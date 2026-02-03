@@ -1,9 +1,18 @@
 import OpenAI from "openai";
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Lazy-initialized OpenAI client (only created when needed)
+let openaiClient: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (!openaiClient) {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      throw new Error("OPENAI_API_KEY environment variable is not set");
+    }
+    openaiClient = new OpenAI({ apiKey });
+  }
+  return openaiClient;
+}
 
 export interface AIAnalysisResult {
   success: boolean;
@@ -30,6 +39,7 @@ export async function runAIAnalysis(
   const maxTokens = options?.maxTokens || 4096;
 
   try {
+    const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
       model,
       messages: [

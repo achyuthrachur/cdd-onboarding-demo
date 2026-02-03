@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, FileText, BarChart3, Grid3X3, FileBarChart } from "lucide-react";
 import { StageNav } from "@/components/audit-run/stage-nav";
+import { DemoModeBanner } from "@/components/demo-mode-banner";
 
 // This will be fetched from the database
 async function getAuditRun(id: string) {
@@ -94,6 +95,11 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
             {auditRun.status === "in_progress" ? "In Progress" : auditRun.status}
           </Badge>
         </div>
+      </div>
+
+      {/* Demo Mode Banner */}
+      <div className="mb-6">
+        <DemoModeBanner auditRunId={id} />
       </div>
 
       {/* Stage Navigation */}
