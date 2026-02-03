@@ -1,15 +1,87 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ArrowRight, Grid3X3, Users, CheckSquare, FileDown } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Grid3X3,
+  CheckSquare,
+  FileDown,
+  CheckCircle2,
+} from "lucide-react";
+import { WorkbookGenerator } from "@/components/stage-3/workbook-generator";
+import { WorkbookEditor } from "@/components/stage-3/workbook-editor";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
+interface WorkbookSummary {
+  id: string;
+  status: string;
+  rowCount: number;
+  summary: {
+    totalRows: number;
+    completedRows: number;
+    passCount: number;
+    failCount: number;
+    naCount: number;
+    completionPercentage: number;
+  };
+  createdAt: string;
 }
 
-export default async function Stage3Page({ params }: PageProps) {
-  const { id } = await params;
+export default function Stage3Page() {
+  const params = useParams();
+  const id = params.id as string;
+
+  const [workbooks, setWorkbooks] = useState<WorkbookSummary[]>([]);
+  const [selectedWorkbookId, setSelectedWorkbookId] = useState<string | null>(null);
+  const [hasStage1Results, setHasStage1Results] = useState(true); // Demo mode
+  const [hasLockedSample, setHasLockedSample] = useState(true); // Demo mode
+
+  // Load existing workbooks on mount
+  useEffect(() => {
+    const loadWorkbooks = async () => {
+      try {
+        const response = await fetch(`/api/workbooks?auditRunId=${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setWorkbooks(data);
+          // Auto-select the first non-submitted workbook
+          const activeWorkbook = data.find(
+            (wb: WorkbookSummary) => wb.status !== "submitted"
+          );
+          if (activeWorkbook) {
+            setSelectedWorkbookId(activeWorkbook.id);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load workbooks:", error);
+      }
+    };
+
+    loadWorkbooks();
+  }, [id]);
+
+  const handleWorkbookGenerated = (workbook: WorkbookSummary) => {
+    setWorkbooks([...workbooks, workbook]);
+    setSelectedWorkbookId(workbook.id);
+  };
+
+  const handleWorkbookSubmitted = () => {
+    // Refresh workbooks list
+    setWorkbooks(
+      workbooks.map((wb) =>
+        wb.id === selectedWorkbookId ? { ...wb, status: "submitted" } : wb
+      )
+    );
+    setSelectedWorkbookId(null);
+  };
+
+  const hasSubmittedWorkbook = workbooks.some((wb) => wb.status === "submitted");
+  const canProceed = hasSubmittedWorkbook;
 
   return (
     <div className="p-8">
@@ -26,119 +98,212 @@ export default async function Stage3Page({ params }: PageProps) {
           <div>
             <div className="flex items-center gap-3">
               <Badge className="bg-purple-100 text-purple-700">Stage 3</Badge>
-              <h1 className="text-3xl font-bold tracking-tight">Testing Workbooks</h1>
+              <h1 className="text-3xl font-bold tracking-tight">
+                Testing Workbooks
+              </h1>
             </div>
             <p className="text-muted-foreground mt-2">
               Generate workbooks, complete testing, and submit results
             </p>
           </div>
-          <Button>
-            <Grid3X3 className="mr-2 h-4 w-4" />
-            Generate Workbooks
-          </Button>
         </div>
       </div>
 
       {/* Workflow Steps */}
-      <div className="grid gap-6 md:grid-cols-4 mb-8">
-        <Card>
+      <div className="grid gap-6 md:grid-cols-3 mb-8">
+        <Card className={workbooks.length > 0 ? "border-green-500" : ""}>
           <CardHeader className="pb-2">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-                <Grid3X3 className="h-5 w-5" />
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                  workbooks.length > 0
+                    ? "bg-green-100 text-green-600"
+                    : "bg-blue-100 text-blue-600"
+                }`}
+              >
+                {workbooks.length > 0 ? (
+                  <CheckCircle2 className="h-5 w-5" />
+                ) : (
+                  <Grid3X3 className="h-5 w-5" />
+                )}
               </div>
               <div>
-                <CardTitle className="text-base">Generate</CardTitle>
+                <CardTitle className="text-base">Step 1: Generate</CardTitle>
+                <CardDescription>Create workbooks</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Create workbooks from attributes and sample
-            </p>
+            <Badge variant={workbooks.length > 0 ? "default" : "outline"}>
+              {workbooks.length > 0
+                ? `${workbooks.length} workbook(s)`
+                : "No workbooks"}
+            </Badge>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card
+          className={
+            workbooks.some((wb) => wb.status === "in_progress")
+              ? "border-green-500"
+              : ""
+          }
+        >
           <CardHeader className="pb-2">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-purple-600">
-                <Users className="h-5 w-5" />
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                  workbooks.some(
+                    (wb) =>
+                      wb.status === "in_progress" || wb.status === "submitted"
+                  )
+                    ? "bg-green-100 text-green-600"
+                    : "bg-purple-100 text-purple-600"
+                }`}
+              >
+                {workbooks.some(
+                  (wb) =>
+                    wb.status === "in_progress" || wb.status === "submitted"
+                ) ? (
+                  <CheckCircle2 className="h-5 w-5" />
+                ) : (
+                  <CheckSquare className="h-5 w-5" />
+                )}
               </div>
               <div>
-                <CardTitle className="text-base">Assign</CardTitle>
+                <CardTitle className="text-base">Step 2: Complete</CardTitle>
+                <CardDescription>Test samples</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Assign workbooks to auditors
-            </p>
+            <Badge
+              variant={
+                workbooks.some((wb) => wb.summary?.completionPercentage > 0)
+                  ? "default"
+                  : "outline"
+              }
+            >
+              {workbooks.length > 0
+                ? `${Math.round(
+                    workbooks.reduce(
+                      (sum, wb) => sum + (wb.summary?.completionPercentage || 0),
+                      0
+                    ) / workbooks.length
+                  )}% avg completion`
+                : "Pending"}
+            </Badge>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className={hasSubmittedWorkbook ? "border-green-500" : ""}>
           <CardHeader className="pb-2">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600">
-                <CheckSquare className="h-5 w-5" />
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                  hasSubmittedWorkbook
+                    ? "bg-green-100 text-green-600"
+                    : "bg-gray-100 text-gray-400"
+                }`}
+              >
+                {hasSubmittedWorkbook ? (
+                  <CheckCircle2 className="h-5 w-5" />
+                ) : (
+                  <FileDown className="h-5 w-5" />
+                )}
               </div>
               <div>
-                <CardTitle className="text-base">Complete</CardTitle>
+                <CardTitle className="text-base">Step 3: Submit</CardTitle>
+                <CardDescription>For consolidation</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Complete testing in spreadsheet UI
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100 text-orange-600">
-                <FileDown className="h-5 w-5" />
-              </div>
-              <div>
-                <CardTitle className="text-base">Submit</CardTitle>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Submit for consolidation
-            </p>
+            <Badge variant={hasSubmittedWorkbook ? "default" : "outline"}>
+              {hasSubmittedWorkbook
+                ? `${workbooks.filter((wb) => wb.status === "submitted").length} submitted`
+                : "Pending"}
+            </Badge>
           </CardContent>
         </Card>
       </div>
 
-      {/* Workbooks List */}
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Grid3X3 className="h-5 w-5" />
-            Workbooks
-          </CardTitle>
-          <CardDescription>
-            Manage testing workbooks for this audit run
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-12 text-muted-foreground">
-            <Grid3X3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <h3 className="font-medium mb-2">No workbooks generated</h3>
-            <p className="text-sm mb-4">
-              Complete Stage 2 (Sampling) to generate workbooks
-            </p>
-            <Button disabled>
-              <Grid3X3 className="mr-2 h-4 w-4" />
-              Generate Workbooks
+      {/* Workbook Generator */}
+      <div className="mb-6">
+        <WorkbookGenerator
+          auditRunId={id}
+          hasStage1Results={hasStage1Results}
+          hasLockedSample={hasLockedSample}
+          workbooks={workbooks}
+          onWorkbookGenerated={handleWorkbookGenerated}
+        />
+      </div>
+
+      {/* Workbook Selector */}
+      {workbooks.length > 0 && !selectedWorkbookId && (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Select Workbook to Edit</CardTitle>
+            <CardDescription>
+              Choose a workbook to continue testing
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {workbooks.map((wb) => (
+                <div
+                  key={wb.id}
+                  className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-muted/80"
+                  onClick={() =>
+                    wb.status !== "submitted" && setSelectedWorkbookId(wb.id)
+                  }
+                >
+                  <div>
+                    <p className="font-medium">
+                      Workbook - {new Date(wb.createdAt).toLocaleDateString()}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {wb.rowCount} tests • {wb.summary.completionPercentage.toFixed(0)}%
+                      complete
+                    </p>
+                  </div>
+                  <Badge
+                    variant={
+                      wb.status === "submitted"
+                        ? "default"
+                        : wb.status === "in_progress"
+                        ? "secondary"
+                        : "outline"
+                    }
+                    className={wb.status === "submitted" ? "bg-green-500" : ""}
+                  >
+                    {wb.status}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Workbook Editor */}
+      {selectedWorkbookId && (
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <Button
+              variant="outline"
+              onClick={() => setSelectedWorkbookId(null)}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Workbook List
             </Button>
           </div>
-        </CardContent>
-      </Card>
+          <WorkbookEditor
+            workbookId={selectedWorkbookId}
+            onSubmitted={handleWorkbookSubmitted}
+          />
+        </div>
+      )}
 
       {/* Navigation */}
       <div className="flex justify-between">
@@ -149,7 +314,7 @@ export default async function Stage3Page({ params }: PageProps) {
           </Button>
         </Link>
         <Link href={`/audit-runs/${id}/stage-4`}>
-          <Button disabled>
+          <Button disabled={!canProceed}>
             Continue to Reporting
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
