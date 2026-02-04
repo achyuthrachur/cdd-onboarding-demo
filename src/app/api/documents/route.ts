@@ -1,7 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
-// In-memory store for demo (replace with database in production)
+// Pre-loaded demo documents (available at /demo/ URLs)
+const DEMO_DOCUMENTS = [
+  {
+    id: "demo-doc-1",
+    docType: "flu_global",
+    jurisdiction: null,
+    fileName: "CIP CDD Procedures (Mock).docx",
+    fileUrl: "/demo/CIP CDD Procedures (Mock).docx",
+    fileHash: null,
+    uploadedAt: "2024-01-15T10:00:00.000Z",
+  },
+  {
+    id: "demo-doc-2",
+    docType: "global_std_new",
+    jurisdiction: null,
+    fileName: "Global Financial Standards (Mock) (5).docx",
+    fileUrl: "/demo/Global Financial Standards (Mock) (5).docx",
+    fileHash: null,
+    uploadedAt: "2024-01-15T10:05:00.000Z",
+  },
+];
+
+// In-memory store for user-uploaded documents (in addition to demo docs)
 const documentsStore: Map<string, {
   id: string;
   auditRunId: string;
@@ -18,10 +40,18 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const auditRunId = searchParams.get("auditRunId");
 
+    // Start with user-uploaded documents
     let documents = Array.from(documentsStore.values());
 
     if (auditRunId) {
       documents = documents.filter((doc) => doc.auditRunId === auditRunId);
+
+      // Always include demo documents for any audit run
+      const demoDocsForRun = DEMO_DOCUMENTS.map(doc => ({
+        ...doc,
+        auditRunId,
+      }));
+      documents = [...demoDocsForRun, ...documents];
     }
 
     documents.sort(
@@ -102,6 +132,14 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json(
         { error: "Document ID is required" },
         { status: 400 }
+      );
+    }
+
+    // Don't allow deleting demo documents
+    if (id.startsWith("demo-doc-")) {
+      return NextResponse.json(
+        { error: "Cannot delete demo documents" },
+        { status: 403 }
       );
     }
 
