@@ -6,8 +6,12 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* Typography - Design System fonts */
+  --font-display: var(--font-display), 'Playfair Display', 'Fraunces', 'Libre Baskerville', Georgia, serif;
+  --font-body: var(--font-body), 'DM Sans', 'Bricolage Grotesque', 'Source Sans Pro', system-ui, sans-serif;
+  --font-mono: var(--font-mono), 'JetBrains Mono', 'Fira Code', 'IBM Plex Mono', Consolas, monospace;
+
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -37,16 +41,197 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Border Radius - Design System */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Box Shadows - Design System */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+  --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.12);
+
+  /* Transition Durations - Design System (for Tailwind duration-* utilities) */
+  --transition-duration-instant: 75ms;
+  --transition-duration-fast: 150ms;
+  --transition-duration-normal: 250ms;
+  --transition-duration-slow: 350ms;
+  --transition-duration-slower: 500ms;
+
+  /* Transition Timing Functions - Design System (for Tailwind ease-* utilities) */
+  --transition-timing-function-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-timing-function-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --transition-timing-function-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --transition-timing-function-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Animation - Design System (for Tailwind animate-* utilities) */
+  --animate-fade-in-up: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+
+  /* ============================================
+     Warm Grey Color Palette - Design System
+     Usage: bg-grey-50, text-grey-900, etc.
+     ============================================ */
+  --color-grey-50: #fafaf9;
+  --color-grey-100: #f5f5f4;
+  --color-grey-200: #e7e5e4;
+  --color-grey-300: #d6d3d1;
+  --color-grey-400: #a8a29e;
+  --color-grey-500: #78716c;
+  --color-grey-600: #57534e;
+  --color-grey-700: #44403c;
+  --color-grey-800: #292524;
+  --color-grey-900: #1c1917;
+  --color-grey-950: #0c0a09;
+
+  /* ============================================
+     Accent Colors - Design System
+     Usage: bg-accent-blue, text-accent-warm, etc.
+     ============================================ */
+  /* Slate Blue Accent */
+  --color-accent-blue: #64748b;
+  --color-accent-blue-light: #94a3b8;
+  --color-accent-blue-dark: #475569;
+
+  /* Warm Taupe Accent */
+  --color-accent-warm: #a8927c;
+  --color-accent-warm-light: #c4b5a5;
+  --color-accent-warm-dark: #8c7a66;
+
+  /* ============================================
+     Functional Colors - Design System
+     Usage: bg-success, text-warning, border-error, etc.
+     ============================================ */
+  --color-success: #6b8f71;
+  --color-success-light: #a3c4a9;
+  --color-warning: #c9a962;
+  --color-warning-light: #e5d4a1;
+  --color-error: #b07070;
+  --color-error-light: #d4a5a5;
+
+  /* ============================================
+     Semantic Text Colors - Design System
+     Usage: text-text-primary, text-text-secondary, etc.
+     ============================================ */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  /* ============================================
+     Semantic Surface Colors - Design System
+     Usage: bg-surface-primary, bg-surface-elevated, etc.
+     ============================================ */
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-elevated: var(--surface-elevated);
+
+  /* ============================================
+     Semantic Border Colors - Design System
+     Usage: border-border-default, border-border-strong
+     ============================================ */
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
 }
 
 :root {
+  /* Spacing Scale - Design System (8px grid) */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+
+  /* Shadow Values - Design System */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+  --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.12);
+
+  /* Border Radius - Design System */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Animation Timing Tokens - Design System */
+  --duration-instant: 75ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --duration-slower: 500ms;
+
+  /* Easing Curves - Design System */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ============================================
+     Warm Grey Neutrals - Design System (CSS Custom Properties)
+     ============================================ */
+  --grey-50: #fafaf9;
+  --grey-100: #f5f5f4;
+  --grey-200: #e7e5e4;
+  --grey-300: #d6d3d1;
+  --grey-400: #a8a29e;
+  --grey-500: #78716c;
+  --grey-600: #57534e;
+  --grey-700: #44403c;
+  --grey-800: #292524;
+  --grey-900: #1c1917;
+  --grey-950: #0c0a09;
+
+  /* ============================================
+     Muted Accent Colors - Design System (CSS Custom Properties)
+     ============================================ */
+  /* Slate Blue */
+  --color-accent-blue: #64748b;
+  --color-accent-blue-light: #94a3b8;
+  --color-accent-blue-dark: #475569;
+
+  /* Warm Taupe */
+  --color-accent-warm: #a8927c;
+  --color-accent-warm-light: #c4b5a5;
+  --color-accent-warm-dark: #8c7a66;
+
+  /* Functional Colors */
+  --color-success: #6b8f71;
+  --color-success-light: #a3c4a9;
+  --color-warning: #c9a962;
+  --color-warning-light: #e5d4a1;
+  --color-error: #b07070;
+  --color-error-light: #d4a5a5;
+
+  /* ============================================
+     Semantic Tokens - Light Mode
+     ============================================ */
+  /* Text */
+  --text-primary: var(--grey-900);
+  --text-secondary: var(--grey-600);
+  --text-muted: var(--grey-400);
+
+  /* Surfaces */
+  --surface-primary: var(--grey-50);
+  --surface-secondary: var(--grey-100);
+  --surface-elevated: #ffffff;
+
+  /* Borders */
+  --border-default: var(--grey-200);
+  --border-strong: var(--grey-300);
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -81,7 +266,31 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark {
+.dark,
+[data-theme="dark"] {
+  /* ============================================
+     Semantic Tokens - Dark Mode
+     Note: Uses warm blacks (#121212), never pure black
+     ============================================ */
+  /* Text */
+  --text-primary: #e7e5e4;
+  --text-secondary: #a8a29e;
+  --text-muted: #78716c;
+
+  /* Surfaces - Using warm blacks */
+  --surface-primary: #121212;
+  --surface-secondary: #1e1e1e;
+  --surface-elevated: #2a2a2a;
+
+  /* Borders */
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.12);
+
+  /* Accent Colors - Adjusted for dark mode */
+  --color-accent-blue: #94a3b8;
+  --color-accent-blue-light: #cbd5e1;
+  --color-accent-blue-dark: #64748b;
+
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -120,6 +329,173 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body;
+  }
+}
+
+/* ============================================
+   Design System: Background Utilities
+   ============================================ */
+
+/* Subtle Grid Pattern */
+.bg-grid {
+  background:
+    linear-gradient(to bottom, var(--grey-50) 0%, var(--grey-100) 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0, 0, 0, 0.015) 1px,
+      rgba(0, 0, 0, 0.015) 2px
+    );
+}
+
+.dark .bg-grid {
+  background:
+    linear-gradient(to bottom, var(--grey-900) 0%, var(--grey-950) 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(255, 255, 255, 0.02) 1px,
+      rgba(255, 255, 255, 0.02) 2px
+    );
+}
+
+/* Paper Texture with Noise */
+.bg-paper {
+  background:
+    linear-gradient(to bottom, var(--grey-50), var(--grey-100)),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+.dark .bg-paper {
+  background:
+    linear-gradient(to bottom, var(--grey-900), var(--grey-950)),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* Glassmorphism */
+.bg-glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.dark .bg-glass {
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Dot Pattern */
+.bg-dots {
+  background-image: radial-gradient(
+    circle,
+    var(--grey-300) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+.dark .bg-dots {
+  background-image: radial-gradient(
+    circle,
+    var(--grey-700) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+/* Subtle Gradient for Hero Sections */
+.bg-gradient-subtle {
+  background: linear-gradient(
+    135deg,
+    var(--grey-50) 0%,
+    var(--grey-100) 50%,
+    rgba(100, 116, 139, 0.05) 100%
+  );
+}
+
+.dark .bg-gradient-subtle {
+  background: linear-gradient(
+    135deg,
+    var(--grey-950) 0%,
+    var(--grey-900) 50%,
+    rgba(100, 116, 139, 0.1) 100%
+  );
+}
+
+/* ============================================
+   Design System: Animation Keyframes
+   ============================================ */
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Design System: Animation Classes
+   ============================================ */
+
+/* Fade In Up Animation */
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s var(--ease-out) backwards;
+}
+
+/* Staggered Children Animation */
+.stagger-children > * {
+  animation: fade-in-up 0.5s var(--ease-out) backwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.7s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.8s; }
+
+/* Card Hover Lift Pattern */
+.card-hover-lift {
+  transition: transform var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Subtle Card Hover (less aggressive) */
+.card-hover-subtle {
+  transition: transform var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.card-hover-subtle:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   Design System: Reduced Motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
