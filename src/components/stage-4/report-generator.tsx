@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { ConsolidationResult } from "@/lib/consolidation/engine";
+import { downloadConsolidationExcel } from "@/lib/consolidation/export";
 
 interface ReportGeneratorProps {
   consolidation: ConsolidationResult | null;
@@ -150,6 +151,18 @@ export function ReportGenerator({
     }
   };
 
+  const handleExportExcel = async () => {
+    if (!consolidation) return;
+
+    try {
+      const filename = `consolidation-report-${auditRunId}-${new Date().toISOString().split("T")[0]}.xlsx`;
+      downloadConsolidationExcel(consolidation, filename);
+      toast.success("Excel report exported successfully");
+    } catch {
+      toast.error("Failed to export Excel report");
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -279,7 +292,15 @@ export function ReportGenerator({
             )}
           </Button>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
+            <Button
+              variant="outline"
+              onClick={handleExportExcel}
+              disabled={!canGenerate}
+            >
+              <FileSpreadsheet className="mr-2 h-4 w-4" />
+              Export Excel
+            </Button>
             <Button
               variant="outline"
               onClick={handleExportData}
@@ -293,7 +314,7 @@ export function ReportGenerator({
               onClick={handleExportCSV}
               disabled={!canGenerate}
             >
-              <FileSpreadsheet className="mr-2 h-4 w-4" />
+              <Download className="mr-2 h-4 w-4" />
               Export CSV
             </Button>
           </div>

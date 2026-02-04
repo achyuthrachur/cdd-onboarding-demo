@@ -4,11 +4,16 @@
  */
 
 import { WorkbookState, WorkbookRow } from "@/lib/workbook/builder";
+import type { GeneratedWorkbook, TestGridRow } from "@/lib/attribute-library/generation-engine";
 
 export interface ConsolidatedMetrics {
   totalTests: number;
   passCount: number;
+  passWithObservationCount: number;
   failCount: number;
+  fail1RegulatoryCount: number;
+  fail2ProcedureCount: number;
+  questionToLOBCount: number;
   naCount: number;
   passRate: number;
   failRate: number;
@@ -49,6 +54,72 @@ export interface ExceptionDetail {
   observation: string;
   evidenceReference: string;
   auditorNotes: string;
+  resultType?: 'Fail 1 - Regulatory' | 'Fail 2 - Procedure' | 'Question to LOB';
+  jurisdictionId?: string;
+  auditorId?: string;
+  auditorName?: string;
+  riskTier?: string;
+  partyType?: string;
+}
+
+// Metrics by Jurisdiction
+export interface JurisdictionMetrics {
+  jurisdictionId: string;
+  jurisdictionName: string;
+  totalTests: number;
+  passCount: number;
+  passWithObservationCount: number;
+  fail1Count: number;
+  fail2Count: number;
+  questionToLOBCount: number;
+  naCount: number;
+  passRate: number;
+  failRate: number;
+  entityCount: number;
+}
+
+// Metrics by Auditor
+export interface AuditorMetrics {
+  auditorId: string;
+  auditorName: string;
+  totalTests: number;
+  passCount: number;
+  passWithObservationCount: number;
+  fail1Count: number;
+  fail2Count: number;
+  questionToLOBCount: number;
+  naCount: number;
+  passRate: number;
+  failRate: number;
+  entityCount: number;
+  completionRate: number;
+}
+
+// Metrics by Category
+export interface CategoryMetrics {
+  category: string;
+  totalTests: number;
+  passCount: number;
+  passWithObservationCount: number;
+  fail1Count: number;
+  fail2Count: number;
+  questionToLOBCount: number;
+  naCount: number;
+  passRate: number;
+  failRate: number;
+  attributeCount: number;
+}
+
+// Metrics by Risk Tier
+export interface RiskTierMetrics {
+  riskTier: string;
+  totalTests: number;
+  passCount: number;
+  failCount: number;
+  naCount: number;
+  passRate: number;
+  failRate: number;
+  entityCount: number;
 }
 
 export interface ConsolidationResult {
@@ -58,14 +129,18 @@ export interface ConsolidationResult {
   metrics: ConsolidatedMetrics;
   findingsByCategory: FindingsByCategory[];
   findingsByAttribute: FindingsByAttribute[];
+  findingsByJurisdiction: JurisdictionMetrics[];
+  findingsByAuditor: AuditorMetrics[];
+  findingsByRiskTier: RiskTierMetrics[];
   exceptions: ExceptionDetail[];
   rawData: {
     workbookIds: string[];
     totalRows: number;
+    testGridRows?: TestGridRow[];
   };
 }
 
-// Consolidate multiple workbooks
+// Consolidate multiple workbooks (legacy format)
 export function consolidateWorkbooks(
   workbooks: WorkbookState[]
 ): ConsolidationResult {
@@ -99,6 +174,9 @@ export function consolidateWorkbooks(
     metrics,
     findingsByCategory,
     findingsByAttribute,
+    findingsByJurisdiction: [],
+    findingsByAuditor: [],
+    findingsByRiskTier: [],
     exceptions,
     rawData: {
       workbookIds: submittedWorkbooks.map((wb) => wb.id),
@@ -126,7 +204,11 @@ function calculateMetrics(
   return {
     totalTests,
     passCount,
+    passWithObservationCount: 0,
     failCount,
+    fail1RegulatoryCount: 0,
+    fail2ProcedureCount: 0,
+    questionToLOBCount: 0,
     naCount,
     passRate,
     failRate,
@@ -237,7 +319,11 @@ function createEmptyConsolidation(auditRunId: string): ConsolidationResult {
     metrics: {
       totalTests: 0,
       passCount: 0,
+      passWithObservationCount: 0,
       failCount: 0,
+      fail1RegulatoryCount: 0,
+      fail2ProcedureCount: 0,
+      questionToLOBCount: 0,
       naCount: 0,
       passRate: 0,
       failRate: 0,
@@ -248,6 +334,9 @@ function createEmptyConsolidation(auditRunId: string): ConsolidationResult {
     },
     findingsByCategory: [],
     findingsByAttribute: [],
+    findingsByJurisdiction: [],
+    findingsByAuditor: [],
+    findingsByRiskTier: [],
     exceptions: [],
     rawData: {
       workbookIds: [],
@@ -264,15 +353,19 @@ export function getMockConsolidation(auditRunId: string): ConsolidationResult {
     generatedAt: new Date().toISOString(),
     metrics: {
       totalTests: 250,
-      passCount: 215,
+      passCount: 200,
+      passWithObservationCount: 15,
       failCount: 25,
+      fail1RegulatoryCount: 15,
+      fail2ProcedureCount: 10,
+      questionToLOBCount: 5,
       naCount: 10,
-      passRate: 89.6,
-      failRate: 10.4,
+      passRate: 86.0,
+      failRate: 10.0,
       exceptionsCount: 25,
       uniqueEntitiesTested: 25,
       uniqueAttributesTested: 10,
-      workbooksSubmitted: 1,
+      workbooksSubmitted: 3,
     },
     findingsByCategory: [
       { category: "Ownership", totalTests: 50, passCount: 40, failCount: 8, naCount: 2, failRate: 16.0 },
@@ -289,16 +382,521 @@ export function getMockConsolidation(auditRunId: string): ConsolidationResult {
       { attributeId: "ATTR007", attributeName: "Sanctions Screening", category: "AML", totalTests: 25, passCount: 22, failCount: 3, naCount: 0, failRate: 12.0, observations: ["Documentation dated outside acceptable period. Updated records needed."] },
       { attributeId: "ATTR009", attributeName: "Source of Funds", category: "EDD", totalTests: 25, passCount: 21, failCount: 3, naCount: 1, failRate: 12.0, observations: ["Additional clarification required from entity management."] },
     ],
+    findingsByJurisdiction: [
+      { jurisdictionId: "US", jurisdictionName: "United States", totalTests: 100, passCount: 88, passWithObservationCount: 5, fail1Count: 5, fail2Count: 3, questionToLOBCount: 2, naCount: 4, passRate: 88.0, failRate: 8.0, entityCount: 10 },
+      { jurisdictionId: "UK", jurisdictionName: "United Kingdom", totalTests: 75, passCount: 65, passWithObservationCount: 5, fail1Count: 4, fail2Count: 3, questionToLOBCount: 1, naCount: 3, passRate: 86.7, failRate: 9.3, entityCount: 8 },
+      { jurisdictionId: "HK", jurisdictionName: "Hong Kong", totalTests: 75, passCount: 62, passWithObservationCount: 5, fail1Count: 6, fail2Count: 4, questionToLOBCount: 2, naCount: 3, passRate: 82.7, failRate: 13.3, entityCount: 7 },
+    ],
+    findingsByAuditor: [
+      { auditorId: "AUD001", auditorName: "John Smith", totalTests: 85, passCount: 75, passWithObservationCount: 5, fail1Count: 5, fail2Count: 3, questionToLOBCount: 1, naCount: 3, passRate: 88.2, failRate: 9.4, entityCount: 9, completionRate: 100 },
+      { auditorId: "AUD002", auditorName: "Sarah Johnson", totalTests: 85, passCount: 73, passWithObservationCount: 5, fail1Count: 5, fail2Count: 4, questionToLOBCount: 2, naCount: 4, passRate: 85.9, failRate: 10.6, entityCount: 8, completionRate: 100 },
+      { auditorId: "AUD003", auditorName: "Michael Chen", totalTests: 80, passCount: 67, passWithObservationCount: 5, fail1Count: 5, fail2Count: 3, questionToLOBCount: 2, naCount: 3, passRate: 83.8, failRate: 10.0, entityCount: 8, completionRate: 100 },
+    ],
+    findingsByRiskTier: [
+      { riskTier: "High", totalTests: 50, passCount: 40, failCount: 8, naCount: 2, passRate: 80.0, failRate: 16.0, entityCount: 5 },
+      { riskTier: "Medium", totalTests: 100, passCount: 88, failCount: 9, naCount: 3, passRate: 88.0, failRate: 9.0, entityCount: 10 },
+      { riskTier: "Low", totalTests: 100, passCount: 87, failCount: 8, naCount: 5, passRate: 87.0, failRate: 8.0, entityCount: 10 },
+    ],
     exceptions: [
-      { id: "EXC001", sampleItemId: "REC-00005", entityName: "Entity 5", attributeId: "ATTR004", attributeName: "Beneficial Owner Identification", category: "Ownership", observation: "Documentation appears incomplete. Additional verification required.", evidenceReference: "DOC-005", auditorNotes: "Pending BO certification" },
-      { id: "EXC002", sampleItemId: "REC-00012", entityName: "Entity 12", attributeId: "ATTR005", attributeName: "Beneficial Owner Verification", category: "Ownership", observation: "Supporting evidence provided does not fully address the requirement.", evidenceReference: "DOC-012", auditorNotes: "ID copy expired" },
-      { id: "EXC003", sampleItemId: "REC-00018", entityName: "Entity 18", attributeId: "ATTR006", attributeName: "PEP Screening", category: "AML", observation: "Third-party verification pending. Awaiting confirmation.", evidenceReference: "DOC-018", auditorNotes: "Awaiting vendor response" },
-      { id: "EXC004", sampleItemId: "REC-00023", entityName: "Entity 23", attributeId: "ATTR007", attributeName: "Sanctions Screening", category: "AML", observation: "Documentation dated outside acceptable period. Updated records needed.", evidenceReference: "DOC-023", auditorNotes: "Screening from 2022" },
-      { id: "EXC005", sampleItemId: "REC-00007", entityName: "Entity 7", attributeId: "ATTR009", attributeName: "Source of Funds", category: "EDD", observation: "Additional clarification required from entity management.", evidenceReference: "DOC-007", auditorNotes: "Vague description" },
+      { id: "EXC001", sampleItemId: "REC-00005", entityName: "Entity 5", attributeId: "ATTR004", attributeName: "Beneficial Owner Identification", category: "Ownership", observation: "Documentation appears incomplete. Additional verification required.", evidenceReference: "DOC-005", auditorNotes: "Pending BO certification", resultType: "Fail 1 - Regulatory", jurisdictionId: "US", auditorId: "AUD001", auditorName: "John Smith" },
+      { id: "EXC002", sampleItemId: "REC-00012", entityName: "Entity 12", attributeId: "ATTR005", attributeName: "Beneficial Owner Verification", category: "Ownership", observation: "Supporting evidence provided does not fully address the requirement.", evidenceReference: "DOC-012", auditorNotes: "ID copy expired", resultType: "Fail 1 - Regulatory", jurisdictionId: "UK", auditorId: "AUD002", auditorName: "Sarah Johnson" },
+      { id: "EXC003", sampleItemId: "REC-00018", entityName: "Entity 18", attributeId: "ATTR006", attributeName: "PEP Screening", category: "AML", observation: "Third-party verification pending. Awaiting confirmation.", evidenceReference: "DOC-018", auditorNotes: "Awaiting vendor response", resultType: "Fail 2 - Procedure", jurisdictionId: "HK", auditorId: "AUD003", auditorName: "Michael Chen" },
+      { id: "EXC004", sampleItemId: "REC-00023", entityName: "Entity 23", attributeId: "ATTR007", attributeName: "Sanctions Screening", category: "AML", observation: "Documentation dated outside acceptable period. Updated records needed.", evidenceReference: "DOC-023", auditorNotes: "Screening from 2022", resultType: "Fail 2 - Procedure", jurisdictionId: "US", auditorId: "AUD001", auditorName: "John Smith" },
+      { id: "EXC005", sampleItemId: "REC-00007", entityName: "Entity 7", attributeId: "ATTR009", attributeName: "Source of Funds", category: "EDD", observation: "Additional clarification required from entity management.", evidenceReference: "DOC-007", auditorNotes: "Vague description", resultType: "Question to LOB", jurisdictionId: "UK", auditorId: "AUD002", auditorName: "Sarah Johnson" },
     ],
     rawData: {
-      workbookIds: ["mock-wb-001"],
+      workbookIds: ["mock-wb-001", "mock-wb-002", "mock-wb-003"],
       totalRows: 250,
     },
   };
+}
+
+// ============================================================================
+// NEW TEST GRID CONSOLIDATION FUNCTIONS
+// ============================================================================
+
+/**
+ * Consolidate from new test grid format (GeneratedWorkbook[])
+ * This is the primary consolidation function for the new generation engine
+ */
+export function consolidateTestGridWorkbooks(
+  workbooks: GeneratedWorkbook[]
+): ConsolidationResult {
+  if (workbooks.length === 0) {
+    return createEmptyConsolidation("");
+  }
+
+  // Gather all rows from all workbooks
+  const allRows: TestGridRow[] = workbooks.flatMap((wb) => wb.rows);
+
+  // Calculate comprehensive metrics
+  const metrics = calculateTestGridMetrics(allRows, workbooks.length);
+
+  // Group by category
+  const findingsByCategory = calculateTestGridFindingsByCategory(allRows);
+
+  // Group by attribute
+  const findingsByAttribute = calculateTestGridFindingsByAttribute(allRows);
+
+  // Group by jurisdiction
+  const findingsByJurisdiction = calculateFindingsByJurisdiction(allRows);
+
+  // Group by auditor
+  const findingsByAuditor = calculateFindingsByAuditor(allRows);
+
+  // Group by risk tier (based on IRR)
+  const findingsByRiskTier = calculateFindingsByRiskTier(allRows);
+
+  // Extract exceptions (all failure types)
+  const exceptions = extractTestGridExceptions(allRows);
+
+  return {
+    id: `CONSOL-${Date.now()}`,
+    auditRunId: workbooks[0]?.auditorId ? `BATCH-${Date.now()}` : "",
+    generatedAt: new Date().toISOString(),
+    metrics,
+    findingsByCategory,
+    findingsByAttribute,
+    findingsByJurisdiction,
+    findingsByAuditor,
+    findingsByRiskTier,
+    exceptions,
+    rawData: {
+      workbookIds: workbooks.map((wb) => wb.auditorId),
+      totalRows: allRows.length,
+      testGridRows: allRows,
+    },
+  };
+}
+
+/**
+ * Calculate metrics from TestGridRow[] format
+ */
+function calculateTestGridMetrics(
+  rows: TestGridRow[],
+  workbookCount: number
+): ConsolidatedMetrics {
+  const totalTests = rows.length;
+  let passCount = 0;
+  let passWithObservationCount = 0;
+  let fail1RegulatoryCount = 0;
+  let fail2ProcedureCount = 0;
+  let questionToLOBCount = 0;
+  let naCount = 0;
+
+  for (const row of rows) {
+    switch (row.result) {
+      case "Pass":
+        passCount++;
+        break;
+      case "Pass w/Observation":
+        passWithObservationCount++;
+        break;
+      case "Fail 1 - Regulatory":
+        fail1RegulatoryCount++;
+        break;
+      case "Fail 2 - Procedure":
+        fail2ProcedureCount++;
+        break;
+      case "Question to LOB":
+        questionToLOBCount++;
+        break;
+      case "N/A":
+        naCount++;
+        break;
+    }
+  }
+
+  const totalFailCount = fail1RegulatoryCount + fail2ProcedureCount;
+  const totalPassCount = passCount + passWithObservationCount;
+  const testedRows = totalPassCount + totalFailCount + naCount + questionToLOBCount;
+  const passRate = testedRows > 0 ? (totalPassCount / testedRows) * 100 : 0;
+  const failRate = testedRows > 0 ? (totalFailCount / testedRows) * 100 : 0;
+
+  const uniqueEntities = new Set(rows.map((r) => r.caseId));
+  const uniqueAttributes = new Set(rows.map((r) => r.attributeId));
+
+  return {
+    totalTests,
+    passCount,
+    passWithObservationCount,
+    failCount: totalFailCount,
+    fail1RegulatoryCount,
+    fail2ProcedureCount,
+    questionToLOBCount,
+    naCount,
+    passRate,
+    failRate,
+    exceptionsCount: totalFailCount + questionToLOBCount,
+    uniqueEntitiesTested: uniqueEntities.size,
+    uniqueAttributesTested: uniqueAttributes.size,
+    workbooksSubmitted: workbookCount,
+  };
+}
+
+/**
+ * Calculate findings by category from test grid rows
+ */
+function calculateTestGridFindingsByCategory(rows: TestGridRow[]): FindingsByCategory[] {
+  const categories = new Map<string, FindingsByCategory>();
+
+  for (const row of rows) {
+    const cat = row.category || "Uncategorized";
+
+    if (!categories.has(cat)) {
+      categories.set(cat, {
+        category: cat,
+        totalTests: 0,
+        passCount: 0,
+        failCount: 0,
+        naCount: 0,
+        failRate: 0,
+      });
+    }
+
+    const finding = categories.get(cat)!;
+    finding.totalTests++;
+
+    if (row.result === "Pass" || row.result === "Pass w/Observation") {
+      finding.passCount++;
+    } else if (row.result === "Fail 1 - Regulatory" || row.result === "Fail 2 - Procedure") {
+      finding.failCount++;
+    } else if (row.result === "N/A") {
+      finding.naCount++;
+    }
+  }
+
+  // Calculate fail rates
+  for (const finding of categories.values()) {
+    const tested = finding.passCount + finding.failCount + finding.naCount;
+    finding.failRate = tested > 0 ? (finding.failCount / tested) * 100 : 0;
+  }
+
+  return Array.from(categories.values()).sort((a, b) => b.failRate - a.failRate);
+}
+
+/**
+ * Calculate findings by attribute from test grid rows
+ */
+function calculateTestGridFindingsByAttribute(rows: TestGridRow[]): FindingsByAttribute[] {
+  const attributes = new Map<string, FindingsByAttribute>();
+
+  for (const row of rows) {
+    const attrId = row.attributeId;
+
+    if (!attributes.has(attrId)) {
+      attributes.set(attrId, {
+        attributeId: attrId,
+        attributeName: row.attributeName,
+        category: row.category,
+        totalTests: 0,
+        passCount: 0,
+        failCount: 0,
+        naCount: 0,
+        failRate: 0,
+        observations: [],
+      });
+    }
+
+    const finding = attributes.get(attrId)!;
+    finding.totalTests++;
+
+    if (row.result === "Pass" || row.result === "Pass w/Observation") {
+      finding.passCount++;
+    } else if (row.result === "Fail 1 - Regulatory" || row.result === "Fail 2 - Procedure") {
+      finding.failCount++;
+      if (row.comments && !finding.observations.includes(row.comments)) {
+        finding.observations.push(row.comments);
+      }
+    } else if (row.result === "N/A") {
+      finding.naCount++;
+    }
+  }
+
+  // Calculate fail rates
+  for (const finding of attributes.values()) {
+    const tested = finding.passCount + finding.failCount + finding.naCount;
+    finding.failRate = tested > 0 ? (finding.failCount / tested) * 100 : 0;
+  }
+
+  return Array.from(attributes.values()).sort((a, b) => b.failRate - a.failRate);
+}
+
+/**
+ * Calculate findings by jurisdiction
+ */
+function calculateFindingsByJurisdiction(rows: TestGridRow[]): JurisdictionMetrics[] {
+  const jurisdictions = new Map<string, JurisdictionMetrics>();
+
+  for (const row of rows) {
+    const jurId = row.jurisdictionId || "Unknown";
+
+    if (!jurisdictions.has(jurId)) {
+      jurisdictions.set(jurId, {
+        jurisdictionId: jurId,
+        jurisdictionName: jurId, // Could be enhanced with a lookup
+        totalTests: 0,
+        passCount: 0,
+        passWithObservationCount: 0,
+        fail1Count: 0,
+        fail2Count: 0,
+        questionToLOBCount: 0,
+        naCount: 0,
+        passRate: 0,
+        failRate: 0,
+        entityCount: 0,
+      });
+    }
+
+    const finding = jurisdictions.get(jurId)!;
+    finding.totalTests++;
+
+    switch (row.result) {
+      case "Pass":
+        finding.passCount++;
+        break;
+      case "Pass w/Observation":
+        finding.passWithObservationCount++;
+        break;
+      case "Fail 1 - Regulatory":
+        finding.fail1Count++;
+        break;
+      case "Fail 2 - Procedure":
+        finding.fail2Count++;
+        break;
+      case "Question to LOB":
+        finding.questionToLOBCount++;
+        break;
+      case "N/A":
+        finding.naCount++;
+        break;
+    }
+  }
+
+  // Calculate rates and entity counts
+  for (const [jurId, finding] of jurisdictions) {
+    const tested = finding.passCount + finding.passWithObservationCount +
+                   finding.fail1Count + finding.fail2Count + finding.naCount;
+    finding.passRate = tested > 0 ? ((finding.passCount + finding.passWithObservationCount) / tested) * 100 : 0;
+    finding.failRate = tested > 0 ? ((finding.fail1Count + finding.fail2Count) / tested) * 100 : 0;
+
+    // Count unique entities per jurisdiction
+    const entitiesInJur = new Set(rows.filter(r => r.jurisdictionId === jurId).map(r => r.caseId));
+    finding.entityCount = entitiesInJur.size;
+  }
+
+  return Array.from(jurisdictions.values()).sort((a, b) => b.totalTests - a.totalTests);
+}
+
+/**
+ * Calculate findings by auditor
+ */
+function calculateFindingsByAuditor(rows: TestGridRow[]): AuditorMetrics[] {
+  const auditors = new Map<string, AuditorMetrics>();
+
+  for (const row of rows) {
+    const audId = row.auditor || "Unknown";
+
+    if (!auditors.has(audId)) {
+      auditors.set(audId, {
+        auditorId: audId,
+        auditorName: row.auditorName || audId,
+        totalTests: 0,
+        passCount: 0,
+        passWithObservationCount: 0,
+        fail1Count: 0,
+        fail2Count: 0,
+        questionToLOBCount: 0,
+        naCount: 0,
+        passRate: 0,
+        failRate: 0,
+        entityCount: 0,
+        completionRate: 0,
+      });
+    }
+
+    const finding = auditors.get(audId)!;
+    finding.totalTests++;
+
+    switch (row.result) {
+      case "Pass":
+        finding.passCount++;
+        break;
+      case "Pass w/Observation":
+        finding.passWithObservationCount++;
+        break;
+      case "Fail 1 - Regulatory":
+        finding.fail1Count++;
+        break;
+      case "Fail 2 - Procedure":
+        finding.fail2Count++;
+        break;
+      case "Question to LOB":
+        finding.questionToLOBCount++;
+        break;
+      case "N/A":
+        finding.naCount++;
+        break;
+    }
+  }
+
+  // Calculate rates and entity counts
+  for (const [audId, finding] of auditors) {
+    const tested = finding.passCount + finding.passWithObservationCount +
+                   finding.fail1Count + finding.fail2Count + finding.naCount;
+    finding.passRate = tested > 0 ? ((finding.passCount + finding.passWithObservationCount) / tested) * 100 : 0;
+    finding.failRate = tested > 0 ? ((finding.fail1Count + finding.fail2Count) / tested) * 100 : 0;
+
+    // Count unique entities per auditor
+    const entitiesForAuditor = new Set(rows.filter(r => r.auditor === audId).map(r => r.caseId));
+    finding.entityCount = entitiesForAuditor.size;
+
+    // Calculate completion rate (rows with results vs total)
+    const auditorRows = rows.filter(r => r.auditor === audId);
+    const completedRows = auditorRows.filter(r => r.result !== "").length;
+    finding.completionRate = auditorRows.length > 0 ? (completedRows / auditorRows.length) * 100 : 0;
+  }
+
+  return Array.from(auditors.values()).sort((a, b) => b.totalTests - a.totalTests);
+}
+
+/**
+ * Calculate findings by risk tier (based on IRR)
+ */
+function calculateFindingsByRiskTier(rows: TestGridRow[]): RiskTierMetrics[] {
+  const riskTiers = new Map<string, RiskTierMetrics>();
+
+  for (const row of rows) {
+    // Determine risk tier based on IRR
+    let tier: string;
+    if (row.irr >= 4) {
+      tier = "Critical";
+    } else if (row.irr >= 3) {
+      tier = "High";
+    } else if (row.irr >= 2) {
+      tier = "Medium";
+    } else {
+      tier = "Low";
+    }
+
+    if (!riskTiers.has(tier)) {
+      riskTiers.set(tier, {
+        riskTier: tier,
+        totalTests: 0,
+        passCount: 0,
+        failCount: 0,
+        naCount: 0,
+        passRate: 0,
+        failRate: 0,
+        entityCount: 0,
+      });
+    }
+
+    const finding = riskTiers.get(tier)!;
+    finding.totalTests++;
+
+    if (row.result === "Pass" || row.result === "Pass w/Observation") {
+      finding.passCount++;
+    } else if (row.result === "Fail 1 - Regulatory" || row.result === "Fail 2 - Procedure") {
+      finding.failCount++;
+    } else if (row.result === "N/A") {
+      finding.naCount++;
+    }
+  }
+
+  // Calculate rates and entity counts
+  for (const [tier, finding] of riskTiers) {
+    const tested = finding.passCount + finding.failCount + finding.naCount;
+    finding.passRate = tested > 0 ? (finding.passCount / tested) * 100 : 0;
+    finding.failRate = tested > 0 ? (finding.failCount / tested) * 100 : 0;
+
+    // Count unique entities per tier
+    const entitiesInTier = new Set(
+      rows.filter(r => {
+        if (r.irr >= 4) return tier === "Critical";
+        if (r.irr >= 3) return tier === "High";
+        if (r.irr >= 2) return tier === "Medium";
+        return tier === "Low";
+      }).map(r => r.caseId)
+    );
+    finding.entityCount = entitiesInTier.size;
+  }
+
+  // Sort by risk level (Critical first)
+  const tierOrder = ["Critical", "High", "Medium", "Low"];
+  return Array.from(riskTiers.values()).sort(
+    (a, b) => tierOrder.indexOf(a.riskTier) - tierOrder.indexOf(b.riskTier)
+  );
+}
+
+/**
+ * Extract exceptions from test grid rows
+ */
+function extractTestGridExceptions(rows: TestGridRow[]): ExceptionDetail[] {
+  return rows
+    .filter((r) =>
+      r.result === "Fail 1 - Regulatory" ||
+      r.result === "Fail 2 - Procedure" ||
+      r.result === "Question to LOB"
+    )
+    .map((r, index) => ({
+      id: `EXC-${Date.now()}-${index}`,
+      sampleItemId: r.caseId,
+      entityName: r.legalName,
+      attributeId: r.attributeId,
+      attributeName: r.attributeName,
+      category: r.category,
+      observation: r.comments || "",
+      evidenceReference: r.sourceFile || "",
+      auditorNotes: r.comments || "",
+      resultType: r.result as 'Fail 1 - Regulatory' | 'Fail 2 - Procedure' | 'Question to LOB',
+      jurisdictionId: r.jurisdictionId,
+      auditorId: r.auditor,
+      auditorName: r.auditorName,
+      partyType: r.partyType,
+    }));
+}
+
+// ============================================================================
+// CONVENIENCE GETTER FUNCTIONS
+// ============================================================================
+
+/**
+ * Get metrics grouped by jurisdiction from a consolidation result
+ */
+export function getMetricsByJurisdiction(result: ConsolidationResult): JurisdictionMetrics[] {
+  return result.findingsByJurisdiction;
+}
+
+/**
+ * Get metrics grouped by auditor from a consolidation result
+ */
+export function getMetricsByAuditor(result: ConsolidationResult): AuditorMetrics[] {
+  return result.findingsByAuditor;
+}
+
+/**
+ * Get metrics grouped by category from a consolidation result
+ */
+export function getMetricsByCategory(result: ConsolidationResult): CategoryMetrics[] {
+  return result.findingsByCategory.map(cat => ({
+    category: cat.category,
+    totalTests: cat.totalTests,
+    passCount: cat.passCount,
+    passWithObservationCount: 0, // Legacy format doesn't track this
+    fail1Count: 0,
+    fail2Count: 0,
+    questionToLOBCount: 0,
+    naCount: cat.naCount,
+    passRate: cat.totalTests > 0 ? (cat.passCount / cat.totalTests) * 100 : 0,
+    failRate: cat.failRate,
+    attributeCount: 0,
+  }));
+}
+
+/**
+ * Get metrics grouped by risk tier from a consolidation result
+ */
+export function getMetricsByRiskTier(result: ConsolidationResult): RiskTierMetrics[] {
+  return result.findingsByRiskTier;
 }
