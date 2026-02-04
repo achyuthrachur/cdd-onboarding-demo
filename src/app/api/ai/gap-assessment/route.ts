@@ -3,10 +3,13 @@ import { v4 as uuidv4 } from "uuid";
 import {
   runAIAnalysis,
   getMockGapAssessmentResult,
+  getMockStandardsComparisonResult,
 } from "@/lib/ai/client";
 import {
   GAP_ASSESSMENT_SYSTEM_PROMPT,
+  STANDARDS_COMPARISON_SYSTEM_PROMPT,
   buildGapAssessmentPrompt,
+  buildStandardsComparisonPrompt,
 } from "@/lib/ai/prompts";
 
 // In-memory store for demo
@@ -30,6 +33,7 @@ export async function POST(request: NextRequest) {
       auditRunId,
       standardsContent,
       proceduresContent,
+      assessmentType = "standards_vs_flu", // "standards_comparison" | "standards_vs_flu"
       jurisdiction,
       useMock = false,
     } = body;
@@ -42,35 +46,42 @@ export async function POST(request: NextRequest) {
     }
 
     let result;
+    const isStandardsComparison = assessmentType === "standards_comparison";
 
     // Debug: Log whether API key is present (not the actual key!)
     console.log("OPENAI_API_KEY present:", !!process.env.OPENAI_API_KEY);
     console.log("useMock flag:", useMock);
+    console.log("assessmentType:", assessmentType);
 
     if (useMock || !process.env.OPENAI_API_KEY) {
       // Use mock data for demo
       console.log("Using MOCK data - either useMock=true or no API key");
       result = {
         success: true,
-        data: getMockGapAssessmentResult(),
+        data: isStandardsComparison
+          ? getMockStandardsComparisonResult()
+          : getMockGapAssessmentResult(),
       };
     } else {
       console.log("Using REAL OpenAI API");
       if (!standardsContent || !proceduresContent) {
         return NextResponse.json(
-          { error: "Both standards and procedures content are required" },
+          { error: "Both document contents are required" },
           { status: 400 }
         );
       }
 
-      // Run AI analysis
-      const userPrompt = buildGapAssessmentPrompt(
-        standardsContent,
-        proceduresContent
-      );
+      // Run AI analysis with appropriate prompt based on assessment type
+      const systemPrompt = isStandardsComparison
+        ? STANDARDS_COMPARISON_SYSTEM_PROMPT
+        : GAP_ASSESSMENT_SYSTEM_PROMPT;
+
+      const userPrompt = isStandardsComparison
+        ? buildStandardsComparisonPrompt(standardsContent, proceduresContent)
+        : buildGapAssessmentPrompt(standardsContent, proceduresContent);
 
       result = await runAIAnalysis(
-        GAP_ASSESSMENT_SYSTEM_PROMPT,
+        systemPrompt,
         userPrompt,
         {
           model: "gpt-4-turbo-preview",

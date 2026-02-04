@@ -1,0 +1,87 @@
+"use client";
+
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { FileText, GripVertical } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export interface DocumentCardProps {
+  id: string;
+  fileName: string;
+  docType: string;
+  jurisdiction?: string | null;
+  isDragging?: boolean;
+  isSelected?: boolean;
+  onDragStart?: (e: React.DragEvent) => void;
+  onDragEnd?: (e: React.DragEvent) => void;
+  onClick?: () => void;
+}
+
+const DOC_TYPE_LABELS: Record<string, string> = {
+  global_std_old: "Old Global Standards",
+  global_std_new: "Current Global Standards",
+  flu_jurisdiction: "FLU Procedures",
+};
+
+const DOC_TYPE_COLORS: Record<string, string> = {
+  global_std_old: "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300",
+  global_std_new: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+  flu_jurisdiction: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+};
+
+export function DocumentCard({
+  id,
+  fileName,
+  docType,
+  jurisdiction,
+  isDragging,
+  isSelected,
+  onDragStart,
+  onDragEnd,
+  onClick,
+}: DocumentCardProps) {
+  return (
+    <Card
+      draggable
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onClick={onClick}
+      data-document-id={id}
+      className={cn(
+        "p-3 cursor-grab active:cursor-grabbing transition-all",
+        "hover:shadow-md hover:border-primary/50",
+        isDragging && "opacity-50 scale-95",
+        isSelected && "ring-2 ring-primary border-primary"
+      )}
+    >
+      <div className="flex items-start gap-3">
+        <div className="flex-shrink-0 mt-0.5">
+          <GripVertical className="h-4 w-4 text-muted-foreground" />
+        </div>
+        <div className="flex-shrink-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+            <FileText className="h-5 w-5 text-muted-foreground" />
+          </div>
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium truncate" title={fileName}>
+            {fileName}
+          </p>
+          <div className="flex items-center gap-2 mt-1">
+            <Badge
+              variant="secondary"
+              className={cn("text-xs", DOC_TYPE_COLORS[docType])}
+            >
+              {DOC_TYPE_LABELS[docType] || docType}
+            </Badge>
+            {jurisdiction && (
+              <Badge variant="outline" className="text-xs">
+                {jurisdiction}
+              </Badge>
+            )}
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}

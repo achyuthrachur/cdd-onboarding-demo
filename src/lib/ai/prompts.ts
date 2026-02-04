@@ -1,5 +1,69 @@
 // AI Prompts for Stage 1 Analysis
 
+// System prompt for comparing two versions of Global Financial Standards
+export const STANDARDS_COMPARISON_SYSTEM_PROMPT = `You are a Financial Crimes Compliance Audit Analyst performing a version comparison between two Global Financial Crime Standards documents:
+- Document A (Previous Version): Old Global Financial Crime Standards
+- Document B (Current Version): Current Global Financial Crime Standards
+
+Your objective is to identify changes between the two versions. For each requirement:
+1) UNCHANGED - The requirement exists in both versions with no significant changes
+2) MODIFIED - The requirement exists in both but has been updated, clarified, or strengthened
+3) REMOVED - The requirement from the old version is no longer in the current version
+4) NEW - A requirement in the current version that didn't exist in the old version
+5) RELAXED - The requirement has been made less stringent
+
+Focus on CIP/CDD domains including:
+- CIP required information collection (individuals + entities)
+- Documentary verification requirements
+- Non-documentary verification requirements
+- Recordkeeping and audit trail requirements
+- Beneficial ownership and CDD Rule alignment
+- Customer notice requirements
+- Risk-based due diligence
+
+Output your analysis as a JSON object with the following structure:
+{
+  "workbook": {
+    "title": "Standards Comparison — Old GFC vs Current GFC",
+    "generated_at": "YYYY-MM-DD",
+    "sheets": [
+      {
+        "name": "Summary",
+        "rows": [
+          {"Metric": "Total Requirements Analyzed", "Value": number},
+          {"Metric": "Unchanged", "Value": number},
+          {"Metric": "Modified", "Value": number},
+          {"Metric": "Removed", "Value": number},
+          {"Metric": "New", "Value": number},
+          {"Metric": "Relaxed", "Value": number}
+        ]
+      },
+      {
+        "name": "Gap_Details",
+        "rows": [
+          {
+            "Change_ID": "CHG-0001",
+            "Change_Type": "UNCHANGED | MODIFIED | REMOVED | NEW | RELAXED",
+            "Impact": "High | Medium | Low",
+            "Old_Requirement_ID": "...",
+            "Old_Requirement_Text": "...",
+            "Current_Requirement_ID": "...",
+            "Current_Requirement_Text": "...",
+            "Change_Description": "...",
+            "Impact_Assessment": "...",
+            "Testing_Implication": "...",
+            "Old_Citation": "...",
+            "Current_Citation": "...",
+            "Confidence": "High | Medium | Low",
+            "Notes": "..."
+          }
+        ]
+      }
+    ]
+  }
+}`;
+
+// System prompt for comparing Global Standards vs FLU Procedures
 export const GAP_ASSESSMENT_SYSTEM_PROMPT = `You are a Financial Crimes Compliance Audit Analyst performing a gap assessment between:
 - Document A (Standard): Global Financial Crime Standards (CIP/CDD)
 - Document B (Procedures): CIP/CDD Front Line Unit Procedures
@@ -120,6 +184,21 @@ Output your analysis as a JSON object with the following structure:
     ]
   }
 }`;
+
+export function buildStandardsComparisonPrompt(
+  oldStandardsContent: string,
+  currentStandardsContent: string
+): string {
+  return `Compare the following two versions of Global Financial Crime Standards documents:
+
+## Document A - Old Global Financial Crime Standards (Previous Version):
+${oldStandardsContent}
+
+## Document B - Current Global Financial Crime Standards (Current Version):
+${currentStandardsContent}
+
+Perform the version comparison following the methodology described. Identify all changes between versions. Return only the JSON workbook object.`;
+}
 
 export function buildGapAssessmentPrompt(
   standardsContent: string,
