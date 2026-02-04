@@ -473,49 +473,43 @@ export function executeSampling(
   };
 }
 
-// Get mock population data for demo - generates 10,000 records
+// Get mock population data for demo - loads 10,000 records from embedded Excel file
 export function getMockPopulationData(): Record<string, unknown>[] {
-  const jurisdictions = ["US", "UK", "CA", "DE", "FR", "JP", "AU", "SG", "HK", "CH"];
-  const riskLevels = ["Low", "Medium", "High"];
-  const entityTypes = ["Individual", "Corporation", "Partnership", "Trust", "LLC", "Foundation"];
-  const segments = ["Retail", "SMB", "Mid-Market", "Enterprise", "Institutional"];
-  const industries = ["Financial Services", "Technology", "Healthcare", "Manufacturing", "Retail", "Energy", "Real Estate"];
+  // Try to load from the embedded Excel file
+  try {
+    // Dynamic import for server-side only
+    const XLSX = require("xlsx");
+    const path = require("path");
+    const fs = require("fs");
 
+    const filePath = path.join(process.cwd(), "public", "demo", "synthetic_onboarding_data.xlsx");
+
+    if (fs.existsSync(filePath)) {
+      const workbook = XLSX.readFile(filePath);
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet) as Record<string, unknown>[];
+
+      console.log(`Loaded ${data.length} records from synthetic_onboarding_data.xlsx`);
+      return data;
+    }
+  } catch (error) {
+    console.warn("Could not load embedded Excel file, using fallback data:", error);
+  }
+
+  // Fallback: Generate simple mock data if Excel file is not available
   const data: Record<string, unknown>[] = [];
+  const jurisdictions = ["USA", "UK", "Canada", "Germany", "France"];
+  const statuses = ["Active", "Inactive"];
 
-  // Use seeded random for consistent demo data
-  const seededRandom = (seed: number) => {
-    const x = Math.sin(seed) * 10000;
-    return x - Math.floor(x);
-  };
-
-  for (let i = 1; i <= 10000; i++) {
-    const seed = i * 12345;
+  for (let i = 1; i <= 500; i++) {
     data.push({
-      RecordID: `REC-${String(i).padStart(5, "0")}`,
-      EntityName: `Entity ${i}`,
+      GCI: 600000000 + i - 1,
+      "Legal Name": `Entity ${i}`,
       Jurisdiction: jurisdictions[i % jurisdictions.length],
-      RiskLevel: riskLevels[Math.floor(seededRandom(seed) * riskLevels.length)],
-      EntityType: entityTypes[i % entityTypes.length],
-      Segment: segments[Math.floor(seededRandom(seed + 1) * segments.length)],
-      Industry: industries[Math.floor(seededRandom(seed + 2) * industries.length)],
-      AccountValue: Math.round(seededRandom(seed + 3) * 1000000) / 100,
-      OnboardingDate: new Date(
-        2023,
-        Math.floor(seededRandom(seed + 4) * 12),
-        Math.floor(seededRandom(seed + 5) * 28) + 1
-      )
-        .toISOString()
-        .split("T")[0],
-      LastReviewDate: new Date(
-        2024,
-        Math.floor(seededRandom(seed + 6) * 12),
-        Math.floor(seededRandom(seed + 7) * 28) + 1
-      )
-        .toISOString()
-        .split("T")[0],
-      Status: seededRandom(seed + 8) > 0.1 ? "Active" : "Inactive",
-      ReviewCycle: seededRandom(seed + 9) > 0.7 ? "Annual" : seededRandom(seed + 10) > 0.4 ? "Semi-Annual" : "Quarterly",
+      "Oper. Status": statuses[i % 10 === 0 ? 1 : 0],
+      "KYC Status": ["Green", "Red", "Amber"][i % 3],
+      "Party Type": "ORG",
     });
   }
 
