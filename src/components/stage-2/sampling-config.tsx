@@ -391,12 +391,12 @@ export function SamplingConfig({
         {/* ID Column */}
         <div className="space-y-2">
           <Label>ID Column (for tracking)</Label>
-          <Select value={idColumn} onValueChange={setIdColumn}>
+          <Select value={idColumn || "none"} onValueChange={(v) => setIdColumn(v === "none" ? "" : v)}>
             <SelectTrigger>
               <SelectValue placeholder="Select ID column..." />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">None</SelectItem>
+              <SelectItem value="none">None</SelectItem>
               {columns.map((col) => (
                 <SelectItem key={col} value={col}>
                   {col}
