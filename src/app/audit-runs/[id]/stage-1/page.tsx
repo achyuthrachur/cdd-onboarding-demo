@@ -13,10 +13,17 @@ import {
   CheckCircle2,
   Bot,
   FileSpreadsheet,
-  Sparkles,
+  Database,
 } from "lucide-react";
 import { AIAgentChat } from "@/components/stage-1/ai-agent-chat";
 import { GapResultsSpreadsheet } from "@/components/stage-1/gap-results-spreadsheet";
+import { toast } from "sonner";
+import {
+  loadFallbackDataForStage,
+  getStageData,
+  setStageData,
+  GapAssessmentResult as StoreGapAssessmentResult
+} from "@/lib/stage-data";
 
 interface Document {
   id: string;
@@ -44,7 +51,7 @@ export default function Stage1Page() {
   const [assessment2Result, setAssessment2Result] = useState<GapAssessmentResult | null>(null);
   const [activeTab, setActiveTab] = useState("agent");
 
-  // Load documents on mount
+  // Load documents and check for existing stage data on mount
   useEffect(() => {
     const loadDocuments = async () => {
       try {
@@ -59,15 +66,46 @@ export default function Stage1Page() {
     };
 
     loadDocuments();
+
+    // Check for existing stage data
+    const storedAssessment1 = getStageData('gapAssessment1');
+    const storedAssessment2 = getStageData('gapAssessment2');
+    if (storedAssessment1) {
+      setAssessment1Result(storedAssessment1 as unknown as GapAssessmentResult);
+    }
+    if (storedAssessment2) {
+      setAssessment2Result(storedAssessment2 as unknown as GapAssessmentResult);
+      if (storedAssessment1) {
+        setActiveTab("results");
+      }
+    }
   }, [id]);
 
   const handleAssessment1Complete = (result: GapAssessmentResult) => {
     setAssessment1Result(result);
+    // Save to centralized store
+    setStageData('gapAssessment1', result as unknown as StoreGapAssessmentResult);
   };
 
   const handleAssessment2Complete = (result: GapAssessmentResult) => {
     setAssessment2Result(result);
     setActiveTab("results"); // Switch to results tab after completing both
+    // Save to centralized store
+    setStageData('gapAssessment2', result as unknown as StoreGapAssessmentResult);
+  };
+
+  const handleLoadDemoData = () => {
+    loadFallbackDataForStage(1);
+    const storedAssessment1 = getStageData('gapAssessment1');
+    const storedAssessment2 = getStageData('gapAssessment2');
+    if (storedAssessment1) {
+      setAssessment1Result(storedAssessment1 as unknown as GapAssessmentResult);
+    }
+    if (storedAssessment2) {
+      setAssessment2Result(storedAssessment2 as unknown as GapAssessmentResult);
+    }
+    setActiveTab("results");
+    toast.success("Demo data loaded for Stage 1");
   };
 
   const canProceed = assessment1Result && assessment2Result;
@@ -93,6 +131,10 @@ export default function Stage1Page() {
               Run sequential gap assessments using the AI assistant
             </p>
           </div>
+          <Button variant="outline" onClick={handleLoadDemoData}>
+            <Database className="h-4 w-4 mr-2" />
+            Load Demo Data
+          </Button>
         </div>
       </div>
 

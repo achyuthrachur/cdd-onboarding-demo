@@ -13,6 +13,7 @@ import {
   Settings,
   Lock,
   CheckCircle2,
+  Database,
 } from "lucide-react";
 import { PopulationUploader } from "@/components/stage-2/population-uploader";
 import { SamplingConfig } from "@/components/stage-2/sampling-config";
@@ -22,6 +23,13 @@ import {
   SamplingPlan,
   SamplingSummary,
 } from "@/lib/sampling/original-engine";
+import { toast } from "sonner";
+import {
+  loadFallbackDataForStage,
+  getStageData,
+  setStageData,
+  hasStageData
+} from "@/lib/stage-data";
 
 interface PopulationData {
   id: string;
@@ -42,9 +50,25 @@ export default function Stage2Page() {
   const [summary, setSummary] = useState<SamplingSummary | null>(null);
   const [sampleId, setSampleId] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState(false);
+  const [hasGapData, setHasGapData] = useState(false);
 
-  // Load existing population data on mount
+  // Load existing data on mount
   useEffect(() => {
+    // Check for gap assessment data from Stage 1
+    setHasGapData(hasStageData('gapAssessment1') || hasStageData('combinedGaps'));
+
+    // Check for stored sampling result in centralized store
+    const storedSamplingResult = getStageData('samplingResult');
+    if (storedSamplingResult) {
+      setSample(storedSamplingResult.sample);
+      setSummary(storedSamplingResult.summary);
+      setPlan(storedSamplingResult.plan);
+      setConfig(storedSamplingResult.config);
+      setIsLocked(storedSamplingResult.isLocked || false);
+      setSampleId(storedSamplingResult.sampleId || null);
+    }
+
+    // Load existing population data from API
     const loadExistingData = async () => {
       try {
         const response = await fetch(`/api/sampling?auditRunId=${id}&type=population`);
@@ -55,7 +79,7 @@ export default function Stage2Page() {
           }
         }
 
-        // Also check for existing samples
+        // Also check for existing samples from API
         const sampleResponse = await fetch(`/api/sampling?auditRunId=${id}&type=sample`);
         if (sampleResponse.ok) {
           const samples = await sampleResponse.json();
@@ -121,6 +145,40 @@ export default function Stage2Page() {
 
   const handleSampleLocked = () => {
     setIsLocked(true);
+    // Save the complete sampling result to the centralized store
+    if (sample && plan && config && summary) {
+      setStageData('samplingResult', {
+        sample,
+        plan,
+        config,
+        summary,
+        sampleId: sampleId || undefined,
+        isLocked: true,
+      });
+    }
+  };
+
+  const handleLoadDemoData = () => {
+    loadFallbackDataForStage(2);
+    const storedSamplingResult = getStageData('samplingResult');
+    if (storedSamplingResult) {
+      setSample(storedSamplingResult.sample);
+      setSummary(storedSamplingResult.summary);
+      setPlan(storedSamplingResult.plan);
+      setConfig(storedSamplingResult.config);
+      setIsLocked(storedSamplingResult.isLocked || false);
+      setSampleId(storedSamplingResult.sampleId || null);
+      // Set population indicator
+      setPopulation({
+        id: 'demo-population',
+        fileName: 'synthetic_onboarding_data.xlsx',
+        columns: ['Entity_ID', 'Entity_Name', 'Country', 'Risk_Rating', 'Onboarding_Date'],
+        rowCount: 10000,
+        uploadedAt: new Date().toISOString(),
+      });
+    }
+    setHasGapData(true);
+    toast.success("Demo data loaded for Stage 2");
   };
 
   const handlePlanUpdated = (updatedPlan: SamplingPlan) => {
@@ -158,6 +216,10 @@ export default function Stage2Page() {
               your sample set
             </p>
           </div>
+          <Button variant="outline" onClick={handleLoadDemoData}>
+            <Database className="h-4 w-4 mr-2" />
+            Load Demo Data
+          </Button>
         </div>
       </div>
 
@@ -318,7 +380,7 @@ export default function Stage2Page() {
         </Link>
         <Link href={`/audit-runs/${id}/stage-3`}>
           <Button disabled={!canProceed}>
-            Continue to Workbooks
+            Continue to Attribute Extraction
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>

@@ -6,106 +6,110 @@ import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   ArrowLeft,
-  RefreshCw,
-  Loader2,
+  ArrowRight,
+  Grid3X3,
+  CheckSquare,
+  FileDown,
   CheckCircle2,
-  AlertCircle,
+  FileSpreadsheet,
+  Library,
+  Database,
 } from "lucide-react";
+import { WorkbookGenerator } from "@/components/stage-3/workbook-generator";
+import { WorkbookEditor } from "@/components/stage-3/workbook-editor";
+import { AttributeLibraryUI } from "@/components/attribute-library";
+import { loadFallbackDataForStage, getStageData, hasStageData } from "@/lib/stage-data";
 import { toast } from "sonner";
-import { ConsolidationDashboard } from "@/components/stage-4/consolidation-dashboard";
-import { FindingsTable } from "@/components/stage-4/findings-table";
-import { ReportGenerator } from "@/components/stage-4/report-generator";
-import { ConsolidationResult } from "@/lib/consolidation/engine";
+
+interface WorkbookSummary {
+  id: string;
+  status: string;
+  rowCount: number;
+  summary: {
+    totalRows: number;
+    completedRows: number;
+    passCount: number;
+    failCount: number;
+    naCount: number;
+    completionPercentage: number;
+  };
+  createdAt: string;
+}
+
+type ViewMode = "workbooks" | "attribute-library";
 
 export default function Stage4Page() {
   const params = useParams();
   const id = params.id as string;
 
-  const [consolidation, setConsolidation] = useState<ConsolidationResult | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [hasSubmittedWorkbooks, setHasSubmittedWorkbooks] = useState(true); // Demo mode
+  const [viewMode, setViewMode] = useState<ViewMode>("workbooks");
+  const [workbooks, setWorkbooks] = useState<WorkbookSummary[]>([]);
+  const [selectedWorkbookId, setSelectedWorkbookId] = useState<string | null>(null);
+  const [hasStage3Results, setHasStage3Results] = useState(false);
+  const [hasLockedSample, setHasLockedSample] = useState(false);
 
-  // Load existing consolidation on mount
+  // Check for prerequisite data
   useEffect(() => {
-    const loadConsolidation = async () => {
+    setHasStage3Results(hasStageData('extractedAttributes') || hasStageData('attributeExtractionComplete'));
+    setHasLockedSample(hasStageData('samplingResult'));
+  }, []);
+
+  // Load existing workbooks on mount
+  useEffect(() => {
+    const loadWorkbooks = async () => {
       try {
-        const response = await fetch(`/api/consolidation?auditRunId=${id}`);
+        const response = await fetch(`/api/workbooks?auditRunId=${id}`);
         if (response.ok) {
           const data = await response.json();
-          if (data.length > 0) {
-            // Get the latest consolidation
-            const latest = data.sort(
-              (a: ConsolidationResult, b: ConsolidationResult) =>
-                new Date(b.generatedAt).getTime() - new Date(a.generatedAt).getTime()
-            )[0];
-            setConsolidation(latest);
+          setWorkbooks(data);
+          // Auto-select the first non-submitted workbook
+          const activeWorkbook = data.find(
+            (wb: WorkbookSummary) => wb.status !== "submitted"
+          );
+          if (activeWorkbook) {
+            setSelectedWorkbookId(activeWorkbook.id);
           }
         }
       } catch (error) {
-        console.error("Failed to load consolidation:", error);
-      } finally {
-        setIsLoading(false);
+        console.error("Failed to load workbooks:", error);
       }
     };
 
-    loadConsolidation();
+    loadWorkbooks();
   }, [id]);
 
-  const handleGenerateConsolidation = async () => {
-    setIsGenerating(true);
-    try {
-      const response = await fetch("/api/consolidation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "generate",
-          auditRunId: id,
-          useMock: true, // Use mock data for demo
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to generate consolidation");
-      }
-
-      const data = await response.json();
-      setConsolidation(data);
-      toast.success("Consolidation generated successfully");
-    } catch {
-      toast.error("Failed to generate consolidation");
-    } finally {
-      setIsGenerating(false);
-    }
+  const handleLoadDemoData = () => {
+    loadFallbackDataForStage(4);
+    setHasStage3Results(true);
+    setHasLockedSample(true);
+    toast.success("Demo data loaded for Stage 4");
   };
 
-  const handleRefreshConsolidation = async () => {
-    setIsGenerating(true);
-    try {
-      const response = await fetch("/api/consolidation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "refresh",
-          auditRunId: id,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to refresh consolidation");
-      }
-
-      const data = await response.json();
-      setConsolidation(data);
-      toast.success("Consolidation refreshed");
-    } catch {
-      toast.error("Failed to refresh consolidation");
-    } finally {
-      setIsGenerating(false);
-    }
+  const handleWorkbookGenerated = (workbook: WorkbookSummary) => {
+    setWorkbooks([...workbooks, workbook]);
+    setSelectedWorkbookId(workbook.id);
   };
+
+  const handleWorkbookSubmitted = () => {
+    // Refresh workbooks list
+    setWorkbooks(
+      workbooks.map((wb) =>
+        wb.id === selectedWorkbookId ? { ...wb, status: "submitted" } : wb
+      )
+    );
+    setSelectedWorkbookId(null);
+  };
+
+  const handleGenerateFromLibrary = () => {
+    // Switch to workbooks view and trigger generation
+    setViewMode("workbooks");
+  };
+
+  const hasSubmittedWorkbook = workbooks.some((wb) => wb.status === "submitted");
+  const canProceed = hasSubmittedWorkbook;
 
   return (
     <div className="p-8">
@@ -121,145 +125,259 @@ export default function Stage4Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-orange-100 text-orange-700">Stage 4</Badge>
+              <Badge className="bg-purple-100 text-purple-700">Stage 4</Badge>
               <h1 className="text-3xl font-bold tracking-tight">
-                Consolidation & Reporting
+                Workbook Generation
               </h1>
             </div>
             <p className="text-muted-foreground mt-2">
-              Consolidate results, view metrics, and generate final report
+              Generate testing workbooks from attributes and sample data
             </p>
           </div>
-          <div className="flex gap-2">
-            {consolidation ? (
-              <Button
-                variant="outline"
-                onClick={handleRefreshConsolidation}
-                disabled={isGenerating}
-              >
-                {isGenerating ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                )}
-                Refresh Data
-              </Button>
-            ) : (
-              <Button
-                onClick={handleGenerateConsolidation}
-                disabled={isGenerating || !hasSubmittedWorkbooks}
-              >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  "Generate Consolidation"
-                )}
-              </Button>
+          <Button variant="outline" onClick={handleLoadDemoData}>
+            <Database className="h-4 w-4 mr-2" />
+            Load Demo Data
+          </Button>
+        </div>
+      </div>
+
+      {/* Prerequisites Check */}
+      {(!hasStage3Results || !hasLockedSample) && (
+        <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+          <h3 className="font-medium text-yellow-700 dark:text-yellow-300 mb-2">
+            Prerequisites Required
+          </h3>
+          <ul className="text-sm text-yellow-600 dark:text-yellow-400 space-y-1">
+            {!hasStage3Results && (
+              <li>• Complete Stage 3 (Attribute Extraction) or load demo data</li>
             )}
-          </div>
-        </div>
-      </div>
-
-      {/* Status Banner */}
-      {consolidation ? (
-        <div className="mb-6 p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3">
-          <CheckCircle2 className="h-5 w-5 text-green-600" />
-          <div>
-            <p className="font-medium text-green-700 dark:text-green-300">
-              Consolidation Available
-            </p>
-            <p className="text-sm text-green-600 dark:text-green-400">
-              Last generated: {new Date(consolidation.generatedAt).toLocaleString()} •{" "}
-              {consolidation.rawData.totalRows} rows from {consolidation.rawData.workbookIds.length} workbook(s)
-            </p>
-          </div>
-        </div>
-      ) : !isLoading && (
-        <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg flex items-center gap-3">
-          <AlertCircle className="h-5 w-5 text-yellow-600" />
-          <div>
-            <p className="font-medium text-yellow-700 dark:text-yellow-300">
-              No Consolidation Yet
-            </p>
-            <p className="text-sm text-yellow-600 dark:text-yellow-400">
-              {hasSubmittedWorkbooks
-                ? "Click \"Generate Consolidation\" to aggregate results from submitted workbooks"
-                : "Submit at least one workbook in Stage 3 to generate consolidation"}
-            </p>
-          </div>
+            {!hasLockedSample && (
+              <li>• Complete Stage 2 (Sampling) with a locked sample or load demo data</li>
+            )}
+          </ul>
         </div>
       )}
 
-      {/* Consolidation Dashboard */}
-      <div className="mb-8">
-        <ConsolidationDashboard
-          consolidation={consolidation}
-          isLoading={isLoading}
-        />
-      </div>
+      {/* View Mode Tabs */}
+      <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)} className="mb-6">
+        <TabsList>
+          <TabsTrigger value="workbooks" className="flex items-center gap-2">
+            <FileSpreadsheet className="h-4 w-4" />
+            Workbook Generation
+          </TabsTrigger>
+          <TabsTrigger value="attribute-library" className="flex items-center gap-2">
+            <Library className="h-4 w-4" />
+            Attribute Library
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Findings Table */}
-      {consolidation && (
-        <div className="mb-8">
-          <FindingsTable
-            exceptions={consolidation.exceptions}
-            findingsByAttribute={consolidation.findingsByAttribute}
-          />
-        </div>
-      )}
+        {/* Workbook Testing View */}
+        <TabsContent value="workbooks" className="mt-6">
+          {/* Workflow Steps */}
+          <div className="grid gap-6 md:grid-cols-3 mb-8">
+            <Card className={workbooks.length > 0 ? "border-green-500" : ""}>
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                      workbooks.length > 0
+                        ? "bg-green-100 text-green-600"
+                        : "bg-blue-100 text-blue-600"
+                    }`}
+                  >
+                    {workbooks.length > 0 ? (
+                      <CheckCircle2 className="h-5 w-5" />
+                    ) : (
+                      <Grid3X3 className="h-5 w-5" />
+                    )}
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">Step 1: Generate</CardTitle>
+                    <CardDescription>Create workbooks</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Badge variant={workbooks.length > 0 ? "default" : "outline"}>
+                  {workbooks.length > 0
+                    ? `${workbooks.length} workbook(s)`
+                    : "No workbooks"}
+                </Badge>
+              </CardContent>
+            </Card>
 
-      {/* Report Generator */}
-      <div className="mb-8">
-        <ReportGenerator
-          consolidation={consolidation}
-          auditRunId={id}
-        />
-      </div>
+            <Card
+              className={
+                workbooks.some((wb) => wb.status === "in_progress")
+                  ? "border-green-500"
+                  : ""
+              }
+            >
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                      workbooks.some(
+                        (wb) =>
+                          wb.status === "in_progress" || wb.status === "submitted"
+                      )
+                        ? "bg-green-100 text-green-600"
+                        : "bg-purple-100 text-purple-600"
+                    }`}
+                  >
+                    {workbooks.some(
+                      (wb) =>
+                        wb.status === "in_progress" || wb.status === "submitted"
+                    ) ? (
+                      <CheckCircle2 className="h-5 w-5" />
+                    ) : (
+                      <CheckSquare className="h-5 w-5" />
+                    )}
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">Step 2: Review</CardTitle>
+                    <CardDescription>Verify workbook</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Badge
+                  variant={
+                    workbooks.some((wb) => wb.summary?.completionPercentage > 0)
+                      ? "default"
+                      : "outline"
+                  }
+                >
+                  {workbooks.length > 0
+                    ? `${Math.round(
+                        workbooks.reduce(
+                          (sum, wb) => sum + (wb.summary?.completionPercentage || 0),
+                          0
+                        ) / workbooks.length
+                      )}% avg completion`
+                    : "Pending"}
+                </Badge>
+              </CardContent>
+            </Card>
 
-      {/* Prerequisites Info (when no consolidation) */}
-      {!consolidation && !isLoading && (
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Prerequisites</CardTitle>
-            <CardDescription>
-              Complete these steps before generating consolidation
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
-                <span>Stage 1: Attribute Extraction complete</span>
+            <Card className={hasSubmittedWorkbook ? "border-green-500" : ""}>
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                      hasSubmittedWorkbook
+                        ? "bg-green-100 text-green-600"
+                        : "bg-gray-100 text-gray-400"
+                    }`}
+                  >
+                    {hasSubmittedWorkbook ? (
+                      <CheckCircle2 className="h-5 w-5" />
+                    ) : (
+                      <FileDown className="h-5 w-5" />
+                    )}
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">Step 3: Submit</CardTitle>
+                    <CardDescription>For testing</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Badge variant={hasSubmittedWorkbook ? "default" : "outline"}>
+                  {hasSubmittedWorkbook
+                    ? `${workbooks.filter((wb) => wb.status === "submitted").length} submitted`
+                    : "Pending"}
+                </Badge>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Workbook Generator */}
+          <div className="mb-6">
+            <WorkbookGenerator
+              auditRunId={id}
+              hasStage1Results={hasStage3Results}
+              hasLockedSample={hasLockedSample}
+              workbooks={workbooks}
+              onWorkbookGenerated={handleWorkbookGenerated}
+            />
+          </div>
+
+          {/* Workbook Selector */}
+          {workbooks.length > 0 && !selectedWorkbookId && (
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Select Workbook to Review</CardTitle>
+                <CardDescription>
+                  Choose a workbook to review before testing
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {workbooks.map((wb) => (
+                    <div
+                      key={wb.id}
+                      className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-muted/80"
+                      onClick={() =>
+                        wb.status !== "submitted" && setSelectedWorkbookId(wb.id)
+                      }
+                    >
+                      <div>
+                        <p className="font-medium">
+                          Workbook - {new Date(wb.createdAt).toLocaleDateString()}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {wb.rowCount} tests • {wb.summary.completionPercentage.toFixed(0)}%
+                          complete
+                        </p>
+                      </div>
+                      <Badge
+                        variant={
+                          wb.status === "submitted"
+                            ? "default"
+                            : wb.status === "in_progress"
+                            ? "secondary"
+                            : "outline"
+                        }
+                        className={wb.status === "submitted" ? "bg-green-500" : ""}
+                      >
+                        {wb.status}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Workbook Editor */}
+          {selectedWorkbookId && (
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedWorkbookId(null)}
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Workbook List
+                </Button>
               </div>
-              <div className="flex items-center gap-3">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
-                <span>Stage 2: Sample locked</span>
-              </div>
-              <div className="flex items-center gap-3">
-                {hasSubmittedWorkbooks ? (
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
-                ) : (
-                  <AlertCircle className="h-5 w-5 text-yellow-500" />
-                )}
-                <span>
-                  Stage 3: At least one workbook submitted
-                  {!hasSubmittedWorkbooks && (
-                    <Badge variant="outline" className="ml-2">
-                      Required
-                    </Badge>
-                  )}
-                </span>
-              </div>
+              <WorkbookEditor
+                workbookId={selectedWorkbookId}
+                onSubmitted={handleWorkbookSubmitted}
+              />
             </div>
-            <p className="text-sm text-muted-foreground mt-4">
-              Demo mode: Mock data will be used if no real workbooks are submitted.
-            </p>
-          </CardContent>
-        </Card>
-      )}
+          )}
+        </TabsContent>
+
+        {/* Attribute Library View */}
+        <TabsContent value="attribute-library" className="mt-6">
+          <AttributeLibraryUI
+            auditRunId={id}
+            onWorkbookGenerate={handleGenerateFromLibrary}
+          />
+        </TabsContent>
+      </Tabs>
 
       {/* Navigation */}
       <div className="flex justify-between">
@@ -269,8 +387,11 @@ export default function Stage4Page() {
             Back to Stage 3
           </Button>
         </Link>
-        <Link href={`/audit-runs/${id}`}>
-          <Button variant="outline">Back to Overview</Button>
+        <Link href={`/audit-runs/${id}/stage-5`}>
+          <Button disabled={!canProceed}>
+            Continue to Testing
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
         </Link>
       </div>
     </div>

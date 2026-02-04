@@ -117,9 +117,10 @@ export function GapResultsSpreadsheet({
               colHeaders={gapDetails.columns}
               rowHeaders={true}
               width="100%"
-              height={400}
+              height="auto"
               licenseKey="non-commercial-and-evaluation"
               stretchH="all"
+              autoRowSize={true}
               readOnly={true}
               columnSorting={true}
               filters={true}
@@ -157,9 +158,10 @@ export function GapResultsSpreadsheet({
               colHeaders={summary.columns}
               rowHeaders={true}
               width="100%"
-              height={300}
+              height="auto"
               licenseKey="non-commercial-and-evaluation"
               stretchH="all"
+              autoRowSize={true}
               readOnly={true}
               manualColumnResize={true}
             />

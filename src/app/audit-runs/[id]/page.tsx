@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ArrowRight, FileText, BarChart3, Grid3X3, FileBarChart } from "lucide-react";
+import { ArrowLeft, ArrowRight, FileText, BarChart3, Sparkles, Grid3X3, ClipboardCheck, FileBarChart } from "lucide-react";
 import { StageNav } from "@/components/audit-run/stage-nav";
 import { DemoModeBanner } from "@/components/demo-mode-banner";
 
@@ -40,7 +40,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
     {
       number: 1,
       name: "Gap Assessment",
-      description: "Upload documents and run AI analysis",
+      description: "Upload documents and run AI gap analysis",
       icon: FileText,
       href: `/audit-runs/${id}/stage-1`,
       status: auditRun.currentStage >= 1 ? "active" : "pending",
@@ -55,19 +55,35 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
     },
     {
       number: 3,
-      name: "Workbooks",
-      description: "Complete testing in spreadsheet UI",
-      icon: Grid3X3,
+      name: "Attribute Extraction",
+      description: "Extract testing attributes from gaps",
+      icon: Sparkles,
       href: `/audit-runs/${id}/stage-3`,
       status: auditRun.currentStage >= 3 ? "active" : "pending",
     },
     {
       number: 4,
-      name: "Reporting",
-      description: "Generate consolidated report",
-      icon: FileBarChart,
+      name: "Workbook Generation",
+      description: "Generate testing workbooks",
+      icon: Grid3X3,
       href: `/audit-runs/${id}/stage-4`,
       status: auditRun.currentStage >= 4 ? "active" : "pending",
+    },
+    {
+      number: 5,
+      name: "Testing",
+      description: "Execute tests and record results",
+      icon: ClipboardCheck,
+      href: `/audit-runs/${id}/stage-5`,
+      status: auditRun.currentStage >= 5 ? "active" : "pending",
+    },
+    {
+      number: 6,
+      name: "Consolidation",
+      description: "Generate consolidated report",
+      icon: FileBarChart,
+      href: `/audit-runs/${id}/stage-6`,
+      status: auditRun.currentStage >= 6 ? "active" : "pending",
     },
   ];
 
@@ -109,7 +125,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
       />
 
       {/* Stage Cards */}
-      <div className="grid gap-6 md:grid-cols-2 mt-8">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
         {stages.map((stage) => {
           const isActive = auditRun.currentStage >= stage.number;
           const isCurrent = auditRun.currentStage === stage.number;
@@ -152,9 +168,8 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
                   <Button
                     className="w-full"
                     variant={isCurrent ? "default" : "outline"}
-                    disabled={!isActive}
                   >
-                    {isCurrent ? "Continue" : isActive ? "View" : "Locked"}
+                    {isCurrent ? "Continue" : isActive ? "View" : "Start"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
@@ -163,6 +178,56 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
           );
         })}
       </div>
+
+      {/* Workflow Summary */}
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>Workflow Summary</CardTitle>
+          <CardDescription>
+            Overview of the 6-stage audit workflow
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="w-24 font-medium">Stage 1</div>
+              <div className="flex-1 text-sm text-muted-foreground">
+                Gap Assessment: Compare standards and procedures to identify gaps
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-24 font-medium">Stage 2</div>
+              <div className="flex-1 text-sm text-muted-foreground">
+                Sampling: Upload population and generate statistical sample
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-24 font-medium">Stage 3</div>
+              <div className="flex-1 text-sm text-muted-foreground">
+                Attribute Extraction: Extract testing attributes from gap analysis
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-24 font-medium">Stage 4</div>
+              <div className="flex-1 text-sm text-muted-foreground">
+                Workbook Generation: Create testing workbooks from attributes and sample
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-24 font-medium">Stage 5</div>
+              <div className="flex-1 text-sm text-muted-foreground">
+                Testing: Execute tests and record pass/fail results
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-24 font-medium">Stage 6</div>
+              <div className="flex-1 text-sm text-muted-foreground">
+                Consolidation: Aggregate results and generate final report
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
