@@ -431,8 +431,8 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                     </TableCell>
                     <TableCell>
                       <Select
-                        value={row.observation}
-                        onValueChange={(v) => updateRow(row.id, "observation", v)}
+                        value={row.observation || "none"}
+                        onValueChange={(v) => updateRow(row.id, "observation", v === "none" ? "" : v)}
                         disabled={isSubmitted}
                       >
                         <SelectTrigger className="w-[200px] h-8">
@@ -441,7 +441,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">None</SelectItem>
+                          <SelectItem value="none">None</SelectItem>
                           {STANDARD_OBSERVATIONS.map((obs) => (
                             <SelectItem key={obs.id} value={obs.text}>
                               <span className="truncate max-w-[250px]">{obs.text}</span>
@@ -484,8 +484,8 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                               <div className="space-y-2">
                                 <h4 className="font-semibold text-sm">Result</h4>
                                 <Select
-                                  value={row.result || ""}
-                                  onValueChange={(v) => updateRow(row.id, "result", v)}
+                                  value={row.result || "Not tested"}
+                                  onValueChange={(v) => updateRow(row.id, "result", v === "Not tested" ? "" : v)}
                                   disabled={isSubmitted}
                                 >
                                   <SelectTrigger>
@@ -493,8 +493,8 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                                   </SelectTrigger>
                                   <SelectContent>
                                     {RESULT_OPTIONS.map((opt) => (
-                                      <SelectItem key={opt || "empty"} value={opt || ""}>
-                                        {opt || "Not tested"}
+                                      <SelectItem key={opt} value={opt}>
+                                        {opt}
                                       </SelectItem>
                                     ))}
                                   </SelectContent>
@@ -515,15 +515,15 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                             <div className="space-y-2">
                               <h4 className="font-semibold text-sm">Observation</h4>
                               <Select
-                                value={row.observation}
-                                onValueChange={(v) => updateRow(row.id, "observation", v)}
+                                value={row.observation || "none"}
+                                onValueChange={(v) => updateRow(row.id, "observation", v === "none" ? "" : v)}
                                 disabled={isSubmitted}
                               >
                                 <SelectTrigger>
                                   <SelectValue placeholder="Select observation..." />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="">None</SelectItem>
+                                  <SelectItem value="none">None</SelectItem>
                                   {STANDARD_OBSERVATIONS.map((obs) => (
                                     <SelectItem key={obs.id} value={obs.text}>
                                       {obs.text}

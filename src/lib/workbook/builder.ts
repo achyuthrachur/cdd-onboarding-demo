@@ -70,7 +70,7 @@ export const STANDARD_OBSERVATIONS = [
   { id: "OBS010", text: "Documentation dated outside acceptable period. Updated records needed." },
 ];
 
-export const RESULT_OPTIONS = ["Pass", "Fail", "N/A", ""];
+export const RESULT_OPTIONS = ["Pass", "Fail", "N/A", "Not tested"];
 
 // Generate workbook rows from attributes and sample
 export function generateWorkbookRows(

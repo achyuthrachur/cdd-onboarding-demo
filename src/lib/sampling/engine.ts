@@ -473,37 +473,49 @@ export function executeSampling(
   };
 }
 
-// Get mock population data for demo
+// Get mock population data for demo - generates 10,000 records
 export function getMockPopulationData(): Record<string, unknown>[] {
-  const jurisdictions = ["US", "UK", "CA", "DE", "FR"];
+  const jurisdictions = ["US", "UK", "CA", "DE", "FR", "JP", "AU", "SG", "HK", "CH"];
   const riskLevels = ["Low", "Medium", "High"];
-  const entityTypes = ["Individual", "Corporation", "Partnership", "Trust"];
+  const entityTypes = ["Individual", "Corporation", "Partnership", "Trust", "LLC", "Foundation"];
+  const segments = ["Retail", "SMB", "Mid-Market", "Enterprise", "Institutional"];
+  const industries = ["Financial Services", "Technology", "Healthcare", "Manufacturing", "Retail", "Energy", "Real Estate"];
 
   const data: Record<string, unknown>[] = [];
 
-  for (let i = 1; i <= 500; i++) {
+  // Use seeded random for consistent demo data
+  const seededRandom = (seed: number) => {
+    const x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  };
+
+  for (let i = 1; i <= 10000; i++) {
+    const seed = i * 12345;
     data.push({
       RecordID: `REC-${String(i).padStart(5, "0")}`,
       EntityName: `Entity ${i}`,
       Jurisdiction: jurisdictions[i % jurisdictions.length],
-      RiskLevel: riskLevels[i % riskLevels.length],
+      RiskLevel: riskLevels[Math.floor(seededRandom(seed) * riskLevels.length)],
       EntityType: entityTypes[i % entityTypes.length],
-      AccountValue: Math.round(Math.random() * 1000000) / 100,
+      Segment: segments[Math.floor(seededRandom(seed + 1) * segments.length)],
+      Industry: industries[Math.floor(seededRandom(seed + 2) * industries.length)],
+      AccountValue: Math.round(seededRandom(seed + 3) * 1000000) / 100,
       OnboardingDate: new Date(
         2023,
-        Math.floor(Math.random() * 12),
-        Math.floor(Math.random() * 28) + 1
+        Math.floor(seededRandom(seed + 4) * 12),
+        Math.floor(seededRandom(seed + 5) * 28) + 1
       )
         .toISOString()
         .split("T")[0],
       LastReviewDate: new Date(
         2024,
-        Math.floor(Math.random() * 12),
-        Math.floor(Math.random() * 28) + 1
+        Math.floor(seededRandom(seed + 6) * 12),
+        Math.floor(seededRandom(seed + 7) * 28) + 1
       )
         .toISOString()
         .split("T")[0],
-      Status: Math.random() > 0.1 ? "Active" : "Inactive",
+      Status: seededRandom(seed + 8) > 0.1 ? "Active" : "Inactive",
+      ReviewCycle: seededRandom(seed + 9) > 0.7 ? "Annual" : seededRandom(seed + 10) > 0.4 ? "Semi-Annual" : "Quarterly",
     });
   }
 
