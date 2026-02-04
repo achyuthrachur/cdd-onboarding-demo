@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 const DEMO_DOCUMENTS = [
   {
     id: "demo-doc-1",
-    docType: "flu_global",
-    jurisdiction: null,
+    docType: "flu_jurisdiction",
+    jurisdiction: "US",
     fileName: "CIP CDD Procedures (Mock).docx",
     fileUrl: "/demo/CIP CDD Procedures (Mock).docx",
     fileHash: null,
@@ -20,6 +20,15 @@ const DEMO_DOCUMENTS = [
     fileUrl: "/demo/Global Financial Standards (Mock) (5).docx",
     fileHash: null,
     uploadedAt: "2024-01-15T10:05:00.000Z",
+  },
+  {
+    id: "demo-doc-3",
+    docType: "global_std_old",
+    jurisdiction: null,
+    fileName: "Global Financial Standards (Synthetic Older Version).docx",
+    fileUrl: "/demo/Global Financial Standards (Synthetic Older Version).docx",
+    fileHash: null,
+    uploadedAt: "2024-01-15T09:55:00.000Z",
   },
 ];
 

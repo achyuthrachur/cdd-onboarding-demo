@@ -34,7 +34,6 @@ interface DocumentUploaderProps {
 const DOC_TYPES = [
   { value: "global_std_old", label: "Global Standards (Old Version)" },
   { value: "global_std_new", label: "Global Standards (New Version)" },
-  { value: "flu_global", label: "FLU Procedures (Global)" },
   { value: "flu_jurisdiction", label: "FLU Procedures (Jurisdiction)" },
 ];
 

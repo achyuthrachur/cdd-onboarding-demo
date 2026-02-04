@@ -129,8 +129,8 @@ export default function NewAuditRunPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="custom">Custom (Start Fresh)</SelectItem>
-                  <SelectItem value="bofa-demo">
-                    BofA Synthetic Demo Package
+                  <SelectItem value="synthetic-demo">
+                    Synthetic Data Package
                   </SelectItem>
                 </SelectContent>
               </Select>
