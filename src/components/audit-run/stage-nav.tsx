@@ -2,15 +2,12 @@
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Check, LucideIcon } from "lucide-react";
+import { Check } from "lucide-react";
 
 interface Stage {
   number: number;
   name: string;
-  description: string;
-  icon: LucideIcon;
   href: string;
-  status: "pending" | "active" | "completed";
 }
 
 interface StageNavProps {

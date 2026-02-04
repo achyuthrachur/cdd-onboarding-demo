@@ -103,7 +103,10 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
       </div>
 
       {/* Stage Navigation */}
-      <StageNav stages={stages} currentStage={auditRun.currentStage} />
+      <StageNav
+        stages={stages.map(({ number, name, href }) => ({ number, name, href }))}
+        currentStage={auditRun.currentStage}
+      />
 
       {/* Stage Cards */}
       <div className="grid gap-6 md:grid-cols-2 mt-8">
