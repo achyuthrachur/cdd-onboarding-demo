@@ -43,13 +43,19 @@ export async function POST(request: NextRequest) {
 
     let result;
 
+    // Debug: Log whether API key is present (not the actual key!)
+    console.log("OPENAI_API_KEY present:", !!process.env.OPENAI_API_KEY);
+    console.log("useMock flag:", useMock);
+
     if (useMock || !process.env.OPENAI_API_KEY) {
       // Use mock data for demo
+      console.log("Using MOCK data - either useMock=true or no API key");
       result = {
         success: true,
         data: getMockGapAssessmentResult(),
       };
     } else {
+      console.log("Using REAL OpenAI API");
       if (!standardsContent || !proceduresContent) {
         return NextResponse.json(
           { error: "Both standards and procedures content are required" },
