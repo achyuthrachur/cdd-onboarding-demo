@@ -483,6 +483,7 @@ export function getMockPopulationData(): Record<string, unknown>[] {
     const fs = require("fs");
 
     const filePath = path.join(process.cwd(), "public", "demo", "synthetic_onboarding_data.xlsx");
+    console.log("Attempting to load Excel from:", filePath);
 
     if (fs.existsSync(filePath)) {
       const workbook = XLSX.readFile(filePath);
@@ -490,28 +491,38 @@ export function getMockPopulationData(): Record<string, unknown>[] {
       const sheet = workbook.Sheets[sheetName];
       const data = XLSX.utils.sheet_to_json(sheet) as Record<string, unknown>[];
 
-      console.log(`Loaded ${data.length} records from synthetic_onboarding_data.xlsx`);
+      console.log(`Successfully loaded ${data.length} records from synthetic_onboarding_data.xlsx`);
       return data;
+    } else {
+      console.warn("Excel file not found at:", filePath);
     }
   } catch (error) {
-    console.warn("Could not load embedded Excel file, using fallback data:", error);
+    console.error("Error loading embedded Excel file:", error);
   }
 
-  // Fallback: Generate simple mock data if Excel file is not available
+  // Fallback: Generate 10,000 mock records if Excel file is not available
+  console.log("Generating 10,000 fallback mock records...");
   const data: Record<string, unknown>[] = [];
-  const jurisdictions = ["USA", "UK", "Canada", "Germany", "France"];
+  const jurisdictions = ["USA", "UK", "Canada", "Germany", "France", "Australia", "Japan", "Singapore"];
   const statuses = ["Active", "Inactive"];
+  const riskRatings = ["Low", "Medium", "High", "Critical"];
+  const entityTypes = ["Corporation", "LLC", "Partnership", "Trust", "Individual"];
 
-  for (let i = 1; i <= 500; i++) {
+  for (let i = 1; i <= 10000; i++) {
+    const riskIdx = i % 100 < 60 ? 0 : i % 100 < 85 ? 1 : i % 100 < 97 ? 2 : 3; // 60% Low, 25% Medium, 12% High, 3% Critical
     data.push({
-      GCI: 600000000 + i - 1,
-      "Legal Name": `Entity ${i}`,
+      Entity_ID: `ENT-${String(i).padStart(5, '0')}`,
+      Entity_Name: `Entity ${i}`,
       Jurisdiction: jurisdictions[i % jurisdictions.length],
-      "Oper. Status": statuses[i % 10 === 0 ? 1 : 0],
-      "KYC Status": ["Green", "Red", "Amber"][i % 3],
-      "Party Type": "ORG",
+      Status: statuses[i % 10 === 0 ? 1 : 0],
+      RiskRating: riskRatings[riskIdx],
+      EntityType: entityTypes[i % entityTypes.length],
+      OnboardingDate: new Date(2020 + Math.floor(i / 2500), i % 12, (i % 28) + 1).toISOString().split('T')[0],
+      AnnualRevenue: Math.floor(Math.random() * 10000000) + 100000,
+      EmployeeCount: Math.floor(Math.random() * 5000) + 10,
     });
   }
 
+  console.log(`Generated ${data.length} fallback records`);
   return data;
 }

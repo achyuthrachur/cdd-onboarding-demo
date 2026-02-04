@@ -117,10 +117,11 @@ export function GapResultsSpreadsheet({
               colHeaders={gapDetails.columns}
               rowHeaders={true}
               width="100%"
-              height="auto"
+              height={Math.min(800, Math.max(200, (gapDetails.data.length + 1) * 28))}
               licenseKey="non-commercial-and-evaluation"
               stretchH="all"
-              autoRowSize={true}
+              autoRowSize={false}
+              rowHeights={26}
               readOnly={true}
               columnSorting={true}
               filters={true}
@@ -158,10 +159,11 @@ export function GapResultsSpreadsheet({
               colHeaders={summary.columns}
               rowHeaders={true}
               width="100%"
-              height="auto"
+              height={Math.min(400, Math.max(100, (summary.data.length + 1) * 28))}
               licenseKey="non-commercial-and-evaluation"
               stretchH="all"
-              autoRowSize={true}
+              autoRowSize={false}
+              rowHeights={26}
               readOnly={true}
               manualColumnResize={true}
             />

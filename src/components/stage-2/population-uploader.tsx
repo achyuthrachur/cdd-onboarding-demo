@@ -265,7 +265,7 @@ export function PopulationUploader({
             ) : (
               <>
                 <Database className="mr-2 h-4 w-4" />
-                Load Demo Data (500 records)
+                Load Demo Data (10,000 records)
               </>
             )}
           </Button>
