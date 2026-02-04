@@ -83,7 +83,6 @@ export default function Stage1Page() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           auditRunId: id,
-          useMock: true, // Use mock data for demo
         }),
       });
 
@@ -110,7 +109,6 @@ export default function Stage1Page() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           auditRunId: id,
-          useMock: true, // Use mock data for demo
         }),
       });
 
@@ -335,7 +333,7 @@ export default function Stage1Page() {
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground mt-4 text-center">
-                Demo mode: Uses pre-computed mock results. Connect OpenAI API for live analysis.
+                AI-powered analysis using OpenAI GPT-4
               </p>
             </CardContent>
           </Card>
