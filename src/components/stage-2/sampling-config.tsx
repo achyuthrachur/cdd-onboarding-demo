@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -13,9 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Settings2, Calculator, Layers, X, Loader2 } from "lucide-react";
+import { Settings2, Calculator, Layers, X, Loader2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import { SamplingConfig as SamplingConfigType, SamplingPlan, calculateSampleSize } from "@/lib/sampling/engine";
+import {
+  SamplingConfig as SamplingConfigType,
+  SamplingPlan,
+  calculateSampleSize,
+  hasOverrides,
+} from "@/lib/sampling/original-engine";
 
 interface SamplingConfigProps {
   auditRunId: string;
@@ -32,7 +38,8 @@ export function SamplingConfig({
   populationSize,
   onPlanComputed,
 }: SamplingConfigProps) {
-  const [method, setMethod] = useState<"statistical" | "random" | "systematic" | "percentage">("statistical");
+  // Method now uses "simple_random" to match the original HTML tool
+  const [method, setMethod] = useState<"statistical" | "simple_random" | "systematic" | "percentage">("statistical");
   const [confidence, setConfidence] = useState(95);
   const [margin, setMargin] = useState(5);
   const [expectedError, setExpectedError] = useState(1);
@@ -43,24 +50,51 @@ export function SamplingConfig({
   const [idColumn, setIdColumn] = useState("");
   const [isComputing, setIsComputing] = useState(false);
 
+  // New fields from original HTML tool
+  const [populationOverride, setPopulationOverride] = useState("");
+  const [overrideJustification, setOverrideJustification] = useState("");
+  const [systematicStep, setSystematicStep] = useState("");
+
   // Calculate estimated sample size
   const [estimatedSize, setEstimatedSize] = useState(0);
 
+  // Check if any overrides are active
+  const configHasOverrides = hasOverrides({
+    method,
+    confidence: confidence / 100,
+    margin: margin / 100,
+    expectedErrorRate: expectedError / 100,
+    sampleSize: sampleSizeOverride ? parseInt(sampleSizeOverride) : null,
+    samplePercentage: samplePercentage ? parseFloat(samplePercentage) : null,
+    systematicStep: systematicStep ? parseInt(systematicStep) : null,
+    seed,
+    stratifyFields,
+    populationOverride: populationOverride ? parseInt(populationOverride) : null,
+  });
+
   useEffect(() => {
+    // Use population override if set, otherwise actual population size
+    const effectivePop = populationOverride ? parseInt(populationOverride) : populationSize;
+
     if (sampleSizeOverride) {
       setEstimatedSize(parseInt(sampleSizeOverride) || 0);
     } else if (method === "percentage" && samplePercentage) {
-      setEstimatedSize(Math.ceil(populationSize * (parseFloat(samplePercentage) / 100)));
+      setEstimatedSize(Math.ceil(effectivePop * (parseFloat(samplePercentage) / 100)));
     } else {
-      const size = calculateSampleSize(
-        populationSize,
-        confidence / 100,
-        margin / 100,
-        expectedError / 100
-      );
-      setEstimatedSize(size);
+      try {
+        const size = calculateSampleSize(
+          effectivePop,
+          confidence / 100,
+          margin / 100,
+          expectedError / 100
+        );
+        setEstimatedSize(size);
+      } catch {
+        // Handle error (e.g., TER must exceed EER)
+        setEstimatedSize(0);
+      }
     }
-  }, [populationSize, confidence, margin, expectedError, sampleSizeOverride, method, samplePercentage]);
+  }, [populationSize, populationOverride, confidence, margin, expectedError, sampleSizeOverride, method, samplePercentage]);
 
   const addStratifyField = (field: string) => {
     if (field && !stratifyFields.includes(field)) {
@@ -73,6 +107,12 @@ export function SamplingConfig({
   };
 
   const computePlan = async () => {
+    // Validate override justification if overrides are active
+    if (configHasOverrides && !overrideJustification.trim()) {
+      toast.error("Override justification is required when using overrides");
+      return;
+    }
+
     setIsComputing(true);
     try {
       const config: SamplingConfigType = {
@@ -80,12 +120,15 @@ export function SamplingConfig({
         confidence: confidence / 100,
         margin: margin / 100,
         expectedErrorRate: expectedError / 100,
-        sampleSize: sampleSizeOverride ? parseInt(sampleSizeOverride) : undefined,
-        samplePercentage: samplePercentage ? parseFloat(samplePercentage) : undefined,
+        sampleSize: sampleSizeOverride ? parseInt(sampleSizeOverride) : null,
+        samplePercentage: samplePercentage ? parseFloat(samplePercentage) : null,
+        systematicStep: systematicStep ? parseInt(systematicStep) : null,
         seed,
         stratifyFields,
         idColumn: idColumn || undefined,
         systematicRandomStart: true,
+        overrideJustification: overrideJustification.trim() || undefined,
+        populationOverride: populationOverride ? parseInt(populationOverride) : null,
       };
 
       const response = await fetch("/api/sampling", {
@@ -131,7 +174,7 @@ export function SamplingConfig({
           <Select
             value={method}
             onValueChange={(v) =>
-              setMethod(v as "statistical" | "random" | "systematic" | "percentage")
+              setMethod(v as "statistical" | "simple_random" | "systematic" | "percentage")
             }
           >
             <SelectTrigger>
@@ -139,16 +182,16 @@ export function SamplingConfig({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="statistical">Statistical (Recommended)</SelectItem>
-              <SelectItem value="random">Simple Random</SelectItem>
+              <SelectItem value="simple_random">Simple Random</SelectItem>
               <SelectItem value="systematic">Systematic</SelectItem>
               <SelectItem value="percentage">Percentage-based</SelectItem>
             </SelectContent>
           </Select>
           <p className="text-xs text-muted-foreground">
             {method === "statistical" &&
-              "Uses confidence level, margin of error, and expected error rate to calculate sample size"}
-            {method === "random" &&
-              "Randomly selects records from the population"}
+              "Uses confidence level, tolerable error rate, and expected error rate to calculate sample size (Wald CI + FPC)"}
+            {method === "simple_random" &&
+              "Randomly selects records from the population using Fisher-Yates shuffle"}
             {method === "systematic" &&
               "Selects every Nth record with a random starting point"}
             {method === "percentage" &&
@@ -157,30 +200,33 @@ export function SamplingConfig({
         </div>
 
         {/* Statistical Parameters */}
-        {(method === "statistical" || method === "random" || method === "systematic") && (
+        {(method === "statistical" || method === "systematic") && (
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="confidence">Confidence Level (%)</Label>
               <Input
                 id="confidence"
                 type="number"
-                min={80}
-                max={99}
+                min={50}
+                max={99.9}
+                step={0.1}
                 value={confidence}
                 onChange={(e) => setConfidence(parseFloat(e.target.value) || 95)}
               />
+              <p className="text-xs text-muted-foreground">50-99.9%</p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="margin">Margin of Error (%)</Label>
+              <Label htmlFor="margin">Tolerable Error Rate (%)</Label>
               <Input
                 id="margin"
                 type="number"
-                min={1}
-                max={20}
-                step={0.5}
+                min={0.01}
+                max={100}
+                step={0.1}
                 value={margin}
                 onChange={(e) => setMargin(parseFloat(e.target.value) || 5)}
               />
+              <p className="text-xs text-muted-foreground">Must exceed Expected Error Rate</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="expectedError">Expected Error Rate (%)</Label>
@@ -188,11 +234,12 @@ export function SamplingConfig({
                 id="expectedError"
                 type="number"
                 min={0}
-                max={50}
-                step={0.5}
+                max={99}
+                step={0.1}
                 value={expectedError}
                 onChange={(e) => setExpectedError(parseFloat(e.target.value) || 1)}
               />
+              <p className="text-xs text-muted-foreground">Based on historical performance</p>
             </div>
           </div>
         )}
@@ -217,12 +264,26 @@ export function SamplingConfig({
         {/* Overrides */}
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
+            <Label htmlFor="populationOverride">Population Size Override</Label>
+            <Input
+              id="populationOverride"
+              type="number"
+              min={1}
+              value={populationOverride}
+              onChange={(e) => setPopulationOverride(e.target.value)}
+              placeholder={`Actual: ${populationSize.toLocaleString()}`}
+            />
+            <p className="text-xs text-muted-foreground">
+              Test sample calculations with different population assumptions
+            </p>
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="sampleSizeOverride">Sample Size Override</Label>
             <Input
               id="sampleSizeOverride"
               type="number"
               min={1}
-              max={populationSize}
+              max={populationOverride ? parseInt(populationOverride) : populationSize}
               value={sampleSizeOverride}
               onChange={(e) => setSampleSizeOverride(e.target.value)}
               placeholder="Leave empty to use calculated size"
@@ -231,6 +292,25 @@ export function SamplingConfig({
               Override the calculated sample size with a specific number
             </p>
           </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {method === "systematic" && (
+            <div className="space-y-2">
+              <Label htmlFor="systematicStep">Systematic Step (Interval)</Label>
+              <Input
+                id="systematicStep"
+                type="number"
+                min={1}
+                value={systematicStep}
+                onChange={(e) => setSystematicStep(e.target.value)}
+                placeholder="Leave empty to calculate automatically"
+              />
+              <p className="text-xs text-muted-foreground">
+                Explicit interval for systematic sampling
+              </p>
+            </div>
+          )}
           <div className="space-y-2">
             <Label htmlFor="seed">Random Seed</Label>
             <Input
@@ -240,10 +320,32 @@ export function SamplingConfig({
               onChange={(e) => setSeed(parseInt(e.target.value) || 42)}
             />
             <p className="text-xs text-muted-foreground">
-              Ensures reproducible sampling results
+              Ensures reproducible sampling results (Mulberry32 PRNG)
             </p>
           </div>
         </div>
+
+        {/* Override Justification - Required when overrides are active */}
+        {configHasOverrides && (
+          <div className="space-y-2 p-4 border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950 rounded-lg">
+            <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300">
+              <AlertTriangle className="h-4 w-4" />
+              <Label htmlFor="overrideJustification" className="font-medium">
+                Override Justification (Required)
+              </Label>
+            </div>
+            <Textarea
+              id="overrideJustification"
+              value={overrideJustification}
+              onChange={(e) => setOverrideJustification(e.target.value)}
+              placeholder="Provide justification for using overrides..."
+              className="min-h-[80px]"
+            />
+            <p className="text-xs text-amber-600 dark:text-amber-400">
+              Overrides detected. A justification is required for audit documentation.
+            </p>
+          </div>
+        )}
 
         {/* Stratification */}
         <div className="space-y-3">

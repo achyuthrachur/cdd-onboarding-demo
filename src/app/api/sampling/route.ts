@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import {
-  executeSampling,
+  sampleData,
   computePlan,
-  getMockPopulationData,
   SamplingConfig,
   SamplingPlan,
-} from "@/lib/sampling/engine";
+  addCoverageOverrides,
+} from "@/lib/sampling/original-engine";
+import { getMockPopulationData } from "@/lib/sampling/engine";
 
 // In-memory stores for demo
 const populationStore: Map<
@@ -181,10 +182,13 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        const result = executeSampling(
+        // Use the original engine's sampleData function
+        const result = sampleData(
           population.data,
           config as SamplingConfig,
-          plan as SamplingPlan | undefined
+          plan as SamplingPlan | null,
+          population.fileName,
+          "Sheet1"
         );
 
         const id = uuidv4();
@@ -208,6 +212,21 @@ export async function POST(request: NextRequest) {
           plan: result.plan,
           summary: result.summary,
         });
+      }
+
+      case "add-coverage-overrides": {
+        const { plan } = body;
+
+        if (!plan) {
+          return NextResponse.json(
+            { error: "Plan is required" },
+            { status: 400 }
+          );
+        }
+
+        const updatedPlan = addCoverageOverrides(plan as SamplingPlan);
+
+        return NextResponse.json({ plan: updatedPlan });
       }
 
       case "lock-sample": {

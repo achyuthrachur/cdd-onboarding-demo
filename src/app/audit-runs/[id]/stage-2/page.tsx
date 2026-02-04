@@ -21,7 +21,7 @@ import {
   SamplingConfig as SamplingConfigType,
   SamplingPlan,
   SamplingSummary,
-} from "@/lib/sampling/engine";
+} from "@/lib/sampling/original-engine";
 
 interface PopulationData {
   id: string;
@@ -121,6 +121,15 @@ export default function Stage2Page() {
 
   const handleSampleLocked = () => {
     setIsLocked(true);
+  };
+
+  const handlePlanUpdated = (updatedPlan: SamplingPlan) => {
+    setPlan(updatedPlan);
+    // Clear sample when plan changes
+    setSample(null);
+    setSummary(null);
+    setSampleId(null);
+    setIsLocked(false);
   };
 
   const canProceed = isLocked && sample && sample.length > 0;
@@ -294,6 +303,7 @@ export default function Stage2Page() {
             isLocked={isLocked}
             onSampleGenerated={handleSampleGenerated}
             onSampleLocked={handleSampleLocked}
+            onPlanUpdated={handlePlanUpdated}
           />
         </div>
       )}

@@ -20,9 +20,11 @@ import {
   CheckCircle2,
   ListTree,
   BarChart3,
+  PlusCircle,
+  AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
-import { SamplingConfig, SamplingPlan, SamplingSummary } from "@/lib/sampling/engine";
+import { SamplingConfig, SamplingPlan, SamplingSummary } from "@/lib/sampling/original-engine";
 
 interface SamplePreviewProps {
   auditRunId: string;
@@ -39,6 +41,7 @@ interface SamplePreviewProps {
     sampleId: string
   ) => void;
   onSampleLocked: () => void;
+  onPlanUpdated?: (plan: SamplingPlan) => void;
 }
 
 export function SamplePreview({
@@ -52,9 +55,45 @@ export function SamplePreview({
   isLocked,
   onSampleGenerated,
   onSampleLocked,
+  onPlanUpdated,
 }: SamplePreviewProps) {
   const [isRunning, setIsRunning] = useState(false);
   const [isLocking, setIsLocking] = useState(false);
+  const [isAddingCoverage, setIsAddingCoverage] = useState(false);
+
+  // Count strata with zero samples but population > 0
+  const zeroStrata = plan.allocations.filter(
+    (a) => a.sample_count === 0 && a.population_count > 0
+  );
+  const hasZeroStrata = zeroStrata.length > 0;
+  const coverageOverrideCount = plan.coverageOverrides?.length || 0;
+
+  const addCoverageOverrides = async () => {
+    setIsAddingCoverage(true);
+    try {
+      const response = await fetch("/api/sampling", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "add-coverage-overrides",
+          auditRunId,
+          plan,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add coverage overrides");
+      }
+
+      const data = await response.json();
+      onPlanUpdated?.(data.plan);
+      toast.success(`Added +1 to ${zeroStrata.length} zero-allocation strata`);
+    } catch {
+      toast.error("Failed to add coverage overrides");
+    } finally {
+      setIsAddingCoverage(false);
+    }
+  };
 
   const runSampling = async () => {
     setIsRunning(true);
@@ -189,11 +228,22 @@ export function SamplePreview({
               Target: {plan.desiredSize.toLocaleString()} samples
             </Badge>
             <Badge variant="secondary" className="text-sm">
-              Population: {plan.populationSize.toLocaleString()}
+              Population: {(plan.populationSize || 0).toLocaleString()}
             </Badge>
             {plan.stratifyFields.length > 0 && (
               <Badge variant="outline" className="text-sm">
                 Stratified by: {plan.stratifyFields.join(", ")}
+              </Badge>
+            )}
+            {hasZeroStrata && (
+              <Badge variant="destructive" className="text-sm">
+                <AlertCircle className="mr-1 h-3 w-3" />
+                {zeroStrata.length} stratum/strata with 0 samples
+              </Badge>
+            )}
+            {coverageOverrideCount > 0 && (
+              <Badge variant="default" className="text-sm bg-amber-500">
+                {coverageOverrideCount} coverage override(s) applied
               </Badge>
             )}
           </div>
@@ -204,6 +254,7 @@ export function SamplePreview({
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>#</TableHead>
                     <TableHead>Stratum</TableHead>
                     <TableHead className="text-right">Population</TableHead>
                     <TableHead className="text-right">Sample Size</TableHead>
@@ -211,28 +262,50 @@ export function SamplePreview({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {plan.allocations.map((alloc, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell>
-                        {Object.entries(alloc.stratum)
-                          .map(([k, v]) => `${k}: ${v ?? "NULL"}`)
-                          .join(", ") || "(All)"}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {alloc.populationCount.toLocaleString()}
-                      </TableCell>
-                      <TableCell className="text-right font-medium">
-                        {alloc.sampleCount.toLocaleString()}
-                      </TableCell>
-                      <TableCell className="text-right text-muted-foreground">
-                        {(alloc.shareOfPopulation * 100).toFixed(1)}%
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {plan.allocations.map((alloc, idx) => {
+                    const isZero = alloc.sample_count === 0 && alloc.population_count > 0;
+                    const isOverridden = plan.coverageOverrides?.some(
+                      (o) => JSON.stringify(o.stratum) === JSON.stringify(alloc.stratum)
+                    );
+                    return (
+                      <TableRow
+                        key={idx}
+                        className={
+                          isOverridden
+                            ? "bg-amber-50 dark:bg-amber-950"
+                            : isZero
+                            ? "bg-red-50 dark:bg-red-950"
+                            : ""
+                        }
+                      >
+                        <TableCell className="font-mono text-sm">{idx + 1}</TableCell>
+                        <TableCell>
+                          {Object.entries(alloc.stratum)
+                            .map(([k, v]) => `${k}: ${v ?? "NULL"}`)
+                            .join(", ") || "(All)"}
+                          {isOverridden && (
+                            <span className="ml-2 text-xs text-amber-600 dark:text-amber-400">
+                              (+1 override)
+                            </span>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {alloc.population_count.toLocaleString()}
+                        </TableCell>
+                        <TableCell className="text-right font-medium">
+                          {alloc.sample_count.toLocaleString()}
+                        </TableCell>
+                        <TableCell className="text-right text-muted-foreground">
+                          {(((alloc.population_count || 0) / (plan.populationSize || 1)) * 100).toFixed(1)}%
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                   <TableRow className="font-medium">
+                    <TableCell></TableCell>
                     <TableCell>Total</TableCell>
                     <TableCell className="text-right">
-                      {plan.populationSize.toLocaleString()}
+                      {(plan.populationSize || 0).toLocaleString()}
                     </TableCell>
                     <TableCell className="text-right">
                       {plan.plannedSize.toLocaleString()}
@@ -242,6 +315,28 @@ export function SamplePreview({
                 </TableBody>
               </Table>
             </div>
+          )}
+
+          {/* Add Coverage Override Button */}
+          {hasZeroStrata && !isLocked && onPlanUpdated && (
+            <Button
+              onClick={addCoverageOverrides}
+              disabled={isAddingCoverage}
+              variant="outline"
+              className="w-full mb-4 border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-950"
+            >
+              {isAddingCoverage ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Adding Coverage Overrides...
+                </>
+              ) : (
+                <>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Add +1 to {zeroStrata.length} Zero Strata (Coverage Override)
+                </>
+              )}
+            </Button>
           )}
 
           {/* Generate Sample Button */}
@@ -313,7 +408,7 @@ export function SamplePreview({
               <Card>
                 <CardContent className="pt-4">
                   <div className="text-2xl font-bold">
-                    {summary.sampleSelectionMethod.finalSampleSize.toLocaleString()}
+                    {summary.sample_selection_method.final_sample_size.toLocaleString()}
                   </div>
                   <p className="text-xs text-muted-foreground">Sample Size</p>
                 </CardContent>
@@ -321,7 +416,7 @@ export function SamplePreview({
               <Card>
                 <CardContent className="pt-4">
                   <div className="text-2xl font-bold">
-                    {(summary.samplingRationale.confidenceLevel * 100).toFixed(0)}%
+                    {(summary.sampling_rationale.confidence_level * 100).toFixed(0)}%
                   </div>
                   <p className="text-xs text-muted-foreground">Confidence Level</p>
                 </CardContent>
@@ -329,20 +424,48 @@ export function SamplePreview({
               <Card>
                 <CardContent className="pt-4">
                   <div className="text-2xl font-bold">
-                    {(summary.samplingRationale.tolerableErrorRate * 100).toFixed(1)}%
+                    {(summary.sampling_rationale.tolerable_error_rate * 100).toFixed(1)}%
                   </div>
-                  <p className="text-xs text-muted-foreground">Margin of Error</p>
+                  <p className="text-xs text-muted-foreground">Tolerable Error Rate</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="pt-4">
                   <div className="text-2xl font-bold">
-                    {summary.sampleSelectionMethod.seed}
+                    {summary.sample_selection_method.seed}
                   </div>
                   <p className="text-xs text-muted-foreground">Random Seed</p>
                 </CardContent>
               </Card>
             </div>
+
+            {/* Overrides Summary */}
+            {summary.overrides?.has_overrides && (
+              <div className="p-4 mb-6 border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950 rounded-lg">
+                <h4 className="font-medium text-amber-700 dark:text-amber-300 mb-2">
+                  Overrides Applied
+                </h4>
+                {summary.overrides.justification && (
+                  <p className="text-sm text-amber-600 dark:text-amber-400 mb-2">
+                    Justification: {summary.overrides.justification}
+                  </p>
+                )}
+                <div className="text-sm space-y-1">
+                  {summary.overrides.parameter_overrides.population_size.applied && (
+                    <p>Population Override: {summary.overrides.parameter_overrides.population_size.value?.toLocaleString()} (original: {summary.overrides.parameter_overrides.population_size.original?.toLocaleString()})</p>
+                  )}
+                  {summary.overrides.parameter_overrides.sample_size.applied && (
+                    <p>Sample Size Override: {summary.overrides.parameter_overrides.sample_size.value?.toLocaleString()}</p>
+                  )}
+                  {summary.overrides.coverage_overrides.length > 0 && (
+                    <p>Coverage Overrides: {summary.overrides.coverage_overrides.length} stratum/strata with +1 added</p>
+                  )}
+                  {summary.overrides.allocation_adjustments.length > 0 && (
+                    <p>Allocation Adjustments: {summary.overrides.allocation_adjustments.length} manual adjustments</p>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Sample Preview Table */}
             <div className="rounded-md border">
