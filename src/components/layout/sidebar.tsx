@@ -6,8 +6,6 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   FileStack,
-  Settings,
-  HelpCircle,
 } from "lucide-react";
 
 const navigation = [
@@ -23,18 +21,7 @@ const navigation = [
   },
 ];
 
-const secondaryNavigation = [
-  {
-    name: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
-  {
-    name: "Help",
-    href: "/help",
-    icon: HelpCircle,
-  },
-];
+const secondaryNavigation: typeof navigation = [];
 
 export function Sidebar() {
   const pathname = usePathname();
