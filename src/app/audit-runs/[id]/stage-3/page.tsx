@@ -34,11 +34,67 @@ import {
   hasStageData,
   setStageData,
 } from "@/lib/stage-data";
-import type { FLUExtractionResult, ExtractedAttribute } from "@/lib/stage-data/store";
+import type { FLUExtractionResult, ExtractedAttribute, FLUProcedureDocument } from "@/lib/stage-data/store";
 import type { AcceptableDoc } from "@/lib/attribute-library/types";
 import { FLUProcedureChat } from "@/components/stage-3/flu-procedure-chat";
 import { ExtractionResultsView } from "@/components/stage-3/extraction-results-view";
 import { getMockFLUExtractionResult } from "@/lib/ai/client";
+
+// Demo FLU Procedures document that's preloaded for extraction
+const DEMO_FLU_DOCUMENT: FLUProcedureDocument = {
+  id: "demo-flu-procedures",
+  fileName: "FLU_CIP_CDD_Procedures.docx",
+  docType: "flu_procedure",
+  jurisdiction: "ENT",
+  uploadedAt: new Date().toISOString(),
+  content: `FRONT LINE UNIT PROCEDURES - CIP/CDD/EDD COMPLIANCE
+
+1. CUSTOMER IDENTIFICATION PROGRAM (CIP)
+1.1 Identity Verification Requirements
+- Verify customer's full legal name using government-issued ID
+- Verify date of birth from documentary evidence
+- Verify residential address through utility bill or bank statement
+- For non-documentary verification, use credit bureau or public records
+
+1.2 Documentary Evidence
+Acceptable documents for identity verification:
+- Valid passport (unexpired)
+- Driver's license with photo
+- State-issued ID card
+- Military ID
+
+2. CUSTOMER DUE DILIGENCE (CDD)
+2.1 Beneficial Ownership
+- Identify all beneficial owners with 25% or more ownership
+- Verify identity of beneficial owners using CIP procedures
+- Document control person for legal entity customers
+
+2.2 Nature and Purpose
+- Document nature of business relationship
+- Understand expected account activity
+- Assess customer risk rating (Low/Medium/High)
+
+2.3 Ongoing Monitoring
+- Conduct periodic reviews based on risk rating
+- Monitor transactions for unusual activity
+- Update customer information at trigger events
+
+3. ENHANCED DUE DILIGENCE (EDD)
+3.1 High-Risk Customers
+- Senior management approval required
+- Source of funds documentation
+- Source of wealth verification
+
+3.2 PEP Screening
+- Screen against PEP databases
+- Enhanced monitoring for PEP relationships
+- Annual certification for PEP accounts
+
+3.3 High-Risk Jurisdictions
+- Additional documentation requirements
+- Enhanced transaction monitoring
+- Escalation procedures for suspicious activity`,
+};
 
 type ViewMode = "chat" | "results";
 
@@ -49,10 +105,20 @@ export default function Stage3Page() {
   const [viewMode, setViewMode] = useState<ViewMode>("chat");
   const [extractionResult, setExtractionResult] = useState<FLUExtractionResult | null>(null);
   const [hasSample, setHasSample] = useState(false);
+  const [preloadedDoc, setPreloadedDoc] = useState<FLUProcedureDocument | null>(null);
 
   // Check for prerequisite data and load existing extraction
   useEffect(() => {
     setHasSample(hasStageData('samplingResult'));
+
+    // Check for stored FLU procedures from stage-data, or use demo document
+    const storedFluProcedures = getStageData('fluProcedures');
+    if (storedFluProcedures && storedFluProcedures.length > 0) {
+      setPreloadedDoc(storedFluProcedures[0]);
+    } else {
+      // Preload demo FLU document so users don't have to upload
+      setPreloadedDoc(DEMO_FLU_DOCUMENT);
+    }
 
     // Load existing extraction result
     const storedResult = getStageData('fluExtractionResult');
@@ -390,6 +456,7 @@ export default function Stage3Page() {
                   onExtractionComplete={handleExtractionComplete}
                   extractionResult={extractionResult}
                   auditRunId={id}
+                  preloadedDocument={preloadedDoc}
                 />
               </TabsContent>
             </motion.div>

@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { ChatMessage, MessageType } from "@/components/stage-1/chat-message";
 import { toast } from "sonner";
 import type { FLUExtractionResult, FLUProcedureDocument } from "@/lib/stage-data/store";
+import { getMockFLUExtractionResult } from "@/lib/ai/client";
 import {
   motion,
   AnimatePresence,
@@ -47,6 +48,7 @@ interface FLUProcedureChatProps {
   onExtractionComplete: (result: FLUExtractionResult) => void;
   extractionResult: FLUExtractionResult | null;
   auditRunId: string;
+  preloadedDocument?: FLUProcedureDocument | null;
 }
 
 // System prompt for display
@@ -78,6 +80,7 @@ export function FLUProcedureChat({
   onExtractionComplete,
   extractionResult,
   auditRunId,
+  preloadedDocument,
 }: FLUProcedureChatProps) {
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -93,6 +96,26 @@ export function FLUProcedureChat({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
+
+  // Load preloaded document on mount
+  useEffect(() => {
+    if (preloadedDocument && !uploadedFile && !extractionResult) {
+      setUploadedFile({
+        doc: preloadedDocument,
+        content: preloadedDocument.content || `[Document: ${preloadedDocument.fileName}]`,
+      });
+      setMessages(prev => [
+        ...prev,
+        {
+          id: `preloaded-${Date.now()}`,
+          type: "system",
+          content: `FLU Procedures document "${preloadedDocument.fileName}" has been preloaded from the previous stage. Click 'Extract Attributes' to analyze.`,
+          timestamp: new Date(),
+          documents: [{ fileName: preloadedDocument.fileName, docType: "flu_procedure" }],
+        },
+      ]);
+    }
+  }, [preloadedDocument, uploadedFile, extractionResult]);
 
   // Helper to get the document from uploaded file
   const selectedDoc = uploadedFile?.doc || null;
@@ -296,13 +319,51 @@ Click the "Results" tab to view and export the extracted attributes.`,
       // Remove loading message
       setMessages(prev => prev.filter(m => m.id !== loadingMsgId));
 
+      console.error("Extraction error:", error);
+
+      // Fall back to mock data when API fails
       addMessage({
-        type: "error",
-        content: "Failed to extract attributes from FLU procedures. Please try again.",
+        type: "system",
+        content: "API unavailable - using demo extraction data...",
       });
 
-      console.error("Extraction error:", error);
-      toast.error("Extraction failed");
+      try {
+        const mockData = getMockFLUExtractionResult();
+        const result: FLUExtractionResult = {
+          id: `flu-fallback-${Date.now()}`,
+          workbook: mockData.workbook as FLUExtractionResult['workbook'],
+          tokensUsed: 0,
+        };
+
+        // Count attributes by category
+        const attributes = result.workbook.sheets.find(s => s.name === "Attributes")?.rows || [];
+        const cipCount = attributes.filter(a => (a as unknown as Record<string, unknown>).Category === "CIP").length;
+        const cddCount = attributes.filter(a => (a as unknown as Record<string, unknown>).Category === "CDD").length;
+        const eddCount = attributes.filter(a => (a as unknown as Record<string, unknown>).Category === "EDD").length;
+        const docsCount = result.workbook.sheets.find(s => s.name === "Acceptable_Docs")?.rows.length || 0;
+
+        addMessage({
+          type: "assistant",
+          content: `Extraction completed using demo data!
+
+**Attributes Extracted:**
+- CIP (Customer Identification Program): ${cipCount} attributes
+- CDD (Customer Due Diligence): ${cddCount} attributes
+- EDD (Enhanced Due Diligence): ${eddCount} attributes
+- Acceptable Documents: ${docsCount} total
+
+Click the "Results" tab to view and export the extracted attributes.`,
+        });
+
+        onExtractionComplete(result);
+        toast.success("FLU extraction completed (demo data)");
+      } catch (fallbackError) {
+        addMessage({
+          type: "error",
+          content: "Failed to extract attributes. Please try again or use 'Load Demo Data'.",
+        });
+        toast.error("Extraction failed");
+      }
     } finally {
       setIsProcessing(false);
     }
