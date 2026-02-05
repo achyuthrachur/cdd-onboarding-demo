@@ -36,6 +36,13 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { ExceptionDetail, FindingsByAttribute } from "@/lib/consolidation/engine";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  staggerContainer,
+  staggerItem,
+} from "@/lib/animations";
 
 interface FindingsTableProps {
   exceptions: ExceptionDetail[];
@@ -46,6 +53,7 @@ export function FindingsTable({
   exceptions,
   findingsByAttribute,
 }: FindingsTableProps) {
+  const shouldReduceMotion = useReducedMotion();
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [selectedFinding, setSelectedFinding] = useState<ExceptionDetail | null>(null);
@@ -92,26 +100,39 @@ export function FindingsTable({
         </CardHeader>
         <CardContent>
           {findingsByAttribute.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <motion.div
+              className="text-center py-8 text-muted-foreground"
+              initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
               <p className="text-sm">No attribute findings available</p>
-            </div>
+            </motion.div>
           ) : (
-            <div className="space-y-2">
-              {findingsByAttribute.map((attr) => (
-                <div
+            <motion.div
+              className="space-y-2"
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+            >
+              {findingsByAttribute.map((attr, index) => (
+                <motion.div
                   key={attr.attributeId}
                   className="border rounded-lg overflow-hidden"
+                  variants={staggerItem}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.005 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <div
                     className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/50"
                     onClick={() => toggleAttributeExpand(attr.attributeId)}
                   >
                     <div className="flex items-center gap-3">
-                      {expandedAttributes.has(attr.attributeId) ? (
-                        <ChevronUp className="h-4 w-4" />
-                      ) : (
+                      <motion.div
+                        animate={{ rotate: expandedAttributes.has(attr.attributeId) ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
                         <ChevronDown className="h-4 w-4" />
-                      )}
+                      </motion.div>
                       <div>
                         <p className="font-medium">{attr.attributeName}</p>
                         <p className="text-sm text-muted-foreground">
@@ -160,30 +181,43 @@ export function FindingsTable({
                       )}
                     </div>
                   </div>
-                  {expandedAttributes.has(attr.attributeId) &&
-                    attr.observations.length > 0 && (
-                      <div className="px-4 pb-4 pt-0">
-                        <div className="pl-8 border-l-2 border-muted ml-2">
-                          <p className="text-sm font-medium mb-2 text-muted-foreground">
-                            Observations:
-                          </p>
-                          <ul className="space-y-1">
-                            {attr.observations.map((obs, idx) => (
-                              <li
-                                key={idx}
-                                className="text-sm text-muted-foreground flex items-start gap-2"
-                              >
-                                <span className="text-red-500">•</span>
-                                {obs}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    )}
-                </div>
+                  <AnimatePresence>
+                    {expandedAttributes.has(attr.attributeId) &&
+                      attr.observations.length > 0 && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-4 pb-4 pt-0">
+                            <div className="pl-8 border-l-2 border-muted ml-2">
+                              <p className="text-sm font-medium mb-2 text-muted-foreground">
+                                Observations:
+                              </p>
+                              <ul className="space-y-1">
+                                {attr.observations.map((obs, idx) => (
+                                  <motion.li
+                                    key={idx}
+                                    className="text-sm text-muted-foreground flex items-start gap-2"
+                                    initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: idx * 0.05 }}
+                                  >
+                                    <span className="text-red-500">•</span>
+                                    {obs}
+                                  </motion.li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                  </AnimatePresence>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
         </CardContent>
       </Card>
@@ -201,7 +235,12 @@ export function FindingsTable({
         </CardHeader>
         <CardContent>
           {/* Filters */}
-          <div className="flex gap-4 mb-4">
+          <motion.div
+            className="flex gap-4 mb-4"
+            initial={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -224,70 +263,102 @@ export function FindingsTable({
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </motion.div>
 
-          {filteredExceptions.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              <AlertTriangle className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <h3 className="font-medium mb-2">
-                {exceptions.length === 0
-                  ? "No exceptions found"
-                  : "No matching exceptions"}
-              </h3>
-              <p className="text-sm">
-                {exceptions.length === 0
-                  ? "Exceptions will appear here after workbook testing is complete"
-                  : "Try adjusting your search or filter criteria"}
-              </p>
-            </div>
-          ) : (
-            <div className="border rounded-lg overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Entity</TableHead>
-                    <TableHead>Attribute</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead className="max-w-[300px]">Observation</TableHead>
-                    <TableHead>Evidence</TableHead>
-                    <TableHead></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredExceptions.map((exception) => (
-                    <TableRow key={exception.id}>
-                      <TableCell className="font-medium">
-                        {exception.entityName}
-                      </TableCell>
-                      <TableCell>{exception.attributeName}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{exception.category}</Badge>
-                      </TableCell>
-                      <TableCell className="max-w-[300px]">
-                        <p className="truncate" title={exception.observation}>
-                          {exception.observation}
-                        </p>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm text-muted-foreground">
-                          {exception.evidenceReference}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedFinding(exception)}
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
+          <AnimatePresence mode="wait">
+            {filteredExceptions.length === 0 ? (
+              <motion.div
+                key="empty"
+                className="text-center py-12 text-muted-foreground"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <motion.div
+                  initial={shouldReduceMotion ? undefined : { scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <AlertTriangle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                </motion.div>
+                <h3 className="font-medium mb-2">
+                  {exceptions.length === 0
+                    ? "No exceptions found"
+                    : "No matching exceptions"}
+                </h3>
+                <p className="text-sm">
+                  {exceptions.length === 0
+                    ? "Exceptions will appear here after workbook testing is complete"
+                    : "Try adjusting your search or filter criteria"}
+                </p>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="table"
+                className="border rounded-lg overflow-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Entity</TableHead>
+                      <TableHead>Attribute</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead className="max-w-[300px]">Observation</TableHead>
+                      <TableHead>Evidence</TableHead>
+                      <TableHead></TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
+                  </TableHeader>
+                  <TableBody>
+                    {filteredExceptions.map((exception, index) => (
+                      <motion.tr
+                        key={exception.id}
+                        className="border-b transition-colors hover:bg-muted/50"
+                        initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: Math.min(index * 0.03, 0.5) }}
+                        whileHover={shouldReduceMotion ? undefined : { backgroundColor: "rgba(0,0,0,0.02)" }}
+                      >
+                        <TableCell className="font-medium">
+                          {exception.entityName}
+                        </TableCell>
+                        <TableCell>{exception.attributeName}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{exception.category}</Badge>
+                        </TableCell>
+                        <TableCell className="max-w-[300px]">
+                          <p className="truncate" title={exception.observation}>
+                            {exception.observation}
+                          </p>
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-sm text-muted-foreground">
+                            {exception.evidenceReference}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <motion.div
+                            whileHover={shouldReduceMotion ? undefined : { scale: 1.1 }}
+                            whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                          >
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setSelectedFinding(exception)}
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                          </motion.div>
+                        </TableCell>
+                      </motion.tr>
+                    ))}
+                  </TableBody>
+                </Table>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </CardContent>
       </Card>
 

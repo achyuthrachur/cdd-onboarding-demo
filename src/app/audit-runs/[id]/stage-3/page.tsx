@@ -18,6 +18,15 @@ import {
   FileSpreadsheet,
   Download,
 } from "lucide-react";
+import {
+  motion,
+  AnimatePresence,
+  staggerContainer,
+  staggerItem,
+  fadeInUp,
+  tabContent,
+  useReducedMotion,
+} from "@/lib/animations";
 import { toast } from "sonner";
 import {
   loadFallbackDataForStage,
@@ -226,11 +235,50 @@ export default function Stage3Page() {
   const docsCount = extractionResult?.workbook.sheets.find(s => s.name === 'Acceptable_Docs')?.rows.length || 0;
 
   const canProceed = extractionResult !== null && attributeCount > 0;
+  const shouldReduceMotion = useReducedMotion();
+
+  // Step cards data for rendering
+  const steps = [
+    {
+      title: "Step 1: Upload",
+      description: "FLU Procedures",
+      isComplete: true,
+      activeColor: "bg-green-100 text-green-600",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: FileText,
+      badgeText: "Ready",
+    },
+    {
+      title: "Step 2: Extract",
+      description: "AI Attribute Extraction",
+      isComplete: attributeCount > 0,
+      activeColor: "bg-amber-100 text-amber-600",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: Bot,
+      badgeText: attributeCount > 0
+        ? `${attributeCount} attributes`
+        : "Pending extraction",
+    },
+    {
+      title: "Step 3: Review",
+      description: "Confirm & Export",
+      isComplete: canProceed,
+      activeColor: "bg-gray-100 text-gray-400",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: FileSpreadsheet,
+      badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
+    },
+  ];
 
   return (
     <div className="p-8 h-[calc(100vh-4rem)] flex flex-col">
-      {/* Header */}
-      <div className="mb-6 flex-shrink-0">
+      {/* Header - Animated */}
+      <motion.div
+        className="mb-6 flex-shrink-0"
+        initial={shouldReduceMotion ? undefined : "hidden"}
+        animate="visible"
+        variants={fadeInUp}
+      >
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
@@ -255,87 +303,58 @@ export default function Stage3Page() {
             Load Demo Data
           </Button>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Workflow Steps */}
-      <div className="grid gap-4 md:grid-cols-3 mb-6 flex-shrink-0">
-        <Card className="border-green-500">
-          <CardHeader className="pb-2">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600">
-                <FileText className="h-5 w-5" />
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 1: Upload</CardTitle>
-                <CardDescription>FLU Procedures</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Badge variant="default">Ready</Badge>
-          </CardContent>
-        </Card>
-
-        <Card className={attributeCount > 0 ? "border-green-500" : ""}>
-          <CardHeader className="pb-2">
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  attributeCount > 0
-                    ? "bg-green-100 text-green-600"
-                    : "bg-amber-100 text-amber-600"
-                }`}
-              >
-                {attributeCount > 0 ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <Bot className="h-5 w-5" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 2: Extract</CardTitle>
-                <CardDescription>AI Attribute Extraction</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Badge variant={attributeCount > 0 ? "default" : "outline"}>
-              {attributeCount > 0
-                ? `${attributeCount} attributes`
-                : "Pending extraction"}
-            </Badge>
-          </CardContent>
-        </Card>
-
-        <Card className={canProceed ? "border-green-500" : ""}>
-          <CardHeader className="pb-2">
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  canProceed
-                    ? "bg-green-100 text-green-600"
-                    : "bg-gray-100 text-gray-400"
-                }`}
-              >
-                {canProceed ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <FileSpreadsheet className="h-5 w-5" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 3: Review</CardTitle>
-                <CardDescription>Confirm & Export</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Badge variant={canProceed ? "default" : "outline"}>
-              {canProceed ? `${docsCount} docs mapped` : "Pending"}
-            </Badge>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Workflow Steps - Staggered animation */}
+      <motion.div
+        className="grid gap-4 md:grid-cols-3 mb-6 flex-shrink-0"
+        initial={shouldReduceMotion ? undefined : "hidden"}
+        animate="visible"
+        variants={staggerContainer}
+      >
+        {steps.map((step, index) => (
+          <motion.div key={index} variants={staggerItem}>
+            <Card className={step.isComplete ? "border-green-500" : ""}>
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-3">
+                  <motion.div
+                    className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                      step.isComplete ? step.completeColor : step.activeColor
+                    }`}
+                    animate={step.isComplete ? { scale: [1, 1.1, 1] } : undefined}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {step.isComplete ? (
+                      <CheckCircle2 className="h-5 w-5" />
+                    ) : (
+                      <step.Icon className="h-5 w-5" />
+                    )}
+                  </motion.div>
+                  <div>
+                    <CardTitle className="text-base">{step.title}</CardTitle>
+                    <CardDescription>{step.description}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={step.badgeText}
+                    initial={shouldReduceMotion ? undefined : { scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Badge variant={step.isComplete ? "default" : "outline"}>
+                      {step.badgeText}
+                    </Badge>
+                  </motion.div>
+                </AnimatePresence>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
 
       {/* View Mode Tabs */}
       <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)} className="flex-1 flex flex-col min-h-0">
@@ -355,38 +374,66 @@ export default function Stage3Page() {
           </TabsTrigger>
         </TabsList>
 
-        {/* Chat View */}
-        <TabsContent value="chat" className="flex-1 min-h-0 mt-0">
-          <FLUProcedureChat
-            onExtractionComplete={handleExtractionComplete}
-            extractionResult={extractionResult}
-            auditRunId={id}
-          />
-        </TabsContent>
-
-        {/* Results View */}
-        <TabsContent value="results" className="flex-1 min-h-0 mt-0">
-          {extractionResult ? (
-            <ExtractionResultsView
-              result={extractionResult}
-              onExportExcel={handleExportExcel}
-            />
-          ) : (
-            <Card className="h-full flex items-center justify-center">
-              <div className="text-center">
-                <Sparkles className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-30" />
-                <h3 className="font-medium mb-2">No Extraction Results</h3>
-                <p className="text-sm text-muted-foreground">
-                  Upload FLU procedures and run extraction to view results
-                </p>
-              </div>
-            </Card>
+        {/* Tab Content with Animation */}
+        <AnimatePresence mode="wait">
+          {viewMode === "chat" && (
+            <motion.div
+              key="chat"
+              className="flex-1 min-h-0"
+              initial={shouldReduceMotion ? undefined : "hidden"}
+              animate="visible"
+              exit="exit"
+              variants={tabContent}
+            >
+              <TabsContent value="chat" className="h-full m-0">
+                <FLUProcedureChat
+                  onExtractionComplete={handleExtractionComplete}
+                  extractionResult={extractionResult}
+                  auditRunId={id}
+                />
+              </TabsContent>
+            </motion.div>
           )}
-        </TabsContent>
+
+          {viewMode === "results" && (
+            <motion.div
+              key="results"
+              className="flex-1 min-h-0"
+              initial={shouldReduceMotion ? undefined : "hidden"}
+              animate="visible"
+              exit="exit"
+              variants={tabContent}
+            >
+              <TabsContent value="results" className="h-full m-0">
+                {extractionResult ? (
+                  <ExtractionResultsView
+                    result={extractionResult}
+                    onExportExcel={handleExportExcel}
+                  />
+                ) : (
+                  <Card className="h-full flex items-center justify-center">
+                    <div className="text-center">
+                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-30" />
+                      <h3 className="font-medium mb-2">No Extraction Results</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Upload FLU procedures and run extraction to view results
+                      </p>
+                    </div>
+                  </Card>
+                )}
+              </TabsContent>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </Tabs>
 
       {/* Navigation */}
-      <div className="flex justify-between pt-4 flex-shrink-0 border-t mt-4">
+      <motion.div
+        className="flex justify-between pt-4 flex-shrink-0 border-t mt-4"
+        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
         <Link href={`/audit-runs/${id}/stage-2`}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -399,7 +446,7 @@ export default function Stage3Page() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }

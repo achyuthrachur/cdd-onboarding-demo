@@ -2,8 +2,9 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { FileText, Bot, User, Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
+import { FileText, Bot, User, CheckCircle2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, useReducedMotion, chatMessage, fadeInUp, scaleIn } from "@/lib/animations";
 
 export type MessageType = "system" | "user" | "assistant" | "loading" | "error";
 
@@ -13,6 +14,76 @@ export interface ChatMessageProps {
   timestamp?: Date;
   documents?: Array<{ fileName: string; docType: string }>;
   isPrompt?: boolean;
+  index?: number;
+}
+
+// Animated typing dots component
+function TypingIndicator() {
+  const shouldReduceMotion = useReducedMotion();
+
+  if (shouldReduceMotion) {
+    return (
+      <div className="flex gap-1">
+        {[0, 1, 2].map((i) => (
+          <span key={i} className="w-2 h-2 bg-blue-500 rounded-full" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex gap-1">
+      {[0, 1, 2].map((i) => (
+        <motion.span
+          key={i}
+          className="w-2 h-2 bg-blue-500 rounded-full"
+          animate={{ y: [0, -6, 0] }}
+          transition={{
+            duration: 0.6,
+            repeat: Infinity,
+            delay: i * 0.15,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// Animated spinner for loading icon
+function AnimatedSpinner() {
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      animate={shouldReduceMotion ? {} : { rotate: 360 }}
+      transition={{
+        duration: 1,
+        repeat: Infinity,
+        ease: "linear",
+      }}
+      className="h-5 w-5 text-blue-500"
+    >
+      <svg
+        className="h-full w-full"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+          strokeOpacity="0.25"
+        />
+        <path
+          d="M12 2a10 10 0 0 1 10 10"
+          strokeLinecap="round"
+        />
+      </svg>
+    </motion.div>
+  );
 }
 
 export function ChatMessage({
@@ -21,7 +92,10 @@ export function ChatMessage({
   timestamp,
   documents,
   isPrompt,
+  index = 0,
 }: ChatMessageProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   const getIcon = () => {
     switch (type) {
       case "system":
@@ -31,7 +105,7 @@ export function ChatMessage({
       case "assistant":
         return <Bot className="h-5 w-5 text-purple-500" />;
       case "loading":
-        return <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />;
+        return <AnimatedSpinner />;
       case "error":
         return <AlertTriangle className="h-5 w-5 text-red-500" />;
       default:
@@ -56,8 +130,17 @@ export function ChatMessage({
     }
   };
 
+  const MessageWrapper = shouldReduceMotion ? 'div' : motion.div;
+  const messageProps = shouldReduceMotion ? {} : {
+    initial: "hidden",
+    animate: "visible",
+    variants: chatMessage,
+    transition: { delay: index * 0.05 },
+  };
+
   return (
-    <div
+    <MessageWrapper
+      {...messageProps}
       className={cn(
         "flex gap-3 p-4",
         type === "user" && "bg-muted/30",
@@ -77,17 +160,23 @@ export function ChatMessage({
 
         {/* Prompt Display - Special formatting for system prompts */}
         {isPrompt ? (
-          <Card className="bg-grey-50 dark:bg-grey-900 border-grey-200 dark:border-grey-800 p-4 mt-2">
-            <div className="flex items-center gap-2 mb-3">
-              <Badge variant="outline" className="text-xs">
-                System Prompt
-              </Badge>
-              <span className="text-xs text-muted-foreground">Read-only</span>
-            </div>
-            <pre className="text-sm whitespace-pre-wrap font-mono text-grey-700 dark:text-grey-300 leading-relaxed">
-              {content}
-            </pre>
-          </Card>
+          <motion.div
+            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
+            <Card className="bg-grey-50 dark:bg-grey-900 border-grey-200 dark:border-grey-800 p-4 mt-2">
+              <div className="flex items-center gap-2 mb-3">
+                <Badge variant="outline" className="text-xs">
+                  System Prompt
+                </Badge>
+                <span className="text-xs text-muted-foreground">Read-only</span>
+              </div>
+              <pre className="text-sm whitespace-pre-wrap font-mono text-grey-700 dark:text-grey-300 leading-relaxed">
+                {content}
+              </pre>
+            </Card>
+          </motion.div>
         ) : (
           <div className="text-sm text-foreground">{content}</div>
         )}
@@ -95,39 +184,57 @@ export function ChatMessage({
         {/* Attached Documents */}
         {documents && documents.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {documents.map((doc, index) => (
-              <Badge
-                key={index}
-                variant="secondary"
-                className="flex items-center gap-1.5 py-1 px-2"
+            {documents.map((doc, docIndex) => (
+              <motion.div
+                key={docIndex}
+                initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2, delay: docIndex * 0.05 }}
               >
-                <FileText className="h-3 w-3" />
-                <span className="text-xs">{doc.fileName}</span>
-              </Badge>
+                <Badge
+                  variant="secondary"
+                  className="flex items-center gap-1.5 py-1 px-2"
+                >
+                  <FileText className="h-3 w-3" />
+                  <span className="text-xs">{doc.fileName}</span>
+                </Badge>
+              </motion.div>
             ))}
           </div>
         )}
 
-        {/* Loading indicator */}
+        {/* Loading indicator with animated typing dots */}
         {type === "loading" && (
-          <div className="flex items-center gap-2 mt-2">
-            <div className="flex gap-1">
-              <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-              <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-              <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-            </div>
+          <motion.div
+            initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center gap-2 mt-2"
+          >
+            <TypingIndicator />
             <span className="text-xs text-muted-foreground">Processing...</span>
-          </div>
+          </motion.div>
         )}
 
         {/* Success indicator for completed messages */}
         {type === "assistant" && content.includes("completed") && (
-          <div className="flex items-center gap-1 mt-2 text-green-600">
-            <CheckCircle2 className="h-4 w-4" />
+          <motion.div
+            initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="flex items-center gap-1 mt-2 text-green-600"
+          >
+            <motion.div
+              initial={shouldReduceMotion ? undefined : { scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.3, type: "spring", stiffness: 300 }}
+            >
+              <CheckCircle2 className="h-4 w-4" />
+            </motion.div>
             <span className="text-xs">Analysis complete</span>
-          </div>
+          </motion.div>
         )}
       </div>
-    </div>
+    </MessageWrapper>
   );
 }

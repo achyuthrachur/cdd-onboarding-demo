@@ -13,10 +13,19 @@ import {
   Loader2,
   CheckCircle2,
   FileText,
+  Check,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ConsolidationResult } from "@/lib/consolidation/engine";
 import { downloadConsolidationExcel } from "@/lib/consolidation/export";
+import {
+  motion,
+  AnimatePresence,
+  Presence,
+  useReducedMotion,
+  staggerContainer,
+  staggerItem,
+} from "@/lib/animations";
 
 interface ReportGeneratorProps {
   consolidation: ConsolidationResult | null;
@@ -35,7 +44,9 @@ export function ReportGenerator({
   consolidation,
   auditRunId,
 }: ReportGeneratorProps) {
+  const shouldReduceMotion = useReducedMotion();
   const [isGenerating, setIsGenerating] = useState(false);
+  const [exportSuccess, setExportSuccess] = useState<string | null>(null);
   const [reportOptions, setReportOptions] = useState<ReportOptions>({
     includeExecutiveSummary: true,
     includeFindingsDetail: true,
@@ -45,6 +56,11 @@ export function ReportGenerator({
   });
 
   const canGenerate = consolidation !== null;
+
+  const showExportSuccess = (type: string) => {
+    setExportSuccess(type);
+    setTimeout(() => setExportSuccess(null), 2000);
+  };
 
   const handleGenerateReport = async () => {
     if (!consolidation) return;
@@ -66,6 +82,7 @@ export function ReportGenerator({
       URL.revokeObjectURL(url);
 
       toast.success("Report generated successfully");
+      showExportSuccess("html");
     } catch {
       toast.error("Failed to generate report");
     } finally {
@@ -100,6 +117,7 @@ export function ReportGenerator({
       URL.revokeObjectURL(url);
 
       toast.success("Data exported successfully");
+      showExportSuccess("json");
     } catch {
       toast.error("Failed to export data");
     }
@@ -146,6 +164,7 @@ export function ReportGenerator({
       URL.revokeObjectURL(url);
 
       toast.success("CSV exported successfully");
+      showExportSuccess("csv");
     } catch {
       toast.error("Failed to export CSV");
     }
@@ -158,6 +177,7 @@ export function ReportGenerator({
       const filename = `consolidation-report-${auditRunId}-${new Date().toISOString().split("T")[0]}.xlsx`;
       downloadConsolidationExcel(consolidation, filename);
       toast.success("Excel report exported successfully");
+      showExportSuccess("excel");
     } catch {
       toast.error("Failed to export Excel report");
     }
@@ -176,155 +196,251 @@ export function ReportGenerator({
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Report Status */}
-        {consolidation && (
-          <div className="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-950 rounded-lg">
-            <CheckCircle2 className="h-5 w-5 text-green-600" />
-            <div>
-              <p className="font-medium text-green-700 dark:text-green-300">
-                Consolidation Complete
-              </p>
-              <p className="text-sm text-green-600 dark:text-green-400">
-                Generated at {new Date(consolidation.generatedAt).toLocaleString()}
-              </p>
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {consolidation && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-950 rounded-lg"
+            >
+              <motion.div
+                initial={shouldReduceMotion ? undefined : { scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+              >
+                <CheckCircle2 className="h-5 w-5 text-green-600" />
+              </motion.div>
+              <div>
+                <p className="font-medium text-green-700 dark:text-green-300">
+                  Consolidation Complete
+                </p>
+                <p className="text-sm text-green-600 dark:text-green-400">
+                  Generated at {new Date(consolidation.generatedAt).toLocaleString()}
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Report Options */}
-        <div className="space-y-4">
+        <motion.div
+          className="space-y-4"
+          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
           <h4 className="font-medium">Report Sections</h4>
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="executiveSummary"
-                checked={reportOptions.includeExecutiveSummary}
-                onCheckedChange={(checked) =>
-                  setReportOptions((prev) => ({
-                    ...prev,
-                    includeExecutiveSummary: !!checked,
-                  }))
-                }
-              />
-              <Label htmlFor="executiveSummary" className="flex items-center gap-2">
-                Executive Summary
-                <Badge variant="secondary">Recommended</Badge>
-              </Label>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="findingsDetail"
-                checked={reportOptions.includeFindingsDetail}
-                onCheckedChange={(checked) =>
-                  setReportOptions((prev) => ({
-                    ...prev,
-                    includeFindingsDetail: !!checked,
-                  }))
-                }
-              />
-              <Label htmlFor="findingsDetail">Findings by Category</Label>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="exceptionsList"
-                checked={reportOptions.includeExceptionsList}
-                onCheckedChange={(checked) =>
-                  setReportOptions((prev) => ({
-                    ...prev,
-                    includeExceptionsList: !!checked,
-                  }))
-                }
-              />
-              <Label htmlFor="exceptionsList">Exceptions List</Label>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="metricsCharts"
-                checked={reportOptions.includeMetricsCharts}
-                onCheckedChange={(checked) =>
-                  setReportOptions((prev) => ({
-                    ...prev,
-                    includeMetricsCharts: !!checked,
-                  }))
-                }
-              />
-              <Label htmlFor="metricsCharts">Metrics Summary</Label>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="supportingData"
-                checked={reportOptions.includeSupportingData}
-                onCheckedChange={(checked) =>
-                  setReportOptions((prev) => ({
-                    ...prev,
-                    includeSupportingData: !!checked,
-                  }))
-                }
-              />
-              <Label htmlFor="supportingData" className="flex items-center gap-2">
-                Supporting Raw Data
-                <Badge variant="outline">Large file</Badge>
-              </Label>
-            </div>
-          </div>
-        </div>
+          <motion.div
+            className="space-y-3"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            {[
+              { id: "executiveSummary", label: "Executive Summary", key: "includeExecutiveSummary", badge: "Recommended", badgeVariant: "secondary" as const },
+              { id: "findingsDetail", label: "Findings by Category", key: "includeFindingsDetail" },
+              { id: "exceptionsList", label: "Exceptions List", key: "includeExceptionsList" },
+              { id: "metricsCharts", label: "Metrics Summary", key: "includeMetricsCharts" },
+              { id: "supportingData", label: "Supporting Raw Data", key: "includeSupportingData", badge: "Large file", badgeVariant: "outline" as const },
+            ].map((option) => (
+              <motion.div
+                key={option.id}
+                variants={staggerItem}
+                className="flex items-center space-x-2"
+              >
+                <Checkbox
+                  id={option.id}
+                  checked={reportOptions[option.key as keyof ReportOptions]}
+                  onCheckedChange={(checked) =>
+                    setReportOptions((prev) => ({
+                      ...prev,
+                      [option.key]: !!checked,
+                    }))
+                  }
+                />
+                <Label htmlFor={option.id} className="flex items-center gap-2">
+                  {option.label}
+                  {option.badge && (
+                    <Badge variant={option.badgeVariant}>{option.badge}</Badge>
+                  )}
+                </Label>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
 
         {/* Generate Buttons */}
-        <div className="space-y-3">
-          <Button
-            onClick={handleGenerateReport}
-            disabled={!canGenerate || isGenerating}
-            className="w-full"
+        <motion.div
+          className="space-y-3"
+          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <motion.div
+            whileHover={shouldReduceMotion || !canGenerate || isGenerating ? undefined : { scale: 1.01 }}
+            whileTap={shouldReduceMotion || !canGenerate || isGenerating ? undefined : { scale: 0.99 }}
           >
-            {isGenerating ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating Report...
-              </>
-            ) : (
-              <>
-                <FileBarChart className="mr-2 h-4 w-4" />
-                Generate HTML Report
-              </>
-            )}
-          </Button>
+            <Button
+              onClick={handleGenerateReport}
+              disabled={!canGenerate || isGenerating}
+              className="w-full"
+            >
+              <AnimatePresence mode="wait">
+                {isGenerating ? (
+                  <motion.span
+                    key="generating"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center"
+                  >
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating Report...
+                  </motion.span>
+                ) : exportSuccess === "html" ? (
+                  <motion.span
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="flex items-center text-green-100"
+                  >
+                    <Check className="mr-2 h-4 w-4" />
+                    Report Generated!
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="default"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center"
+                  >
+                    <FileBarChart className="mr-2 h-4 w-4" />
+                    Generate HTML Report
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </Button>
+          </motion.div>
 
-          <div className="grid grid-cols-3 gap-3">
-            <Button
-              variant="outline"
-              onClick={handleExportExcel}
-              disabled={!canGenerate}
-            >
-              <FileSpreadsheet className="mr-2 h-4 w-4" />
-              Export Excel
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleExportData}
-              disabled={!canGenerate}
-            >
-              <FileText className="mr-2 h-4 w-4" />
-              Export JSON
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleExportCSV}
-              disabled={!canGenerate}
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Export CSV
-            </Button>
-          </div>
-        </div>
+          <motion.div
+            className="grid grid-cols-3 gap-3"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div variants={staggerItem}>
+              <Button
+                variant="outline"
+                onClick={handleExportExcel}
+                disabled={!canGenerate}
+                className="w-full"
+              >
+                <AnimatePresence mode="wait">
+                  {exportSuccess === "excel" ? (
+                    <motion.span
+                      key="success"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center text-green-600"
+                    >
+                      <Check className="mr-2 h-4 w-4" />
+                      Done!
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="default"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center"
+                    >
+                      <FileSpreadsheet className="mr-2 h-4 w-4" />
+                      Export Excel
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </Button>
+            </motion.div>
+            <motion.div variants={staggerItem}>
+              <Button
+                variant="outline"
+                onClick={handleExportData}
+                disabled={!canGenerate}
+                className="w-full"
+              >
+                <AnimatePresence mode="wait">
+                  {exportSuccess === "json" ? (
+                    <motion.span
+                      key="success"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center text-green-600"
+                    >
+                      <Check className="mr-2 h-4 w-4" />
+                      Done!
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="default"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center"
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
+                      Export JSON
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </Button>
+            </motion.div>
+            <motion.div variants={staggerItem}>
+              <Button
+                variant="outline"
+                onClick={handleExportCSV}
+                disabled={!canGenerate}
+                className="w-full"
+              >
+                <AnimatePresence mode="wait">
+                  {exportSuccess === "csv" ? (
+                    <motion.span
+                      key="success"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center text-green-600"
+                    >
+                      <Check className="mr-2 h-4 w-4" />
+                      Done!
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="default"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center"
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Export CSV
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </Button>
+            </motion.div>
+          </motion.div>
+        </motion.div>
 
-        {!canGenerate && (
+        <Presence isVisible={!canGenerate}>
           <p className="text-sm text-muted-foreground text-center">
             Generate a consolidation first to create reports
           </p>
-        )}
+        </Presence>
       </CardContent>
     </Card>
   );

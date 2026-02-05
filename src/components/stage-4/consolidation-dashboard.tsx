@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { AnimatedProgress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -22,6 +22,16 @@ import {
 import { toast } from "sonner";
 import { ConsolidationResult } from "@/lib/consolidation/engine";
 import { downloadConsolidationExcel } from "@/lib/consolidation/export";
+import {
+  motion,
+  AnimatePresence,
+  StaggerContainer,
+  StaggerItem,
+  useCountUp,
+  useReducedMotion,
+  staggerContainer,
+  staggerItem,
+} from "@/lib/animations";
 
 interface ConsolidationDashboardProps {
   consolidation: ConsolidationResult | null;
@@ -32,6 +42,22 @@ export function ConsolidationDashboard({
   consolidation,
   isLoading,
 }: ConsolidationDashboardProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  // Animated count-ups for metrics
+  const animatedTotalTests = useCountUp(consolidation?.metrics.totalTests || 0, { duration: 1, delay: 0.2 });
+  const animatedPassRate = useCountUp(consolidation?.metrics.passRate || 0, { duration: 1.2, delay: 0.3 });
+  const animatedExceptions = useCountUp(consolidation?.metrics.exceptionsCount || 0, { duration: 0.8, delay: 0.4 });
+  const animatedWorkbooks = useCountUp(consolidation?.metrics.workbooksSubmitted || 0, { duration: 0.6, delay: 0.5 });
+
+  // Animated counts for result breakdown
+  const animatedPassCount = useCountUp(consolidation?.metrics.passCount || 0, { duration: 0.8, delay: 0.6 });
+  const animatedPassWithObs = useCountUp(consolidation?.metrics.passWithObservationCount || 0, { duration: 0.8, delay: 0.7 });
+  const animatedFail1 = useCountUp(consolidation?.metrics.fail1RegulatoryCount || 0, { duration: 0.8, delay: 0.8 });
+  const animatedFail2 = useCountUp(consolidation?.metrics.fail2ProcedureCount || 0, { duration: 0.8, delay: 0.9 });
+  const animatedQLOB = useCountUp(consolidation?.metrics.questionToLOBCount || 0, { duration: 0.8, delay: 1.0 });
+  const animatedNA = useCountUp(consolidation?.metrics.naCount || 0, { duration: 0.8, delay: 1.1 });
+
   const handleExportExcel = () => {
     if (!consolidation) return;
     try {
@@ -48,32 +74,50 @@ export function ConsolidationDashboard({
     return (
       <div className="space-y-6">
         {/* Loading Summary Cards */}
-        <div className="grid gap-4 md:grid-cols-4">
+        <motion.div
+          className="grid gap-4 md:grid-cols-4"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+        >
           {[...Array(4)].map((_, i) => (
-            <Card key={i}>
-              <CardHeader className="pb-2">
-                <div className="h-4 w-24 bg-muted animate-pulse rounded" />
-              </CardHeader>
-              <CardContent>
-                <div className="h-8 w-16 bg-muted animate-pulse rounded mb-2" />
-                <div className="h-3 w-20 bg-muted animate-pulse rounded" />
-              </CardContent>
-            </Card>
+            <motion.div key={i} variants={staggerItem}>
+              <Card>
+                <CardHeader className="pb-2">
+                  <div className="h-4 w-24 bg-muted animate-pulse rounded" />
+                </CardHeader>
+                <CardContent>
+                  <div className="h-8 w-16 bg-muted animate-pulse rounded mb-2" />
+                  <div className="h-3 w-20 bg-muted animate-pulse rounded" />
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   if (!consolidation) {
     return (
-      <div className="text-center py-12 text-muted-foreground">
-        <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
+      <motion.div
+        className="text-center py-12 text-muted-foreground"
+        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+      >
+        <motion.div
+          initial={shouldReduceMotion ? undefined : { scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.1, type: "spring" }}
+        >
+          <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
+        </motion.div>
         <h3 className="font-medium mb-2">No consolidation data</h3>
         <p className="text-sm">
           Generate a consolidation to view metrics and results
         </p>
-      </div>
+      </motion.div>
     );
   }
 
@@ -82,158 +126,218 @@ export function ConsolidationDashboard({
   return (
     <div className="space-y-6">
       {/* Export Button */}
-      <div className="flex justify-end">
+      <motion.div
+        className="flex justify-end"
+        initial={shouldReduceMotion ? undefined : { opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.1 }}
+      >
         <Button onClick={handleExportExcel} variant="outline">
           <FileSpreadsheet className="mr-2 h-4 w-4" />
           Export to Excel
         </Button>
-      </div>
+      </motion.div>
 
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <ClipboardList className="h-4 w-4" />
-              Total Tests
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{metrics.totalTests}</div>
-            <p className="text-xs text-muted-foreground">
-              across {metrics.uniqueEntitiesTested} entities
-            </p>
-          </CardContent>
-        </Card>
+      <motion.div
+        className="grid gap-4 md:grid-cols-4"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div variants={staggerItem}>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <ClipboardList className="h-4 w-4" />
+                Total Tests
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div className="text-2xl font-bold tabular-nums">
+                {animatedTotalTests}
+              </motion.div>
+              <p className="text-xs text-muted-foreground">
+                across {metrics.uniqueEntitiesTested} entities
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Pass Rate
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${metrics.passRate >= 80 ? 'text-green-600' : metrics.passRate >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
-              {metrics.passRate.toFixed(1)}%
-            </div>
-            <div className="flex items-center gap-2 mt-1">
-              <Progress value={metrics.passRate} className="h-2" />
-            </div>
-          </CardContent>
-        </Card>
+        <motion.div variants={staggerItem}>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Pass Rate
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div className={`text-2xl font-bold tabular-nums ${metrics.passRate >= 80 ? 'text-green-600' : metrics.passRate >= 60 ? 'text-yellow-600' : 'text-red-600'}`}>
+                {animatedPassRate}%
+              </motion.div>
+              <div className="flex items-center gap-2 mt-1">
+                <AnimatedProgress value={metrics.passRate} className="h-2" />
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <TrendingDown className="h-4 w-4" />
-              Exceptions
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">
-              {metrics.exceptionsCount}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {metrics.failRate.toFixed(1)}% fail rate
-            </p>
-          </CardContent>
-        </Card>
+        <motion.div variants={staggerItem}>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <TrendingDown className="h-4 w-4" />
+                Exceptions
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div className="text-2xl font-bold text-red-600 tabular-nums">
+                {animatedExceptions}
+              </motion.div>
+              <p className="text-xs text-muted-foreground">
+                {metrics.failRate.toFixed(1)}% fail rate
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Workbooks
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {metrics.workbooksSubmitted}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              submitted for consolidation
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+        <motion.div variants={staggerItem}>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                Workbooks
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div className="text-2xl font-bold tabular-nums">
+                {animatedWorkbooks}
+              </motion.div>
+              <p className="text-xs text-muted-foreground">
+                submitted for consolidation
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
 
       {/* Test Results Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Test Results Summary</CardTitle>
-          <CardDescription>
-            Breakdown of all test results across submitted workbooks
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
-            <div className="flex items-center gap-4 p-4 bg-green-50 dark:bg-green-950 rounded-lg">
-              <CheckCircle2 className="h-8 w-8 text-green-600" />
-              <div>
-                <div className="text-xl font-bold text-green-600">
-                  {metrics.passCount}
+      <motion.div
+        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle>Test Results Summary</CardTitle>
+            <CardDescription>
+              Breakdown of all test results across submitted workbooks
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <motion.div
+              className="grid gap-4 md:grid-cols-3 lg:grid-cols-6"
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.div
+                variants={staggerItem}
+                className="flex items-center gap-4 p-4 bg-green-50 dark:bg-green-950 rounded-lg"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
+              >
+                <CheckCircle2 className="h-8 w-8 text-green-600" />
+                <div>
+                  <motion.div className="text-xl font-bold text-green-600 tabular-nums">
+                    {animatedPassCount}
+                  </motion.div>
+                  <p className="text-xs text-muted-foreground">Pass</p>
                 </div>
-                <p className="text-xs text-muted-foreground">Pass</p>
-              </div>
-            </div>
+              </motion.div>
 
-            <div className="flex items-center gap-4 p-4 bg-green-50 dark:bg-green-950 rounded-lg">
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
-              <div>
-                <div className="text-xl font-bold text-green-500">
-                  {metrics.passWithObservationCount}
+              <motion.div
+                variants={staggerItem}
+                className="flex items-center gap-4 p-4 bg-green-50 dark:bg-green-950 rounded-lg"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
+              >
+                <CheckCircle2 className="h-8 w-8 text-green-500" />
+                <div>
+                  <motion.div className="text-xl font-bold text-green-500 tabular-nums">
+                    {animatedPassWithObs}
+                  </motion.div>
+                  <p className="text-xs text-muted-foreground">Pass w/Obs</p>
                 </div>
-                <p className="text-xs text-muted-foreground">Pass w/Obs</p>
-              </div>
-            </div>
+              </motion.div>
 
-            <div className="flex items-center gap-4 p-4 bg-red-50 dark:bg-red-950 rounded-lg">
-              <XCircle className="h-8 w-8 text-red-600" />
-              <div>
-                <div className="text-xl font-bold text-red-600">
-                  {metrics.fail1RegulatoryCount}
+              <motion.div
+                variants={staggerItem}
+                className="flex items-center gap-4 p-4 bg-red-50 dark:bg-red-950 rounded-lg"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
+              >
+                <XCircle className="h-8 w-8 text-red-600" />
+                <div>
+                  <motion.div className="text-xl font-bold text-red-600 tabular-nums">
+                    {animatedFail1}
+                  </motion.div>
+                  <p className="text-xs text-muted-foreground">Fail 1 - Reg</p>
                 </div>
-                <p className="text-xs text-muted-foreground">Fail 1 - Reg</p>
-              </div>
-            </div>
+              </motion.div>
 
-            <div className="flex items-center gap-4 p-4 bg-orange-50 dark:bg-orange-950 rounded-lg">
-              <XCircle className="h-8 w-8 text-orange-600" />
-              <div>
-                <div className="text-xl font-bold text-orange-600">
-                  {metrics.fail2ProcedureCount}
+              <motion.div
+                variants={staggerItem}
+                className="flex items-center gap-4 p-4 bg-orange-50 dark:bg-orange-950 rounded-lg"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
+              >
+                <XCircle className="h-8 w-8 text-orange-600" />
+                <div>
+                  <motion.div className="text-xl font-bold text-orange-600 tabular-nums">
+                    {animatedFail2}
+                  </motion.div>
+                  <p className="text-xs text-muted-foreground">Fail 2 - Proc</p>
                 </div>
-                <p className="text-xs text-muted-foreground">Fail 2 - Proc</p>
-              </div>
-            </div>
+              </motion.div>
 
-            <div className="flex items-center gap-4 p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg">
-              <AlertTriangle className="h-8 w-8 text-yellow-600" />
-              <div>
-                <div className="text-xl font-bold text-yellow-600">
-                  {metrics.questionToLOBCount}
+              <motion.div
+                variants={staggerItem}
+                className="flex items-center gap-4 p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
+              >
+                <AlertTriangle className="h-8 w-8 text-yellow-600" />
+                <div>
+                  <motion.div className="text-xl font-bold text-yellow-600 tabular-nums">
+                    {animatedQLOB}
+                  </motion.div>
+                  <p className="text-xs text-muted-foreground">Q to LOB</p>
                 </div>
-                <p className="text-xs text-muted-foreground">Q to LOB</p>
-              </div>
-            </div>
+              </motion.div>
 
-            <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-              <MinusCircle className="h-8 w-8 text-gray-500" />
-              <div>
-                <div className="text-xl font-bold text-gray-500">
-                  {metrics.naCount}
+              <motion.div
+                variants={staggerItem}
+                className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
+              >
+                <MinusCircle className="h-8 w-8 text-gray-500" />
+                <div>
+                  <motion.div className="text-xl font-bold text-gray-500 tabular-nums">
+                    {animatedNA}
+                  </motion.div>
+                  <p className="text-xs text-muted-foreground">N/A</p>
                 </div>
-                <p className="text-xs text-muted-foreground">N/A</p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+              </motion.div>
+            </motion.div>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       {/* Tabbed Breakdown View */}
-      <Tabs defaultValue="category" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+      <motion.div
+        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <Tabs defaultValue="category" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="category" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             By Category
@@ -537,7 +641,8 @@ export function ConsolidationDashboard({
             </CardContent>
           </Card>
         </TabsContent>
-      </Tabs>
+        </Tabs>
+      </motion.div>
     </div>
   );
 }

@@ -15,6 +15,15 @@ import {
   CheckCircle2,
   Database,
 } from "lucide-react";
+import {
+  motion,
+  AnimatePresence,
+  staggerContainer,
+  staggerItem,
+  fadeInUp,
+  scaleIn,
+  useReducedMotion,
+} from "@/lib/animations";
 import { PopulationUploader } from "@/components/stage-2/population-uploader";
 import { SamplingConfig } from "@/components/stage-2/sampling-config";
 import { SamplePreview } from "@/components/stage-2/sample-preview";
@@ -191,11 +200,57 @@ export default function Stage2Page() {
   };
 
   const canProceed = isLocked && sample && sample.length > 0;
+  const shouldReduceMotion = useReducedMotion();
+
+  // Step cards data for rendering
+  const steps = [
+    {
+      title: "Step 1",
+      description: "Upload Population",
+      isComplete: !!population,
+      activeColor: "bg-blue-100 text-blue-600",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: Upload,
+      badgeText: population
+        ? `${population.rowCount.toLocaleString()} records`
+        : "No file uploaded",
+      helpText: "Upload population file (CSV/Excel) for sampling.",
+    },
+    {
+      title: "Step 2",
+      description: "Configure & Sample",
+      isComplete: !!plan,
+      activeColor: "bg-purple-100 text-purple-600",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: Settings,
+      badgeText: sample
+        ? `${sample.length.toLocaleString()} sampled`
+        : plan
+        ? "Plan ready"
+        : "Not configured",
+      helpText: "Set sampling method, confidence level, and generate sample.",
+    },
+    {
+      title: "Step 3",
+      description: "Lock Sample",
+      isComplete: isLocked,
+      activeColor: "bg-gray-100 text-gray-400",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: Lock,
+      badgeText: isLocked ? "Locked" : "Pending",
+      helpText: "Review and lock the sample to proceed to workbooks.",
+    },
+  ];
 
   return (
     <div className="p-8">
       {/* Header */}
-      <div className="mb-8">
+      <motion.div
+        className="mb-8"
+        initial={shouldReduceMotion ? undefined : "hidden"}
+        animate="visible"
+        variants={fadeInUp}
+      >
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
@@ -221,157 +276,133 @@ export default function Stage2Page() {
             Load Demo Data
           </Button>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Workflow Steps */}
-      <div className="grid gap-6 md:grid-cols-3 mb-8">
-        <Card className={population ? "border-green-500" : ""}>
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  population
-                    ? "bg-green-100 text-green-600"
-                    : "bg-blue-100 text-blue-600"
-                }`}
-              >
-                {population ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <Upload className="h-5 w-5" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 1</CardTitle>
-                <CardDescription>Upload Population</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              Upload population file (CSV/Excel) for sampling.
-            </p>
-            <Badge variant={population ? "default" : "outline"}>
-              {population
-                ? `${population.rowCount.toLocaleString()} records`
-                : "No file uploaded"}
-            </Badge>
-          </CardContent>
-        </Card>
+      {/* Workflow Steps - Animated with stagger */}
+      <motion.div
+        className="grid gap-6 md:grid-cols-3 mb-8"
+        initial={shouldReduceMotion ? undefined : "hidden"}
+        animate="visible"
+        variants={staggerContainer}
+      >
+        {steps.map((step, index) => (
+          <motion.div key={index} variants={staggerItem}>
+            <Card className={step.isComplete ? "border-green-500" : ""}>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <motion.div
+                    className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                      step.isComplete ? step.completeColor : step.activeColor
+                    }`}
+                    animate={step.isComplete ? { scale: [1, 1.1, 1] } : undefined}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {step.isComplete ? (
+                      <CheckCircle2 className="h-5 w-5" />
+                    ) : (
+                      <step.Icon className="h-5 w-5" />
+                    )}
+                  </motion.div>
+                  <div>
+                    <CardTitle className="text-base">{step.title}</CardTitle>
+                    <CardDescription>{step.description}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {step.helpText}
+                </p>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={step.badgeText}
+                    initial={shouldReduceMotion ? undefined : { scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Badge variant={step.isComplete ? "default" : "outline"}>
+                      {step.badgeText}
+                    </Badge>
+                  </motion.div>
+                </AnimatePresence>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
 
-        <Card className={plan ? "border-green-500" : ""}>
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  plan
-                    ? "bg-green-100 text-green-600"
-                    : "bg-purple-100 text-purple-600"
-                }`}
-              >
-                {plan ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <Settings className="h-5 w-5" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 2</CardTitle>
-                <CardDescription>Configure & Sample</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              Set sampling method, confidence level, and generate sample.
-            </p>
-            <Badge variant={plan ? "default" : "outline"}>
-              {sample
-                ? `${sample.length.toLocaleString()} sampled`
-                : plan
-                ? "Plan ready"
-                : "Not configured"}
-            </Badge>
-          </CardContent>
-        </Card>
-
-        <Card className={isLocked ? "border-green-500" : ""}>
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  isLocked
-                    ? "bg-green-100 text-green-600"
-                    : "bg-gray-100 text-gray-400"
-                }`}
-              >
-                {isLocked ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <Lock className="h-5 w-5" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 3</CardTitle>
-                <CardDescription>Lock Sample</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              Review and lock the sample to proceed to workbooks.
-            </p>
-            <Badge variant={isLocked ? "default" : "outline"}>
-              {isLocked ? "Locked" : "Pending"}
-            </Badge>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Population Uploader */}
-      <div className="mb-6">
+      {/* Population Uploader - Animated entrance */}
+      <motion.div
+        className="mb-6"
+        initial={shouldReduceMotion ? undefined : "hidden"}
+        animate="visible"
+        variants={fadeInUp}
+        transition={{ delay: 0.2 }}
+      >
         <PopulationUploader
           auditRunId={id}
           population={population}
           onPopulationLoaded={handlePopulationLoaded}
           onPopulationCleared={handlePopulationCleared}
         />
-      </div>
+      </motion.div>
 
-      {/* Sampling Configuration */}
-      {population && !isLocked && (
-        <div className="mb-6">
-          <SamplingConfig
-            auditRunId={id}
-            populationId={population.id}
-            columns={population.columns}
-            populationSize={population.rowCount}
-            onPlanComputed={handlePlanComputed}
-          />
-        </div>
-      )}
+      {/* Sampling Configuration - Animated presence */}
+      <AnimatePresence>
+        {population && !isLocked && (
+          <motion.div
+            className="mb-6"
+            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <SamplingConfig
+              auditRunId={id}
+              populationId={population.id}
+              columns={population.columns}
+              populationSize={population.rowCount}
+              onPlanComputed={handlePlanComputed}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Sample Preview */}
-      {plan && config && (
-        <div className="mb-6">
-          <SamplePreview
-            auditRunId={id}
-            populationId={population?.id || ""}
-            plan={plan}
-            config={config}
-            sample={sample}
-            summary={summary}
-            sampleId={sampleId}
-            isLocked={isLocked}
-            onSampleGenerated={handleSampleGenerated}
-            onSampleLocked={handleSampleLocked}
-            onPlanUpdated={handlePlanUpdated}
-          />
-        </div>
-      )}
+      {/* Sample Preview - Animated presence */}
+      <AnimatePresence>
+        {plan && config && (
+          <motion.div
+            className="mb-6"
+            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
+            <SamplePreview
+              auditRunId={id}
+              populationId={population?.id || ""}
+              plan={plan}
+              config={config}
+              sample={sample}
+              summary={summary}
+              sampleId={sampleId}
+              isLocked={isLocked}
+              onSampleGenerated={handleSampleGenerated}
+              onSampleLocked={handleSampleLocked}
+              onPlanUpdated={handlePlanUpdated}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Navigation */}
-      <div className="flex justify-between">
+      <motion.div
+        className="flex justify-between"
+        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+      >
         <Link href={`/audit-runs/${id}/stage-1`}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -384,7 +415,7 @@ export default function Stage2Page() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }

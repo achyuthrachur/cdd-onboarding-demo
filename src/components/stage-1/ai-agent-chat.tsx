@@ -12,14 +12,13 @@ import {
   Play,
   Upload,
   CheckCircle2,
-  Loader2,
-  ArrowRight,
   Sparkles
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DocumentCard } from "./document-card";
 import { ChatMessage, MessageType } from "./chat-message";
 import { toast } from "sonner";
+import { motion, AnimatePresence, useReducedMotion, staggerContainer, staggerItem, fadeInUp, scaleIn } from "@/lib/animations";
 
 interface Document {
   id: string;
@@ -336,160 +335,266 @@ export function AIAgentChat({
     return "Step 2: Drag 'Current Global Standards' and 'FLU Procedures' here to run Gap Assessment 2.";
   };
 
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Left Panel - Documents */}
-      <Card className="lg:col-span-1">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <FileText className="h-5 w-5" />
-            Documents
-          </CardTitle>
-          <CardDescription>
-            Drag documents to the chat panel to attach them
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {documents.map((doc) => (
-            <DocumentCard
-              key={doc.id}
-              id={doc.id}
-              fileName={doc.fileName}
-              docType={doc.docType}
-              jurisdiction={doc.jurisdiction}
-              isDragging={draggingDocId === doc.id}
-              isSelected={selectedDocs.some(d => d.id === doc.id)}
-              onDragStart={(e) => handleDragStart(e, doc)}
-              onDragEnd={handleDragEnd}
-            />
-          ))}
-          {documents.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              <Upload className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No documents uploaded</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Right Panel - Chat Interface */}
-      <Card className="lg:col-span-2">
-        <CardHeader className="border-b">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
-                <Bot className="h-5 w-5 text-purple-600 dark:text-purple-300" />
-              </div>
-              <div>
-                <CardTitle className="text-lg">Gap Assessment Assistant</CardTitle>
-                <CardDescription>AI-powered document analysis</CardDescription>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant={assessment1Result ? "default" : "outline"} className="gap-1">
-                {assessment1Result && <CheckCircle2 className="h-3 w-3" />}
-                Assessment 1
-              </Badge>
-              <Badge variant={assessment2Result ? "default" : "outline"} className="gap-1">
-                {assessment2Result && <CheckCircle2 className="h-3 w-3" />}
-                Assessment 2
-              </Badge>
-            </div>
-          </div>
-        </CardHeader>
-
-        {/* Chat Messages */}
-        <ScrollArea className="h-[400px]">
-          <div className="divide-y">
-            {messages.map((msg) => (
-              <ChatMessage
-                key={msg.id}
-                type={msg.type}
-                content={msg.content}
-                timestamp={msg.timestamp}
-                documents={msg.documents}
-                isPrompt={msg.isPrompt}
+      <motion.div
+        initial={shouldReduceMotion ? undefined : { opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <Card className="lg:col-span-1">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <FileText className="h-5 w-5" />
+              Documents
+            </CardTitle>
+            <CardDescription>
+              Drag documents to the chat panel to attach them
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {documents.map((doc, index) => (
+              <DocumentCard
+                key={doc.id}
+                id={doc.id}
+                fileName={doc.fileName}
+                docType={doc.docType}
+                jurisdiction={doc.jurisdiction}
+                isDragging={draggingDocId === doc.id}
+                isSelected={selectedDocs.some(d => d.id === doc.id)}
+                index={index}
+                onDragStart={(e) => handleDragStart(e, doc)}
+                onDragEnd={handleDragEnd}
               />
             ))}
-            <div ref={chatEndRef} />
-          </div>
-        </ScrollArea>
-
-        <Separator />
-
-        {/* Drop Zone & Actions */}
-        <div className="p-4">
-          {/* Drop Zone */}
-          <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={cn(
-              "border-2 border-dashed rounded-lg p-4 mb-4 transition-colors",
-              isDragOver
-                ? "border-primary bg-primary/5"
-                : "border-muted-foreground/25 hover:border-muted-foreground/50",
-              selectedDocs.length >= 2 && "opacity-50"
+            {documents.length === 0 && (
+              <motion.div
+                initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="text-center py-8 text-muted-foreground"
+              >
+                <Upload className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No documents uploaded</p>
+              </motion.div>
             )}
-          >
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-2">
-                {getAssessmentInstructions()}
-              </p>
-              {selectedDocs.length > 0 && (
-                <div className="flex flex-wrap gap-2 justify-center mt-3">
-                  {selectedDocs.map((doc) => (
-                    <Badge
-                      key={doc.id}
-                      variant="secondary"
-                      className="flex items-center gap-1.5 py-1.5 px-3 cursor-pointer hover:bg-destructive/10"
-                      onClick={() => removeSelectedDoc(doc.id)}
-                    >
-                      <FileText className="h-3 w-3" />
-                      {doc.fileName}
-                      <span className="text-xs ml-1">&times;</span>
-                    </Badge>
-                  ))}
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Right Panel - Chat Interface */}
+      <motion.div
+        initial={shouldReduceMotion ? undefined : { opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        className="lg:col-span-2"
+      >
+        <Card>
+          <CardHeader className="border-b">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <motion.div
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900"
+                  animate={isProcessing && !shouldReduceMotion ? {
+                    scale: [1, 1.05, 1],
+                    transition: { duration: 1.5, repeat: Infinity }
+                  } : {}}
+                >
+                  <Bot className="h-5 w-5 text-purple-600 dark:text-purple-300" />
+                </motion.div>
+                <div>
+                  <CardTitle className="text-lg">Gap Assessment Assistant</CardTitle>
+                  <CardDescription>AI-powered document analysis</CardDescription>
                 </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <motion.div
+                  initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.2 }}
+                >
+                  <Badge variant={assessment1Result ? "default" : "outline"} className="gap-1">
+                    {assessment1Result && (
+                      <motion.span
+                        initial={shouldReduceMotion ? undefined : { scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                      >
+                        <CheckCircle2 className="h-3 w-3" />
+                      </motion.span>
+                    )}
+                    Assessment 1
+                  </Badge>
+                </motion.div>
+                <motion.div
+                  initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.3 }}
+                >
+                  <Badge variant={assessment2Result ? "default" : "outline"} className="gap-1">
+                    {assessment2Result && (
+                      <motion.span
+                        initial={shouldReduceMotion ? undefined : { scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                      >
+                        <CheckCircle2 className="h-3 w-3" />
+                      </motion.span>
+                    )}
+                    Assessment 2
+                  </Badge>
+                </motion.div>
+              </div>
+            </div>
+          </CardHeader>
+
+          {/* Chat Messages */}
+          <ScrollArea className="h-[400px]">
+            <div className="divide-y">
+              <AnimatePresence mode="popLayout">
+                {messages.map((msg, index) => (
+                  <ChatMessage
+                    key={msg.id}
+                    type={msg.type}
+                    content={msg.content}
+                    timestamp={msg.timestamp}
+                    documents={msg.documents}
+                    isPrompt={msg.isPrompt}
+                    index={index}
+                  />
+                ))}
+              </AnimatePresence>
+              <div ref={chatEndRef} />
+            </div>
+          </ScrollArea>
+
+          <Separator />
+
+          {/* Drop Zone & Actions */}
+          <div className="p-4">
+            {/* Drop Zone */}
+            <motion.div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              animate={isDragOver && !shouldReduceMotion ? {
+                scale: 1.01,
+                borderColor: "var(--primary)",
+                transition: { duration: 0.15 }
+              } : {}}
+              className={cn(
+                "border-2 border-dashed rounded-lg p-4 mb-4 transition-colors",
+                isDragOver
+                  ? "border-primary bg-primary/5"
+                  : "border-muted-foreground/25 hover:border-muted-foreground/50",
+                selectedDocs.length >= 2 && "opacity-50"
               )}
+            >
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground mb-2">
+                  {getAssessmentInstructions()}
+                </p>
+                <AnimatePresence mode="popLayout">
+                  {selectedDocs.length > 0 && (
+                    <motion.div
+                      initial={shouldReduceMotion ? undefined : { opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex flex-wrap gap-2 justify-center mt-3"
+                    >
+                      {selectedDocs.map((doc, index) => (
+                        <motion.div
+                          key={doc.id}
+                          initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                          transition={{ duration: 0.2, delay: index * 0.05 }}
+                          whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                          whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                        >
+                          <Badge
+                            variant="secondary"
+                            className="flex items-center gap-1.5 py-1.5 px-3 cursor-pointer hover:bg-destructive/10"
+                            onClick={() => removeSelectedDoc(doc.id)}
+                          >
+                            <FileText className="h-3 w-3" />
+                            {doc.fileName}
+                            <span className="text-xs ml-1">&times;</span>
+                          </Badge>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+
+            {/* Action Button */}
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-muted-foreground">
+                {selectedDocs.length}/2 documents selected
+              </p>
+              <motion.div
+                whileHover={shouldReduceMotion || !readyAssessment || isProcessing ? {} : { scale: 1.02 }}
+                whileTap={shouldReduceMotion || !readyAssessment || isProcessing ? {} : { scale: 0.98 }}
+              >
+                <Button
+                  onClick={runAssessment}
+                  disabled={!readyAssessment || isProcessing}
+                  className="gap-2"
+                >
+                  {isProcessing ? (
+                    <>
+                      <motion.div
+                        animate={shouldReduceMotion ? {} : { rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      >
+                        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                          <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
+                        </svg>
+                      </motion.div>
+                      Processing...
+                    </>
+                  ) : readyAssessment ? (
+                    <>
+                      <Play className="h-4 w-4" />
+                      Run Gap Assessment {readyAssessment}
+                    </>
+                  ) : assessment1Result && assessment2Result ? (
+                    <>
+                      <motion.div
+                        initial={shouldReduceMotion ? undefined : { scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                      >
+                        <CheckCircle2 className="h-4 w-4" />
+                      </motion.div>
+                      All Assessments Complete
+                    </>
+                  ) : (
+                    <>
+                      <motion.div
+                        animate={shouldReduceMotion ? {} : {
+                          rotate: [0, 15, -15, 0],
+                          transition: { duration: 2, repeat: Infinity }
+                        }}
+                      >
+                        <Sparkles className="h-4 w-4" />
+                      </motion.div>
+                      Select Documents to Start
+                    </>
+                  )}
+                </Button>
+              </motion.div>
             </div>
           </div>
-
-          {/* Action Button */}
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-muted-foreground">
-              {selectedDocs.length}/2 documents selected
-            </p>
-            <Button
-              onClick={runAssessment}
-              disabled={!readyAssessment || isProcessing}
-              className="gap-2"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Processing...
-                </>
-              ) : readyAssessment ? (
-                <>
-                  <Play className="h-4 w-4" />
-                  Run Gap Assessment {readyAssessment}
-                </>
-              ) : assessment1Result && assessment2Result ? (
-                <>
-                  <CheckCircle2 className="h-4 w-4" />
-                  All Assessments Complete
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-4 w-4" />
-                  Select Documents to Start
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-      </Card>
+        </Card>
+      </motion.div>
     </div>
   );
 }

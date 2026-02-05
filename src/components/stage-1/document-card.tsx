@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FileText, GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, useReducedMotion } from "@/lib/animations";
 
 export interface DocumentCardProps {
   id: string;
@@ -12,6 +13,7 @@ export interface DocumentCardProps {
   jurisdiction?: string | null;
   isDragging?: boolean;
   isSelected?: boolean;
+  index?: number;
   onDragStart?: (e: React.DragEvent) => void;
   onDragEnd?: (e: React.DragEvent) => void;
   onClick?: () => void;
@@ -36,52 +38,77 @@ export function DocumentCard({
   jurisdiction,
   isDragging,
   isSelected,
+  index = 0,
   onDragStart,
   onDragEnd,
   onClick,
 }: DocumentCardProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  // Wrap Card in motion.div for animation while keeping native drag on Card
   return (
-    <Card
-      draggable
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      onClick={onClick}
-      data-document-id={id}
-      className={cn(
-        "p-3 cursor-grab active:cursor-grabbing transition-all",
-        "hover:shadow-md hover:border-primary/50",
-        isDragging && "opacity-50 scale-95",
-        isSelected && "ring-2 ring-primary border-primary"
-      )}
+    <motion.div
+      initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        duration: 0.3,
+        delay: index * 0.08,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      whileHover={shouldReduceMotion || isDragging ? {} : {
+        y: -2,
+        transition: { duration: 0.15 },
+      }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
     >
-      <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 mt-0.5">
-          <GripVertical className="h-4 w-4 text-muted-foreground" />
-        </div>
-        <div className="flex-shrink-0">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
-            <FileText className="h-5 w-5 text-muted-foreground" />
+      <Card
+        draggable
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        onClick={onClick}
+        data-document-id={id}
+        className={cn(
+          "p-3 cursor-grab active:cursor-grabbing transition-all",
+          "hover:shadow-md hover:border-primary/50",
+          isDragging && "opacity-50 scale-95",
+          isSelected && "ring-2 ring-primary border-primary"
+        )}
+      >
+        <div className="flex items-start gap-3">
+          <div className="flex-shrink-0 mt-0.5">
+            <GripVertical className="h-4 w-4 text-muted-foreground" />
           </div>
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate" title={fileName}>
-            {fileName}
-          </p>
-          <div className="flex items-center gap-2 mt-1">
-            <Badge
-              variant="secondary"
-              className={cn("text-xs", DOC_TYPE_COLORS[docType])}
+          <div className="flex-shrink-0">
+            <motion.div
+              className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted"
+              animate={isSelected && !shouldReduceMotion ? {
+                scale: [1, 1.1, 1],
+                transition: { duration: 0.3 }
+              } : {}}
             >
-              {DOC_TYPE_LABELS[docType] || docType}
-            </Badge>
-            {jurisdiction && (
-              <Badge variant="outline" className="text-xs">
-                {jurisdiction}
+              <FileText className="h-5 w-5 text-muted-foreground" />
+            </motion.div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate" title={fileName}>
+              {fileName}
+            </p>
+            <div className="flex items-center gap-2 mt-1">
+              <Badge
+                variant="secondary"
+                className={cn("text-xs", DOC_TYPE_COLORS[docType])}
+              >
+                {DOC_TYPE_LABELS[docType] || docType}
               </Badge>
-            )}
+              {jurisdiction && (
+                <Badge variant="outline" className="text-xs">
+                  {jurisdiction}
+                </Badge>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </motion.div>
   );
 }

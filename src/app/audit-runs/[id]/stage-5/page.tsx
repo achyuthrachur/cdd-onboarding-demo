@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { AnimatedProgress } from "@/components/ui/progress";
 import {
   ArrowLeft,
   ArrowRight,
@@ -18,6 +18,20 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
+import {
+  motion,
+  AnimatePresence,
+  FadeInUp,
+  StaggerContainer,
+  StaggerItem,
+  Presence,
+  useCountUp,
+  useReducedMotion,
+  staggerContainer,
+  staggerItem,
+  fadeInUp,
+  scaleIn,
+} from "@/lib/animations";
 import { HotTable, HotTableClass } from "@handsontable/react";
 import { registerAllModules } from "handsontable/registry";
 import Handsontable from "handsontable";
@@ -228,6 +242,12 @@ export default function Stage5Page() {
     : 0;
 
   const canProceed = completionPercentage >= 95;
+  const shouldReduceMotion = useReducedMotion();
+
+  // Animated count-ups for metrics
+  const animatedPassCount = useCountUp(testingProgress.passCount, { duration: 0.8, delay: 0.2 });
+  const animatedFailCount = useCountUp(testingProgress.fail1RegulatoryCount, { duration: 0.8, delay: 0.3 });
+  const animatedNACount = useCountUp(testingProgress.naCount, { duration: 0.8, delay: 0.4 });
 
   // Prepare data for Handsontable
   const tableData = testRows.map(row => [
@@ -245,7 +265,7 @@ export default function Stage5Page() {
   return (
     <div className="p-8">
       {/* Header */}
-      <div className="mb-8">
+      <FadeInUp className="mb-8">
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
@@ -256,7 +276,13 @@ export default function Stage5Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-teal-100 text-teal-700">Stage 5</Badge>
+              <motion.div
+                initial={shouldReduceMotion ? undefined : { scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+              >
+                <Badge className="bg-teal-100 text-teal-700">Stage 5</Badge>
+              </motion.div>
               <h1 className="text-3xl font-bold tracking-tight">
                 Testing
               </h1>
@@ -265,7 +291,12 @@ export default function Stage5Page() {
               Execute testing workbook and record results
             </p>
           </div>
-          <div className="flex gap-2">
+          <motion.div
+            className="flex gap-2"
+            initial={shouldReduceMotion ? undefined : { opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+          >
             <Button variant="outline" onClick={handleLoadDemoData}>
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
@@ -275,19 +306,38 @@ export default function Stage5Page() {
               Export
             </Button>
             <Button onClick={handleSave} disabled={isSaving || testRows.length === 0}>
-              {isSaving ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Save className="h-4 w-4 mr-2" />
-              )}
-              Save Results
+              <AnimatePresence mode="wait">
+                {isSaving ? (
+                  <motion.span
+                    key="saving"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="flex items-center"
+                  >
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Saving...
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="save"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="flex items-center"
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    Save Results
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </Button>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </FadeInUp>
 
       {/* Prerequisites Check */}
-      {!hasWorkbook && testRows.length === 0 && (
+      <Presence isVisible={!hasWorkbook && testRows.length === 0}>
         <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
           <h3 className="font-medium text-yellow-700 dark:text-yellow-300 mb-2">
             Prerequisites Required
@@ -296,95 +346,146 @@ export default function Stage5Page() {
             <li>• Complete Stage 4 (Workbook Generation) or load demo data</li>
           </ul>
         </div>
-      )}
+      </Presence>
 
       {/* Progress Summary */}
-      <div className="grid gap-6 md:grid-cols-4 mb-8">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Progress
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{completionPercentage.toFixed(0)}%</div>
-            <Progress value={completionPercentage} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">
-              {testingProgress.completedTests} / {testingProgress.totalTests} tests
-            </p>
-          </CardContent>
-        </Card>
+      <motion.div
+        className="grid gap-6 md:grid-cols-4 mb-8"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div variants={staggerItem}>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Progress
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div
+                className="text-2xl font-bold"
+                initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                {completionPercentage.toFixed(0)}%
+              </motion.div>
+              <AnimatedProgress value={completionPercentage} className="mt-2" showShimmer={isSaving} />
+              <p className="text-xs text-muted-foreground mt-1">
+                {testingProgress.completedTests} / {testingProgress.totalTests} tests
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card className={testingProgress.passCount > 0 ? "border-green-200" : ""}>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-green-600">
-              Pass
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{testingProgress.passCount}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {testingProgress.totalTests > 0
-                ? ((testingProgress.passCount / testingProgress.totalTests) * 100).toFixed(1)
-                : 0}% pass rate
-            </p>
-          </CardContent>
-        </Card>
+        <motion.div variants={staggerItem}>
+          <Card className={testingProgress.passCount > 0 ? "border-green-200" : ""}>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-green-600">
+                Pass
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div className="text-2xl font-bold text-green-600 tabular-nums">
+                {animatedPassCount}
+              </motion.div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {testingProgress.totalTests > 0
+                  ? ((testingProgress.passCount / testingProgress.totalTests) * 100).toFixed(1)
+                  : 0}% pass rate
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card className={testingProgress.fail1RegulatoryCount > 0 ? "border-red-200" : ""}>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-red-600">
-              Fail
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">{testingProgress.fail1RegulatoryCount}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {testingProgress.fail1RegulatoryCount} exception(s)
-            </p>
-          </CardContent>
-        </Card>
+        <motion.div variants={staggerItem}>
+          <Card className={testingProgress.fail1RegulatoryCount > 0 ? "border-red-200" : ""}>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-red-600">
+                Fail
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div className="text-2xl font-bold text-red-600 tabular-nums">
+                {animatedFailCount}
+              </motion.div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {testingProgress.fail1RegulatoryCount} exception(s)
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              N/A
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{testingProgress.naCount}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Not applicable
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+        <motion.div variants={staggerItem}>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                N/A
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div className="text-2xl font-bold tabular-nums">
+                {animatedNACount}
+              </motion.div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Not applicable
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
 
       {/* Testing Workbook */}
-      <Card className="mb-6">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <ClipboardCheck className="h-5 w-5" />
-                Testing Workbook
-              </CardTitle>
-              <CardDescription>
-                Enter test results for each attribute
-              </CardDescription>
+      <motion.div
+        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.35 }}
+      >
+        <Card className="mb-6">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <ClipboardCheck className="h-5 w-5" />
+                  Testing Workbook
+                </CardTitle>
+                <CardDescription>
+                  Enter test results for each attribute
+                </CardDescription>
+              </div>
+              <AnimatePresence>
+                {canProceed && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8, x: 20 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, x: 20 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
+                    <Badge className="bg-green-100 text-green-700">
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.1, type: "spring" }}
+                      >
+                        <CheckCircle2 className="h-4 w-4 mr-1" />
+                      </motion.div>
+                      Ready for Consolidation
+                    </Badge>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-            {canProceed && (
-              <Badge className="bg-green-100 text-green-700">
-                <CheckCircle2 className="h-4 w-4 mr-1" />
-                Ready for Consolidation
-              </Badge>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent>
-          {testRows.length > 0 ? (
-            <div className="border rounded-lg overflow-hidden">
-              <HotTable
+          </CardHeader>
+          <CardContent>
+            {testRows.length > 0 ? (
+              <motion.div
+                className="border rounded-lg overflow-hidden"
+                initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                <HotTable
                 ref={hotRef}
                 data={tableData}
                 colHeaders={['Sample ID', 'Entity Name', 'Attr ID', 'Attribute', 'Test Question', 'Result', 'Observation', 'Evidence Ref', 'Notes']}
@@ -425,39 +526,70 @@ export default function Stage5Page() {
                   return cellProperties;
                 }}
               />
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-              <ClipboardCheck className="h-16 w-16 mb-4 opacity-30" />
-              <h3 className="font-medium mb-2">No Testing Data</h3>
-              <p className="text-sm text-center max-w-md">
-                Complete Stage 4 to generate a workbook, or click &quot;Load Demo Data&quot; to see sample testing data.
-              </p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Completion Requirements */}
-      {!canProceed && testRows.length > 0 && (
-        <Card className="mb-6 border-yellow-200">
-          <CardHeader className="pb-2">
-            <div className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 text-yellow-600" />
-              <CardTitle className="text-yellow-700">Completion Required</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-yellow-600">
-              At least 95% of tests must be completed to proceed to consolidation.
-              Currently at {completionPercentage.toFixed(1)}%.
-            </p>
+              </motion.div>
+            ) : (
+              <motion.div
+                className="flex flex-col items-center justify-center py-16 text-muted-foreground"
+                initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <motion.div
+                  initial={shouldReduceMotion ? undefined : { scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.3, type: "spring" }}
+                >
+                  <ClipboardCheck className="h-16 w-16 mb-4 opacity-30" />
+                </motion.div>
+                <h3 className="font-medium mb-2">No Testing Data</h3>
+                <p className="text-sm text-center max-w-md">
+                  Complete Stage 4 to generate a workbook, or click &quot;Load Demo Data&quot; to see sample testing data.
+                </p>
+              </motion.div>
+            )}
           </CardContent>
         </Card>
-      )}
+      </motion.div>
+
+      {/* Completion Requirements */}
+      <AnimatePresence>
+        {!canProceed && testRows.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <Card className="mb-6 border-yellow-200">
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-2">
+                  <motion.div
+                    animate={{ rotate: [0, -10, 10, -10, 0] }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    <AlertCircle className="h-5 w-5 text-yellow-600" />
+                  </motion.div>
+                  <CardTitle className="text-yellow-700">Completion Required</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-yellow-600">
+                  At least 95% of tests must be completed to proceed to consolidation.
+                  Currently at {completionPercentage.toFixed(1)}%.
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Navigation */}
-      <div className="flex justify-between">
+      <motion.div
+        className="flex justify-between"
+        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
         <Link href={`/audit-runs/${id}/stage-4`}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -465,12 +597,17 @@ export default function Stage5Page() {
           </Button>
         </Link>
         <Link href={`/audit-runs/${id}/stage-6`}>
-          <Button disabled={!canProceed}>
-            Continue to Consolidation
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <motion.div
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+          >
+            <Button disabled={!canProceed}>
+              Continue to Consolidation
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </motion.div>
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }

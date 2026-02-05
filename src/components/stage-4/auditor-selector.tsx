@@ -16,6 +16,13 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Auditor } from "@/lib/attribute-library/types";
+import {
+  motion,
+  AnimatePresence,
+  staggerContainer,
+  staggerItem,
+  useReducedMotion,
+} from "@/lib/animations";
 
 interface AuditorSelectorProps {
   availableAuditors: Auditor[];
@@ -77,6 +84,8 @@ export function AuditorSelector({
     setShowAddForm(false);
   };
 
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <Card>
       <CardHeader>
@@ -101,22 +110,35 @@ export function AuditorSelector({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Auditor Distribution Info */}
-        {selectedAuditors.length > 0 && (
-          <div className="p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
-            <div className="text-sm">
-              <span className="font-medium">Sample Distribution (Round-Robin): </span>
-              <span className="text-muted-foreground">
-                {samplesPerAuditor} samples per auditor
-                {remainder > 0 && ` (+1 for first ${remainder} auditors)`}
-              </span>
-            </div>
-          </div>
-        )}
+        {/* Auditor Distribution Info - Animated */}
+        <AnimatePresence>
+          {selectedAuditors.length > 0 && (
+            <motion.div
+              className="p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg"
+              initial={shouldReduceMotion ? undefined : { opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="text-sm">
+                <span className="font-medium">Sample Distribution (Round-Robin): </span>
+                <span className="text-muted-foreground">
+                  {samplesPerAuditor} samples per auditor
+                  {remainder > 0 && ` (+1 for first ${remainder} auditors)`}
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Auditor List */}
-        <div className="space-y-2">
-          {availableAuditors.map((auditor) => {
+        {/* Auditor List - Staggered animation */}
+        <motion.div
+          className="space-y-2"
+          initial={shouldReduceMotion ? undefined : "hidden"}
+          animate="visible"
+          variants={staggerContainer}
+        >
+          {availableAuditors.map((auditor, index) => {
             const isSelected = selectedAuditors.some((a) => a.id === auditor.id);
             const selectedIndex = selectedAuditors.findIndex((a) => a.id === auditor.id);
             const assignedSamples = isSelected
@@ -124,8 +146,9 @@ export function AuditorSelector({
               : 0;
 
             return (
-              <div
+              <motion.div
                 key={auditor.id}
+                variants={staggerItem}
                 onClick={() => toggleAuditor(auditor)}
                 className={cn(
                   "flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors",
@@ -133,6 +156,8 @@ export function AuditorSelector({
                     ? "border-primary bg-primary/5"
                     : "border-border hover:bg-muted/50"
                 )}
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.01 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.99 }}
               >
                 <div className="flex items-center gap-3">
                   <Checkbox checked={isSelected} />
@@ -144,75 +169,110 @@ export function AuditorSelector({
                     </div>
                   </div>
                 </div>
-                {isSelected && (
-                  <Badge variant="secondary">
-                    {assignedSamples} samples
-                  </Badge>
-                )}
-              </div>
+                <AnimatePresence>
+                  {isSelected && (
+                    <motion.div
+                      initial={shouldReduceMotion ? undefined : { scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <Badge variant="secondary">
+                        {assignedSamples} samples
+                      </Badge>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
-        {/* Add New Auditor */}
-        {showAddForm ? (
-          <div className="p-4 border rounded-lg space-y-3">
-            <div className="space-y-2">
-              <Label htmlFor="auditor-name">Name</Label>
-              <Input
-                id="auditor-name"
-                placeholder="Enter auditor name"
-                value={newAuditorName}
-                onChange={(e) => setNewAuditorName(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="auditor-email">Email</Label>
-              <Input
-                id="auditor-email"
-                type="email"
-                placeholder="Enter auditor email"
-                value={newAuditorEmail}
-                onChange={(e) => setNewAuditorEmail(e.target.value)}
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button size="sm" onClick={handleAddAuditor}>
-                <Check className="h-4 w-4 mr-1" />
-                Add
-              </Button>
+        {/* Add New Auditor - Animated */}
+        <AnimatePresence mode="wait">
+          {showAddForm ? (
+            <motion.div
+              key="add-form"
+              className="p-4 border rounded-lg space-y-3"
+              initial={shouldReduceMotion ? undefined : { opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="space-y-2">
+                <Label htmlFor="auditor-name">Name</Label>
+                <Input
+                  id="auditor-name"
+                  placeholder="Enter auditor name"
+                  value={newAuditorName}
+                  onChange={(e) => setNewAuditorName(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="auditor-email">Email</Label>
+                <Input
+                  id="auditor-email"
+                  type="email"
+                  placeholder="Enter auditor email"
+                  value={newAuditorEmail}
+                  onChange={(e) => setNewAuditorEmail(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" onClick={handleAddAuditor}>
+                  <Check className="h-4 w-4 mr-1" />
+                  Add
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setShowAddForm(false);
+                    setNewAuditorName("");
+                    setNewAuditorEmail("");
+                  }}
+                >
+                  <X className="h-4 w-4 mr-1" />
+                  Cancel
+                </Button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="add-button"
+              initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
               <Button
                 variant="outline"
-                size="sm"
-                onClick={() => {
-                  setShowAddForm(false);
-                  setNewAuditorName("");
-                  setNewAuditorEmail("");
-                }}
+                className="w-full"
+                onClick={() => setShowAddForm(true)}
               >
-                <X className="h-4 w-4 mr-1" />
-                Cancel
+                <UserPlus className="h-4 w-4 mr-2" />
+                Add Custom Auditor
               </Button>
-            </div>
-          </div>
-        ) : (
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={() => setShowAddForm(true)}
-          >
-            <UserPlus className="h-4 w-4 mr-2" />
-            Add Custom Auditor
-          </Button>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Summary */}
+        {/* Summary - Animated badge */}
         <div className="pt-3 border-t">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Selected Auditors:</span>
-            <Badge variant={selectedAuditors.length > 0 ? "default" : "outline"}>
-              {selectedAuditors.length} / {availableAuditors.length}
-            </Badge>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedAuditors.length}
+                initial={shouldReduceMotion ? undefined : { scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <Badge variant={selectedAuditors.length > 0 ? "default" : "outline"}>
+                  {selectedAuditors.length} / {availableAuditors.length}
+                </Badge>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </CardContent>

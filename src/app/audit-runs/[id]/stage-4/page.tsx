@@ -20,6 +20,16 @@ import {
   Sparkles,
   Download,
 } from "lucide-react";
+import {
+  motion,
+  AnimatePresence,
+  staggerContainer,
+  staggerItem,
+  fadeInUp,
+  tabContent,
+  scaleIn,
+  useReducedMotion,
+} from "@/lib/animations";
 import { toast } from "sonner";
 import {
   loadFallbackDataForStage,
@@ -276,10 +286,57 @@ export default function Stage4Page() {
     view: auditorWorkbooks.some((wb) => wb.summary.completedRows > 0),
   };
 
+  const shouldReduceMotion = useReducedMotion();
+
+  // Step cards data for rendering
+  const steps = [
+    {
+      title: "Step 1: Load Data",
+      description: "Sample & Attributes",
+      isComplete: stepComplete.load,
+      activeColor: "bg-blue-100 text-blue-600",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: Database,
+      badgeText: `${samples.length} samples, ${extractedAttributes.length} attrs`,
+    },
+    {
+      title: "Step 2: Auditors",
+      description: "Select team",
+      isComplete: stepComplete.auditors,
+      activeColor: "bg-purple-100 text-purple-600",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: Users,
+      badgeText: `${selectedAuditors.length} selected`,
+    },
+    {
+      title: "Step 3: Generate",
+      description: "Create workbooks",
+      isComplete: stepComplete.generate,
+      activeColor: "bg-amber-100 text-amber-600",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: FileSpreadsheet,
+      badgeText: `${auditorWorkbooks.length} workbooks`,
+    },
+    {
+      title: "Step 4: Populate",
+      description: "Fill demo data",
+      isComplete: stepComplete.view,
+      activeColor: "bg-gray-100 text-gray-400",
+      completeColor: "bg-green-100 text-green-600",
+      Icon: ListChecks,
+      badgeText: stepComplete.view ? "Ready" : "Pending",
+    },
+  ];
+
   return (
     <div className="p-8 h-[calc(100vh-4rem)] flex flex-col">
-      {/* Header */}
-      <div className="mb-6 flex-shrink-0">
+      {/* Header - Animated */}
+      <motion.div
+        className="mb-6 flex-shrink-0"
+        initial={shouldReduceMotion ? undefined : "hidden"}
+        animate="visible"
+        variants={fadeInUp}
+      >
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
@@ -304,126 +361,58 @@ export default function Stage4Page() {
             Load Demo Data
           </Button>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Workflow Steps */}
-      <div className="grid gap-4 md:grid-cols-4 mb-6 flex-shrink-0">
-        <Card className={stepComplete.load ? "border-green-500" : ""}>
-          <CardHeader className="pb-2">
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  stepComplete.load
-                    ? "bg-green-100 text-green-600"
-                    : "bg-blue-100 text-blue-600"
-                }`}
-              >
-                {stepComplete.load ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <Database className="h-5 w-5" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 1: Load Data</CardTitle>
-                <CardDescription>Sample & Attributes</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Badge variant={stepComplete.load ? "default" : "outline"}>
-              {samples.length} samples, {extractedAttributes.length} attrs
-            </Badge>
-          </CardContent>
-        </Card>
-
-        <Card className={stepComplete.auditors ? "border-green-500" : ""}>
-          <CardHeader className="pb-2">
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  stepComplete.auditors
-                    ? "bg-green-100 text-green-600"
-                    : "bg-purple-100 text-purple-600"
-                }`}
-              >
-                {stepComplete.auditors ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <Users className="h-5 w-5" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 2: Auditors</CardTitle>
-                <CardDescription>Select team</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Badge variant={stepComplete.auditors ? "default" : "outline"}>
-              {selectedAuditors.length} selected
-            </Badge>
-          </CardContent>
-        </Card>
-
-        <Card className={stepComplete.generate ? "border-green-500" : ""}>
-          <CardHeader className="pb-2">
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  stepComplete.generate
-                    ? "bg-green-100 text-green-600"
-                    : "bg-amber-100 text-amber-600"
-                }`}
-              >
-                {stepComplete.generate ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <FileSpreadsheet className="h-5 w-5" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 3: Generate</CardTitle>
-                <CardDescription>Create workbooks</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Badge variant={stepComplete.generate ? "default" : "outline"}>
-              {auditorWorkbooks.length} workbooks
-            </Badge>
-          </CardContent>
-        </Card>
-
-        <Card className={stepComplete.view ? "border-green-500" : ""}>
-          <CardHeader className="pb-2">
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  stepComplete.view
-                    ? "bg-green-100 text-green-600"
-                    : "bg-gray-100 text-gray-400"
-                }`}
-              >
-                {stepComplete.view ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <ListChecks className="h-5 w-5" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-base">Step 4: Populate</CardTitle>
-                <CardDescription>Fill demo data</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Badge variant={stepComplete.view ? "default" : "outline"}>
-              {stepComplete.view ? "Ready" : "Pending"}
-            </Badge>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Workflow Steps - Staggered animation */}
+      <motion.div
+        className="grid gap-4 md:grid-cols-4 mb-6 flex-shrink-0"
+        initial={shouldReduceMotion ? undefined : "hidden"}
+        animate="visible"
+        variants={staggerContainer}
+      >
+        {steps.map((step, index) => (
+          <motion.div key={index} variants={staggerItem}>
+            <Card className={step.isComplete ? "border-green-500" : ""}>
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-3">
+                  <motion.div
+                    className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                      step.isComplete ? step.completeColor : step.activeColor
+                    }`}
+                    animate={step.isComplete ? { scale: [1, 1.1, 1] } : undefined}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {step.isComplete ? (
+                      <CheckCircle2 className="h-5 w-5" />
+                    ) : (
+                      <step.Icon className="h-5 w-5" />
+                    )}
+                  </motion.div>
+                  <div>
+                    <CardTitle className="text-base">{step.title}</CardTitle>
+                    <CardDescription>{step.description}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={step.badgeText}
+                    initial={shouldReduceMotion ? undefined : { scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Badge variant={step.isComplete ? "default" : "outline"}>
+                      {step.badgeText}
+                    </Badge>
+                  </motion.div>
+                </AnimatePresence>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
 
       {/* Main Content Area */}
       <Tabs
@@ -467,263 +456,372 @@ export default function Stage4Page() {
           </TabsTrigger>
         </TabsList>
 
-        {/* Load Data Tab */}
-        <TabsContent value="load" className="flex-1 min-h-0 mt-0">
-          <div className="grid gap-6 md:grid-cols-2 h-full">
-            {/* Sampling Data */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Sampling Data (Stage 2)</CardTitle>
-                <CardDescription>
-                  Sample records from the locked sampling plan
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {samples.length > 0 ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Total Samples:</span>
-                      <Badge variant="default">{samples.length}</Badge>
-                    </div>
-                    {samplingResult?.config && (
+        {/* Tab Content with Animations */}
+        <AnimatePresence mode="wait">
+          {/* Load Data Tab */}
+          {currentStep === "load" && (
+            <motion.div
+              key="load"
+              className="flex-1 min-h-0"
+              initial={shouldReduceMotion ? undefined : "hidden"}
+              animate="visible"
+              exit="exit"
+              variants={tabContent}
+            >
+              <TabsContent value="load" className="h-full m-0">
+                <motion.div
+                  className="grid gap-6 md:grid-cols-2 h-full"
+                  initial={shouldReduceMotion ? undefined : "hidden"}
+                  animate="visible"
+                  variants={staggerContainer}
+                >
+                  {/* Sampling Data */}
+                  <motion.div variants={staggerItem}>
+                    <Card className="h-full">
+                      <CardHeader>
+                        <CardTitle className="text-lg">Sampling Data (Stage 2)</CardTitle>
+                        <CardDescription>
+                          Sample records from the locked sampling plan
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        {samples.length > 0 ? (
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <span className="text-muted-foreground">Total Samples:</span>
+                              <Badge variant="default">{samples.length}</Badge>
+                            </div>
+                            {samplingResult?.config && (
+                              <>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-muted-foreground">Sample Method:</span>
+                                  <span className="capitalize">{samplingResult.config.method}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-muted-foreground">Confidence Level:</span>
+                                  <span>{Math.round((samplingResult.config.confidence || 0.95) * 100)}%</span>
+                                </div>
+                              </>
+                            )}
+                            <motion.div
+                              className="p-3 bg-green-50 dark:bg-green-950 rounded-lg"
+                              initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.2 }}
+                            >
+                              <CheckCircle2 className="h-5 w-5 text-green-600 mb-2" />
+                              <p className="text-sm text-green-700 dark:text-green-300">
+                                Sampling data loaded and ready
+                              </p>
+                            </motion.div>
+                          </div>
+                        ) : (
+                          <div className="text-center py-8 text-muted-foreground">
+                            <Database className="h-12 w-12 mx-auto mb-3 opacity-30" />
+                            <p>No sampling data available</p>
+                            <p className="text-sm">Complete Stage 2 or load demo data</p>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+
+                  {/* Attributes Data */}
+                  <motion.div variants={staggerItem}>
+                    <Card className="h-full">
+                      <CardHeader>
+                        <CardTitle className="text-lg">Attributes (Stage 3)</CardTitle>
+                        <CardDescription>
+                          CIP/CDD/EDD testing attributes from FLU procedures
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        {extractedAttributes.length > 0 ? (
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <span className="text-muted-foreground">Total Attributes:</span>
+                              <Badge variant="default">{extractedAttributes.length}</Badge>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-muted-foreground">Acceptable Docs:</span>
+                              <Badge variant="secondary">{acceptableDocs.length}</Badge>
+                            </div>
+                            <div className="flex gap-2 flex-wrap">
+                              <Badge variant="outline">
+                                CIP: {extractedAttributes.filter((a) => a.Category === "CIP").length}
+                              </Badge>
+                              <Badge variant="outline">
+                                CDD: {extractedAttributes.filter((a) => a.Category === "CDD").length}
+                              </Badge>
+                              <Badge variant="outline">
+                                EDD: {extractedAttributes.filter((a) => a.Category === "EDD").length}
+                              </Badge>
+                            </div>
+                            <motion.div
+                              className="p-3 bg-green-50 dark:bg-green-950 rounded-lg"
+                              initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.3 }}
+                            >
+                              <CheckCircle2 className="h-5 w-5 text-green-600 mb-2" />
+                              <p className="text-sm text-green-700 dark:text-green-300">
+                                Attributes loaded and ready
+                              </p>
+                            </motion.div>
+                          </div>
+                        ) : (
+                          <div className="text-center py-8 text-muted-foreground">
+                            <FileSpreadsheet className="h-12 w-12 mx-auto mb-3 opacity-30" />
+                            <p>No attributes available</p>
+                            <p className="text-sm">Complete Stage 3 or load demo data</p>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </motion.div>
+
+                {hasPrerequisites && (
+                  <motion.div
+                    className="mt-4 flex justify-end"
+                    initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <Button onClick={() => setCurrentStep("auditors")}>
+                      Continue to Auditor Selection
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </motion.div>
+                )}
+              </TabsContent>
+            </motion.div>
+          )}
+
+          {/* Auditors Tab */}
+          {currentStep === "auditors" && (
+            <motion.div
+              key="auditors"
+              className="flex-1 min-h-0"
+              initial={shouldReduceMotion ? undefined : "hidden"}
+              animate="visible"
+              exit="exit"
+              variants={tabContent}
+            >
+              <TabsContent value="auditors" className="h-full m-0">
+                <AuditorSelector
+                  availableAuditors={availableAuditors}
+                  selectedAuditors={selectedAuditors}
+                  onSelectionChange={setSelectedAuditors}
+                  sampleCount={samples.length}
+                />
+
+                <AnimatePresence>
+                  {selectedAuditors.length > 0 && (
+                    <motion.div
+                      className="mt-4 flex justify-end"
+                      initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                    >
+                      <Button onClick={() => setCurrentStep("generate")}>
+                        Continue to Generation
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </TabsContent>
+            </motion.div>
+          )}
+
+          {/* Generate Tab */}
+          {currentStep === "generate" && (
+            <motion.div
+              key="generate"
+              className="flex-1 min-h-0"
+              initial={shouldReduceMotion ? undefined : "hidden"}
+              animate="visible"
+              exit="exit"
+              variants={tabContent}
+            >
+              <TabsContent value="generate" className="h-full m-0">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Generate Auditor Workbooks</CardTitle>
+                    <CardDescription>
+                      Create testing workbooks for each selected auditor
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Summary - Staggered */}
+                    <motion.div
+                      className="grid grid-cols-3 gap-4"
+                      initial={shouldReduceMotion ? undefined : "hidden"}
+                      animate="visible"
+                      variants={staggerContainer}
+                    >
+                      <motion.div variants={staggerItem} className="p-4 bg-muted rounded-lg text-center">
+                        <div className="text-2xl font-bold">{samples.length}</div>
+                        <div className="text-sm text-muted-foreground">Samples</div>
+                      </motion.div>
+                      <motion.div variants={staggerItem} className="p-4 bg-muted rounded-lg text-center">
+                        <div className="text-2xl font-bold">{selectedAuditors.length}</div>
+                        <div className="text-sm text-muted-foreground">Auditors</div>
+                      </motion.div>
+                      <motion.div variants={staggerItem} className="p-4 bg-muted rounded-lg text-center">
+                        <div className="text-2xl font-bold">{extractedAttributes.length}</div>
+                        <div className="text-sm text-muted-foreground">Attributes</div>
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Estimated Output */}
+                    <motion.div
+                      className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg"
+                      initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <h4 className="font-medium mb-2">Estimated Output</h4>
+                      <div className="text-sm space-y-1">
+                        <p>
+                          <span className="text-muted-foreground">Samples per auditor: </span>
+                          {Math.floor(samples.length / selectedAuditors.length)} (round-robin)
+                        </p>
+                        <p>
+                          <span className="text-muted-foreground">Rows per workbook: </span>
+                          ~{Math.floor(samples.length / selectedAuditors.length) * extractedAttributes.length}
+                        </p>
+                        <p>
+                          <span className="text-muted-foreground">Total test rows: </span>
+                          {samples.length * extractedAttributes.length}
+                        </p>
+                      </div>
+                    </motion.div>
+
+                    {/* Actions */}
+                    <motion.div
+                      className="flex gap-3"
+                      initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      <Button
+                        onClick={handleGenerateWorkbooks}
+                        disabled={isGenerating || auditorWorkbooks.length > 0}
+                        className="flex-1"
+                      >
+                        {isGenerating ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Generating...
+                          </>
+                        ) : auditorWorkbooks.length > 0 ? (
+                          <>
+                            <CheckCircle2 className="h-4 w-4 mr-2" />
+                            Workbooks Generated
+                          </>
+                        ) : (
+                          <>
+                            <Play className="h-4 w-4 mr-2" />
+                            Generate Workbooks
+                          </>
+                        )}
+                      </Button>
+                      {auditorWorkbooks.length > 0 && (
+                        <Button variant="outline" onClick={handleClearWorkbooks}>
+                          Clear & Regenerate
+                        </Button>
+                      )}
+                    </motion.div>
+
+                    <AnimatePresence>
+                      {auditorWorkbooks.length > 0 && (
+                        <motion.div
+                          className="flex justify-end"
+                          initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                        >
+                          <Button onClick={() => setCurrentStep("view")}>
+                            View Workbooks
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </motion.div>
+          )}
+
+          {/* View Workbooks Tab */}
+          {currentStep === "view" && (
+            <motion.div
+              key="view"
+              className="flex-1 min-h-0 flex flex-col"
+              initial={shouldReduceMotion ? undefined : "hidden"}
+              animate="visible"
+              exit="exit"
+              variants={tabContent}
+            >
+              <TabsContent value="view" className="h-full m-0 flex flex-col">
+                {/* Populate Button */}
+                <motion.div
+                  className="mb-4 flex items-center justify-between flex-shrink-0"
+                  initial={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline">
+                      {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.totalRows, 0)} total rows
+                    </Badge>
+                    <Badge variant="outline">
+                      {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.completedRows, 0)} completed
+                    </Badge>
+                  </div>
+                  <Button
+                    onClick={handlePopulateDemoData}
+                    disabled={isPopulating}
+                    variant={auditorWorkbooks.some((wb) => wb.summary.completedRows > 0) ? "outline" : "default"}
+                  >
+                    {isPopulating ? (
                       <>
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Sample Method:</span>
-                          <span className="capitalize">{samplingResult.config.method}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Confidence Level:</span>
-                          <span>{Math.round((samplingResult.config.confidence || 0.95) * 100)}%</span>
-                        </div>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Populating...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Populate Demo Data
                       </>
                     )}
-                    <div className="p-3 bg-green-50 dark:bg-green-950 rounded-lg">
-                      <CheckCircle2 className="h-5 w-5 text-green-600 mb-2" />
-                      <p className="text-sm text-green-700 dark:text-green-300">
-                        Sampling data loaded and ready
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Database className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                    <p>No sampling data available</p>
-                    <p className="text-sm">Complete Stage 2 or load demo data</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Attributes Data */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Attributes (Stage 3)</CardTitle>
-                <CardDescription>
-                  CIP/CDD/EDD testing attributes from FLU procedures
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {extractedAttributes.length > 0 ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Total Attributes:</span>
-                      <Badge variant="default">{extractedAttributes.length}</Badge>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Acceptable Docs:</span>
-                      <Badge variant="secondary">{acceptableDocs.length}</Badge>
-                    </div>
-                    <div className="flex gap-2 flex-wrap">
-                      <Badge variant="outline">
-                        CIP: {extractedAttributes.filter((a) => a.Category === "CIP").length}
-                      </Badge>
-                      <Badge variant="outline">
-                        CDD: {extractedAttributes.filter((a) => a.Category === "CDD").length}
-                      </Badge>
-                      <Badge variant="outline">
-                        EDD: {extractedAttributes.filter((a) => a.Category === "EDD").length}
-                      </Badge>
-                    </div>
-                    <div className="p-3 bg-green-50 dark:bg-green-950 rounded-lg">
-                      <CheckCircle2 className="h-5 w-5 text-green-600 mb-2" />
-                      <p className="text-sm text-green-700 dark:text-green-300">
-                        Attributes loaded and ready
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <FileSpreadsheet className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                    <p>No attributes available</p>
-                    <p className="text-sm">Complete Stage 3 or load demo data</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          {hasPrerequisites && (
-            <div className="mt-4 flex justify-end">
-              <Button onClick={() => setCurrentStep("auditors")}>
-                Continue to Auditor Selection
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          )}
-        </TabsContent>
-
-        {/* Auditors Tab */}
-        <TabsContent value="auditors" className="flex-1 min-h-0 mt-0">
-          <AuditorSelector
-            availableAuditors={availableAuditors}
-            selectedAuditors={selectedAuditors}
-            onSelectionChange={setSelectedAuditors}
-            sampleCount={samples.length}
-          />
-
-          {selectedAuditors.length > 0 && (
-            <div className="mt-4 flex justify-end">
-              <Button onClick={() => setCurrentStep("generate")}>
-                Continue to Generation
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          )}
-        </TabsContent>
-
-        {/* Generate Tab */}
-        <TabsContent value="generate" className="flex-1 min-h-0 mt-0">
-          <Card>
-            <CardHeader>
-              <CardTitle>Generate Auditor Workbooks</CardTitle>
-              <CardDescription>
-                Create testing workbooks for each selected auditor
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Summary */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="p-4 bg-muted rounded-lg text-center">
-                  <div className="text-2xl font-bold">{samples.length}</div>
-                  <div className="text-sm text-muted-foreground">Samples</div>
-                </div>
-                <div className="p-4 bg-muted rounded-lg text-center">
-                  <div className="text-2xl font-bold">{selectedAuditors.length}</div>
-                  <div className="text-sm text-muted-foreground">Auditors</div>
-                </div>
-                <div className="p-4 bg-muted rounded-lg text-center">
-                  <div className="text-2xl font-bold">{extractedAttributes.length}</div>
-                  <div className="text-sm text-muted-foreground">Attributes</div>
-                </div>
-              </div>
-
-              {/* Estimated Output */}
-              <div className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
-                <h4 className="font-medium mb-2">Estimated Output</h4>
-                <div className="text-sm space-y-1">
-                  <p>
-                    <span className="text-muted-foreground">Samples per auditor: </span>
-                    {Math.floor(samples.length / selectedAuditors.length)} (round-robin)
-                  </p>
-                  <p>
-                    <span className="text-muted-foreground">Rows per workbook: </span>
-                    ~{Math.floor(samples.length / selectedAuditors.length) * extractedAttributes.length}
-                  </p>
-                  <p>
-                    <span className="text-muted-foreground">Total test rows: </span>
-                    {samples.length * extractedAttributes.length}
-                  </p>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-3">
-                <Button
-                  onClick={handleGenerateWorkbooks}
-                  disabled={isGenerating || auditorWorkbooks.length > 0}
-                  className="flex-1"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Generating...
-                    </>
-                  ) : auditorWorkbooks.length > 0 ? (
-                    <>
-                      <CheckCircle2 className="h-4 w-4 mr-2" />
-                      Workbooks Generated
-                    </>
-                  ) : (
-                    <>
-                      <Play className="h-4 w-4 mr-2" />
-                      Generate Workbooks
-                    </>
-                  )}
-                </Button>
-                {auditorWorkbooks.length > 0 && (
-                  <Button variant="outline" onClick={handleClearWorkbooks}>
-                    Clear & Regenerate
                   </Button>
-                )}
-              </div>
+                </motion.div>
 
-              {auditorWorkbooks.length > 0 && (
-                <div className="flex justify-end">
-                  <Button onClick={() => setCurrentStep("view")}>
-                    View Workbooks
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                {/* Workbook View */}
+                <div className="flex-1 min-h-0">
+                  <AuditorWorkbookView
+                    workbooks={auditorWorkbooks}
+                    activeAuditorId={activeAuditorId}
+                    onAuditorChange={setActiveAuditorId}
+                    onExport={handleExportWorkbook}
+                  />
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* View Workbooks Tab */}
-        <TabsContent value="view" className="flex-1 min-h-0 mt-0 flex flex-col">
-          {/* Populate Button */}
-          <div className="mb-4 flex items-center justify-between flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <Badge variant="outline">
-                {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.totalRows, 0)} total rows
-              </Badge>
-              <Badge variant="outline">
-                {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.completedRows, 0)} completed
-              </Badge>
-            </div>
-            <Button
-              onClick={handlePopulateDemoData}
-              disabled={isPopulating}
-              variant={auditorWorkbooks.some((wb) => wb.summary.completedRows > 0) ? "outline" : "default"}
-            >
-              {isPopulating ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Populating...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Populate Demo Data
-                </>
-              )}
-            </Button>
-          </div>
-
-          {/* Workbook View */}
-          <div className="flex-1 min-h-0">
-            <AuditorWorkbookView
-              workbooks={auditorWorkbooks}
-              activeAuditorId={activeAuditorId}
-              onAuditorChange={setActiveAuditorId}
-              onExport={handleExportWorkbook}
-            />
-          </div>
-        </TabsContent>
+              </TabsContent>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </Tabs>
 
       {/* Navigation */}
-      <div className="flex justify-between pt-4 flex-shrink-0 border-t mt-4">
+      <motion.div
+        className="flex justify-between pt-4 flex-shrink-0 border-t mt-4"
+        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
         <Link href={`/audit-runs/${id}/stage-3`}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -736,7 +834,7 @@ export default function Stage4Page() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -20,6 +20,14 @@ import { cn } from "@/lib/utils";
 import { ChatMessage, MessageType } from "@/components/stage-1/chat-message";
 import { toast } from "sonner";
 import type { FLUExtractionResult, FLUProcedureDocument } from "@/lib/stage-data/store";
+import {
+  motion,
+  AnimatePresence,
+  chatMessage as chatMessageVariant,
+  fadeInUp,
+  scaleIn,
+  useReducedMotion,
+} from "@/lib/animations";
 
 interface ChatMessageData {
   id: string;
@@ -79,6 +87,7 @@ export function FLUProcedureChat({
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -276,26 +285,45 @@ Click the "Results" tab to view and export the extracted attributes.`,
               <CardDescription>AI-powered attribute extraction</CardDescription>
             </div>
           </div>
-          <Badge variant={extractionResult ? "default" : "outline"} className="gap-1">
-            {extractionResult && <CheckCircle2 className="h-3 w-3" />}
-            {extractionResult ? "Extraction Complete" : "Ready"}
-          </Badge>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={extractionResult ? "complete" : "ready"}
+              initial={shouldReduceMotion ? undefined : { scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Badge variant={extractionResult ? "default" : "outline"} className="gap-1">
+                {extractionResult && <CheckCircle2 className="h-3 w-3" />}
+                {extractionResult ? "Extraction Complete" : "Ready"}
+              </Badge>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </CardHeader>
 
-      {/* Chat Messages */}
+      {/* Chat Messages - Animated */}
       <ScrollArea className="flex-1 min-h-0">
         <div className="divide-y">
-          {messages.map((msg) => (
-            <ChatMessage
-              key={msg.id}
-              type={msg.type}
-              content={msg.content}
-              timestamp={msg.timestamp}
-              documents={msg.documents}
-              isPrompt={msg.isPrompt}
-            />
-          ))}
+          <AnimatePresence initial={false}>
+            {messages.map((msg, index) => (
+              <motion.div
+                key={msg.id}
+                initial={shouldReduceMotion ? undefined : "hidden"}
+                animate="visible"
+                variants={chatMessageVariant}
+                transition={{ delay: index === messages.length - 1 ? 0 : 0 }}
+              >
+                <ChatMessage
+                  type={msg.type}
+                  content={msg.content}
+                  timestamp={msg.timestamp}
+                  documents={msg.documents}
+                  isPrompt={msg.isPrompt}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
           <div ref={chatEndRef} />
         </div>
       </ScrollArea>
@@ -304,8 +332,8 @@ Click the "Results" tab to view and export the extracted attributes.`,
 
       {/* Upload Zone & Actions */}
       <div className="p-4 flex-shrink-0">
-        {/* Drop Zone */}
-        <div
+        {/* Drop Zone - Animated */}
+        <motion.div
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -317,6 +345,8 @@ Click the "Results" tab to view and export the extracted attributes.`,
               : "border-muted-foreground/25 hover:border-muted-foreground/50",
             selectedDoc && "cursor-default"
           )}
+          animate={isDragOver ? { scale: 1.02 } : { scale: 1 }}
+          transition={{ duration: 0.15 }}
         >
           <input
             ref={fileInputRef}
@@ -326,71 +356,90 @@ Click the "Results" tab to view and export the extracted attributes.`,
             className="hidden"
           />
           <div className="text-center">
-            {selectedDoc ? (
-              <div className="flex items-center justify-center gap-2">
-                <Badge
-                  variant="secondary"
-                  className="flex items-center gap-1.5 py-1.5 px-3"
+            <AnimatePresence mode="wait">
+              {selectedDoc ? (
+                <motion.div
+                  key="selected"
+                  className="flex items-center justify-center gap-2"
+                  initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <FileText className="h-3 w-3" />
-                  {selectedDoc.fileName}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeSelectedDoc();
-                    }}
-                    className="ml-1 hover:text-destructive"
+                  <Badge
+                    variant="secondary"
+                    className="flex items-center gap-1.5 py-1.5 px-3"
                   >
-                    <X className="h-3 w-3" />
-                  </button>
-                </Badge>
-              </div>
-            ) : (
-              <>
-                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">
-                  Drag & drop FLU Procedures document here, or click to browse
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Supports PDF, Word (.docx), and text files
-                </p>
-              </>
-            )}
+                    <FileText className="h-3 w-3" />
+                    {selectedDoc.fileName}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeSelectedDoc();
+                      }}
+                      className="ml-1 hover:text-destructive"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="upload"
+                  initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground">
+                    Drag & drop FLU Procedures document here, or click to browse
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Supports PDF, Word (.docx), and text files
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
         {/* Action Button */}
         <div className="flex items-center justify-between">
           <p className="text-xs text-muted-foreground">
             {selectedDoc ? "Ready to extract attributes" : "No document selected"}
           </p>
-          <Button
-            onClick={runExtraction}
-            disabled={!selectedDoc || isProcessing || !!extractionResult}
-            className="gap-2"
+          <motion.div
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
           >
-            {isProcessing ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Extracting...
-              </>
-            ) : extractionResult ? (
-              <>
-                <CheckCircle2 className="h-4 w-4" />
-                Extraction Complete
-              </>
-            ) : selectedDoc ? (
-              <>
-                <Play className="h-4 w-4" />
-                Extract Attributes
-              </>
-            ) : (
-              <>
-                <Sparkles className="h-4 w-4" />
-                Upload Document to Start
-              </>
-            )}
-          </Button>
+            <Button
+              onClick={runExtraction}
+              disabled={!selectedDoc || isProcessing || !!extractionResult}
+              className="gap-2"
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Extracting...
+                </>
+              ) : extractionResult ? (
+                <>
+                  <CheckCircle2 className="h-4 w-4" />
+                  Extraction Complete
+                </>
+              ) : selectedDoc ? (
+                <>
+                  <Play className="h-4 w-4" />
+                  Extract Attributes
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4" />
+                  Upload Document to Start
+                </>
+              )}
+            </Button>
+          </motion.div>
         </div>
       </div>
     </Card>

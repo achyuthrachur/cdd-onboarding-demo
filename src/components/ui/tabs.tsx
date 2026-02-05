@@ -3,8 +3,10 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Tabs as TabsPrimitive } from "radix-ui"
+import { motion, AnimatePresence } from "framer-motion"
 
 import { cn } from "@/lib/utils"
+import { tabContent } from "@/lib/animations"
 
 function Tabs({
   className,
@@ -75,17 +77,141 @@ function TabsTrigger({
   )
 }
 
+// Check for reduced motion preference
+function useReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = React.useState(false)
+
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    setPrefersReducedMotion(mediaQuery.matches)
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setPrefersReducedMotion(event.matches)
+    }
+
+    mediaQuery.addEventListener("change", handleChange)
+    return () => mediaQuery.removeEventListener("change", handleChange)
+  }, [])
+
+  return prefersReducedMotion
+}
+
+interface TabsContentProps
+  extends React.ComponentProps<typeof TabsPrimitive.Content> {
+  /** Disable animations for this content */
+  disableAnimation?: boolean
+}
+
 function TabsContent({
   className,
+  children,
+  value,
+  disableAnimation = false,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Content>) {
+}: TabsContentProps) {
+  const prefersReducedMotion = useReducedMotion()
+  const shouldAnimate = !disableAnimation && !prefersReducedMotion
+
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"
       className={cn("flex-1 outline-none", className)}
+      value={value}
+      asChild={shouldAnimate}
       {...props}
-    />
+    >
+      {shouldAnimate ? (
+        <motion.div
+          key={value}
+          variants={tabContent}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          {children}
+        </motion.div>
+      ) : (
+        children
+      )}
+    </TabsPrimitive.Content>
   )
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }
+interface AnimatedTabsContentProps extends TabsContentProps {
+  /** The currently active tab value - required for AnimatePresence */
+  activeValue?: string
+}
+
+/**
+ * Animated TabsContent wrapper with enter/exit transitions.
+ * Use this when you want full enter/exit animations with AnimatePresence.
+ *
+ * @example
+ * ```tsx
+ * <Tabs defaultValue="tab1">
+ *   <TabsList>
+ *     <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+ *     <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+ *   </TabsList>
+ *   <AnimatedTabsContent value="tab1" activeValue={activeTab}>
+ *     Content 1
+ *   </AnimatedTabsContent>
+ *   <AnimatedTabsContent value="tab2" activeValue={activeTab}>
+ *     Content 2
+ *   </AnimatedTabsContent>
+ * </Tabs>
+ * ```
+ */
+function AnimatedTabsContent({
+  className,
+  children,
+  value,
+  activeValue,
+  disableAnimation = false,
+  ...props
+}: AnimatedTabsContentProps) {
+  const prefersReducedMotion = useReducedMotion()
+  const shouldAnimate = !disableAnimation && !prefersReducedMotion
+  const isActive = activeValue === value
+
+  // Only render when active (AnimatePresence handles exit animation)
+  if (!shouldAnimate) {
+    return (
+      <TabsPrimitive.Content
+        data-slot="tabs-content"
+        className={cn("flex-1 outline-none", className)}
+        value={value}
+        {...props}
+      >
+        {children}
+      </TabsPrimitive.Content>
+    )
+  }
+
+  return (
+    <AnimatePresence mode="wait">
+      {isActive && (
+        <TabsPrimitive.Content
+          data-slot="tabs-content"
+          className={cn("flex-1 outline-none", className)}
+          value={value}
+          forceMount
+          asChild
+          {...props}
+        >
+          <motion.div
+            key={value}
+            variants={tabContent}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {children}
+          </motion.div>
+        </TabsPrimitive.Content>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export { Tabs, TabsList, TabsTrigger, TabsContent, AnimatedTabsContent, tabsListVariants }

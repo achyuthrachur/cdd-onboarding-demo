@@ -35,6 +35,14 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import type { FLUExtractionResult } from "@/lib/stage-data/store";
 import type { Attribute, AcceptableDoc } from "@/lib/attribute-library/types";
+import {
+  motion,
+  AnimatePresence,
+  staggerContainer,
+  staggerItem,
+  tabContent,
+  useReducedMotion,
+} from "@/lib/animations";
 
 interface ExtractionResultsViewProps {
   result: FLUExtractionResult;
@@ -48,6 +56,7 @@ export function ExtractionResultsView({
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [activeTab, setActiveTab] = useState("attributes");
+  const shouldReduceMotion = useReducedMotion();
 
   // Extract attributes and docs from result
   const attributes = useMemo(() => {
@@ -147,27 +156,43 @@ export function ExtractionResultsView({
               {attributes.length} attributes extracted with {acceptableDocs.length} acceptable documents
             </CardDescription>
           </div>
-          <Button onClick={onExportExcel} className="gap-2">
-            <Download className="h-4 w-4" />
-            Export to Excel
-          </Button>
+          <motion.div
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+          >
+            <Button onClick={onExportExcel} className="gap-2">
+              <Download className="h-4 w-4" />
+              Export to Excel
+            </Button>
+          </motion.div>
         </div>
 
-        {/* Summary Badges */}
-        <div className="flex gap-3 mt-4">
-          <Badge variant="default" className="gap-1 px-3 py-1">
-            <ShieldCheck className="h-3 w-3" />
-            CIP: {categoryCounts.CIP}
-          </Badge>
-          <Badge variant="secondary" className="gap-1 px-3 py-1">
-            <FileText className="h-3 w-3" />
-            CDD: {categoryCounts.CDD}
-          </Badge>
-          <Badge variant="destructive" className="gap-1 px-3 py-1">
-            <AlertTriangle className="h-3 w-3" />
-            EDD: {categoryCounts.EDD}
-          </Badge>
-        </div>
+        {/* Summary Badges - Staggered entrance */}
+        <motion.div
+          className="flex gap-3 mt-4"
+          initial={shouldReduceMotion ? undefined : "hidden"}
+          animate="visible"
+          variants={staggerContainer}
+        >
+          <motion.div variants={staggerItem}>
+            <Badge variant="default" className="gap-1 px-3 py-1">
+              <ShieldCheck className="h-3 w-3" />
+              CIP: {categoryCounts.CIP}
+            </Badge>
+          </motion.div>
+          <motion.div variants={staggerItem}>
+            <Badge variant="secondary" className="gap-1 px-3 py-1">
+              <FileText className="h-3 w-3" />
+              CDD: {categoryCounts.CDD}
+            </Badge>
+          </motion.div>
+          <motion.div variants={staggerItem}>
+            <Badge variant="destructive" className="gap-1 px-3 py-1">
+              <AlertTriangle className="h-3 w-3" />
+              EDD: {categoryCounts.EDD}
+            </Badge>
+          </motion.div>
+        </motion.div>
       </CardHeader>
 
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -210,125 +235,162 @@ export function ExtractionResultsView({
             </div>
           </div>
 
-          <TabsContent value="attributes" className="flex-1 overflow-auto px-4 pb-4 mt-0">
-            <div className="border rounded-lg">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-24">ID</TableHead>
-                    <TableHead className="w-20">Category</TableHead>
-                    <TableHead className="w-48">Attribute Name</TableHead>
-                    <TableHead>Question Text</TableHead>
-                    <TableHead className="w-20">Scope</TableHead>
-                    <TableHead className="w-20">Docs</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredAttributes.map((attr) => {
-                    const docs = getDocsForAttribute(attr.Attribute_ID);
-                    return (
-                      <TableRow key={attr.Attribute_ID}>
-                        <TableCell className="font-mono text-xs">
-                          {attr.Attribute_ID}
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            variant={getCategoryBadgeVariant(attr.Category)}
-                            className="gap-1"
-                          >
-                            {getCategoryIcon(attr.Category)}
-                            {attr.Category}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {attr.Attribute_Name}
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {attr.Question_Text}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="text-xs">
-                            {attr.RiskScope}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary" className="text-xs">
-                            {docs.length}
-                          </Badge>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                  {filteredAttributes.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                        No attributes match your search criteria
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </TabsContent>
+          {/* Tab Content with Animations */}
+          <AnimatePresence mode="wait">
+            {activeTab === "attributes" && (
+              <motion.div
+                key="attributes"
+                className="flex-1 overflow-auto px-4 pb-4"
+                initial={shouldReduceMotion ? undefined : "hidden"}
+                animate="visible"
+                exit="exit"
+                variants={tabContent}
+              >
+                <TabsContent value="attributes" className="m-0">
+                  <div className="border rounded-lg">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-24">ID</TableHead>
+                          <TableHead className="w-20">Category</TableHead>
+                          <TableHead className="w-48">Attribute Name</TableHead>
+                          <TableHead>Question Text</TableHead>
+                          <TableHead className="w-20">Scope</TableHead>
+                          <TableHead className="w-20">Docs</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredAttributes.map((attr, index) => {
+                          const docs = getDocsForAttribute(attr.Attribute_ID);
+                          return (
+                            <motion.tr
+                              key={attr.Attribute_ID}
+                              className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                              initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: Math.min(index * 0.02, 0.3) }}
+                            >
+                              <TableCell className="font-mono text-xs">
+                                {attr.Attribute_ID}
+                              </TableCell>
+                              <TableCell>
+                                <Badge
+                                  variant={getCategoryBadgeVariant(attr.Category)}
+                                  className="gap-1"
+                                >
+                                  {getCategoryIcon(attr.Category)}
+                                  {attr.Category}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="font-medium">
+                                {attr.Attribute_Name}
+                              </TableCell>
+                              <TableCell className="text-sm text-muted-foreground">
+                                {attr.Question_Text}
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant="outline" className="text-xs">
+                                  {attr.RiskScope}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant="secondary" className="text-xs">
+                                  {docs.length}
+                                </Badge>
+                              </TableCell>
+                            </motion.tr>
+                          );
+                        })}
+                        {filteredAttributes.length === 0 && (
+                          <TableRow>
+                            <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                              No attributes match your search criteria
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </TabsContent>
+              </motion.div>
+            )}
 
-          <TabsContent value="documents" className="flex-1 overflow-auto px-4 pb-4 mt-0">
-            <div className="border rounded-lg">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-24">Attribute ID</TableHead>
-                    <TableHead className="w-48">Document Name</TableHead>
-                    <TableHead>Evidence Source</TableHead>
-                    <TableHead className="w-32">Jurisdiction</TableHead>
-                    <TableHead>Notes</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredDocs.map((doc, index) => {
-                    const attr = attributes.find(a => a.Attribute_ID === doc.Attribute_ID);
-                    return (
-                      <TableRow key={`${doc.Attribute_ID}-${index}`}>
-                        <TableCell className="font-mono text-xs">
-                          <div className="flex items-center gap-2">
-                            {doc.Attribute_ID}
-                            {attr && (
-                              <Badge
-                                variant={getCategoryBadgeVariant(attr.Category)}
-                                className="text-[10px] px-1"
-                              >
-                                {attr.Category}
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {doc.Document_Name}
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {doc.Evidence_Source_Document}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="text-xs">
-                            {doc.Jurisdiction_ID}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-xs text-muted-foreground">
-                          {doc.Notes}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                  {filteredDocs.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                        No documents match your search criteria
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </TabsContent>
+            {activeTab === "documents" && (
+              <motion.div
+                key="documents"
+                className="flex-1 overflow-auto px-4 pb-4"
+                initial={shouldReduceMotion ? undefined : "hidden"}
+                animate="visible"
+                exit="exit"
+                variants={tabContent}
+              >
+                <TabsContent value="documents" className="m-0">
+                  <div className="border rounded-lg">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-24">Attribute ID</TableHead>
+                          <TableHead className="w-48">Document Name</TableHead>
+                          <TableHead>Evidence Source</TableHead>
+                          <TableHead className="w-32">Jurisdiction</TableHead>
+                          <TableHead>Notes</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredDocs.map((doc, index) => {
+                          const attr = attributes.find(a => a.Attribute_ID === doc.Attribute_ID);
+                          return (
+                            <motion.tr
+                              key={`${doc.Attribute_ID}-${index}`}
+                              className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                              initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: Math.min(index * 0.02, 0.3) }}
+                            >
+                              <TableCell className="font-mono text-xs">
+                                <div className="flex items-center gap-2">
+                                  {doc.Attribute_ID}
+                                  {attr && (
+                                    <Badge
+                                      variant={getCategoryBadgeVariant(attr.Category)}
+                                      className="text-[10px] px-1"
+                                    >
+                                      {attr.Category}
+                                    </Badge>
+                                  )}
+                                </div>
+                              </TableCell>
+                              <TableCell className="font-medium">
+                                {doc.Document_Name}
+                              </TableCell>
+                              <TableCell className="text-sm text-muted-foreground">
+                                {doc.Evidence_Source_Document}
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant="outline" className="text-xs">
+                                  {doc.Jurisdiction_ID}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="text-xs text-muted-foreground">
+                                {doc.Notes}
+                              </TableCell>
+                            </motion.tr>
+                          );
+                        })}
+                        {filteredDocs.length === 0 && (
+                          <TableRow>
+                            <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                              No documents match your search criteria
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </TabsContent>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Tabs>
       </div>
     </Card>
