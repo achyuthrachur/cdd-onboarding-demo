@@ -284,6 +284,19 @@ export interface StageDataStore {
 
   // Stage 6: Consolidation
   consolidatedReport?: ConsolidationResult;
+
+  // AIC/Auditor Portal - Publishing & Progress Tracking
+  workbooksPublished?: {
+    publishedAt: string;
+    publishedBy: string;
+    workbookCount: number;
+  };
+  auditorProgress?: Record<string, {
+    completionPercentage: number;
+    status: 'draft' | 'in_progress' | 'submitted';
+    lastActivityAt: string;
+    submittedAt: string | null;
+  }>;
 }
 
 // In-memory store (singleton pattern)
@@ -411,11 +424,13 @@ export function loadStageDataFromStorage(): void {
       // Stage 3
       'fluProcedures', 'fluExtractionResult', 'extractedAttributes', 'acceptableDocs', 'attributeExtractionComplete',
       // Stage 4
-      'selectedAuditors', 'auditorWorkbooks', 'activeAuditorId', 'workbookGenerationComplete', 'workbookState', 'generatedWorkbooks',
+      'selectedAuditors', 'auditorWorkbooks', 'pivotedWorkbooks', 'activeAuditorId', 'workbookGenerationComplete', 'workbookState', 'generatedWorkbooks',
       // Stage 5
       'testResults', 'testingProgress',
       // Stage 6
-      'consolidatedReport'
+      'consolidatedReport',
+      // AIC/Auditor Portal
+      'workbooksPublished', 'auditorProgress'
     ];
 
     keys.forEach(key => {

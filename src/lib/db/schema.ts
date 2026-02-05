@@ -151,6 +151,7 @@ export const workbooks = pgTable('workbooks', {
   sampleId: uuid('sample_id').references(() => samples.id),
   auditorId: text('auditor_id'),
   auditorName: text('auditor_name'),
+  auditorEmail: text('auditor_email'),
   status: workbookStatusEnum('status').default('draft').notNull(),
   templateVersion: text('template_version').default('1.0'),
   handsontableStateJson: json('handsontable_state_json').$type<{
@@ -165,7 +166,49 @@ export const workbooks = pgTable('workbooks', {
       }>;
     }>;
   }>(),
+  // Pivoted workbook structure (rows=attributes, columns=customers)
+  pivotedDataJson: json('pivoted_data_json').$type<{
+    assignedCustomers: Array<{
+      customerId: string;
+      customerName: string;
+      jurisdiction: string;
+      irr: string;
+      drr: string;
+      partyType: string;
+      kycDate: string;
+      primaryFlu: string;
+      samplingIndex: number;
+    }>;
+    rows: Array<{
+      id: string;
+      attributeId: string;
+      attributeCategory: string;
+      questionText: string;
+      attributeName?: string;
+      sourceFile?: string;
+      source?: string;
+      sourcePage?: string;
+      group?: string;
+      customerResults: Record<string, {
+        customerId: string;
+        customerName: string;
+        result: string;
+        observation: string;
+      }>;
+    }>;
+    attributes: Array<{
+      attributeId: string;
+      attributeName: string;
+      attributeCategory: string;
+      questionText: string;
+    }>;
+  }>(),
   exportXlsxUrl: text('export_xlsx_url'),
+  // Publishing fields
+  publishedAt: timestamp('published_at'),
+  publishedBy: text('published_by'),
+  completionPercentage: integer('completion_percentage').default(0),
+  lastActivityAt: timestamp('last_activity_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   submittedAt: timestamp('submitted_at'),
 });
