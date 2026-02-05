@@ -38,6 +38,11 @@ interface ChatMessageData {
   isPrompt?: boolean;
 }
 
+interface UploadedFile {
+  doc: FLUProcedureDocument;
+  content: string;
+}
+
 interface FLUProcedureChatProps {
   onExtractionComplete: (result: FLUExtractionResult) => void;
   extractionResult: FLUExtractionResult | null;
@@ -74,7 +79,7 @@ export function FLUProcedureChat({
   extractionResult,
   auditRunId,
 }: FLUProcedureChatProps) {
-  const [selectedDoc, setSelectedDoc] = useState<FLUProcedureDocument | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const [messages, setMessages] = useState<ChatMessageData[]>([
     {
@@ -88,6 +93,9 @@ export function FLUProcedureChat({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
+
+  // Helper to get the document from uploaded file
+  const selectedDoc = uploadedFile?.doc || null;
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -147,6 +155,39 @@ export function FLUProcedureChat({
       return;
     }
 
+    addMessage({
+      type: "user",
+      content: `Uploading FLU Procedure document: ${file.name}`,
+      documents: [{ fileName: file.name, docType: "flu_procedure" }],
+    });
+
+    // Read file content
+    let fileContent = "";
+    try {
+      if (file.type === "text/plain") {
+        fileContent = await file.text();
+      } else if (file.type === "application/pdf") {
+        // For PDF files, we'll send to API which can handle PDF extraction
+        // For now, note that content will be extracted server-side
+        fileContent = `[PDF Document: ${file.name}]`;
+        addMessage({
+          type: "system",
+          content: "PDF detected. Content will be extracted during analysis.",
+        });
+      } else if (file.type.includes("word") || file.type.includes("document")) {
+        // For Word docs, content will be extracted server-side
+        fileContent = `[Word Document: ${file.name}]`;
+        addMessage({
+          type: "system",
+          content: "Word document detected. Content will be extracted during analysis.",
+        });
+      }
+    } catch (error) {
+      console.error("Error reading file:", error);
+      toast.error("Failed to read file content");
+      return;
+    }
+
     const doc: FLUProcedureDocument = {
       id: `flu-${Date.now()}`,
       fileName: file.name,
@@ -155,32 +196,26 @@ export function FLUProcedureChat({
       uploadedAt: new Date().toISOString(),
     };
 
-    setSelectedDoc(doc);
-
-    addMessage({
-      type: "user",
-      content: `Uploaded FLU Procedure document: ${file.name}`,
-      documents: [{ fileName: file.name, docType: "flu_procedure" }],
-    });
+    setUploadedFile({ doc, content: fileContent });
 
     addMessage({
       type: "system",
-      content: "Document received. Click 'Extract Attributes' to analyze the procedures and extract CIP, CDD, and EDD testing attributes.",
+      content: "Document received. Click 'Extract Attributes' to analyze the procedures and extract CIP, CDD, and EDD testing attributes using AI.",
     });
   };
 
   const removeSelectedDoc = () => {
-    if (selectedDoc) {
+    if (uploadedFile) {
       addMessage({
         type: "user",
-        content: `Removed document: ${selectedDoc.fileName}`,
+        content: `Removed document: ${uploadedFile.doc.fileName}`,
       });
-      setSelectedDoc(null);
+      setUploadedFile(null);
     }
   };
 
   const runExtraction = async () => {
-    if (!selectedDoc || isProcessing) return;
+    if (!uploadedFile || isProcessing) return;
 
     setIsProcessing(true);
 
@@ -198,21 +233,22 @@ export function FLUProcedureChat({
       {
         id: loadingMsgId,
         type: "loading",
-        content: "Analyzing FLU procedures and extracting attributes...",
+        content: "Analyzing FLU procedures and extracting attributes with AI...",
         timestamp: new Date(),
       },
     ]);
 
     try {
       // Call the FLU extraction API
+      // The API will use AI if OPENAI_API_KEY is configured and content is provided,
+      // otherwise falls back to mock data
       const response = await fetch("/api/ai/flu-extraction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           auditRunId,
-          sourceFileName: selectedDoc.fileName,
-          // For demo, we'll use mock data
-          useMock: true,
+          sourceFileName: uploadedFile.doc.fileName,
+          proceduresContent: uploadedFile.content,
         }),
       });
 

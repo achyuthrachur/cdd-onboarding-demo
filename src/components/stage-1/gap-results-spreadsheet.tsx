@@ -157,11 +157,11 @@ export function GapResultsSpreadsheet({
                 colHeaders={gapDetails.columns}
                 rowHeaders={true}
                 width="100%"
-                height={Math.min(800, Math.max(200, (gapDetails.data.length + 1) * 28))}
+                height={Math.min(600, Math.max(250, gapDetails.data.length * 50 + 40))}
                 licenseKey="non-commercial-and-evaluation"
                 stretchH="all"
-                autoRowSize={false}
-                rowHeights={26}
+                autoRowSize={true}
+                rowHeights={48}
                 readOnly={true}
                 columnSorting={true}
                 filters={true}
@@ -169,7 +169,22 @@ export function GapResultsSpreadsheet({
                 manualColumnResize={true}
                 autoWrapRow={true}
                 autoWrapCol={true}
-                className="htCenter"
+                wordWrap={true}
+                className="htCenter htMiddle"
+                colWidths={function(index: number) {
+                  const col = gapDetails.columns[index];
+                  // Give more width to text-heavy columns
+                  if (col?.includes('Text') || col?.includes('Description')) {
+                    return 300;
+                  }
+                  if (col?.includes('ID')) {
+                    return 80;
+                  }
+                  if (col === 'Change_Type' || col === 'Impact') {
+                    return 90;
+                  }
+                  return 120;
+                }}
                 cells={function(row, col) {
                   const cellProperties: { className?: string } = {};
                   const data = gapDetails.data[row];
