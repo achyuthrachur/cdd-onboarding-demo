@@ -59,6 +59,15 @@ export interface GenerationReviewRow {
  * Maps to the "Auditors" sheet in the Excel workbook
  */
 export interface Auditor {
+  id: string;
+  name: string;
+  email: string;
+}
+
+/**
+ * Legacy Auditor format for Excel workbook compatibility
+ */
+export interface LegacyAuditor {
   AuditorID: string;
   AuditorName: string;
   Email: string;

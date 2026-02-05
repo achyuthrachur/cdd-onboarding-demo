@@ -10,11 +10,16 @@ import {
   SamplingResult,
   ExtractedAttribute,
   TestResult,
+  FLUExtractionResult,
+  AuditorWorkbook,
 } from "./store";
-import { getMockGapAssessmentResult, getMockStandardsComparisonResult, getMockAttributeExtractionResult } from "@/lib/ai/client";
+import type { AcceptableDoc, Auditor } from "@/lib/attribute-library/types";
+import { getMockGapAssessmentResult, getMockStandardsComparisonResult, getMockAttributeExtractionResult, getMockFLUExtractionResult } from "@/lib/ai/client";
 import { getMockAttributes } from "@/lib/workbook/builder";
 import { getMockConsolidation } from "@/lib/consolidation/engine";
-import { mockAttributes, mockGenerationReviewRows } from "@/lib/attribute-library/mock-data";
+import { mockAttributes, mockGenerationReviewRows, mockAuditors } from "@/lib/attribute-library/mock-data";
+import { generateAuditorWorkbooks } from "@/lib/workbook/auditor-assignment";
+import { populateAllWorkbooksWithDemoData } from "@/lib/workbook/demo-data-populator";
 import type { WorkbookState } from "@/lib/workbook/builder";
 
 /**
@@ -79,42 +84,67 @@ export function getFallbackCombinedGaps(): GapItem[] {
 }
 
 /**
- * Get fallback population data (10,000 records based on synthetic_onboarding_data structure)
+ * Get fallback population data (10,000 records based on actual synthetic_onboarding_data.xlsx structure)
+ * Schema: GCI, Family GCI, Family Name, Legal Name, KYC date, Jurisdiction, Bk. Entity,
+ * Primary FLU, IRR, Juris. Status, Restriction Level, Oper. Status, Party Type, KYC Status,
+ * DRR, DRR Reason, Client Type, Refresh LOB, Country of Incorp., Restriction Comment
  */
 export function getFallbackPopulation(): Record<string, unknown>[] {
-  // Generate 10,000 synthetic records
   const population: Record<string, unknown>[] = [];
-  const entityTypes = ['Corporation', 'LLC', 'Partnership', 'Trust', 'Individual'];
-  const jurisdictions = ['US', 'UK', 'SG', 'HK', 'CA', 'AU'];
-  const riskRatings = ['Low', 'Medium', 'High', 'Critical'];
-  const industries = ['Financial Services', 'Manufacturing', 'Technology', 'Healthcare', 'Retail', 'Real Estate', 'Energy'];
 
-  for (let i = 1; i <= 10000; i++) {
-    const entityType = entityTypes[Math.floor(Math.random() * entityTypes.length)];
-    const jurisdiction = jurisdictions[Math.floor(Math.random() * jurisdictions.length)];
-    const riskRating = riskRatings[Math.floor(Math.random() * riskRatings.length)];
-    const industry = industries[Math.floor(Math.random() * industries.length)];
+  const jurisdictions = ["USA", "UK", "Canada", "Germany", "France", "Australia", "Japan", "Singapore", "Hong Kong", "Switzerland"];
+  const bkEntities = ["MLT", "BRSCOT", "HSBCUK", "USBANK", "HKSB", "CHSB"];
+  const primaryFLUs = ["Retail Banking", "Global Corporate & Investment Banking", "Global Commercial Banking", "Wealth Management", "Private Banking"];
+  const irrValues = ["Enhanced Program", "Pre-2016 Program", "Standard Program"];
+  const jurisStatuses = ["Green", "Amber", "Red"];
+  const operStatuses = ["Active", "Inactive", ""];
+  const partyTypes = ["ORG", "IND"];
+  const kycStatuses = ["Green", "Amber", "Red"];
+  const drrValues = ["Standard", "Elevated", "High"];
+  const drrReasons = ["Low complexity / low risk profile", "Standard Due Diligence", "Complex ownership structure", "High-risk jurisdiction", "PEP relationship"];
+  const clientTypes = ["Financial Institution", "Non-Profit Organization", "Government Entity or Agency", "Corporation", "Trust", "Partnership"];
+  const refreshLOBs = ["FICC – SRM", "Corporate Banking (CBK)", "Global Markets – Sales", "Wealth Management – Advisory", "Retail Banking"];
+  const countries = ["United States", "United Kingdom", "Canada", "Germany", "France", "Australia", "Japan", "Singapore", "Hong Kong", "Switzerland"];
 
-    // Generate random date in 2023-2024
-    const year = 2023 + Math.floor(Math.random() * 2);
+  for (let i = 0; i < 10000; i++) {
+    const gci = 600000000 + i;
+    const familyGci = Math.floor(Math.random() * 900000000) + 100000000;
+    const familyNum = Math.floor(Math.random() * 2000) + 1;
+    const jurisdiction = jurisdictions[i % jurisdictions.length];
+    const countryIdx = jurisdictions.indexOf(jurisdiction);
+    const country = countries[countryIdx >= 0 && countryIdx < countries.length ? countryIdx : 0];
+
+    // Generate KYC date between 2018 and 2024
+    const year = 2018 + Math.floor(Math.random() * 7);
     const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
-    const day = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
-    const onboardingDate = `${year}-${month}-${day}`;
+    const kycDate = `${year}-${month}`;
+
+    // Risk distribution: 60% Green, 25% Amber, 15% Red
+    const riskRandom = Math.random() * 100;
+    const jurisStatus = riskRandom < 60 ? "Green" : riskRandom < 85 ? "Amber" : "Red";
+    const kycStatus = jurisStatuses[Math.floor(Math.random() * jurisStatuses.length)];
 
     population.push({
-      RecordID: `REC-${String(i).padStart(5, '0')}`,
-      EntityName: `Entity ${i}`,
-      EntityType: entityType,
+      GCI: gci,
+      "Family GCI": familyGci,
+      "Family Name": `Family ${familyNum}`,
+      "Legal Name": `Entity ${i + 1} ${jurisdiction}`,
+      "KYC date": kycDate,
       Jurisdiction: jurisdiction,
-      RiskRating: riskRating,
-      Industry: industry,
-      OnboardingDate: onboardingDate,
-      IRR: (Math.random() * 5 + 1).toFixed(2),
-      DRR: (Math.random() * 5 + 1).toFixed(2),
-      AnnualRevenue: Math.floor(Math.random() * 10000000) + 100000,
-      EmployeeCount: Math.floor(Math.random() * 5000) + 10,
-      LastReviewDate: onboardingDate,
-      ReviewStatus: 'Pending',
+      "Bk. Entity": bkEntities[i % bkEntities.length],
+      "Primary FLU": primaryFLUs[i % primaryFLUs.length],
+      IRR: irrValues[i % irrValues.length],
+      "Juris. Status": jurisStatus,
+      "Restriction Level": i % 20 === 0 ? "Restricted" : "",
+      "Oper. Status": operStatuses[i % 3],
+      "Party Type": partyTypes[i % partyTypes.length],
+      "KYC Status": kycStatus,
+      DRR: drrValues[Math.floor(Math.random() * drrValues.length)],
+      "DRR Reason": drrReasons[Math.floor(Math.random() * drrReasons.length)],
+      "Client Type": clientTypes[i % clientTypes.length],
+      "Refresh LOB": refreshLOBs[i % refreshLOBs.length],
+      "Country of Incorp.": country,
+      "Restriction Comment": i % 50 === 0 ? "Subject to internal review" : "",
     });
   }
 
@@ -130,12 +160,11 @@ export function getFallbackSamplingResult(): SamplingResult {
   const sampleSize = 50;
   const sample: Record<string, unknown>[] = [];
 
-  // Stratified sampling by risk rating
+  // Stratified sampling by Juris. Status (Green/Amber/Red)
   const riskGroups = {
-    Low: population.filter(p => p.RiskRating === 'Low'),
-    Medium: population.filter(p => p.RiskRating === 'Medium'),
-    High: population.filter(p => p.RiskRating === 'High'),
-    Critical: population.filter(p => p.RiskRating === 'Critical'),
+    Green: population.filter(p => p["Juris. Status"] === 'Green'),
+    Amber: population.filter(p => p["Juris. Status"] === 'Amber'),
+    Red: population.filter(p => p["Juris. Status"] === 'Red'),
   };
 
   // Sample proportionally from each group
@@ -152,10 +181,9 @@ export function getFallbackSamplingResult(): SamplingResult {
 
   const finalSample = sample.slice(0, sampleSize);
   const riskDistribution = {
-    Low: finalSample.filter(s => s.RiskRating === 'Low').length,
-    Medium: finalSample.filter(s => s.RiskRating === 'Medium').length,
-    High: finalSample.filter(s => s.RiskRating === 'High').length,
-    Critical: finalSample.filter(s => s.RiskRating === 'Critical').length,
+    Green: finalSample.filter(s => s["Juris. Status"] === 'Green').length,
+    Amber: finalSample.filter(s => s["Juris. Status"] === 'Amber').length,
+    Red: finalSample.filter(s => s["Juris. Status"] === 'Red').length,
   };
 
   return {
@@ -167,18 +195,18 @@ export function getFallbackSamplingResult(): SamplingResult {
       sample_source: {
         description: 'CDD Onboarding Population - Demo Data',
         file_name: 'synthetic_onboarding_data.xlsx',
-        sheet_name: 'Population',
+        sheet_name: 'Sheet1',
       },
       define_population: {
         total_population_size: population.length,
-        stratify_fields: ['RiskRating'],
+        stratify_fields: ['Juris. Status'],
         population_distribution: Object.entries(riskGroups).map(([key, group]) => ({
-          stratum: { RiskRating: key },
+          stratum: { "Juris. Status": key },
           count: group.length,
           share: group.length / population.length,
         })),
         strata_details: Object.entries(riskGroups).map(([key, group]) => ({
-          stratum: { RiskRating: key },
+          stratum: { "Juris. Status": key },
           population_count: group.length,
           share_of_population: group.length / population.length,
         })),
@@ -192,7 +220,7 @@ export function getFallbackSamplingResult(): SamplingResult {
           confidence_level: '95% confidence level selected for audit sampling',
           tolerable_error_rate: '5% tolerable error rate per AICPA guidance',
           expected_error_rate: '1% expected based on prior audits',
-          stratification: 'Stratified by Risk Rating for better coverage',
+          stratification: 'Stratified by Jurisdiction Status for better coverage across risk levels',
         },
       },
       sample_selection_method: {
@@ -202,13 +230,13 @@ export function getFallbackSamplingResult(): SamplingResult {
         original_calculated_sample_size: sampleSize,
         final_sample_size: finalSample.length,
         sample_distribution: Object.entries(riskDistribution).map(([key, count]) => ({
-          stratum: { RiskRating: key },
+          stratum: { "Juris. Status": key },
           count,
           share: count / finalSample.length,
         })),
         allocations_by_stratum: Object.entries(riskDistribution).map(([key, count]) => ({
           key,
-          stratum: { RiskRating: key },
+          stratum: { "Juris. Status": key },
           population_count: riskGroups[key as keyof typeof riskGroups].length,
           sample_count: count,
           original_sample_count: count,
@@ -230,14 +258,14 @@ export function getFallbackSamplingResult(): SamplingResult {
     plan: {
       allocations: Object.entries(riskDistribution).map(([key, count]) => ({
         key,
-        stratum: { RiskRating: key },
+        stratum: { "Juris. Status": key },
         population_count: riskGroups[key as keyof typeof riskGroups].length,
         sample_count: count,
         original_sample_count: count,
       })),
       plannedSize: sampleSize,
       desiredSize: sampleSize,
-      stratifyFields: ['RiskRating'],
+      stratifyFields: ['Juris. Status'],
       populationSize: population.length,
       coverageOverrides: [],
     },
@@ -247,7 +275,7 @@ export function getFallbackSamplingResult(): SamplingResult {
       margin: 0.05,
       expectedErrorRate: 0.01,
       seed: 42,
-      stratifyFields: ['RiskRating'],
+      stratifyFields: ['Juris. Status'],
     },
     lockedAt: new Date().toISOString(),
     isLocked: true,
@@ -292,7 +320,7 @@ export function getFallbackAIExtractedAttributes(): ExtractedAttribute[] {
       IsRequired: (row.IsRequired as 'Y' | 'N') || 'Y',
       DocumentationAgeRule: String(row.DocumentationAgeRule || ''),
       Group: String(row.Group || ''),
-      extractedFrom: 'gap_assessment' as const,
+      extractedFrom: 'flu_procedures' as const,
     };
   });
 }
@@ -340,6 +368,105 @@ export function getFallbackWorkbook(): WorkbookState {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
+}
+
+/**
+ * Get fallback FLU extraction result (Stage 3)
+ * Uses the mock FLU extraction result with CIP/CDD/EDD attributes
+ */
+export function getFallbackFLUExtractionResult(): FLUExtractionResult {
+  const result = getMockFLUExtractionResult();
+  return {
+    id: `FLU-${Date.now()}`,
+    workbook: result.workbook as FLUExtractionResult['workbook'],
+    tokensUsed: 0,
+  };
+}
+
+/**
+ * Get fallback extracted attributes from FLU extraction (Stage 3)
+ */
+export function getFallbackFLUAttributes(): ExtractedAttribute[] {
+  const fluResult = getMockFLUExtractionResult();
+  const attributesSheet = fluResult.workbook.sheets.find(s => s.name === 'Attributes');
+
+  if (!attributesSheet?.rows) {
+    return getFallbackAttributes();
+  }
+
+  return attributesSheet.rows.map(r => {
+    const row = r as Record<string, unknown>;
+    return {
+      Source_File: String(row.Source_File || ''),
+      Attribute_ID: String(row.Attribute_ID || ''),
+      Attribute_Name: String(row.Attribute_Name || ''),
+      Category: String(row.Category || ''),
+      Source: String(row.Source || ''),
+      Source_Page: String(row.Source_Page || ''),
+      Question_Text: String(row.Question_Text || ''),
+      Notes: String(row.Notes || ''),
+      Jurisdiction_ID: String(row.Jurisdiction_ID || 'ENT'),
+      RiskScope: (row.RiskScope as 'Base' | 'EDD' | 'Both') || 'Base',
+      IsRequired: (row.IsRequired as 'Y' | 'N') || 'Y',
+      DocumentationAgeRule: String(row.DocumentationAgeRule || ''),
+      Group: String(row.Group || ''),
+      extractedFrom: 'flu_procedures' as const,
+    };
+  });
+}
+
+/**
+ * Get fallback acceptable documents from FLU extraction (Stage 3)
+ */
+export function getFallbackAcceptableDocs(): AcceptableDoc[] {
+  const fluResult = getMockFLUExtractionResult();
+  const docsSheet = fluResult.workbook.sheets.find(s => s.name === 'Acceptable_Docs');
+
+  if (!docsSheet?.rows) {
+    return [];
+  }
+
+  return docsSheet.rows.map(r => {
+    const row = r as Record<string, unknown>;
+    return {
+      Source_File: String(row.Source_File || ''),
+      Attribute_ID: String(row.Attribute_ID || ''),
+      Document_Name: String(row.Document_Name || ''),
+      Evidence_Source_Document: String(row.Evidence_Source_Document || ''),
+      Jurisdiction_ID: String(row.Jurisdiction_ID || 'ENT'),
+      Notes: String(row.Notes || ''),
+    };
+  });
+}
+
+/**
+ * Get fallback auditors for Stage 4
+ */
+export function getFallbackAuditors(): Auditor[] {
+  return mockAuditors;
+}
+
+/**
+ * Get fallback auditor workbooks for Stage 4
+ * Generates per-auditor workbooks with demo data populated
+ */
+export function getFallbackAuditorWorkbooks(): AuditorWorkbook[] {
+  const samplingResult = getFallbackSamplingResult();
+  const attributes = getFallbackFLUAttributes();
+  const auditors = getFallbackAuditors();
+
+  // Generate workbooks using round-robin distribution
+  const workbooks = generateAuditorWorkbooks(
+    samplingResult.sample,
+    attributes,
+    auditors,
+    { strategy: 'round-robin' }
+  );
+
+  // Populate with demo data
+  const populatedWorkbooks = populateAllWorkbooksWithDemoData(workbooks);
+
+  return populatedWorkbooks;
 }
 
 /**
@@ -413,21 +540,36 @@ export function loadFallbackDataForStage(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): vo
     setStageData('populationMetadata', {
       id: `POP-DEMO-${Date.now()}`,
       fileName: 'synthetic_onboarding_data.xlsx',
-      columns: ['RecordID', 'EntityName', 'EntityType', 'Jurisdiction', 'RiskRating', 'Industry', 'OnboardingDate', 'IRR', 'DRR', 'AnnualRevenue', 'EmployeeCount', 'LastReviewDate', 'ReviewStatus'],
+      columns: ['GCI', 'Family GCI', 'Family Name', 'Legal Name', 'KYC date', 'Jurisdiction', 'Bk. Entity', 'Primary FLU', 'IRR', 'Juris. Status', 'Restriction Level', 'Oper. Status', 'Party Type', 'KYC Status', 'DRR', 'DRR Reason', 'Client Type', 'Refresh LOB', 'Country of Incorp.', 'Restriction Comment'],
       rowCount: population.length,
       uploadedAt: new Date().toISOString(),
     });
     setStageData('samplingResult', getFallbackSamplingResult());
   }
 
-  // Stage 3: Attribute Extraction
+  // Stage 3: FLU Attribute Extraction
   if (stageNumber >= 3) {
-    setStageData('extractedAttributes', getFallbackAttributes());
+    const fluResult = getFallbackFLUExtractionResult();
+    const fluAttributes = getFallbackFLUAttributes();
+    const acceptableDocs = getFallbackAcceptableDocs();
+
+    setStageData('fluExtractionResult', fluResult);
+    setStageData('extractedAttributes', fluAttributes);
+    setStageData('acceptableDocs', acceptableDocs);
     setStageData('attributeExtractionComplete', true);
   }
 
-  // Stage 4: Workbook Generation
+  // Stage 4: Auditor Workbook Generation
   if (stageNumber >= 4) {
+    const auditors = getFallbackAuditors();
+    const auditorWorkbooks = getFallbackAuditorWorkbooks();
+
+    setStageData('selectedAuditors', auditors);
+    setStageData('auditorWorkbooks', auditorWorkbooks);
+    setStageData('activeAuditorId', auditors[0]?.id);
+    setStageData('workbookGenerationComplete', true);
+
+    // Legacy support
     const workbook = getFallbackWorkbook();
     setStageData('workbookState', workbook);
     setStageData('generatedWorkbooks', [workbook]);
@@ -436,13 +578,37 @@ export function loadFallbackDataForStage(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): vo
   // Stage 5: Testing
   if (stageNumber >= 5) {
     const testResults = getFallbackTestResults();
+    const auditorWorkbooks = getFallbackAuditorWorkbooks();
+
+    // Calculate aggregated stats from auditor workbooks
+    let totalRows = 0;
+    let passCount = 0;
+    let passWithObsCount = 0;
+    let fail1RegulatoryCount = 0;
+    let fail2ProcedureCount = 0;
+    let questionToLOBCount = 0;
+    let naCount = 0;
+
+    auditorWorkbooks.forEach(wb => {
+      totalRows += wb.summary.totalRows;
+      passCount += wb.summary.passCount;
+      passWithObsCount += wb.summary.passWithObsCount;
+      fail1RegulatoryCount += wb.summary.fail1RegulatoryCount;
+      fail2ProcedureCount += wb.summary.fail2ProcedureCount;
+      questionToLOBCount += wb.summary.questionToLOBCount;
+      naCount += wb.summary.naCount;
+    });
+
     setStageData('testResults', testResults);
     setStageData('testingProgress', {
-      totalTests: testResults.length,
-      completedTests: testResults.length,
-      passCount: testResults.filter(t => t.result === 'Pass').length,
-      failCount: testResults.filter(t => t.result === 'Fail').length,
-      naCount: testResults.filter(t => t.result === 'N/A').length,
+      totalTests: totalRows,
+      completedTests: totalRows,
+      passCount,
+      passWithObsCount,
+      fail1RegulatoryCount,
+      fail2ProcedureCount,
+      questionToLOBCount,
+      naCount,
     });
   }
 
@@ -469,7 +635,7 @@ export function loadFallbackDataForStageOnly(stageNumber: 1 | 2 | 3 | 4 | 5 | 6)
       setStageData('populationMetadata', {
         id: `POP-DEMO-${Date.now()}`,
         fileName: 'synthetic_onboarding_data.xlsx',
-        columns: ['RecordID', 'EntityName', 'EntityType', 'Jurisdiction', 'RiskRating', 'Industry', 'OnboardingDate', 'IRR', 'DRR', 'AnnualRevenue', 'EmployeeCount', 'LastReviewDate', 'ReviewStatus'],
+        columns: ['GCI', 'Family GCI', 'Family Name', 'Legal Name', 'KYC date', 'Jurisdiction', 'Bk. Entity', 'Primary FLU', 'IRR', 'Juris. Status', 'Restriction Level', 'Oper. Status', 'Party Type', 'KYC Status', 'DRR', 'DRR Reason', 'Client Type', 'Refresh LOB', 'Country of Incorp.', 'Restriction Comment'],
         rowCount: population.length,
         uploadedAt: new Date().toISOString(),
       });
@@ -477,25 +643,64 @@ export function loadFallbackDataForStageOnly(stageNumber: 1 | 2 | 3 | 4 | 5 | 6)
       break;
 
     case 3:
-      setStageData('extractedAttributes', getFallbackAttributes());
+      const fluResult = getFallbackFLUExtractionResult();
+      const fluAttributes = getFallbackFLUAttributes();
+      const acceptableDocs = getFallbackAcceptableDocs();
+
+      setStageData('fluExtractionResult', fluResult);
+      setStageData('extractedAttributes', fluAttributes);
+      setStageData('acceptableDocs', acceptableDocs);
       setStageData('attributeExtractionComplete', true);
       break;
 
     case 4:
+      const auditors = getFallbackAuditors();
+      const auditorWorkbooks = getFallbackAuditorWorkbooks();
+
+      setStageData('selectedAuditors', auditors);
+      setStageData('auditorWorkbooks', auditorWorkbooks);
+      setStageData('activeAuditorId', auditors[0]?.id);
+      setStageData('workbookGenerationComplete', true);
+
+      // Legacy support
       const workbook = getFallbackWorkbook();
       setStageData('workbookState', workbook);
       setStageData('generatedWorkbooks', [workbook]);
       break;
 
     case 5:
-      const testResults = getFallbackTestResults();
-      setStageData('testResults', testResults);
+      const testResults5 = getFallbackTestResults();
+      const auditorWorkbooks5 = getFallbackAuditorWorkbooks();
+
+      // Calculate aggregated stats from auditor workbooks
+      let totalRows5 = 0;
+      let passCount5 = 0;
+      let passWithObsCount5 = 0;
+      let fail1RegulatoryCount5 = 0;
+      let fail2ProcedureCount5 = 0;
+      let questionToLOBCount5 = 0;
+      let naCount5 = 0;
+
+      auditorWorkbooks5.forEach(wb => {
+        totalRows5 += wb.summary.totalRows;
+        passCount5 += wb.summary.passCount;
+        passWithObsCount5 += wb.summary.passWithObsCount;
+        fail1RegulatoryCount5 += wb.summary.fail1RegulatoryCount;
+        fail2ProcedureCount5 += wb.summary.fail2ProcedureCount;
+        questionToLOBCount5 += wb.summary.questionToLOBCount;
+        naCount5 += wb.summary.naCount;
+      });
+
+      setStageData('testResults', testResults5);
       setStageData('testingProgress', {
-        totalTests: testResults.length,
-        completedTests: testResults.length,
-        passCount: testResults.filter(t => t.result === 'Pass').length,
-        failCount: testResults.filter(t => t.result === 'Fail').length,
-        naCount: testResults.filter(t => t.result === 'N/A').length,
+        totalTests: totalRows5,
+        completedTests: totalRows5,
+        passCount: passCount5,
+        passWithObsCount: passWithObsCount5,
+        fail1RegulatoryCount: fail1RegulatoryCount5,
+        fail2ProcedureCount: fail2ProcedureCount5,
+        questionToLOBCount: questionToLOBCount5,
+        naCount: naCount5,
       });
       break;
 

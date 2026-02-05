@@ -396,8 +396,8 @@ export function populateGenerationReview(
         sample.Jurisdiction ||
         jurisdictionMap.get(sample.Jurisdiction_ID) ||
         sample.Jurisdiction_ID,
-      AuditorID: auditor.AuditorID,
-      Auditor_Name: auditor.AuditorName,
+      AuditorID: auditor.id,
+      Auditor_Name: auditor.name,
       IRR: sample.IRR,
       DRR: sample.DRR,
       Party_Type: sample.Party_Type,
@@ -429,8 +429,8 @@ export function autoAssignAuditors(
     case "round-robin": {
       updatedRows.forEach((row, index) => {
         const auditor = auditors[index % auditors.length];
-        row.AuditorID = auditor.AuditorID;
-        row.Auditor_Name = auditor.AuditorName;
+        row.AuditorID = auditor.id;
+        row.Auditor_Name = auditor.name;
       });
       break;
     }
@@ -444,8 +444,8 @@ export function autoAssignAuditors(
 
       updatedRows.forEach((row) => {
         const auditor = jurisdictionAuditors.get(row.Jurisdiction_ID) || auditors[0];
-        row.AuditorID = auditor.AuditorID;
-        row.Auditor_Name = auditor.AuditorName;
+        row.AuditorID = auditor.id;
+        row.Auditor_Name = auditor.name;
       });
       break;
     }
@@ -453,7 +453,7 @@ export function autoAssignAuditors(
     case "balance-workload": {
       // Balance workload while keeping jurisdiction consistency where possible
       const workloadCounts = new Map<string, number>();
-      auditors.forEach((a) => workloadCounts.set(a.AuditorID, 0));
+      auditors.forEach((a) => workloadCounts.set(a.id, 0));
 
       // Sort rows by jurisdiction to keep similar entities together
       const sortedRows = [...updatedRows].sort((a, b) =>
@@ -466,18 +466,18 @@ export function autoAssignAuditors(
         let selectedAuditor = auditors[0];
 
         for (const auditor of auditors) {
-          const workload = workloadCounts.get(auditor.AuditorID) || 0;
+          const workload = workloadCounts.get(auditor.id) || 0;
           if (workload < minWorkload) {
             minWorkload = workload;
             selectedAuditor = auditor;
           }
         }
 
-        row.AuditorID = selectedAuditor.AuditorID;
-        row.Auditor_Name = selectedAuditor.AuditorName;
+        row.AuditorID = selectedAuditor.id;
+        row.Auditor_Name = selectedAuditor.name;
         workloadCounts.set(
-          selectedAuditor.AuditorID,
-          (workloadCounts.get(selectedAuditor.AuditorID) || 0) + 1
+          selectedAuditor.id,
+          (workloadCounts.get(selectedAuditor.id) || 0) + 1
         );
       });
       break;
@@ -489,9 +489,9 @@ export function autoAssignAuditors(
 
 function createDefaultAuditor(): Auditor {
   return {
-    AuditorID: "UNASSIGNED",
-    AuditorName: "Unassigned",
-    Email: "",
+    id: "UNASSIGNED",
+    name: "Unassigned",
+    email: "",
   };
 }
 

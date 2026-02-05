@@ -107,6 +107,18 @@ export function SamplingConfig({
   };
 
   const computePlan = async () => {
+    // Validate simple_random method requires sample size or percentage
+    if (method === "simple_random" && !sampleSizeOverride && !samplePercentage) {
+      toast.error("Simple Random sampling requires either a sample size or percentage");
+      return;
+    }
+
+    // Validate percentage method requires sample percentage
+    if (method === "percentage" && !samplePercentage) {
+      toast.error("Percentage-based sampling requires a sample percentage");
+      return;
+    }
+
     // Validate override justification if overrides are active
     if (configHasOverrides && !overrideJustification.trim()) {
       toast.error("Override justification is required when using overrides");
@@ -247,7 +259,7 @@ export function SamplingConfig({
         {/* Percentage Method */}
         {method === "percentage" && (
           <div className="space-y-2">
-            <Label htmlFor="samplePercentage">Sample Percentage (%)</Label>
+            <Label htmlFor="samplePercentage">Sample Percentage (%) <span className="text-red-500">*</span></Label>
             <Input
               id="samplePercentage"
               type="number"
@@ -258,13 +270,87 @@ export function SamplingConfig({
               onChange={(e) => setSamplePercentage(e.target.value)}
               placeholder="e.g., 10"
             />
+            <p className="text-xs text-muted-foreground">Required for percentage-based sampling</p>
           </div>
         )}
 
-        {/* Overrides */}
-        <div className="grid gap-4 md:grid-cols-2">
+        {/* Simple Random Method - requires sample size or percentage */}
+        {method === "simple_random" && (
+          <div className="grid gap-4 md:grid-cols-2 p-4 border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950 rounded-lg">
+            <div className="space-y-2">
+              <Label htmlFor="simpleRandomSize">Sample Size <span className="text-red-500">*</span></Label>
+              <Input
+                id="simpleRandomSize"
+                type="number"
+                min={1}
+                max={populationSize}
+                value={sampleSizeOverride}
+                onChange={(e) => setSampleSizeOverride(e.target.value)}
+                placeholder="e.g., 100"
+              />
+              <p className="text-xs text-muted-foreground">Number of records to sample</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="simpleRandomPercentage">Or Sample Percentage (%)</Label>
+              <Input
+                id="simpleRandomPercentage"
+                type="number"
+                min={1}
+                max={100}
+                step={1}
+                value={samplePercentage}
+                onChange={(e) => setSamplePercentage(e.target.value)}
+                placeholder="e.g., 10"
+              />
+              <p className="text-xs text-muted-foreground">Alternative to fixed sample size</p>
+            </div>
+            <p className="col-span-2 text-xs text-blue-600 dark:text-blue-400">
+              Simple Random sampling requires either a sample size or percentage.
+            </p>
+          </div>
+        )}
+
+        {/* Overrides - only show for methods where these are actual overrides */}
+        {method !== "simple_random" && (
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="populationOverride">Population Size Override</Label>
+              <Input
+                id="populationOverride"
+                type="number"
+                min={1}
+                value={populationOverride}
+                onChange={(e) => setPopulationOverride(e.target.value)}
+                placeholder={`Actual: ${populationSize.toLocaleString()}`}
+              />
+              <p className="text-xs text-muted-foreground">
+                Test sample calculations with different population assumptions
+              </p>
+            </div>
+            {method !== "percentage" && (
+              <div className="space-y-2">
+                <Label htmlFor="sampleSizeOverride">Sample Size Override</Label>
+                <Input
+                  id="sampleSizeOverride"
+                  type="number"
+                  min={1}
+                  max={populationOverride ? parseInt(populationOverride) : populationSize}
+                  value={sampleSizeOverride}
+                  onChange={(e) => setSampleSizeOverride(e.target.value)}
+                  placeholder="Leave empty to use calculated size"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Override the calculated sample size with a specific number
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Population Override for simple_random method */}
+        {method === "simple_random" && (
           <div className="space-y-2">
-            <Label htmlFor="populationOverride">Population Size Override</Label>
+            <Label htmlFor="populationOverride">Population Size Override (Optional)</Label>
             <Input
               id="populationOverride"
               type="number"
@@ -277,22 +363,7 @@ export function SamplingConfig({
               Test sample calculations with different population assumptions
             </p>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="sampleSizeOverride">Sample Size Override</Label>
-            <Input
-              id="sampleSizeOverride"
-              type="number"
-              min={1}
-              max={populationOverride ? parseInt(populationOverride) : populationSize}
-              value={sampleSizeOverride}
-              onChange={(e) => setSampleSizeOverride(e.target.value)}
-              placeholder="Leave empty to use calculated size"
-            />
-            <p className="text-xs text-muted-foreground">
-              Override the calculated sample size with a specific number
-            </p>
-          </div>
-        </div>
+        )}
 
         <div className="grid gap-4 md:grid-cols-2">
           {method === "systematic" && (

@@ -500,26 +500,66 @@ export function getMockPopulationData(): Record<string, unknown>[] {
     console.error("Error loading embedded Excel file:", error);
   }
 
-  // Fallback: Generate 10,000 mock records if Excel file is not available
-  console.log("Generating 10,000 fallback mock records...");
+  // Fallback: Generate 10,000 mock records matching the Excel schema
+  // Columns: GCI, Family GCI, Family Name, Legal Name, KYC date, Jurisdiction, Bk. Entity,
+  // Primary FLU, IRR, Juris. Status, Restriction Level, Oper. Status, Party Type, KYC Status,
+  // DRR, DRR Reason, Client Type, Refresh LOB, Country of Incorp., Restriction Comment
+  console.log("Generating 10,000 fallback mock records matching Excel schema...");
   const data: Record<string, unknown>[] = [];
-  const jurisdictions = ["USA", "UK", "Canada", "Germany", "France", "Australia", "Japan", "Singapore"];
-  const statuses = ["Active", "Inactive"];
-  const riskRatings = ["Low", "Medium", "High", "Critical"];
-  const entityTypes = ["Corporation", "LLC", "Partnership", "Trust", "Individual"];
 
-  for (let i = 1; i <= 10000; i++) {
-    const riskIdx = i % 100 < 60 ? 0 : i % 100 < 85 ? 1 : i % 100 < 97 ? 2 : 3; // 60% Low, 25% Medium, 12% High, 3% Critical
+  const jurisdictions = ["USA", "UK", "Canada", "Germany", "France", "Australia", "Japan", "Singapore", "Hong Kong", "Switzerland"];
+  const bkEntities = ["MLT", "BRSCOT", "HSBCUK", "USBANK", "HKSB", "CHSB"];
+  const primaryFLUs = ["Retail Banking", "Global Corporate & Investment Banking", "Global Commercial Banking", "Wealth Management", "Private Banking"];
+  const irrValues = ["Enhanced Program", "Pre-2016 Program", "Standard Program"];
+  const jurisStatuses = ["Green", "Amber", "Red"];
+  const operStatuses = ["Active", "Inactive", ""];
+  const partyTypes = ["ORG", "IND"];
+  const kycStatuses = ["Green", "Amber", "Red"];
+  const drrValues = ["Standard", "Elevated", "High"];
+  const drrReasons = ["Low complexity / low risk profile", "Standard Due Diligence", "Complex ownership structure", "High-risk jurisdiction", "PEP relationship"];
+  const clientTypes = ["Financial Institution", "Non-Profit Organization", "Government Entity or Agency", "Corporation", "Trust", "Partnership"];
+  const refreshLOBs = ["FICC – SRM", "Corporate Banking (CBK)", "Global Markets – Sales", "Wealth Management – Advisory", "Retail Banking"];
+  const countries = ["United States", "United Kingdom", "Canada", "Germany", "France", "Australia", "Japan", "Singapore", "Hong Kong", "Switzerland"];
+
+  for (let i = 0; i < 10000; i++) {
+    const gci = 600000000 + i;
+    const familyGci = Math.floor(Math.random() * 900000000) + 100000000;
+    const familyNum = Math.floor(Math.random() * 2000) + 1;
+    const jurisdiction = jurisdictions[i % jurisdictions.length];
+    const countryIdx = jurisdictions.indexOf(jurisdiction);
+    const country = countries[countryIdx >= 0 && countryIdx < countries.length ? countryIdx : 0];
+
+    // Generate KYC date between 2018 and 2024
+    const year = 2018 + Math.floor(Math.random() * 7);
+    const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+    const kycDate = `${year}-${month}`;
+
+    // Risk distribution: 60% Green, 25% Amber, 15% Red
+    const riskRandom = Math.random() * 100;
+    const jurisStatus = riskRandom < 60 ? "Green" : riskRandom < 85 ? "Amber" : "Red";
+    const kycStatus = jurisStatuses[Math.floor(Math.random() * jurisStatuses.length)];
+
     data.push({
-      Entity_ID: `ENT-${String(i).padStart(5, '0')}`,
-      Entity_Name: `Entity ${i}`,
-      Jurisdiction: jurisdictions[i % jurisdictions.length],
-      Status: statuses[i % 10 === 0 ? 1 : 0],
-      RiskRating: riskRatings[riskIdx],
-      EntityType: entityTypes[i % entityTypes.length],
-      OnboardingDate: new Date(2020 + Math.floor(i / 2500), i % 12, (i % 28) + 1).toISOString().split('T')[0],
-      AnnualRevenue: Math.floor(Math.random() * 10000000) + 100000,
-      EmployeeCount: Math.floor(Math.random() * 5000) + 10,
+      GCI: gci,
+      "Family GCI": familyGci,
+      "Family Name": `Family ${familyNum}`,
+      "Legal Name": `Entity ${i + 1} ${jurisdiction}`,
+      "KYC date": kycDate,
+      Jurisdiction: jurisdiction,
+      "Bk. Entity": bkEntities[i % bkEntities.length],
+      "Primary FLU": primaryFLUs[i % primaryFLUs.length],
+      IRR: irrValues[i % irrValues.length],
+      "Juris. Status": jurisStatus,
+      "Restriction Level": i % 20 === 0 ? "Restricted" : "",
+      "Oper. Status": operStatuses[i % 3],
+      "Party Type": partyTypes[i % partyTypes.length],
+      "KYC Status": kycStatus,
+      DRR: drrValues[Math.floor(Math.random() * drrValues.length)],
+      "DRR Reason": drrReasons[Math.floor(Math.random() * drrReasons.length)],
+      "Client Type": clientTypes[i % clientTypes.length],
+      "Refresh LOB": refreshLOBs[i % refreshLOBs.length],
+      "Country of Incorp.": country,
+      "Restriction Comment": i % 50 === 0 ? "Subject to internal review" : "",
     });
   }
 

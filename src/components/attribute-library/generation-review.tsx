@@ -406,8 +406,8 @@ export function GenerationReview({
     const newRows = populateGenerationReview(
       samplingRecords,
       auditors.length > 0 ? auditors : [
-        { AuditorID: "AUD001", AuditorName: "Auditor 1", Email: "" },
-        { AuditorID: "AUD002", AuditorName: "Auditor 2", Email: "" },
+        { id: "AUD001", name: "Auditor 1", email: "" },
+        { id: "AUD002", name: "Auditor 2", email: "" },
       ],
       jurisdictions
     );

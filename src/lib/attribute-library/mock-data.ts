@@ -22,10 +22,10 @@ export const mockJurisdictions: Jurisdiction[] = [
 
 // Auditors (4 auditors)
 export const mockAuditors: Auditor[] = [
-  { AuditorID: 'AUD001', AuditorName: 'John Smith', Email: 'john.smith@crowe.com' },
-  { AuditorID: 'AUD002', AuditorName: 'Sarah Johnson', Email: 'sarah.johnson@crowe.com' },
-  { AuditorID: 'AUD003', AuditorName: 'Michael Chen', Email: 'michael.chen@crowe.com' },
-  { AuditorID: 'AUD004', AuditorName: 'Emily Davis', Email: 'emily.davis@crowe.com' },
+  { id: 'AUD001', name: 'John Smith', email: 'john.smith@crowe.com' },
+  { id: 'AUD002', name: 'Sarah Johnson', email: 'sarah.johnson@crowe.com' },
+  { id: 'AUD003', name: 'Michael Chen', email: 'michael.chen@crowe.com' },
+  { id: 'AUD004', name: 'Emily Davis', email: 'emily.davis@crowe.com' },
 ];
 
 // Client Type Risk Mappings (8 mappings)
@@ -1635,7 +1635,7 @@ export function getAcceptableDocsForAttribute(attributeId: string): AcceptableDo
 }
 
 export function getAuditorById(auditorId: string): Auditor | undefined {
-  return mockAuditors.find((aud) => aud.AuditorID === auditorId);
+  return mockAuditors.find((aud) => aud.id === auditorId);
 }
 
 export function getJurisdictionById(jurisdictionId: string): Jurisdiction | undefined {

@@ -61,7 +61,10 @@ export default function Stage5Page() {
     totalTests: 0,
     completedTests: 0,
     passCount: 0,
-    failCount: 0,
+    passWithObsCount: 0,
+    fail1RegulatoryCount: 0,
+    fail2ProcedureCount: 0,
+    questionToLOBCount: 0,
     naCount: 0,
   });
 
@@ -91,7 +94,10 @@ export default function Stage5Page() {
         totalTests: workbookData.rows.length,
         completedTests: 0,
         passCount: 0,
-        failCount: 0,
+        passWithObsCount: 0,
+        fail1RegulatoryCount: 0,
+        fail2ProcedureCount: 0,
+        questionToLOBCount: 0,
         naCount: 0,
       });
     }
@@ -123,7 +129,10 @@ export default function Stage5Page() {
       totalTests: rows.length,
       completedTests,
       passCount,
-      failCount,
+      passWithObsCount: 0,
+      fail1RegulatoryCount: failCount, // Map legacy Fail to regulatory for compatibility
+      fail2ProcedureCount: 0,
+      questionToLOBCount: 0,
       naCount,
     };
 
@@ -322,16 +331,16 @@ export default function Stage5Page() {
           </CardContent>
         </Card>
 
-        <Card className={testingProgress.failCount > 0 ? "border-red-200" : ""}>
+        <Card className={testingProgress.fail1RegulatoryCount > 0 ? "border-red-200" : ""}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-red-600">
               Fail
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{testingProgress.failCount}</div>
+            <div className="text-2xl font-bold text-red-600">{testingProgress.fail1RegulatoryCount}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              {testingProgress.failCount} exception(s)
+              {testingProgress.fail1RegulatoryCount} exception(s)
             </p>
           </CardContent>
         </Card>

@@ -90,14 +90,14 @@ export function AuditorsTable({ auditors }: AuditorsTableProps) {
               </TableHeader>
               <TableBody>
                 {auditors.map((a) => (
-                  <TableRow key={a.AuditorID}>
+                  <TableRow key={a.id}>
                     <TableCell>
                       <Badge variant="outline" className="font-mono">
-                        {a.AuditorID}
+                        {a.id}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-medium">{a.AuditorName}</TableCell>
-                    <TableCell className="text-muted-foreground">{a.Email}</TableCell>
+                    <TableCell className="font-medium">{a.name}</TableCell>
+                    <TableCell className="text-muted-foreground">{a.email}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

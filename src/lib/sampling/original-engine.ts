@@ -798,14 +798,34 @@ export function sampleData(
 
 // ============================================================================
 // HELPER: Check if config has overrides (from lines 26992-26997)
+// Modified to be method-aware: for simple_random and percentage methods,
+// sampleSize/samplePercentage are required inputs, not overrides.
 // ============================================================================
 export function hasOverrides(cfg: SamplingConfig): boolean {
-  return (
-    (cfg.populationOverride != null && cfg.populationOverride > 0) ||
-    cfg.sampleSize != null ||
-    cfg.samplePercentage != null ||
-    cfg.systematicStep != null
-  );
+  // Population override is always an override
+  if (cfg.populationOverride != null && cfg.populationOverride > 0) {
+    return true;
+  }
+
+  // Systematic step is always an override when provided
+  if (cfg.systematicStep != null) {
+    return true;
+  }
+
+  // For simple_random method: sampleSize or samplePercentage are REQUIRED, not overrides
+  if (cfg.method === 'simple_random') {
+    // These are required for simple_random, so don't count them as overrides
+    return false;
+  }
+
+  // For percentage method: samplePercentage is REQUIRED, not an override
+  if (cfg.method === 'percentage') {
+    // samplePercentage is required for percentage method, so only sampleSize is an override
+    return cfg.sampleSize != null;
+  }
+
+  // For statistical and systematic methods: sampleSize/samplePercentage are overrides
+  return cfg.sampleSize != null || cfg.samplePercentage != null;
 }
 
 // ============================================================================

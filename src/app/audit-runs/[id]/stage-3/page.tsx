@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,177 +12,225 @@ import {
   ArrowRight,
   Sparkles,
   CheckCircle2,
-  ListChecks,
   FileText,
   Database,
-  Loader2,
-  Library,
-  Plus,
-  Trash2,
+  Bot,
+  FileSpreadsheet,
+  Download,
 } from "lucide-react";
-import { HotTable, HotTableClass } from "@handsontable/react";
-import { registerAllModules } from "handsontable/registry";
-import "handsontable/dist/handsontable.full.min.css";
 import { toast } from "sonner";
 import {
   loadFallbackDataForStage,
   getStageData,
   hasStageData,
   setStageData,
-  getCombinedGaps,
-  ExtractedAttribute,
-  GapItem,
 } from "@/lib/stage-data";
-import { getMockAttributeExtractionResult } from "@/lib/ai/client";
-import { mockAttributes } from "@/lib/attribute-library/mock-data";
+import type { FLUExtractionResult, ExtractedAttribute } from "@/lib/stage-data/store";
+import type { AcceptableDoc } from "@/lib/attribute-library/types";
+import { FLUProcedureChat } from "@/components/stage-3/flu-procedure-chat";
+import { ExtractionResultsView } from "@/components/stage-3/extraction-results-view";
+import { getMockFLUExtractionResult } from "@/lib/ai/client";
 
-// Register Handsontable modules
-registerAllModules();
-
-type ViewMode = "extraction" | "library" | "gaps";
+type ViewMode = "chat" | "results";
 
 export default function Stage3Page() {
   const params = useParams();
   const id = params.id as string;
-  const hotRef = useRef<HotTableClass>(null);
 
-  const [viewMode, setViewMode] = useState<ViewMode>("extraction");
-  const [hasGapResults, setHasGapResults] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("chat");
+  const [extractionResult, setExtractionResult] = useState<FLUExtractionResult | null>(null);
   const [hasSample, setHasSample] = useState(false);
-  const [isExtracting, setIsExtracting] = useState(false);
-  const [extractedAttributes, setExtractedAttributes] = useState<ExtractedAttribute[]>([]);
-  const [gaps, setGaps] = useState<GapItem[]>([]);
-  const [extractionComplete, setExtractionComplete] = useState(false);
 
-  // Check for prerequisite data
+  // Check for prerequisite data and load existing extraction
   useEffect(() => {
-    const hasGaps = hasStageData('gapAssessment1') || hasStageData('gapAssessment2') || hasStageData('combinedGaps');
-    setHasGapResults(hasGaps);
     setHasSample(hasStageData('samplingResult'));
 
-    // Load existing extracted attributes
-    const storedAttributes = getStageData('extractedAttributes');
-    if (storedAttributes) {
-      setExtractedAttributes(storedAttributes);
-      setExtractionComplete(true);
+    // Load existing extraction result
+    const storedResult = getStageData('fluExtractionResult');
+    if (storedResult) {
+      setExtractionResult(storedResult);
     }
 
-    // Load gaps
-    const storedGaps = getCombinedGaps();
-    if (storedGaps.length > 0) {
-      setGaps(storedGaps);
+    // Also check if we have extracted attributes from a previous session
+    const storedAttributes = getStageData('extractedAttributes');
+    if (storedAttributes && storedAttributes.length > 0 && !storedResult) {
+      // Reconstruct the result from stored attributes
+      const acceptableDocs = getStageData('acceptableDocs') || [];
+      setExtractionResult({
+        workbook: {
+          title: "FLU Procedure Attribute Extraction — CIP/CDD/EDD",
+          generated_at: new Date().toISOString().split("T")[0],
+          sheets: [
+            { name: "Attributes", rows: storedAttributes },
+            { name: "Acceptable_Docs", rows: acceptableDocs },
+          ],
+        },
+      });
     }
   }, []);
 
   const handleLoadDemoData = () => {
-    loadFallbackDataForStage(3);
-    const attrs = getStageData('extractedAttributes');
-    if (attrs) {
-      setExtractedAttributes(attrs);
-      setExtractionComplete(true);
+    // Load demo data for Stage 3
+    const mockResult = getMockFLUExtractionResult();
+    const result: FLUExtractionResult = {
+      id: `flu-demo-${Date.now()}`,
+      workbook: mockResult.workbook as FLUExtractionResult['workbook'],
+      tokensUsed: 0,
+    };
+
+    // Store the full result
+    setStageData('fluExtractionResult', result);
+
+    // Extract and store attributes
+    const attributesSheet = result.workbook.sheets.find(s => s.name === 'Attributes');
+    if (attributesSheet?.rows) {
+      const extracted: ExtractedAttribute[] = attributesSheet.rows.map(r => {
+        const row = r as unknown as Record<string, unknown>;
+        return {
+          Source_File: String(row.Source_File || ''),
+          Attribute_ID: String(row.Attribute_ID || ''),
+          Attribute_Name: String(row.Attribute_Name || ''),
+          Category: String(row.Category || ''),
+          Source: String(row.Source || ''),
+          Source_Page: String(row.Source_Page || ''),
+          Question_Text: String(row.Question_Text || ''),
+          Notes: String(row.Notes || ''),
+          Jurisdiction_ID: String(row.Jurisdiction_ID || 'ENT'),
+          RiskScope: (row.RiskScope as 'Base' | 'EDD' | 'Both') || 'Base',
+          IsRequired: (row.IsRequired as 'Y' | 'N') || 'Y',
+          DocumentationAgeRule: String(row.DocumentationAgeRule || ''),
+          Group: String(row.Group || ''),
+          extractedFrom: 'flu_procedures' as const,
+        };
+      });
+      setStageData('extractedAttributes', extracted);
     }
-    const gapData = getCombinedGaps();
-    if (gapData.length > 0) {
-      setGaps(gapData);
+
+    // Extract and store acceptable docs
+    const docsSheet = result.workbook.sheets.find(s => s.name === 'Acceptable_Docs');
+    if (docsSheet?.rows) {
+      const docs: AcceptableDoc[] = docsSheet.rows.map(r => {
+        const row = r as unknown as Record<string, unknown>;
+        return {
+          Source_File: String(row.Source_File || ''),
+          Attribute_ID: String(row.Attribute_ID || ''),
+          Document_Name: String(row.Document_Name || ''),
+          Evidence_Source_Document: String(row.Evidence_Source_Document || ''),
+          Jurisdiction_ID: String(row.Jurisdiction_ID || ''),
+          Notes: String(row.Notes || ''),
+        };
+      });
+      setStageData('acceptableDocs', docs);
     }
-    setHasGapResults(true);
+
+    setStageData('attributeExtractionComplete', true);
+    setExtractionResult(result);
     setHasSample(true);
+
+    // Also load sampling data if not present
+    if (!hasStageData('samplingResult')) {
+      loadFallbackDataForStage(2);
+    }
+
     toast.success("Demo data loaded for Stage 3");
   };
 
-  const handleExtractAttributes = async () => {
-    setIsExtracting(true);
-    try {
-      // Simulate AI extraction delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+  const handleExtractionComplete = (result: FLUExtractionResult) => {
+    // Store the full result
+    setStageData('fluExtractionResult', result);
 
-      // Use mock AI extraction result
-      const aiResult = getMockAttributeExtractionResult();
-      const attributesSheet = aiResult.workbook.sheets.find(s => s.name === 'Attributes');
+    // Extract and store attributes
+    const attributesSheet = result.workbook.sheets.find(s => s.name === 'Attributes');
+    if (attributesSheet?.rows) {
+      const extracted: ExtractedAttribute[] = attributesSheet.rows.map(r => {
+        const row = r as unknown as Record<string, unknown>;
+        return {
+          Source_File: String(row.Source_File || ''),
+          Attribute_ID: String(row.Attribute_ID || ''),
+          Attribute_Name: String(row.Attribute_Name || ''),
+          Category: String(row.Category || ''),
+          Source: String(row.Source || ''),
+          Source_Page: String(row.Source_Page || ''),
+          Question_Text: String(row.Question_Text || ''),
+          Notes: String(row.Notes || ''),
+          Jurisdiction_ID: String(row.Jurisdiction_ID || 'ENT'),
+          RiskScope: (row.RiskScope as 'Base' | 'EDD' | 'Both') || 'Base',
+          IsRequired: (row.IsRequired as 'Y' | 'N') || 'Y',
+          DocumentationAgeRule: String(row.DocumentationAgeRule || ''),
+          Group: String(row.Group || ''),
+          extractedFrom: 'flu_procedures' as const,
+        };
+      });
+      setStageData('extractedAttributes', extracted);
+    }
 
-      if (attributesSheet?.rows) {
-        const extracted: ExtractedAttribute[] = attributesSheet.rows.map(r => {
-          const row = r as Record<string, unknown>;
-          return {
-            Source_File: String(row.Source_File || ''),
-            Attribute_ID: String(row.Attribute_ID || ''),
-            Attribute_Name: String(row.Attribute_Name || ''),
-            Category: String(row.Category || ''),
-            Source: String(row.Source || ''),
-            Source_Page: String(row.Source_Page || ''),
-            Question_Text: String(row.Question_Text || ''),
-            Notes: String(row.Notes || ''),
-            Jurisdiction_ID: String(row.Jurisdiction_ID || 'ENT'),
-            RiskScope: (row.RiskScope as 'Base' | 'EDD' | 'Both') || 'Base',
-            IsRequired: (row.IsRequired as 'Y' | 'N') || 'Y',
-            DocumentationAgeRule: String(row.DocumentationAgeRule || ''),
-            Group: String(row.Group || ''),
-            extractedFrom: 'gap_assessment' as const,
-          };
-        });
+    // Extract and store acceptable docs
+    const docsSheet = result.workbook.sheets.find(s => s.name === 'Acceptable_Docs');
+    if (docsSheet?.rows) {
+      const docs: AcceptableDoc[] = docsSheet.rows.map(r => {
+        const row = r as unknown as Record<string, unknown>;
+        return {
+          Source_File: String(row.Source_File || ''),
+          Attribute_ID: String(row.Attribute_ID || ''),
+          Document_Name: String(row.Document_Name || ''),
+          Evidence_Source_Document: String(row.Evidence_Source_Document || ''),
+          Jurisdiction_ID: String(row.Jurisdiction_ID || ''),
+          Notes: String(row.Notes || ''),
+        };
+      });
+      setStageData('acceptableDocs', docs);
+    }
 
-        setExtractedAttributes(extracted);
-        setStageData('extractedAttributes', extracted);
-        setStageData('attributeExtractionComplete', true);
-        setExtractionComplete(true);
-        toast.success(`Extracted ${extracted.length} attributes from gap assessment`);
-      }
-    } catch (error) {
-      console.error('Extraction failed:', error);
-      toast.error('Failed to extract attributes');
-    } finally {
-      setIsExtracting(false);
+    setStageData('attributeExtractionComplete', true);
+    setExtractionResult(result);
+    setViewMode("results");
+  };
+
+  const handleExportExcel = () => {
+    if (!extractionResult) return;
+
+    // For demo, just show a toast
+    toast.success("Exporting to Excel...", {
+      description: "Download will start shortly",
+    });
+
+    // In a real implementation, this would call an API to generate and download the Excel file
+    // For now, we'll create a simple CSV download
+    const attributesSheet = extractionResult.workbook.sheets.find(s => s.name === 'Attributes');
+    if (attributesSheet?.rows && attributesSheet.rows.length > 0) {
+      const headers = Object.keys(attributesSheet.rows[0] as object);
+      const csvContent = [
+        headers.join(','),
+        ...attributesSheet.rows.map(row =>
+          headers.map(h => {
+            const value = (row as unknown as Record<string, unknown>)[h];
+            return typeof value === 'string' && value.includes(',')
+              ? `"${value}"`
+              : value;
+          }).join(',')
+        )
+      ].join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'flu_extraction_attributes.csv';
+      a.click();
+      URL.revokeObjectURL(url);
     }
   };
 
-  const handleLoadFromLibrary = () => {
-    const libraryAttrs: ExtractedAttribute[] = mockAttributes.map(attr => ({
-      ...attr,
-      extractedFrom: 'library' as const,
-    }));
+  // Calculate counts for display
+  const attributeCount = extractionResult?.workbook.sheets.find(s => s.name === 'Attributes')?.rows.length || 0;
+  const docsCount = extractionResult?.workbook.sheets.find(s => s.name === 'Acceptable_Docs')?.rows.length || 0;
 
-    setExtractedAttributes(libraryAttrs);
-    setStageData('extractedAttributes', libraryAttrs);
-    setStageData('attributeExtractionComplete', true);
-    setExtractionComplete(true);
-    toast.success(`Loaded ${libraryAttrs.length} attributes from library`);
-  };
-
-  const handleClearAttributes = () => {
-    setExtractedAttributes([]);
-    setStageData('extractedAttributes', undefined);
-    setStageData('attributeExtractionComplete', false);
-    setExtractionComplete(false);
-    toast.success('Attributes cleared');
-  };
-
-  const canProceed = extractionComplete && extractedAttributes.length > 0;
-
-  // Prepare data for Handsontable
-  const attributeTableData = extractedAttributes.map(attr => [
-    attr.Attribute_ID,
-    attr.Attribute_Name,
-    attr.Category,
-    attr.Question_Text,
-    attr.IsRequired,
-    attr.RiskScope,
-    attr.Group,
-    attr.extractedFrom || 'library',
-  ]);
-
-  const gapTableData = gaps.map(gap => [
-    gap.Gap_ID,
-    gap.Disposition,
-    gap.Severity,
-    gap.Standard_Requirement_ID,
-    gap.Gap_Description,
-    gap.Recommended_Remediation,
-  ]);
+  const canProceed = extractionResult !== null && attributeCount > 0;
 
   return (
-    <div className="p-8">
+    <div className="p-8 h-[calc(100vh-4rem)] flex flex-col">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6 flex-shrink-0">
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
@@ -195,11 +243,11 @@ export default function Stage3Page() {
             <div className="flex items-center gap-3">
               <Badge className="bg-amber-100 text-amber-700">Stage 3</Badge>
               <h1 className="text-3xl font-bold tracking-tight">
-                Attribute Extraction
+                FLU Procedure Extraction
               </h1>
             </div>
             <p className="text-muted-foreground mt-2">
-              Extract testing attributes from gap analysis results or use the attribute library
+              Extract CIP, CDD, and EDD testing attributes from Front Line Unit procedures
             </p>
           </div>
           <Button variant="outline" onClick={handleLoadDemoData}>
@@ -209,355 +257,136 @@ export default function Stage3Page() {
         </div>
       </div>
 
-      {/* Prerequisites Check */}
-      {!hasGapResults && (
-        <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <h3 className="font-medium text-yellow-700 dark:text-yellow-300 mb-2">
-            Prerequisites Required
-          </h3>
-          <ul className="text-sm text-yellow-600 dark:text-yellow-400 space-y-1">
-            <li>• Complete Stage 1 (Gap Assessment) or load demo data</li>
-          </ul>
-        </div>
-      )}
-
       {/* Workflow Steps */}
-      <div className="grid gap-6 md:grid-cols-3 mb-8">
-        <Card className={hasGapResults ? "border-green-500" : ""}>
+      <div className="grid gap-4 md:grid-cols-3 mb-6 flex-shrink-0">
+        <Card className="border-green-500">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-3">
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  hasGapResults
-                    ? "bg-green-100 text-green-600"
-                    : "bg-blue-100 text-blue-600"
-                }`}
-              >
-                {hasGapResults ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <FileText className="h-5 w-5" />
-                )}
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600">
+                <FileText className="h-5 w-5" />
               </div>
               <div>
-                <CardTitle className="text-base">Step 1: Input</CardTitle>
-                <CardDescription>Gap assessment results</CardDescription>
+                <CardTitle className="text-base">Step 1: Upload</CardTitle>
+                <CardDescription>FLU Procedures</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <Badge variant={hasGapResults ? "default" : "outline"}>
-              {hasGapResults ? `${gaps.length} gaps available` : "No gap data"}
-            </Badge>
+            <Badge variant="default">Ready</Badge>
           </CardContent>
         </Card>
 
-        <Card className={extractedAttributes.length > 0 ? "border-green-500" : ""}>
+        <Card className={attributeCount > 0 ? "border-green-500" : ""}>
           <CardHeader className="pb-2">
             <div className="flex items-center gap-3">
               <div
                 className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  extractedAttributes.length > 0
+                  attributeCount > 0
                     ? "bg-green-100 text-green-600"
                     : "bg-amber-100 text-amber-600"
                 }`}
               >
-                {extractedAttributes.length > 0 ? (
+                {attributeCount > 0 ? (
                   <CheckCircle2 className="h-5 w-5" />
                 ) : (
-                  <Sparkles className="h-5 w-5" />
+                  <Bot className="h-5 w-5" />
                 )}
               </div>
               <div>
                 <CardTitle className="text-base">Step 2: Extract</CardTitle>
-                <CardDescription>Identify attributes</CardDescription>
+                <CardDescription>AI Attribute Extraction</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <Badge variant={extractedAttributes.length > 0 ? "default" : "outline"}>
-              {extractedAttributes.length > 0
-                ? `${extractedAttributes.length} attributes`
+            <Badge variant={attributeCount > 0 ? "default" : "outline"}>
+              {attributeCount > 0
+                ? `${attributeCount} attributes`
                 : "Pending extraction"}
             </Badge>
           </CardContent>
         </Card>
 
-        <Card className={extractionComplete ? "border-green-500" : ""}>
+        <Card className={canProceed ? "border-green-500" : ""}>
           <CardHeader className="pb-2">
             <div className="flex items-center gap-3">
               <div
                 className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                  extractionComplete
+                  canProceed
                     ? "bg-green-100 text-green-600"
                     : "bg-gray-100 text-gray-400"
                 }`}
               >
-                {extractionComplete ? (
+                {canProceed ? (
                   <CheckCircle2 className="h-5 w-5" />
                 ) : (
-                  <ListChecks className="h-5 w-5" />
+                  <FileSpreadsheet className="h-5 w-5" />
                 )}
               </div>
               <div>
                 <CardTitle className="text-base">Step 3: Review</CardTitle>
-                <CardDescription>Confirm attributes</CardDescription>
+                <CardDescription>Confirm & Export</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <Badge variant={extractionComplete ? "default" : "outline"}>
-              {extractionComplete ? "Ready for workbook" : "Pending"}
+            <Badge variant={canProceed ? "default" : "outline"}>
+              {canProceed ? `${docsCount} docs mapped` : "Pending"}
             </Badge>
           </CardContent>
         </Card>
       </div>
 
       {/* View Mode Tabs */}
-      <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)} className="mb-6">
-        <TabsList>
-          <TabsTrigger value="extraction" className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4" />
-            Attribute Extraction
-            {extractedAttributes.length > 0 && (
-              <Badge variant="secondary" className="ml-1">
-                {extractedAttributes.length}
-              </Badge>
-            )}
+      <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)} className="flex-1 flex flex-col min-h-0">
+        <TabsList className="flex-shrink-0 mb-4">
+          <TabsTrigger value="chat" className="flex items-center gap-2">
+            <Bot className="h-4 w-4" />
+            AI Extraction
           </TabsTrigger>
-          <TabsTrigger value="library" className="flex items-center gap-2">
-            <Library className="h-4 w-4" />
-            Attribute Library
-          </TabsTrigger>
-          <TabsTrigger value="gaps" className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            Gap Details
-            {gaps.length > 0 && (
+          <TabsTrigger value="results" className="flex items-center gap-2" disabled={!extractionResult}>
+            <FileSpreadsheet className="h-4 w-4" />
+            Results
+            {attributeCount > 0 && (
               <Badge variant="secondary" className="ml-1">
-                {gaps.length}
+                {attributeCount}
               </Badge>
             )}
           </TabsTrigger>
         </TabsList>
 
-        {/* Extraction View */}
-        <TabsContent value="extraction" className="mt-6">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Extracted Attributes</CardTitle>
-                  <CardDescription>
-                    Attributes to be tested in the workbook
-                  </CardDescription>
-                </div>
-                <div className="flex gap-2">
-                  {extractedAttributes.length > 0 && (
-                    <Button variant="outline" size="sm" onClick={handleClearAttributes}>
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Clear
-                    </Button>
-                  )}
-                  <Button
-                    onClick={handleExtractAttributes}
-                    disabled={isExtracting || !hasGapResults}
-                    size="sm"
-                  >
-                    {isExtracting ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Extracting...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="h-4 w-4 mr-2" />
-                        Extract from Gaps
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handleLoadFromLibrary}
-                    size="sm"
-                  >
-                    <Library className="h-4 w-4 mr-2" />
-                    Load from Library
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {extractedAttributes.length > 0 ? (
-                <div className="border rounded-lg overflow-hidden">
-                  <HotTable
-                    ref={hotRef}
-                    data={attributeTableData}
-                    colHeaders={['Attribute ID', 'Name', 'Category', 'Question Text', 'Required', 'Risk Scope', 'Group', 'Source']}
-                    rowHeaders={true}
-                    width="100%"
-                    height="auto"
-                    licenseKey="non-commercial-and-evaluation"
-                    stretchH="all"
-                    autoRowSize={true}
-                    readOnly={true}
-                    columnSorting={true}
-                    filters={true}
-                    dropdownMenu={true}
-                    manualColumnResize={true}
-                    colWidths={[100, 150, 120, 300, 80, 80, 100, 80]}
-                  />
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-                  <Sparkles className="h-16 w-16 mb-4 opacity-30" />
-                  <h3 className="font-medium mb-2">No Attributes Extracted</h3>
-                  <p className="text-sm text-center max-w-md">
-                    Click &quot;Extract from Gaps&quot; to use AI to identify testing attributes from the gap assessment,
-                    or &quot;Load from Library&quot; to use predefined attributes.
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+        {/* Chat View */}
+        <TabsContent value="chat" className="flex-1 min-h-0 mt-0">
+          <FLUProcedureChat
+            onExtractionComplete={handleExtractionComplete}
+            extractionResult={extractionResult}
+            auditRunId={id}
+          />
         </TabsContent>
 
-        {/* Library View */}
-        <TabsContent value="library" className="mt-6">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Attribute Library</CardTitle>
-                  <CardDescription>
-                    Predefined attributes available for testing
-                  </CardDescription>
-                </div>
-                <Button onClick={handleLoadFromLibrary} size="sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Use Library Attributes
-                </Button>
+        {/* Results View */}
+        <TabsContent value="results" className="flex-1 min-h-0 mt-0">
+          {extractionResult ? (
+            <ExtractionResultsView
+              result={extractionResult}
+              onExportExcel={handleExportExcel}
+            />
+          ) : (
+            <Card className="h-full flex items-center justify-center">
+              <div className="text-center">
+                <Sparkles className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-30" />
+                <h3 className="font-medium mb-2">No Extraction Results</h3>
+                <p className="text-sm text-muted-foreground">
+                  Upload FLU procedures and run extraction to view results
+                </p>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="border rounded-lg overflow-hidden">
-                <HotTable
-                  data={mockAttributes.map(attr => [
-                    attr.Attribute_ID,
-                    attr.Attribute_Name,
-                    attr.Category,
-                    attr.Question_Text,
-                    attr.IsRequired,
-                    attr.RiskScope,
-                    attr.Jurisdiction_ID,
-                    attr.Group,
-                  ])}
-                  colHeaders={['Attribute ID', 'Name', 'Category', 'Question Text', 'Required', 'Risk Scope', 'Jurisdiction', 'Group']}
-                  rowHeaders={true}
-                  width="100%"
-                  height="auto"
-                  licenseKey="non-commercial-and-evaluation"
-                  stretchH="all"
-                  autoRowSize={true}
-                  readOnly={true}
-                  columnSorting={true}
-                  filters={true}
-                  dropdownMenu={true}
-                  manualColumnResize={true}
-                  colWidths={[100, 150, 120, 280, 80, 80, 100, 100]}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Gaps View */}
-        <TabsContent value="gaps" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Gap Details</CardTitle>
-              <CardDescription>
-                Combined gaps from Stage 1 assessments
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {gaps.length > 0 ? (
-                <div className="border rounded-lg overflow-hidden">
-                  <HotTable
-                    data={gapTableData}
-                    colHeaders={['Gap ID', 'Disposition', 'Severity', 'Requirement ID', 'Description', 'Remediation']}
-                    rowHeaders={true}
-                    width="100%"
-                    height="auto"
-                    licenseKey="non-commercial-and-evaluation"
-                    stretchH="all"
-                    autoRowSize={true}
-                    readOnly={true}
-                    columnSorting={true}
-                    filters={true}
-                    dropdownMenu={true}
-                    manualColumnResize={true}
-                    colWidths={[100, 120, 100, 140, 300, 250]}
-                  />
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-                  <FileText className="h-16 w-16 mb-4 opacity-30" />
-                  <h3 className="font-medium mb-2">No Gap Data</h3>
-                  <p className="text-sm">
-                    Complete Stage 1 Gap Assessment or load demo data to view gaps.
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+            </Card>
+          )}
         </TabsContent>
       </Tabs>
 
-      {/* Summary Card */}
-      {extractionComplete && (
-        <Card className="mb-6 border-green-500">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
-              <div>
-                <CardTitle className="text-green-700">Attribute Extraction Complete</CardTitle>
-                <CardDescription>
-                  {extractedAttributes.length} attributes ready for workbook generation
-                </CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-4 gap-4 text-sm">
-              <div>
-                <span className="text-muted-foreground">Total:</span>{' '}
-                <span className="font-medium">{extractedAttributes.length}</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Required:</span>{' '}
-                <span className="font-medium">
-                  {extractedAttributes.filter(a => a.IsRequired === 'Y').length}
-                </span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">EDD Only:</span>{' '}
-                <span className="font-medium">
-                  {extractedAttributes.filter(a => a.RiskScope === 'EDD').length}
-                </span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Categories:</span>{' '}
-                <span className="font-medium">
-                  {new Set(extractedAttributes.map(a => a.Category)).size}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Navigation */}
-      <div className="flex justify-between">
+      <div className="flex justify-between pt-4 flex-shrink-0 border-t mt-4">
         <Link href={`/audit-runs/${id}/stage-2`}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />

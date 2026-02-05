@@ -185,6 +185,107 @@ Output your analysis as a JSON object with the following structure:
   }
 }`;
 
+// Enhanced FLU Procedure Extraction Prompt - categorizes by CIP/CDD/EDD
+export const FLU_PROCEDURE_EXTRACTION_SYSTEM_PROMPT = `You are a Financial Crimes Audit Test Designer specializing in CIP/CDD/EDD compliance testing. Your task is to extract testing attributes from FLU (Front Line Unit) Procedures.
+
+**Extract requirements organized by these categories:**
+
+1. **CIP (Customer Identification Program)** - Requirements for verifying customer identity
+   - Name verification
+   - Date of birth verification (individuals)
+   - Address verification
+   - Identification number verification (SSN, TIN, passport, etc.)
+   - Documentary/non-documentary verification methods
+
+2. **CDD (Customer Due Diligence)** - Standard due diligence requirements
+   - Understanding nature and purpose of customer relationship
+   - Beneficial ownership identification
+   - Ongoing monitoring requirements
+   - Risk rating assessment
+   - Transaction pattern review
+
+3. **EDD (Enhanced Due Diligence)** - Enhanced requirements for high-risk customers
+   - PEP (Politically Exposed Person) screening
+   - High-risk jurisdiction requirements
+   - Source of funds/wealth verification
+   - Enhanced monitoring frequency
+   - Senior management approval requirements
+
+**For EACH requirement found, extract:**
+- A unique Attribute ID (format: CIP-001, CDD-001, EDD-001, etc.)
+- Descriptive attribute name
+- Testing question starting with: Confirm/Verify/Obtain/Determine/Document
+- ALL acceptable documents/evidence mentioned in procedures
+- Source section and page reference
+- Whether it applies to Base, EDD, or Both scopes
+- Customer group it applies to (Individuals, Entity, Beneficial Owner, Screening)
+
+**Output as JSON:**
+{
+  "workbook": {
+    "title": "FLU Procedure Attribute Extraction — CIP/CDD/EDD",
+    "generated_at": "YYYY-MM-DD",
+    "sheets": [
+      {
+        "name": "Attributes",
+        "rows": [
+          {
+            "Source_File": "FLU_Procedures.docx",
+            "Attribute_ID": "CIP-001",
+            "Attribute_Name": "Customer Legal Name Verification",
+            "Category": "CIP | CDD | EDD",
+            "Source": "Section 3.1 Customer Identification",
+            "Source_Page": "12",
+            "Question_Text": "Verify that the customer's legal name is documented and matches identification documents.",
+            "Notes": "Applies to all customer types",
+            "Jurisdiction_ID": "ENT",
+            "RiskScope": "Base | EDD | Both",
+            "IsRequired": "Y | N",
+            "DocumentationAgeRule": "90 | 365 | blank for no limit",
+            "Group": "Individuals | Entity | Beneficial Owner | Screening"
+          }
+        ]
+      },
+      {
+        "name": "Acceptable_Docs",
+        "rows": [
+          {
+            "Source_File": "FLU_Procedures.docx",
+            "Attribute_ID": "CIP-001",
+            "Document_Name": "Government-issued Photo ID",
+            "Evidence_Source_Document": "Passport, National ID Card, Driver's License",
+            "Jurisdiction_ID": "ENT",
+            "Notes": "Must be unexpired; copy retained on file"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+**Important Guidelines:**
+- Target 25-35 attributes across CIP/CDD/EDD categories
+- Include at least 5 CIP, 10 CDD, and 5 EDD attributes minimum
+- Each attribute should have 1-5 acceptable documents
+- Questions must be actionable audit testing steps
+- RiskScope "Base" means standard due diligence, "EDD" means enhanced only, "Both" means applies to all`;
+
+export function buildFLUExtractionPrompt(
+  proceduresContent: string,
+  sourceFileName: string
+): string {
+  return `Extract CIP, CDD, and EDD testing attributes from the following FLU Procedures document:
+
+## Source File: ${sourceFileName}
+
+## Document Content:
+${proceduresContent}
+
+Extract 25-35 distinct, testable attributes organized by CIP/CDD/EDD categories following the methodology described.
+For each attribute, also extract ALL acceptable documents that can satisfy the requirement.
+Return only the JSON workbook object.`;
+}
+
 export function buildStandardsComparisonPrompt(
   oldStandardsContent: string,
   currentStandardsContent: string
