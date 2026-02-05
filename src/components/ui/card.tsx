@@ -15,7 +15,12 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        // Crowe design: borderless cards floating on indigo-tinted shadows
+        "bg-white text-card-foreground flex flex-col gap-6 rounded-xl py-6",
+        // Indigo-tinted shadow stack: tight + mid + ambient
+        "shadow-[0_1px_3px_rgba(1,30,65,0.04),0_6px_16px_rgba(1,30,65,0.04),0_12px_32px_rgba(1,30,65,0.02)]",
+        // Hover: lift with enhanced shadow
+        "transition-all duration-300 hover:shadow-[0_2px_4px_rgba(1,30,65,0.06),0_8px_24px_rgba(1,30,65,0.06),0_16px_48px_rgba(1,30,65,0.04)] hover:-translate-y-0.5",
         className
       )}
       {...props}
@@ -142,8 +147,12 @@ const AnimatedCard = React.forwardRef<HTMLDivElement, AnimatedCardProps>(
         ref={ref}
         data-slot="animated-card"
         className={cn(
-          "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm transition-shadow",
-          enableHover && !shouldReduceMotion && "hover:shadow-lg",
+          // Crowe design: borderless cards floating on indigo-tinted shadows
+          "bg-white text-card-foreground flex flex-col gap-6 rounded-xl py-6",
+          // Indigo-tinted shadow stack
+          "shadow-[0_1px_3px_rgba(1,30,65,0.04),0_6px_16px_rgba(1,30,65,0.04),0_12px_32px_rgba(1,30,65,0.02)]",
+          "transition-all duration-300",
+          enableHover && !shouldReduceMotion && "hover:shadow-[0_2px_4px_rgba(1,30,65,0.06),0_8px_24px_rgba(1,30,65,0.06),0_16px_48px_rgba(1,30,65,0.04)]",
           className
         )}
         {...animationProps}

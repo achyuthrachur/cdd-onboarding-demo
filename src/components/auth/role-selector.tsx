@@ -44,25 +44,26 @@ export function RoleSelector() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-crowe-indigo-dark p-8">
-      <div className="w-full max-w-4xl">
-        {/* Header */}
-        <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-xl">
-              C
-            </div>
-            <h1 className="text-4xl font-bold tracking-tight">CDD Onboarding Demo</h1>
-          </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Audit testing workflow for CIP/CDD/EDD compliance. Select your role to continue.
-          </p>
-        </motion.div>
+    <div className="min-h-screen flex flex-col bg-crowe-indigo-dark">
+      {/* Top accent bar - Crowe Amber */}
+      <div className="h-1 bg-gradient-to-r from-crowe-amber via-crowe-amber-bright to-crowe-amber" />
+
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="w-full max-w-4xl">
+          {/* Header */}
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-4xl font-bold tracking-tight text-[#f6f7fa] mb-2">
+              CDD Onboarding Demo
+            </h1>
+            <p className="text-lg text-[#c8cbd6] max-w-2xl mx-auto">
+              Audit testing workflow for CIP/CDD/EDD compliance. Select your role to continue.
+            </p>
+          </motion.div>
 
         {/* Role Cards */}
         <div className="grid gap-6 md:grid-cols-2">
@@ -73,19 +74,19 @@ export function RoleSelector() {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             <Card
-              className={`cursor-pointer transition-all hover:shadow-lg ${
+              className={`cursor-pointer transition-all duration-300 bg-white backdrop-blur-sm border-0 shadow-[0_1px_3px_rgba(1,30,65,0.04),0_6px_16px_rgba(1,30,65,0.04),0_12px_32px_rgba(1,30,65,0.02)] ${
                 selectedRole === "aic"
-                  ? "ring-2 ring-primary border-primary"
-                  : "hover:border-primary/50"
+                  ? "ring-2 ring-crowe-amber shadow-[0_4px_16px_rgba(245,168,0,0.25)]"
+                  : "hover:shadow-[0_2px_4px_rgba(1,30,65,0.06),0_8px_24px_rgba(1,30,65,0.06),0_16px_48px_rgba(1,30,65,0.04)] hover:-translate-y-1"
               }`}
               onClick={() => setSelectedRole("aic")}
             >
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-crowe-amber/20 text-crowe-amber-dark dark:bg-crowe-amber/20 dark:text-crowe-amber">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-crowe-amber text-crowe-indigo-dark shadow-amber-glow">
                     <Crown className="h-6 w-6" />
                   </div>
-                  <Badge variant="secondary">Full Access</Badge>
+                  <Badge className="bg-crowe-amber/15 text-crowe-amber-dark border-0 hover:bg-crowe-amber/15">Full Access</Badge>
                 </div>
                 <CardTitle className="text-xl">Auditor in Charge (AIC)</CardTitle>
                 <CardDescription>
@@ -133,19 +134,19 @@ export function RoleSelector() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <Card
-              className={`cursor-pointer transition-all hover:shadow-lg ${
+              className={`cursor-pointer transition-all duration-300 bg-white backdrop-blur-sm border-0 shadow-[0_1px_3px_rgba(1,30,65,0.04),0_6px_16px_rgba(1,30,65,0.04),0_12px_32px_rgba(1,30,65,0.02)] ${
                 selectedRole === "auditor"
-                  ? "ring-2 ring-primary border-primary"
-                  : "hover:border-primary/50"
+                  ? "ring-2 ring-crowe-cyan shadow-[0_4px_16px_rgba(84,192,232,0.25)]"
+                  : "hover:shadow-[0_2px_4px_rgba(1,30,65,0.06),0_8px_24px_rgba(1,30,65,0.06),0_16px_48px_rgba(1,30,65,0.04)] hover:-translate-y-1"
               }`}
               onClick={() => setSelectedRole("auditor")}
             >
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-crowe-indigo/10 text-crowe-indigo-dark dark:bg-crowe-indigo-bright/20 dark:text-crowe-cyan">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-crowe-indigo text-white shadow-crowe-md">
                     <ClipboardCheck className="h-6 w-6" />
                   </div>
-                  <Badge variant="outline">Testing</Badge>
+                  <Badge className="bg-crowe-indigo/10 text-crowe-indigo-dark border-0 hover:bg-crowe-indigo/10">Testing</Badge>
                 </div>
                 <CardTitle className="text-xl">Auditor</CardTitle>
                 <CardDescription>
@@ -203,15 +204,16 @@ export function RoleSelector() {
           </motion.div>
         </div>
 
-        {/* Footer */}
-        <motion.div
-          className="text-center mt-12 text-sm text-muted-foreground"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <p>CDD Onboarding Demo v1.0 | Dual-Portal Architecture</p>
-        </motion.div>
+          {/* Footer */}
+          <motion.div
+            className="text-center mt-12 text-sm text-[#8b90a0]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <p>CDD Onboarding Demo v1.0 | Dual-Portal Architecture</p>
+          </motion.div>
+        </div>
       </div>
     </div>
   );

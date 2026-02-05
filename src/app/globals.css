@@ -191,15 +191,19 @@
   --crowe-coral-dark: #992A5C;
 
   /* ============================================
-     NEUTRAL TINTS (CSS Custom Properties)
+     NEUTRAL TINTS — WARM undertone (not pure gray!)
+     Every gray has a hint of indigo warmth so nothing feels cold
      ============================================ */
   --crowe-white: #FFFFFF;
   --crowe-black: #000000;
-  --tint-900: #333333;
-  --tint-700: #4F4F4F;
-  --tint-500: #828282;
-  --tint-300: #BDBDBD;
-  --tint-100: #E0E0E0;
+  --tint-950: #1a1d2b;           /* Near-black with indigo warmth — use instead of #000 */
+  --tint-900: #2d3142;           /* Primary text — warm dark slate, NOT pure #333 */
+  --tint-700: #545968;           /* Secondary text — muted with blue undertone */
+  --tint-500: #8b90a0;           /* Muted/placeholder text */
+  --tint-300: #c8cbd6;           /* Soft borders, dividers */
+  --tint-200: #dfe1e8;           /* Subtle separators */
+  --tint-100: #eef0f4;           /* Very subtle backgrounds */
+  --tint-50: #f6f7fa;            /* Off-white sections — warm, not stark */
 
   /* Spacing Scale - Crowe Design System (8px grid) */
   --space-1: 0.25rem;   /* 4px */
@@ -244,45 +248,59 @@
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ============================================
-     Semantic Tokens - Light Mode (Crowe Brand)
+     Semantic Tokens - Light Mode (Warm, Premium Design)
+     Crowe brand philosophy: warm, soft, premium — not cold corporate
      ============================================ */
-  /* Text */
-  --text-primary: var(--tint-900);
-  --text-secondary: var(--tint-700);
-  --text-muted: var(--tint-500);
+  /* Text - Warm dark slate with indigo undertone, NEVER pure black */
+  --text-primary: #2d3142;              /* Warm dark slate - NOT #333 */
+  --text-secondary: #545968;            /* Muted with blue undertone */
+  --text-muted: #8b90a0;                /* Placeholder/muted text */
 
-  /* Surfaces - Clean, professional, white is essential */
-  --surface-primary: #FFFFFF;
-  --surface-secondary: #F7F7F7;
-  --surface-elevated: #FFFFFF;
+  /* Surfaces - Layered warm backgrounds, NEVER pure white page bg */
+  --surface-page: #f8f9fc;              /* Page background - warm off-white */
+  --surface-primary: #fafbfd;           /* Card/content - barely visible lift */
+  --surface-secondary: #f6f7fa;         /* Alternating sections */
+  --surface-elevated: #FFFFFF;          /* Modals, popovers ONLY - pure white reserved here */
+  --surface-brand-soft: #f0f2f8;        /* Light indigo wash for feature sections */
+  --surface-amber-soft: #fff8eb;        /* Very light amber wash */
 
-  /* Borders */
-  --border-default: var(--tint-100);
-  --border-strong: var(--tint-300);
+  /* Borders - Very soft, prefer shadows over borders */
+  --border-default: #dfe1e8;            /* Very soft warm border */
+  --border-strong: #c8cbd6;             /* Only when needed */
+
+  /* Indigo-tinted shadows - NEVER use pure black rgba(0,0,0,...) */
+  --shadow-xs: 0 1px 2px rgba(1, 30, 65, 0.04);
+  --shadow-sm: 0 1px 3px rgba(1, 30, 65, 0.06), 0 1px 2px rgba(1, 30, 65, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(1, 30, 65, 0.06), 0 2px 4px -1px rgba(1, 30, 65, 0.04);
+  --shadow-lg: 0 6px 16px -4px rgba(1, 30, 65, 0.07), 0 4px 6px -2px rgba(1, 30, 65, 0.04);
+  --shadow-xl: 0 12px 32px -8px rgba(1, 30, 65, 0.08), 0 8px 16px -4px rgba(1, 30, 65, 0.03);
+  --shadow-card: 0 1px 3px rgba(1, 30, 65, 0.04), 0 6px 16px rgba(1, 30, 65, 0.04), 0 12px 32px rgba(1, 30, 65, 0.02);
+  --shadow-card-hover: 0 2px 4px rgba(1, 30, 65, 0.06), 0 8px 24px rgba(1, 30, 65, 0.06), 0 16px 48px rgba(1, 30, 65, 0.04);
+  --shadow-amber-glow: 0 4px 16px rgba(245, 168, 0, 0.20);
 
   /* ============================================
-     shadcn/ui Theme - Crowe Brand Colors
+     shadcn/ui Theme - Warm, Premium Crowe Brand
      ============================================ */
-  --radius: 0.5rem;
-  --background: 0 0% 100%;              /* #FFFFFF */
-  --foreground: 0 0% 20%;               /* #333333 */
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 20%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 20%;
-  --primary: 215 100% 13%;              /* Crowe Indigo Dark #011E41 */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 39 100% 48%;             /* Crowe Amber #F5A800 */
-  --secondary-foreground: 215 100% 13%;
-  --muted: 0 0% 97%;                    /* #F7F7F7 */
-  --muted-foreground: 0 0% 31%;         /* #4F4F4F */
-  --accent: 39 100% 48%;                /* Crowe Amber */
-  --accent-foreground: 215 100% 13%;
-  --destructive: 341 79% 56%;           /* Crowe Coral #E5376B */
-  --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 88%;                   /* #E0E0E0 */
-  --input: 0 0% 88%;
-  --ring: 215 100% 19%;                 /* Crowe Indigo Core #002E62 */
+  --radius: 0.75rem;                     /* 12px - softer than default */
+  --background: 225 33% 98%;             /* #f8f9fc - warm off-white page bg */
+  --foreground: 228 20% 22%;             /* #2d3142 - warm dark text */
+  --card: 225 50% 99%;                   /* #fafbfd - slightly lifted card */
+  --card-foreground: 228 20% 22%;
+  --popover: 0 0% 100%;                  /* Pure white for popovers/modals only */
+  --popover-foreground: 228 20% 22%;
+  --primary: 215 98% 13%;                /* Crowe Indigo Dark #011E41 */
+  --primary-foreground: 225 33% 97%;     /* Soft white */
+  --secondary: 39 100% 48%;              /* Crowe Amber #F5A800 */
+  --secondary-foreground: 215 98% 13%;
+  --muted: 225 20% 96%;                  /* #f0f2f8 - indigo-washed muted bg */
+  --muted-foreground: 228 10% 37%;       /* #545968 - warm muted text */
+  --accent: 39 100% 48%;                 /* Crowe Amber */
+  --accent-foreground: 215 98% 13%;
+  --destructive: 341 79% 56%;            /* Crowe Coral #E5376B */
+  --destructive-foreground: 225 33% 97%;
+  --border: 226 17% 89%;                 /* #dfe1e8 - very soft warm border */
+  --input: 226 17% 89%;
+  --ring: 215 100% 19%;                  /* Crowe Indigo Core #002E62 */
 
   /* Chart colors - Crowe secondary palette */
   --chart-1: 166 95% 34%;               /* Crowe Teal #05AB8C */
@@ -374,23 +392,79 @@
 
 /* ============================================
    Crowe Design System: Background Utilities
-   Note: No gradient backgrounds per brand guidelines
+   Warm, soft, premium — not cold corporate
    ============================================ */
 
-/* Clean white surface — default for most layouts */
+/* ─── PAGE BACKGROUND — always warm, never pure white ─── */
+.bg-page {
+  background: #f8f9fc;  /* Warm off-white with slight blue-indigo warmth */
+}
+
+/* ─── SECTION ALTERNATION — gentle contrast between sections ─── */
+.bg-section-light {
+  background: #fafbfd;  /* Barely-there lift above page bg */
+}
+
+.bg-section-warm {
+  background: #f6f7fa;  /* Slightly more visible, still very soft */
+}
+
+.bg-section-indigo-wash {
+  background: #f0f2f8;  /* Light indigo wash for feature/CTA sections */
+}
+
+.bg-section-amber-wash {
+  background: #fff8eb;  /* Very soft amber glow — testimonials, highlights */
+}
+
+/* Clean surface — cards, content areas */
 .bg-crowe-clean {
   background: var(--crowe-white);
 }
 
 /* Subtle off-white for secondary sections */
 .bg-crowe-subtle {
-  background: #F7F7F7;
+  background: #f6f7fa;
 }
 
 /* Indigo brand surface — hero sections, footers, CTAs */
 .bg-crowe-brand {
   background: var(--crowe-indigo-dark);
-  color: var(--crowe-white);
+  color: #f6f7fa;  /* Soft white text, not pure #FFF */
+}
+
+/* ============================================
+   SOFT GRADIENT BACKGROUNDS - Warm, Premium Feel
+   ============================================ */
+
+/* Subtle warm page gradient - default for dashboard backgrounds */
+.bg-soft-gradient {
+  background: linear-gradient(180deg, #f8f9fc 0%, #f0f2f8 100%);
+}
+
+/* Cool indigo-tinted gradient for dashboards */
+.bg-cool-gradient {
+  background: linear-gradient(
+    135deg,
+    #f8f9fc 0%,
+    #f0f2f8 50%,
+    #eef0f4 100%
+  );
+}
+
+/* Warm amber-tinted gradient for accent areas */
+.bg-warm-gradient {
+  background: linear-gradient(
+    135deg,
+    #fffbf5 0%,
+    #fff8ed 50%,
+    #fef3e2 100%
+  );
+}
+
+/* Elegant sidebar gradient - softer navy */
+.bg-sidebar-gradient {
+  background: linear-gradient(180deg, #1e3a5f 0%, #1a365d 100%);
 }
 
 /* Subtle Grid Pattern */

@@ -18,7 +18,7 @@ import { motion, staggerContainer, staggerItem } from "@/lib/animations";
 
 export default function AicDashboardPage() {
   return (
-    <div className="p-8">
+    <div className="p-8 min-h-full bg-page">
       <motion.div
         className="mb-8"
         initial={{ opacity: 0, y: -20 }}

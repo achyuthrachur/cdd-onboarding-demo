@@ -65,13 +65,30 @@ const config: Config = {
           },
         },
 
-        /* Neutral Tints - UI-specific for text, borders, backgrounds */
+        /* ============================================
+           NEUTRAL TINTS — WARM undertone (not pure gray!)
+           Every gray has indigo warmth so nothing feels cold
+           ============================================ */
         tint: {
-          900: "#333333",
-          700: "#4F4F4F",
-          500: "#828282",
-          300: "#BDBDBD",
-          100: "#E0E0E0",
+          950: "#1a1d2b",         /* Near-black with indigo warmth */
+          900: "#2d3142",         /* Primary text — warm dark slate */
+          700: "#545968",         /* Secondary text — muted with blue undertone */
+          500: "#8b90a0",         /* Muted/placeholder text */
+          300: "#c8cbd6",         /* Soft borders, dividers */
+          200: "#dfe1e8",         /* Subtle separators */
+          100: "#eef0f4",         /* Very subtle backgrounds */
+          50: "#f6f7fa",          /* Off-white sections */
+        },
+
+        /* ============================================
+           SOFT COLOR VARIANTS - Premium, Warm UI
+           ============================================ */
+        soft: {
+          navy: {
+            light: "#1e3a5f",
+            DEFAULT: "#1a365d",
+            dark: "#172554",
+          },
         },
 
         /* ============================================
@@ -144,12 +161,30 @@ const config: Config = {
         xl: "16px",
       },
 
+      /* ============================================
+         INDIGO-TINTED SHADOWS — warm, not cold
+         Use rgba(1, 30, 65, ...) NOT rgba(0, 0, 0, ...)
+         ============================================ */
       boxShadow: {
-        sm: "0 1px 2px rgba(0, 0, 0, 0.04)",
-        md: "0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04)",
-        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04)",
-        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03)",
-        hover: "0 12px 24px rgba(0, 0, 0, 0.12)",
+        "crowe-sm": "0 1px 3px rgba(1,30,65,0.06), 0 1px 2px rgba(1,30,65,0.04)",
+        "crowe-md": "0 4px 8px -2px rgba(1,30,65,0.06), 0 2px 4px -1px rgba(1,30,65,0.04)",
+        "crowe-lg": "0 6px 16px -4px rgba(1,30,65,0.07), 0 4px 6px -2px rgba(1,30,65,0.04)",
+        "crowe-xl": "0 12px 32px -8px rgba(1,30,65,0.08), 0 8px 16px -4px rgba(1,30,65,0.03)",
+        "crowe-hover": "0 8px 24px -4px rgba(1,30,65,0.10), 0 4px 8px -2px rgba(1,30,65,0.04)",
+        "crowe-card": "0 1px 3px rgba(1,30,65,0.04), 0 6px 16px rgba(1,30,65,0.04), 0 12px 32px rgba(1,30,65,0.02)",
+        "amber-glow": "0 4px 16px rgba(245,168,0,0.20)",
+        sm: "0 1px 3px rgba(1, 30, 65, 0.06), 0 1px 2px rgba(1, 30, 65, 0.04)",
+        md: "0 4px 8px -2px rgba(1, 30, 65, 0.06), 0 2px 4px -1px rgba(1, 30, 65, 0.04)",
+        lg: "0 6px 16px -4px rgba(1, 30, 65, 0.07), 0 4px 6px -2px rgba(1, 30, 65, 0.04)",
+        xl: "0 12px 32px -8px rgba(1, 30, 65, 0.08), 0 8px 16px -4px rgba(1, 30, 65, 0.03)",
+        hover: "0 8px 24px -4px rgba(1, 30, 65, 0.10), 0 4px 8px -2px rgba(1, 30, 65, 0.04)",
+      },
+
+      backgroundColor: {
+        page: "#f8f9fc",
+        section: "#f6f7fa",
+        "section-warm": "#f0f2f8",
+        "section-amber": "#fff8eb",
       },
 
       transitionDuration: {

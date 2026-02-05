@@ -93,7 +93,7 @@ export default function AuditorDashboardPage() {
     : 0;
 
   return (
-    <div className="p-8">
+    <div className="p-8 min-h-full bg-page">
       {/* Header */}
       <motion.div
         className="mb-8"
