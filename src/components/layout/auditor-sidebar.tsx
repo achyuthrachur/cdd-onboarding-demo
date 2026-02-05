@@ -30,11 +30,11 @@ export function AuditorSidebar() {
   };
 
   return (
-    <div className="flex h-full w-64 flex-col bg-slate-50 dark:bg-slate-900 border-r">
+    <div className="flex h-full w-64 flex-col bg-white dark:bg-crowe-indigo-dark border-r">
       {/* Header */}
       <div className="flex h-16 items-center border-b px-6">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-600 text-white font-bold">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-crowe-indigo-dark text-white font-bold">
             A
           </div>
           <span className="font-semibold">Auditor Portal</span>
@@ -54,8 +54,8 @@ export function AuditorSidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-teal-100 text-teal-900 dark:bg-teal-900 dark:text-teal-100"
-                  : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                  ? "bg-crowe-amber/15 text-crowe-indigo-dark dark:bg-crowe-amber/20 dark:text-crowe-amber"
+                  : "text-tint-700 hover:bg-crowe-indigo/5 dark:text-tint-300 dark:hover:bg-crowe-indigo-bright/20"
               )}
             >
               <item.icon className="h-5 w-5" />

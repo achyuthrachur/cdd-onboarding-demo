@@ -221,8 +221,8 @@ export default function AuditorDashboardPage() {
                     <Link href={`/auditor/workbooks/${workbook.id}`}>
                       <Card className={`transition-all hover:shadow-md cursor-pointer ${
                         workbook.status === 'submitted'
-                          ? 'border-green-500 bg-green-50/50 dark:bg-green-950/20'
-                          : 'hover:border-teal-500'
+                          ? 'border-crowe-teal bg-crowe-teal/10 dark:bg-crowe-teal-dark/20'
+                          : 'hover:border-crowe-amber'
                       }`}>
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
@@ -231,7 +231,7 @@ export default function AuditorDashboardPage() {
                                 <h3 className="font-medium">Testing Workbook</h3>
                                 <Badge
                                   variant={workbook.status === 'submitted' ? 'default' : 'outline'}
-                                  className={workbook.status === 'submitted' ? 'bg-green-600' : ''}
+                                  className={workbook.status === 'submitted' ? 'bg-crowe-teal' : ''}
                                 >
                                   {workbook.status === 'submitted' ? (
                                     <>
@@ -258,7 +258,7 @@ export default function AuditorDashboardPage() {
                                     value={workbook.completionPercentage}
                                     className={`h-2 ${
                                       workbook.completionPercentage >= 95
-                                        ? '[&>div]:bg-green-500'
+                                        ? '[&>div]:bg-crowe-teal'
                                         : ''
                                     }`}
                                   />

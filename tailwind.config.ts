@@ -3,13 +3,13 @@ import type { Config } from "tailwindcss";
 /**
  * Tailwind CSS v4 Configuration
  *
- * Note: Tailwind v4 uses CSS-based configuration via @theme directive in globals.css.
- * This config file provides additional customization that can extend the CSS-based setup.
+ * Crowe Brand Identity Design System
+ * - Primary: Crowe Indigo (#011E41) + Crowe Amber (#F5A800)
+ * - Secondary colors: Teal, Cyan, Blue, Violet, Coral (accents only)
+ * - Typography: Helvetica Now Text/Display (Arial fallback)
+ * - No gradient backgrounds
  *
- * Color System follows the Design System principles:
- * - 60-30-10 rule: 60% neutral, 30% secondary, 10% accent
- * - Warm blacks (#1c1917 or #121212), never pure black
- * - Muted, desaturated accent colors
+ * Source: https://www.crowedigitalbrand.com
  */
 
 const config: Config = {
@@ -23,60 +23,79 @@ const config: Config = {
     extend: {
       colors: {
         /* ============================================
-           Warm Grey Color Palette - Design System
-           Usage: bg-grey-50, text-grey-900, etc.
+           CROWE PRIMARY COLORS
+           These are the foundation — must dominate all digital assets
            ============================================ */
-        grey: {
-          50: "#fafaf9",
-          100: "#f5f5f4",
-          200: "#e7e5e4",
-          300: "#d6d3d1",
-          400: "#a8a29e",
-          500: "#78716c",
-          600: "#57534e",
-          700: "#44403c",
-          800: "#292524",
-          900: "#1c1917",
-          950: "#0c0a09",
+        crowe: {
+          amber: {
+            bright: "#FFD231",
+            DEFAULT: "#F5A800",
+            dark: "#D7761D",
+          },
+          indigo: {
+            bright: "#003F9F",
+            DEFAULT: "#002E62",
+            dark: "#011E41",
+          },
+          /* Secondary Colors - Complement primaries, never overshadow */
+          teal: {
+            bright: "#16D9BC",
+            DEFAULT: "#05AB8C",
+            dark: "#0C7876",
+          },
+          cyan: {
+            light: "#8FE1FF",
+            DEFAULT: "#54C0E8",
+            dark: "#007DA3",
+          },
+          blue: {
+            light: "#32A8FD",
+            DEFAULT: "#0075C9",
+            dark: "#0050AD",
+          },
+          violet: {
+            bright: "#EA80FF",
+            DEFAULT: "#B14FC5",
+            dark: "#612080",
+          },
+          coral: {
+            bright: "#FF526F",
+            DEFAULT: "#E5376B",
+            dark: "#992A5C",
+          },
+        },
+
+        /* Neutral Tints - UI-specific for text, borders, backgrounds */
+        tint: {
+          900: "#333333",
+          700: "#4F4F4F",
+          500: "#828282",
+          300: "#BDBDBD",
+          100: "#E0E0E0",
         },
 
         /* ============================================
-           Accent Colors - Design System
-           ============================================ */
-        accent: {
-          DEFAULT: "#64748b",
-          light: "#94a3b8",
-          dark: "#475569",
-        },
-
-        /* Slate Blue Accent */
-        "accent-blue": {
-          DEFAULT: "#64748b",
-          light: "#94a3b8",
-          dark: "#475569",
-        },
-
-        /* Warm Taupe Accent */
-        "accent-warm": {
-          DEFAULT: "#a8927c",
-          light: "#c4b5a5",
-          dark: "#8c7a66",
-        },
-
-        /* ============================================
-           Functional Colors - Design System
+           Functional Colors - Aligned to brand
            ============================================ */
         success: {
-          DEFAULT: "#6b8f71",
-          light: "#a3c4a9",
+          DEFAULT: "#05AB8C", // Crowe Teal
+          light: "#16D9BC",
+          dark: "#0C7876",
         },
         warning: {
-          DEFAULT: "#c9a962",
-          light: "#e5d4a1",
+          DEFAULT: "#F5A800", // Crowe Amber
+          light: "#FFD231",
+          dark: "#D7761D",
         },
         error: {
-          DEFAULT: "#b07070",
-          light: "#d4a5a5",
+          DEFAULT: "#E5376B", // Crowe Coral
+          light: "#FF526F",
+          dark: "#992A5C",
+        },
+        info: {
+          DEFAULT: "#0075C9", // Crowe Blue
+          light: "#32A8FD",
+          dark: "#0050AD",
         },
 
         /* ============================================
@@ -96,23 +115,20 @@ const config: Config = {
 
       fontFamily: {
         display: [
-          "var(--font-display)",
-          "Playfair Display",
-          "Fraunces",
-          "Libre Baskerville",
-          "Georgia",
-          "serif",
+          "Helvetica Now Display",
+          "Helvetica Neue",
+          "Arial",
+          "system-ui",
+          "sans-serif",
         ],
         body: [
-          "var(--font-body)",
-          "DM Sans",
-          "Bricolage Grotesque",
-          "Source Sans Pro",
+          "Helvetica Now Text",
+          "Helvetica Neue",
+          "Arial",
           "system-ui",
           "sans-serif",
         ],
         mono: [
-          "var(--font-mono)",
           "JetBrains Mono",
           "Fira Code",
           "IBM Plex Mono",

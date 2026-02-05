@@ -38,8 +38,8 @@ export default function AuditorLayout({
       <main className="flex-1 overflow-auto bg-background">
         {/* Auditor identity banner */}
         {auditorName && (
-          <div className="bg-teal-50 dark:bg-teal-950 border-b border-teal-200 dark:border-teal-800 px-6 py-2">
-            <div className="flex items-center gap-2 text-sm text-teal-700 dark:text-teal-300">
+          <div className="bg-crowe-amber/10 dark:bg-crowe-amber/20 border-b border-crowe-amber/30 dark:border-crowe-amber/40 px-6 py-2">
+            <div className="flex items-center gap-2 text-sm text-crowe-indigo-dark dark:text-crowe-amber">
               <span className="font-medium">Logged in as:</span>
               <span>{auditorName}</span>
             </div>

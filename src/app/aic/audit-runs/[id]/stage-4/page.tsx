@@ -369,7 +369,7 @@ export default function AicStage4Page() {
       title: "Step 1: Load Data",
       description: "Sample & Attributes",
       isComplete: stepComplete.load,
-      activeColor: "bg-blue-100 text-blue-600",
+      activeColor: "bg-crowe-indigo/10 text-crowe-indigo-dark",
       completeColor: "bg-green-100 text-green-600",
       Icon: Database,
       badgeText: `${samples.length} samples, ${extractedAttributes.length} attrs`,
@@ -396,7 +396,7 @@ export default function AicStage4Page() {
       title: "Step 4: Publish",
       description: "Send to auditors",
       isComplete: isPublished,
-      activeColor: "bg-teal-100 text-teal-600",
+      activeColor: "bg-teal-100 text-crowe-teal",
       completeColor: "bg-green-100 text-green-600",
       Icon: Send,
       badgeText: isPublished ? "Published" : "Pending",
@@ -722,7 +722,7 @@ export default function AicStage4Page() {
 
                     {/* Estimated Output */}
                     <motion.div
-                      className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg"
+                      className="p-4 bg-crowe-indigo/5 dark:bg-crowe-indigo-dark/50 border border-crowe-indigo/20 dark:border-crowe-indigo-bright/30 rounded-lg"
                       initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
@@ -810,7 +810,7 @@ export default function AicStage4Page() {
                       {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.completedRows, 0)} completed
                     </Badge>
                     {isPublished && (
-                      <Badge className="bg-teal-100 text-teal-700">
+                      <Badge className="bg-crowe-teal/15 text-crowe-teal-dark">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
                         Published
                       </Badge>
@@ -838,7 +838,7 @@ export default function AicStage4Page() {
                     <Button
                       onClick={() => setShowPublishDialog(true)}
                       disabled={isPublished || auditorWorkbooks.length === 0}
-                      className="bg-teal-600 hover:bg-teal-700"
+                      className="bg-crowe-teal hover:bg-crowe-teal-dark"
                     >
                       <Send className="h-4 w-4 mr-2" />
                       Publish to Auditors
@@ -849,17 +849,17 @@ export default function AicStage4Page() {
                 {/* Published Banner */}
                 {isPublished && (
                   <motion.div
-                    className="mb-4 p-4 bg-teal-50 dark:bg-teal-950 border border-teal-200 dark:border-teal-800 rounded-lg"
+                    className="mb-4 p-4 bg-crowe-teal/10 dark:bg-crowe-teal-dark/30 border border-crowe-teal/30 dark:border-crowe-teal-dark/50 rounded-lg"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-teal-600" />
+                      <CheckCircle2 className="h-5 w-5 text-crowe-teal" />
                       <div>
-                        <p className="font-medium text-teal-900 dark:text-teal-100">
+                        <p className="font-medium text-crowe-teal-dark dark:text-crowe-teal-bright">
                           Workbooks Published Successfully
                         </p>
-                        <p className="text-sm text-teal-700 dark:text-teal-300">
+                        <p className="text-sm text-crowe-teal-dark dark:text-crowe-teal">
                           {pivotedWorkbooks.length} workbooks are now available to auditors.
                           You can monitor their progress on the Live Monitoring page.
                         </p>
@@ -973,7 +973,7 @@ export default function AicStage4Page() {
             <Button
               onClick={handlePublishWorkbooks}
               disabled={isPublishing}
-              className="bg-teal-600 hover:bg-teal-700"
+              className="bg-crowe-teal hover:bg-crowe-teal-dark"
             >
               {isPublishing ? (
                 <>

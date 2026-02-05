@@ -221,7 +221,7 @@ export default function AicMonitorPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-teal-100 text-teal-700">Live Monitor</Badge>
+              <Badge className="bg-crowe-teal/15 text-crowe-teal-dark">Live Monitor</Badge>
               <h1 className="text-3xl font-bold tracking-tight">
                 Auditor Progress Tracking
               </h1>
@@ -230,7 +230,7 @@ export default function AicMonitorPage() {
                   animate={{ opacity: [1, 0.5, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <Badge variant="outline" className="text-teal-600 border-teal-600">
+                  <Badge variant="outline" className="text-crowe-teal border-crowe-teal">
                     <Activity className="h-3 w-3 mr-1" />
                     Live
                   </Badge>

@@ -156,7 +156,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                       isCurrent
                         ? "bg-primary text-primary-foreground"
                         : isMonitor && auditRun.publishedWorkbooks > 0
-                        ? "bg-teal-100 text-teal-600"
+                        ? "bg-crowe-teal/15 text-crowe-teal-dark"
                         : isActive
                         ? "bg-green-100 text-green-600"
                         : "bg-muted text-muted-foreground"
@@ -173,7 +173,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                         </Badge>
                       )}
                       {isMonitor && auditRun.publishedWorkbooks > 0 && (
-                        <Badge className="text-xs bg-teal-100 text-teal-700">
+                        <Badge className="text-xs bg-crowe-teal/15 text-crowe-teal-dark">
                           Live
                         </Badge>
                       )}
@@ -224,7 +224,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
             <div className="flex items-center gap-4">
               <div className="w-32 font-medium">Monitor</div>
               <div className="flex-1 text-sm text-muted-foreground">
-                <span className="font-medium text-teal-600">Live tracking</span> of auditor completion (5-second refresh)
+                <span className="font-medium text-crowe-teal">Live tracking</span> of auditor completion (5-second refresh)
               </div>
             </div>
             <div className="flex items-center gap-4">

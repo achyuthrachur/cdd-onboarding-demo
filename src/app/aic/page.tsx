@@ -26,7 +26,7 @@ export default function AicDashboardPage() {
       >
         <div className="flex items-center gap-3 mb-2">
           <h1 className="text-3xl font-bold tracking-tight">AIC Dashboard</h1>
-          <Badge variant="secondary" className="bg-amber-100 text-amber-700">
+          <Badge variant="secondary" className="bg-crowe-amber/20 text-crowe-amber-dark">
             Auditor in Charge
           </Badge>
         </div>
@@ -136,7 +136,7 @@ export default function AicDashboardPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600 text-sm font-medium">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-indigo/10 text-crowe-indigo-dark text-sm font-medium">
                 1
               </div>
               <div>
@@ -145,7 +145,7 @@ export default function AicDashboardPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600 text-sm font-medium">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-teal/15 text-crowe-teal-dark text-sm font-medium">
                 2
               </div>
               <div>
@@ -154,7 +154,7 @@ export default function AicDashboardPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100 text-purple-600 text-sm font-medium">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-blue/15 text-crowe-blue-dark text-sm font-medium">
                 3
               </div>
               <div>
@@ -163,7 +163,7 @@ export default function AicDashboardPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-600 text-sm font-medium">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-amber/20 text-crowe-amber-dark text-sm font-medium">
                 4
               </div>
               <div>
@@ -172,7 +172,7 @@ export default function AicDashboardPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-100 text-teal-600 text-sm font-medium">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-cyan/15 text-crowe-cyan-dark text-sm font-medium">
                 <Eye className="h-4 w-4" />
               </div>
               <div>

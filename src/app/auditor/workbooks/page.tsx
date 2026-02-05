@@ -192,18 +192,18 @@ export default function AuditorWorkbooksPage() {
                   <Link href={`/auditor/workbooks/${workbook.id}`}>
                     <Card className={`transition-all hover:shadow-md cursor-pointer ${
                       workbook.status === 'submitted'
-                        ? 'border-green-500 bg-green-50/50 dark:bg-green-950/20'
-                        : 'hover:border-teal-500'
+                        ? 'border-crowe-teal bg-crowe-teal/10 dark:bg-crowe-teal-dark/20'
+                        : 'hover:border-crowe-amber'
                     }`}>
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              <FileSpreadsheet className="h-5 w-5 text-teal-600" />
+                              <FileSpreadsheet className="h-5 w-5 text-crowe-indigo-dark" />
                               <h3 className="font-medium text-lg">Testing Workbook</h3>
                               <Badge
                                 variant={workbook.status === 'submitted' ? 'default' : 'outline'}
-                                className={workbook.status === 'submitted' ? 'bg-green-600' : ''}
+                                className={workbook.status === 'submitted' ? 'bg-crowe-teal' : ''}
                               >
                                 {workbook.status === 'submitted' ? (
                                   <>
@@ -232,14 +232,14 @@ export default function AuditorWorkbooksPage() {
                                   value={workbook.completionPercentage}
                                   className={`h-3 ${
                                     workbook.completionPercentage >= 95
-                                      ? '[&>div]:bg-green-500'
+                                      ? '[&>div]:bg-crowe-teal'
                                       : workbook.completionPercentage >= 50
-                                      ? '[&>div]:bg-teal-500'
+                                      ? '[&>div]:bg-crowe-amber'
                                       : ''
                                   }`}
                                 />
                                 {workbook.completionPercentage >= 95 && workbook.status !== 'submitted' && (
-                                  <p className="text-xs text-green-600 mt-1">
+                                  <p className="text-xs text-crowe-teal mt-1">
                                     Ready to submit!
                                   </p>
                                 )}

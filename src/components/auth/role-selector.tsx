@@ -44,7 +44,7 @@ export function RoleSelector() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 p-8">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-crowe-indigo-dark p-8">
       <div className="w-full max-w-4xl">
         {/* Header */}
         <motion.div
@@ -82,7 +82,7 @@ export function RoleSelector() {
             >
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-crowe-amber/20 text-crowe-amber-dark dark:bg-crowe-amber/20 dark:text-crowe-amber">
                     <Crown className="h-6 w-6" />
                   </div>
                   <Badge variant="secondary">Full Access</Badge>
@@ -142,7 +142,7 @@ export function RoleSelector() {
             >
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-crowe-indigo/10 text-crowe-indigo-dark dark:bg-crowe-indigo-bright/20 dark:text-crowe-cyan">
                     <ClipboardCheck className="h-6 w-6" />
                   </div>
                   <Badge variant="outline">Testing</Badge>
