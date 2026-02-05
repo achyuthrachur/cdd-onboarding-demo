@@ -49,7 +49,7 @@ const RESULT_OPTIONS = [
   { value: "Fail 2 - Procedure", label: "Fail 2 - Procedure", icon: AlertTriangle, color: "text-orange-600" },
   { value: "Question to LOB", label: "Question to LOB", icon: HelpCircle, color: "text-blue-600" },
   { value: "N/A", label: "N/A", icon: MinusCircle, color: "text-gray-600" },
-  { value: "", label: "Not Tested", icon: MinusCircle, color: "text-gray-400" },
+  { value: "not-tested", label: "Not Tested", icon: MinusCircle, color: "text-gray-400" },
 ];
 
 export function AuditorWorkbookView({
@@ -78,7 +78,9 @@ export function AuditorWorkbookView({
   const filteredRows = useMemo(() => {
     if (!activeWorkbook) return [];
     return activeWorkbook.rows.filter((row) => {
-      const matchesResult = resultFilter === "all" || row.result === resultFilter;
+      // Handle "not-tested" filter matching empty/undefined results
+      const matchesResult = resultFilter === "all" ||
+        (resultFilter === "not-tested" ? !row.result : row.result === resultFilter);
       const matchesCategory = categoryFilter === "all" || row.attributeCategory === categoryFilter;
       return matchesResult && matchesCategory;
     });
@@ -86,7 +88,9 @@ export function AuditorWorkbookView({
 
   // Get result badge
   const getResultBadge = (result: string) => {
-    const option = RESULT_OPTIONS.find((o) => o.value === result);
+    // Handle empty results as "not-tested"
+    const lookupValue = result || "not-tested";
+    const option = RESULT_OPTIONS.find((o) => o.value === lookupValue);
     if (!option || !option.icon) return <Badge variant="outline">-</Badge>;
 
     const Icon = option.icon;
