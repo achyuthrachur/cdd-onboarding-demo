@@ -66,18 +66,19 @@ export function RoleSelector() {
           </motion.div>
 
         {/* Role Cards */}
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 items-stretch">
           {/* AIC Card */}
           <motion.div
+            className="h-full"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             <Card
-              className={`cursor-pointer transition-all duration-300 bg-white backdrop-blur-sm border-0 shadow-[0_1px_3px_rgba(1,30,65,0.04),0_6px_16px_rgba(1,30,65,0.04),0_12px_32px_rgba(1,30,65,0.02)] ${
+              className={`h-full flex flex-col cursor-pointer transition-all duration-300 ${
                 selectedRole === "aic"
                   ? "ring-2 ring-crowe-amber shadow-[0_4px_16px_rgba(245,168,0,0.25)]"
-                  : "hover:shadow-[0_2px_4px_rgba(1,30,65,0.06),0_8px_24px_rgba(1,30,65,0.06),0_16px_48px_rgba(1,30,65,0.04)] hover:-translate-y-1"
+                  : "hover:-translate-y-1"
               }`}
               onClick={() => setSelectedRole("aic")}
             >
@@ -86,7 +87,7 @@ export function RoleSelector() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-crowe-amber text-crowe-indigo-dark shadow-amber-glow">
                     <Crown className="h-6 w-6" />
                   </div>
-                  <Badge className="bg-crowe-amber/15 text-crowe-amber-dark border-0 hover:bg-crowe-amber/15">Full Access</Badge>
+                  <Badge className="bg-crowe-amber/20 text-crowe-amber border-0 hover:bg-crowe-amber/20">Full Access</Badge>
                 </div>
                 <CardTitle className="text-xl">Auditor in Charge (AIC)</CardTitle>
                 <CardDescription>
@@ -96,19 +97,19 @@ export function RoleSelector() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
-                    <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
+                    <FileSpreadsheet className="h-4 w-4 text-white/50" />
                     <span>Gap analysis & attribute extraction</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                    <BarChart3 className="h-4 w-4 text-white/50" />
                     <span>Sampling configuration</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <Users className="h-4 w-4 text-white/50" />
                     <span>Workbook generation & assignment</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <Eye className="h-4 w-4 text-muted-foreground" />
+                    <Eye className="h-4 w-4 text-white/50" />
                     <span>Live progress monitoring</span>
                   </div>
                 </div>
@@ -134,10 +135,10 @@ export function RoleSelector() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <Card
-              className={`cursor-pointer transition-all duration-300 bg-white backdrop-blur-sm border-0 shadow-[0_1px_3px_rgba(1,30,65,0.04),0_6px_16px_rgba(1,30,65,0.04),0_12px_32px_rgba(1,30,65,0.02)] ${
+              className={`cursor-pointer transition-all duration-300 ${
                 selectedRole === "auditor"
                   ? "ring-2 ring-crowe-cyan shadow-[0_4px_16px_rgba(84,192,232,0.25)]"
-                  : "hover:shadow-[0_2px_4px_rgba(1,30,65,0.06),0_8px_24px_rgba(1,30,65,0.06),0_16px_48px_rgba(1,30,65,0.04)] hover:-translate-y-1"
+                  : "hover:-translate-y-1"
               }`}
               onClick={() => setSelectedRole("auditor")}
             >
@@ -146,7 +147,7 @@ export function RoleSelector() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-crowe-indigo text-white shadow-crowe-md">
                     <ClipboardCheck className="h-6 w-6" />
                   </div>
-                  <Badge className="bg-crowe-indigo/10 text-crowe-indigo-dark border-0 hover:bg-crowe-indigo/10">Testing</Badge>
+                  <Badge className="bg-crowe-cyan/20 text-crowe-cyan border-0 hover:bg-crowe-cyan/20">Testing</Badge>
                 </div>
                 <CardTitle className="text-xl">Auditor</CardTitle>
                 <CardDescription>
@@ -156,22 +157,22 @@ export function RoleSelector() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
-                    <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
+                    <FileSpreadsheet className="h-4 w-4 text-white/50" />
                     <span>View assigned workbooks</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <ClipboardCheck className="h-4 w-4 text-muted-foreground" />
+                    <ClipboardCheck className="h-4 w-4 text-white/50" />
                     <span>Complete CDD testing</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                    <ArrowRight className="h-4 w-4 text-white/50" />
                     <span>Submit completed workbooks</span>
                   </div>
                 </div>
 
                 {/* Auditor Selection */}
-                <div className="pt-2 border-t">
-                  <label className="text-sm font-medium mb-2 block">
+                <div className="pt-2 border-t border-white/10">
+                  <label className="text-sm font-medium mb-2 block text-white/80">
                     Select your identity:
                   </label>
                   <Select value={selectedAuditor} onValueChange={setSelectedAuditor}>

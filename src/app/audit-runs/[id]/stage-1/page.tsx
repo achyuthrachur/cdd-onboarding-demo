@@ -113,7 +113,7 @@ export default function Stage1Page() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="p-8">
+    <div className="p-8 min-h-screen bg-crowe-indigo-dark">
       {/* Header */}
       <motion.div
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: -20 }}
@@ -123,7 +123,7 @@ export default function Stage1Page() {
       >
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -138,9 +138,9 @@ export default function Stage1Page() {
               >
                 <Badge className="bg-blue-100 text-blue-700">Stage 1</Badge>
               </motion.div>
-              <h1 className="text-3xl font-bold tracking-tight">Gap Assessment</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-white">Gap Assessment</h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Run sequential gap assessments using the AI assistant
             </p>
           </div>
@@ -164,7 +164,7 @@ export default function Stage1Page() {
         className="grid gap-4 md:grid-cols-3 mb-8"
       >
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
-          <Card className={assessment1Result ? "border-green-500" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment1Result ? "border-green-500" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
                 <motion.div
@@ -179,8 +179,8 @@ export default function Stage1Page() {
                   {assessment1Result ? <CheckCircle2 className="h-5 w-5" /> : <span className="font-bold">1</span>}
                 </motion.div>
                 <div>
-                  <CardTitle className="text-base">Gap Assessment 1</CardTitle>
-                  <CardDescription>Old GFC vs Current GFC</CardDescription>
+                  <CardTitle className="text-base text-white">Gap Assessment 1</CardTitle>
+                  <CardDescription className="text-white/60">Old GFC vs Current GFC</CardDescription>
                 </div>
               </div>
             </CardHeader>
@@ -193,7 +193,7 @@ export default function Stage1Page() {
         </motion.div>
 
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
-          <Card className={assessment2Result ? "border-green-500" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment2Result ? "border-green-500" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
                 <motion.div
@@ -208,8 +208,8 @@ export default function Stage1Page() {
                   {assessment2Result ? <CheckCircle2 className="h-5 w-5" /> : <span className="font-bold">2</span>}
                 </motion.div>
                 <div>
-                  <CardTitle className="text-base">Gap Assessment 2</CardTitle>
-                  <CardDescription>Current GFC vs FLU Procedures</CardDescription>
+                  <CardTitle className="text-base text-white">Gap Assessment 2</CardTitle>
+                  <CardDescription className="text-white/60">Current GFC vs FLU Procedures</CardDescription>
                 </div>
               </div>
             </CardHeader>
@@ -222,7 +222,7 @@ export default function Stage1Page() {
         </motion.div>
 
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
-          <Card className={canProceed ? "border-green-500" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${canProceed ? "border-green-500" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
                 <motion.div
@@ -237,8 +237,8 @@ export default function Stage1Page() {
                   <CheckCircle2 className="h-5 w-5" />
                 </motion.div>
                 <div>
-                  <CardTitle className="text-base">Ready for Sampling</CardTitle>
-                  <CardDescription>Review & proceed</CardDescription>
+                  <CardTitle className="text-base text-white">Ready for Sampling</CardTitle>
+                  <CardDescription className="text-white/60">Review & proceed</CardDescription>
                 </div>
               </div>
             </CardHeader>

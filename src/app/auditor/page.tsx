@@ -93,7 +93,7 @@ export default function AuditorDashboardPage() {
     : 0;
 
   return (
-    <div className="p-8 min-h-full bg-page">
+    <div className="p-8 min-h-full">
       {/* Header */}
       <motion.div
         className="mb-8"
@@ -101,10 +101,10 @@ export default function AuditorDashboardPage() {
         animate="visible"
         variants={fadeInUp}
       >
-        <h1 className="text-3xl font-bold tracking-tight">
+        <h1 className="text-3xl font-bold tracking-tight text-white">
           Welcome back, {auditorName || "Auditor"}
         </h1>
-        <p className="text-muted-foreground mt-2">
+        <p className="text-white/60 mt-2">
           View and complete your assigned testing workbooks
         </p>
       </motion.div>
@@ -123,7 +123,7 @@ export default function AuditorDashboardPage() {
               <CardTitle className="text-3xl">{totalWorkbooks}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-white/50">
                 <FileSpreadsheet className="h-4 w-4" />
                 Assigned to you
               </div>
@@ -135,10 +135,10 @@ export default function AuditorDashboardPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardDescription>In Progress</CardDescription>
-              <CardTitle className="text-3xl text-amber-600">{inProgressCount}</CardTitle>
+              <CardTitle className="text-3xl text-crowe-amber">{inProgressCount}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-white/50">
                 <Clock className="h-4 w-4" />
                 Awaiting completion
               </div>
@@ -150,10 +150,10 @@ export default function AuditorDashboardPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardDescription>Submitted</CardDescription>
-              <CardTitle className="text-3xl text-green-600">{submittedCount}</CardTitle>
+              <CardTitle className="text-3xl text-crowe-teal-bright">{submittedCount}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-white/50">
                 <CheckCircle2 className="h-4 w-4" />
                 Completed
               </div>
@@ -190,19 +190,19 @@ export default function AuditorDashboardPage() {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="text-muted-foreground">Loading workbooks...</div>
+                <div className="text-white/50">Loading workbooks...</div>
               </div>
             ) : workbooks.length === 0 ? (
               <div className="text-center py-12">
-                <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-30" />
-                <h3 className="font-medium mb-2">No Workbooks Assigned</h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-white/30" />
+                <h3 className="font-medium mb-2 text-white">No Workbooks Assigned</h3>
+                <p className="text-sm text-white/50 mb-4">
                   You don&apos;t have any published workbooks assigned to you yet.
                 </p>
-                <div className="p-4 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg inline-block">
+                <div className="p-4 bg-crowe-amber/10 border border-crowe-amber/30 rounded-lg inline-block">
                   <div className="flex items-start gap-2">
-                    <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5" />
-                    <p className="text-sm text-amber-700 dark:text-amber-300 text-left">
+                    <AlertCircle className="h-4 w-4 text-crowe-amber mt-0.5" />
+                    <p className="text-sm text-crowe-amber text-left">
                       The AIC needs to publish workbooks in Stage 4 before you can see them here.
                       Please check back later or contact your AIC.
                     </p>
@@ -219,16 +219,16 @@ export default function AuditorDashboardPage() {
                 {workbooks.map((workbook) => (
                   <motion.div key={workbook.id} variants={staggerItem}>
                     <Link href={`/auditor/workbooks/${workbook.id}`}>
-                      <Card className={`transition-all hover:shadow-md cursor-pointer ${
+                      <Card className={`transition-all cursor-pointer ${
                         workbook.status === 'submitted'
-                          ? 'border-crowe-teal bg-crowe-teal/10 dark:bg-crowe-teal-dark/20'
-                          : 'hover:border-crowe-amber'
+                          ? 'border-crowe-teal/50 bg-crowe-teal/10'
+                          : 'hover:bg-white/15 hover:border-crowe-amber/50'
                       }`}>
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-2">
-                                <h3 className="font-medium">Testing Workbook</h3>
+                                <h3 className="font-medium text-white">Testing Workbook</h3>
                                 <Badge
                                   variant={workbook.status === 'submitted' ? 'default' : 'outline'}
                                   className={workbook.status === 'submitted' ? 'bg-crowe-teal' : ''}
@@ -243,7 +243,7 @@ export default function AuditorDashboardPage() {
                                   )}
                                 </Badge>
                               </div>
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                              <div className="flex items-center gap-4 text-sm text-white/50 mb-3">
                                 <span>{workbook.totalAttributes} attributes</span>
                                 <span>|</span>
                                 <span>{workbook.totalCustomers} customers</span>
@@ -264,7 +264,7 @@ export default function AuditorDashboardPage() {
                                   />
                                 </div>
                                 {workbook.lastActivityAt && (
-                                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                  <div className="flex items-center gap-1 text-xs text-white/50">
                                     <Clock className="h-3 w-3" />
                                     Last activity: {new Date(workbook.lastActivityAt).toLocaleDateString()}
                                   </div>

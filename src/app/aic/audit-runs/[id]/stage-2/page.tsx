@@ -241,7 +241,7 @@ export default function AicStage2Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -249,17 +249,17 @@ export default function AicStage2Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-green-100 text-green-700">Stage 2</Badge>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <Badge className="bg-green-500/20 text-green-400">Stage 2</Badge>
+              <h1 className="text-3xl font-bold tracking-tight text-white">
                 Statistical Sampling
               </h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Upload population data, configure sampling parameters, and generate
               your sample set
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData}>
+          <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <Database className="h-4 w-4 mr-2" />
             Load Demo Data
           </Button>
@@ -275,12 +275,12 @@ export default function AicStage2Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={step.isComplete ? "border-green-500" : ""}>
+            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <motion.div
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      step.isComplete ? step.completeColor : step.activeColor
+                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor.replace('bg-blue-100 text-blue-600', 'bg-blue-500/20 text-blue-400').replace('bg-purple-100 text-purple-600', 'bg-purple-500/20 text-purple-400').replace('bg-gray-100 text-gray-400', 'bg-white/10 text-white/40')
                     }`}
                   >
                     {step.isComplete ? (
@@ -290,16 +290,16 @@ export default function AicStage2Page() {
                     )}
                   </motion.div>
                   <div>
-                    <CardTitle className="text-base">{step.title}</CardTitle>
-                    <CardDescription>{step.description}</CardDescription>
+                    <CardTitle className="text-base text-white">{step.title}</CardTitle>
+                    <CardDescription className="text-white/60">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-white/50 mb-4">
                   {step.helpText}
                 </p>
-                <Badge variant={step.isComplete ? "default" : "outline"}>
+                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/70" : ""}>
                   {step.badgeText}
                 </Badge>
               </CardContent>
@@ -378,7 +378,7 @@ export default function AicStage2Page() {
         transition={{ delay: 0.4 }}
       >
         <Link href={`/aic/audit-runs/${id}/stage-1`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 1
           </Button>

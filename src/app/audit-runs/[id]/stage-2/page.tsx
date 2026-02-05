@@ -243,7 +243,7 @@ export default function Stage2Page() {
   ];
 
   return (
-    <div className="p-8">
+    <div className="p-8 min-h-screen bg-crowe-indigo-dark">
       {/* Header */}
       <motion.div
         className="mb-8"
@@ -253,7 +253,7 @@ export default function Stage2Page() {
       >
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -262,11 +262,11 @@ export default function Stage2Page() {
           <div>
             <div className="flex items-center gap-3">
               <Badge className="bg-green-100 text-green-700">Stage 2</Badge>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <h1 className="text-3xl font-bold tracking-tight text-white">
                 Statistical Sampling
               </h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Upload population data, configure sampling parameters, and generate
               your sample set
             </p>
@@ -287,7 +287,7 @@ export default function Stage2Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={step.isComplete ? "border-green-500" : ""}>
+            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -304,13 +304,13 @@ export default function Stage2Page() {
                     )}
                   </motion.div>
                   <div>
-                    <CardTitle className="text-base">{step.title}</CardTitle>
-                    <CardDescription>{step.description}</CardDescription>
+                    <CardTitle className="text-base text-white">{step.title}</CardTitle>
+                    <CardDescription className="text-white/60">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-white/50 mb-4">
                   {step.helpText}
                 </p>
                 <AnimatePresence mode="wait">

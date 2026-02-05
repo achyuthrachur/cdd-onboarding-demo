@@ -414,7 +414,7 @@ export default function AicStage4Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -422,16 +422,16 @@ export default function AicStage4Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-purple-100 text-purple-700">Stage 4</Badge>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <Badge className="bg-purple-500/20 text-purple-400">Stage 4</Badge>
+              <h1 className="text-3xl font-bold tracking-tight text-white">
                 Workbook Generation & Publishing
               </h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Generate auditor workbooks and publish to the audit team
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData}>
+          <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <Database className="h-4 w-4 mr-2" />
             Load Demo Data
           </Button>
@@ -447,12 +447,12 @@ export default function AicStage4Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={step.isComplete ? "border-green-500" : ""}>
+            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
                   <motion.div
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      step.isComplete ? step.completeColor : step.activeColor
+                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor.replace('bg-crowe-indigo/10 text-crowe-indigo-dark', 'bg-crowe-indigo/20 text-crowe-indigo-bright').replace('bg-purple-100 text-purple-600', 'bg-purple-500/20 text-purple-400').replace('bg-amber-100 text-amber-600', 'bg-amber-500/20 text-amber-400').replace('bg-teal-100 text-crowe-teal', 'bg-crowe-teal/20 text-crowe-teal')
                     }`}
                     animate={step.isComplete ? { scale: [1, 1.1, 1] } : undefined}
                     transition={{ duration: 0.3 }}
@@ -464,8 +464,8 @@ export default function AicStage4Page() {
                     )}
                   </motion.div>
                   <div>
-                    <CardTitle className="text-base">{step.title}</CardTitle>
-                    <CardDescription>{step.description}</CardDescription>
+                    <CardTitle className="text-base text-white">{step.title}</CardTitle>
+                    <CardDescription className="text-white/60">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -478,7 +478,7 @@ export default function AicStage4Page() {
                     exit={{ scale: 0.8, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Badge variant={step.isComplete ? "default" : "outline"}>
+                    <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/70" : ""}>
                       {step.badgeText}
                     </Badge>
                   </motion.div>
@@ -552,10 +552,10 @@ export default function AicStage4Page() {
                 >
                   {/* Sampling Data */}
                   <motion.div variants={staggerItem}>
-                    <Card className="h-full">
+                    <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
-                        <CardTitle className="text-lg">Sampling Data (Stage 2)</CardTitle>
-                        <CardDescription>
+                        <CardTitle className="text-lg text-white">Sampling Data (Stage 2)</CardTitle>
+                        <CardDescription className="text-white/60">
                           Sample records from the locked sampling plan
                         </CardDescription>
                       </CardHeader>
@@ -563,35 +563,35 @@ export default function AicStage4Page() {
                         {samples.length > 0 ? (
                           <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">Total Samples:</span>
+                              <span className="text-white/50">Total Samples:</span>
                               <Badge variant="default">{samples.length}</Badge>
                             </div>
                             {samplingResult?.config && (
                               <>
                                 <div className="flex items-center justify-between">
-                                  <span className="text-muted-foreground">Sample Method:</span>
-                                  <span className="capitalize">{samplingResult.config.method}</span>
+                                  <span className="text-white/50">Sample Method:</span>
+                                  <span className="capitalize text-white">{samplingResult.config.method}</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                  <span className="text-muted-foreground">Confidence Level:</span>
-                                  <span>{Math.round((samplingResult.config.confidence || 0.95) * 100)}%</span>
+                                  <span className="text-white/50">Confidence Level:</span>
+                                  <span className="text-white">{Math.round((samplingResult.config.confidence || 0.95) * 100)}%</span>
                                 </div>
                               </>
                             )}
                             <motion.div
-                              className="p-3 bg-green-50 dark:bg-green-950 rounded-lg"
+                              className="p-3 bg-green-500/10 border border-green-500/30 rounded-lg"
                               initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ delay: 0.2 }}
                             >
-                              <CheckCircle2 className="h-5 w-5 text-green-600 mb-2" />
-                              <p className="text-sm text-green-700 dark:text-green-300">
+                              <CheckCircle2 className="h-5 w-5 text-green-400 mb-2" />
+                              <p className="text-sm text-green-400">
                                 Sampling data loaded and ready
                               </p>
                             </motion.div>
                           </div>
                         ) : (
-                          <div className="text-center py-8 text-muted-foreground">
+                          <div className="text-center py-8 text-white/50">
                             <Database className="h-12 w-12 mx-auto mb-3 opacity-30" />
                             <p>No sampling data available</p>
                             <p className="text-sm">Complete Stage 2 or load demo data</p>
@@ -603,10 +603,10 @@ export default function AicStage4Page() {
 
                   {/* Attributes Data */}
                   <motion.div variants={staggerItem}>
-                    <Card className="h-full">
+                    <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
-                        <CardTitle className="text-lg">Attributes (Stage 3)</CardTitle>
-                        <CardDescription>
+                        <CardTitle className="text-lg text-white">Attributes (Stage 3)</CardTitle>
+                        <CardDescription className="text-white/60">
                           CIP/CDD/EDD testing attributes from FLU procedures
                         </CardDescription>
                       </CardHeader>
@@ -614,38 +614,38 @@ export default function AicStage4Page() {
                         {extractedAttributes.length > 0 ? (
                           <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">Total Attributes:</span>
+                              <span className="text-white/50">Total Attributes:</span>
                               <Badge variant="default">{extractedAttributes.length}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">Acceptable Docs:</span>
+                              <span className="text-white/50">Acceptable Docs:</span>
                               <Badge variant="secondary">{acceptableDocs.length}</Badge>
                             </div>
                             <div className="flex gap-2 flex-wrap">
-                              <Badge variant="outline">
+                              <Badge variant="outline" className="border-white/30 text-white/70">
                                 CIP: {extractedAttributes.filter((a) => a.Category === "CIP").length}
                               </Badge>
-                              <Badge variant="outline">
+                              <Badge variant="outline" className="border-white/30 text-white/70">
                                 CDD: {extractedAttributes.filter((a) => a.Category === "CDD").length}
                               </Badge>
-                              <Badge variant="outline">
+                              <Badge variant="outline" className="border-white/30 text-white/70">
                                 EDD: {extractedAttributes.filter((a) => a.Category === "EDD").length}
                               </Badge>
                             </div>
                             <motion.div
-                              className="p-3 bg-green-50 dark:bg-green-950 rounded-lg"
+                              className="p-3 bg-green-500/10 border border-green-500/30 rounded-lg"
                               initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ delay: 0.3 }}
                             >
-                              <CheckCircle2 className="h-5 w-5 text-green-600 mb-2" />
-                              <p className="text-sm text-green-700 dark:text-green-300">
+                              <CheckCircle2 className="h-5 w-5 text-green-400 mb-2" />
+                              <p className="text-sm text-green-400">
                                 Attributes loaded and ready
                               </p>
                             </motion.div>
                           </div>
                         ) : (
-                          <div className="text-center py-8 text-muted-foreground">
+                          <div className="text-center py-8 text-white/50">
                             <FileSpreadsheet className="h-12 w-12 mx-auto mb-3 opacity-30" />
                             <p>No attributes available</p>
                             <p className="text-sm">Complete Stage 3 or load demo data</p>
@@ -691,10 +691,10 @@ export default function AicStage4Page() {
               variants={tabContent}
             >
               <TabsContent value="generate" className="h-full m-0">
-                <Card>
+                <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                   <CardHeader>
-                    <CardTitle>Generate Auditor Workbooks</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-white">Generate Auditor Workbooks</CardTitle>
+                    <CardDescription className="text-white/60">
                       Create testing workbooks for each selected auditor
                     </CardDescription>
                   </CardHeader>
@@ -706,39 +706,39 @@ export default function AicStage4Page() {
                       animate="visible"
                       variants={staggerContainer}
                     >
-                      <motion.div variants={staggerItem} className="p-4 bg-muted rounded-lg text-center">
-                        <div className="text-2xl font-bold">{samples.length}</div>
-                        <div className="text-sm text-muted-foreground">Samples</div>
+                      <motion.div variants={staggerItem} className="p-4 bg-white/5 rounded-lg text-center border border-white/10">
+                        <div className="text-2xl font-bold text-white">{samples.length}</div>
+                        <div className="text-sm text-white/50">Samples</div>
                       </motion.div>
-                      <motion.div variants={staggerItem} className="p-4 bg-muted rounded-lg text-center">
-                        <div className="text-2xl font-bold">{selectedAuditors.length}</div>
-                        <div className="text-sm text-muted-foreground">Auditors</div>
+                      <motion.div variants={staggerItem} className="p-4 bg-white/5 rounded-lg text-center border border-white/10">
+                        <div className="text-2xl font-bold text-white">{selectedAuditors.length}</div>
+                        <div className="text-sm text-white/50">Auditors</div>
                       </motion.div>
-                      <motion.div variants={staggerItem} className="p-4 bg-muted rounded-lg text-center">
-                        <div className="text-2xl font-bold">{extractedAttributes.length}</div>
-                        <div className="text-sm text-muted-foreground">Attributes</div>
+                      <motion.div variants={staggerItem} className="p-4 bg-white/5 rounded-lg text-center border border-white/10">
+                        <div className="text-2xl font-bold text-white">{extractedAttributes.length}</div>
+                        <div className="text-sm text-white/50">Attributes</div>
                       </motion.div>
                     </motion.div>
 
                     {/* Estimated Output */}
                     <motion.div
-                      className="p-4 bg-crowe-indigo/5 dark:bg-crowe-indigo-dark/50 border border-crowe-indigo/20 dark:border-crowe-indigo-bright/30 rounded-lg"
+                      className="p-4 bg-crowe-indigo-bright/10 border border-crowe-indigo-bright/30 rounded-lg"
                       initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <h4 className="font-medium mb-2">Estimated Output</h4>
+                      <h4 className="font-medium mb-2 text-white">Estimated Output</h4>
                       <div className="text-sm space-y-1">
-                        <p>
-                          <span className="text-muted-foreground">Samples per auditor: </span>
+                        <p className="text-white">
+                          <span className="text-white/50">Samples per auditor: </span>
                           {Math.floor(samples.length / selectedAuditors.length)} (round-robin)
                         </p>
-                        <p>
-                          <span className="text-muted-foreground">Rows per workbook: </span>
+                        <p className="text-white">
+                          <span className="text-white/50">Rows per workbook: </span>
                           ~{Math.floor(samples.length / selectedAuditors.length) * extractedAttributes.length}
                         </p>
-                        <p>
-                          <span className="text-muted-foreground">Total test rows: </span>
+                        <p className="text-white">
+                          <span className="text-white/50">Total test rows: </span>
                           {samples.length * extractedAttributes.length}
                         </p>
                       </div>
@@ -803,10 +803,10 @@ export default function AicStage4Page() {
                   animate={{ opacity: 1, y: 0 }}
                 >
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline">
+                    <Badge variant="outline" className="border-white/30 text-white/70">
                       {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.totalRows, 0)} total rows
                     </Badge>
-                    <Badge variant="outline">
+                    <Badge variant="outline" className="border-white/30 text-white/70">
                       {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.completedRows, 0)} completed
                     </Badge>
                     {isPublished && (
@@ -849,17 +849,17 @@ export default function AicStage4Page() {
                 {/* Published Banner */}
                 {isPublished && (
                   <motion.div
-                    className="mb-4 p-4 bg-crowe-teal/10 dark:bg-crowe-teal-dark/30 border border-crowe-teal/30 dark:border-crowe-teal-dark/50 rounded-lg"
+                    className="mb-4 p-4 bg-crowe-teal/10 border border-crowe-teal/30 rounded-lg"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
                     <div className="flex items-center gap-3">
                       <CheckCircle2 className="h-5 w-5 text-crowe-teal" />
                       <div>
-                        <p className="font-medium text-crowe-teal-dark dark:text-crowe-teal-bright">
+                        <p className="font-medium text-crowe-teal">
                           Workbooks Published Successfully
                         </p>
-                        <p className="text-sm text-crowe-teal-dark dark:text-crowe-teal">
+                        <p className="text-sm text-crowe-teal/80">
                           {pivotedWorkbooks.length} workbooks are now available to auditors.
                           You can monitor their progress on the Live Monitoring page.
                         </p>
@@ -885,13 +885,13 @@ export default function AicStage4Page() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between pt-4 flex-shrink-0 border-t mt-4"
+        className="flex justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-4"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
         <Link href={`/aic/audit-runs/${id}/stage-3`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 3
           </Button>
@@ -939,26 +939,26 @@ export default function AicStage4Page() {
       <Dialog open={showPublishDialog} onOpenChange={setShowPublishDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Publish Workbooks to Auditors</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-white">Publish Workbooks to Auditors</DialogTitle>
+            <DialogDescription className="text-white/60">
               This will make workbooks available to the assigned auditors.
               They will be able to view and complete their assigned testing.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                <span className="text-sm">Workbooks to publish:</span>
+              <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-lg">
+                <span className="text-sm text-white">Workbooks to publish:</span>
                 <Badge>{pivotedWorkbooks.length}</Badge>
               </div>
-              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                <span className="text-sm">Auditors receiving workbooks:</span>
+              <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-lg">
+                <span className="text-sm text-white">Auditors receiving workbooks:</span>
                 <Badge>{selectedAuditors.length}</Badge>
               </div>
-              <div className="p-3 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg">
+              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
                 <div className="flex items-start gap-2">
-                  <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5" />
-                  <p className="text-sm text-amber-700 dark:text-amber-300">
+                  <AlertCircle className="h-4 w-4 text-amber-400 mt-0.5" />
+                  <p className="text-sm text-amber-400">
                     Once published, workbooks cannot be regenerated without clearing
                     auditor progress. Make sure all settings are correct.
                   </p>
@@ -967,7 +967,7 @@ export default function AicStage4Page() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPublishDialog(false)}>
+            <Button variant="outline" onClick={() => setShowPublishDialog(false)} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               Cancel
             </Button>
             <Button

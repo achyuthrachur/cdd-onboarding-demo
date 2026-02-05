@@ -377,7 +377,7 @@ export default function AuditorWorkbookPage() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-white/50" />
       </div>
     );
   }
@@ -386,13 +386,13 @@ export default function AuditorWorkbookPage() {
     return (
       <div className="p-8">
         <div className="text-center py-12">
-          <AlertCircle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <h2 className="text-lg font-medium mb-2">Workbook Not Found</h2>
-          <p className="text-muted-foreground mb-4">
+          <AlertCircle className="h-12 w-12 mx-auto mb-4 text-white/30" />
+          <h2 className="text-lg font-medium mb-2 text-white">Workbook Not Found</h2>
+          <p className="text-white/50 mb-4">
             This workbook doesn&apos;t exist or you don&apos;t have access to it.
           </p>
           <Link href="/auditor/workbooks">
-            <Button>Back to Workbooks</Button>
+            <Button className="bg-crowe-amber text-crowe-indigo-dark hover:bg-crowe-amber-bright">Back to Workbooks</Button>
           </Link>
         </div>
       </div>
@@ -405,7 +405,7 @@ export default function AuditorWorkbookPage() {
       <FadeInUp className="mb-8">
         <Link
           href="/auditor/workbooks"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Workbooks
@@ -413,7 +413,7 @@ export default function AuditorWorkbookPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold tracking-tight">Testing Workbook</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-white">Testing Workbook</h1>
               {isSubmitted && (
                 <Badge className="bg-green-600">
                   <CheckCircle2 className="h-3 w-3 mr-1" />
@@ -421,7 +421,7 @@ export default function AuditorWorkbookPage() {
                 </Badge>
               )}
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               {workbook.assignedCustomers.length} customers • {workbook.attributes.length} attributes
             </p>
           </div>
@@ -431,13 +431,13 @@ export default function AuditorWorkbookPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Button variant="outline" onClick={handleExportToExcel}>
+            <Button variant="outline" onClick={handleExportToExcel} className="border-white/20 text-white hover:bg-white/10">
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
             {!isSubmitted && (
               <>
-                <Button variant="outline" onClick={handleSave} disabled={isSaving}>
+                <Button variant="outline" onClick={handleSave} disabled={isSaving} className="border-white/20 text-white hover:bg-white/10">
                   {isSaving ? (
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                   ) : (
@@ -462,17 +462,17 @@ export default function AuditorWorkbookPage() {
       {/* Submitted Banner */}
       {isSubmitted && (
         <motion.div
-          className="mb-6 p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg"
+          className="mb-6 p-4 bg-crowe-teal/20 border border-crowe-teal/40 rounded-lg backdrop-blur-xl"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="flex items-center gap-3">
-            <CheckCircle2 className="h-5 w-5 text-green-600" />
+            <CheckCircle2 className="h-5 w-5 text-crowe-teal-bright" />
             <div>
-              <p className="font-medium text-green-700 dark:text-green-300">
+              <p className="font-medium text-crowe-teal-bright">
                 Workbook Submitted
               </p>
-              <p className="text-sm text-green-600 dark:text-green-400">
+              <p className="text-sm text-crowe-teal">
                 Your testing results have been submitted. The workbook is now read-only.
               </p>
             </div>
@@ -488,19 +488,19 @@ export default function AuditorWorkbookPage() {
         animate="visible"
       >
         <motion.div variants={staggerItem}>
-          <Card>
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+              <CardTitle className="text-sm font-medium text-white/50">
                 Progress
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{completionPercentage}%</div>
+              <div className="text-2xl font-bold text-white">{completionPercentage}%</div>
               <AnimatedProgress
                 value={completionPercentage}
-                className={`mt-2 ${completionPercentage >= 95 ? '[&>div]:bg-green-500' : ''}`}
+                className={`mt-2 ${completionPercentage >= 95 ? '[&>div]:bg-crowe-teal' : ''}`}
               />
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-white/50 mt-1">
                 {testingProgress.completedTests} / {testingProgress.totalTests} tests
               </p>
             </CardContent>
@@ -508,15 +508,15 @@ export default function AuditorWorkbookPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className={testingProgress.passCount > 0 ? "border-green-200" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.passCount > 0 ? "border-crowe-teal/50" : "border-white/20"}`}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-green-600">Pass</CardTitle>
+              <CardTitle className="text-sm font-medium text-crowe-teal-bright">Pass</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600 tabular-nums">
+              <div className="text-2xl font-bold text-crowe-teal-bright tabular-nums">
                 {animatedPassCount}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-white/50 mt-1">
                 {testingProgress.totalTests > 0
                   ? (((testingProgress.passCount + testingProgress.passWithObsCount) / testingProgress.totalTests) * 100).toFixed(1)
                   : 0}% pass rate
@@ -526,15 +526,15 @@ export default function AuditorWorkbookPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className={testingProgress.fail1RegulatoryCount > 0 ? "border-red-200" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.fail1RegulatoryCount > 0 ? "border-crowe-coral/50" : "border-white/20"}`}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-red-600">Fail</CardTitle>
+              <CardTitle className="text-sm font-medium text-crowe-coral-bright">Fail</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600 tabular-nums">
+              <div className="text-2xl font-bold text-crowe-coral-bright tabular-nums">
                 {animatedFailCount}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-white/50 mt-1">
                 {testingProgress.fail1RegulatoryCount + testingProgress.fail2ProcedureCount} exception(s)
               </p>
             </CardContent>
@@ -542,13 +542,13 @@ export default function AuditorWorkbookPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card>
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">N/A</CardTitle>
+              <CardTitle className="text-sm font-medium text-white/50">N/A</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tabular-nums">{testingProgress.naCount}</div>
-              <p className="text-xs text-muted-foreground mt-1">Not applicable</p>
+              <div className="text-2xl font-bold tabular-nums text-white">{testingProgress.naCount}</div>
+              <p className="text-xs text-white/50 mt-1">Not applicable</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -560,15 +560,15 @@ export default function AuditorWorkbookPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <Card className="mb-6">
+        <Card className="mb-6 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="flex items-center gap-2">
-                  <ClipboardCheck className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <ClipboardCheck className="h-5 w-5 text-crowe-amber" />
                   Testing Grid
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-white/60">
                   Rows: Attributes | Columns: Customer Results
                 </CardDescription>
               </div>
@@ -590,11 +590,11 @@ export default function AuditorWorkbookPage() {
           </CardHeader>
           <CardContent>
             {/* Customer Legend */}
-            <div className="mb-4 p-3 bg-muted/50 rounded-lg">
-              <div className="text-xs font-medium text-muted-foreground mb-2">Assigned Customers:</div>
+            <div className="mb-4 p-3 bg-white/5 rounded-lg border border-white/10">
+              <div className="text-xs font-medium text-white/50 mb-2">Assigned Customers:</div>
               <div className="flex flex-wrap gap-2">
                 {workbook.assignedCustomers.map((customer, idx) => (
-                  <Badge key={customer.customerId} variant="outline" className="text-xs">
+                  <Badge key={customer.customerId} variant="outline" className="text-xs border-white/20 text-white/70">
                     {idx + 1}. {customer.customerName} ({customer.customerId})
                   </Badge>
                 ))}
@@ -603,7 +603,7 @@ export default function AuditorWorkbookPage() {
 
             {/* Handsontable */}
             {tableData.length > 0 && (
-              <div className="border rounded-lg overflow-hidden">
+              <div className="border border-white/20 rounded-lg overflow-hidden bg-white/5">
                 <HotTable
                   ref={hotRef}
                   data={tableData}
@@ -652,15 +652,15 @@ export default function AuditorWorkbookPage() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
           >
-            <Card className="mb-6 border-amber-200">
+            <Card className="mb-6 bg-crowe-amber/20 border border-crowe-amber/40 backdrop-blur-xl">
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-amber-600" />
-                  <CardTitle className="text-amber-700">Completion Required</CardTitle>
+                  <AlertCircle className="h-5 w-5 text-crowe-amber" />
+                  <CardTitle className="text-crowe-amber-bright">Completion Required</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-amber-600">
+                <p className="text-sm text-crowe-amber">
                   At least 95% of tests must be completed to submit.
                   Currently at {completionPercentage}%.
                 </p>
@@ -672,27 +672,27 @@ export default function AuditorWorkbookPage() {
 
       {/* Submit Confirmation Dialog */}
       <Dialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
-        <DialogContent>
+        <DialogContent className="bg-crowe-indigo-dark/95 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
           <DialogHeader>
-            <DialogTitle>Submit Workbook</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-white">Submit Workbook</DialogTitle>
+            <DialogDescription className="text-white/60">
               Are you sure you want to submit this workbook? Once submitted,
               you will not be able to make further changes.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                <span className="text-sm">Completion:</span>
-                <Badge className="bg-green-600">{completionPercentage}%</Badge>
+              <div className="flex items-center justify-between p-3 bg-white/10 rounded-lg border border-white/10">
+                <span className="text-sm text-white/70">Completion:</span>
+                <Badge className="bg-crowe-teal">{completionPercentage}%</Badge>
               </div>
-              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                <span className="text-sm">Tests Completed:</span>
-                <Badge>{testingProgress.completedTests} / {testingProgress.totalTests}</Badge>
+              <div className="flex items-center justify-between p-3 bg-white/10 rounded-lg border border-white/10">
+                <span className="text-sm text-white/70">Tests Completed:</span>
+                <Badge className="bg-crowe-indigo">{testingProgress.completedTests} / {testingProgress.totalTests}</Badge>
               </div>
-              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                <span className="text-sm">Pass Rate:</span>
-                <Badge variant="outline">
+              <div className="flex items-center justify-between p-3 bg-white/10 rounded-lg border border-white/10">
+                <span className="text-sm text-white/70">Pass Rate:</span>
+                <Badge variant="outline" className="border-white/20 text-white">
                   {testingProgress.totalTests > 0
                     ? (((testingProgress.passCount + testingProgress.passWithObsCount) / testingProgress.totalTests) * 100).toFixed(1)
                     : 0}%
@@ -701,7 +701,7 @@ export default function AuditorWorkbookPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowSubmitDialog(false)}>
+            <Button variant="outline" onClick={() => setShowSubmitDialog(false)} className="border-white/20 text-white hover:bg-white/10">
               Cancel
             </Button>
             <Button

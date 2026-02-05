@@ -16,14 +16,14 @@ function Progress({
     <ProgressPrimitive.Root
       data-slot="progress"
       className={cn(
-        "bg-primary/20 relative h-2 w-full overflow-hidden rounded-full",
+        "bg-white/10 relative h-2 w-full overflow-hidden rounded-full",
         className
       )}
       {...props}
     >
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
-        className="bg-primary h-full w-full flex-1 transition-all"
+        className="bg-crowe-amber h-full w-full flex-1 transition-all"
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
     </ProgressPrimitive.Root>
@@ -68,7 +68,7 @@ const AnimatedProgress = React.forwardRef<
         ref={ref}
         data-slot="progress"
         className={cn(
-          "bg-primary/20 relative h-2 w-full overflow-hidden rounded-full",
+          "bg-white/10 relative h-2 w-full overflow-hidden rounded-full",
           className
         )}
         value={value}
@@ -77,7 +77,7 @@ const AnimatedProgress = React.forwardRef<
         <motion.div
           data-slot="progress-indicator"
           className={cn(
-            "bg-primary h-full rounded-full",
+            "bg-crowe-amber h-full rounded-full",
             showShimmer && "relative overflow-hidden",
             indicatorClassName
           )}
@@ -138,9 +138,9 @@ const LabeledProgress = React.forwardRef<
     <div className="space-y-1.5">
       {(label || showPercentage) && (
         <div className="flex justify-between text-sm">
-          {label && <span className="text-muted-foreground">{label}</span>}
+          {label && <span className="text-white/60">{label}</span>}
           {showPercentage && (
-            <span className="font-medium tabular-nums">{displayNum}%</span>
+            <span className="font-medium tabular-nums text-white">{displayNum}%</span>
           )}
         </div>
       )}

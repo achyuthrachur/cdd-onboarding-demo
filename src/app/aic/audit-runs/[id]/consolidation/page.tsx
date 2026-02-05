@@ -149,7 +149,7 @@ export default function AicConsolidationPage() {
       <FadeInUp className="mb-8">
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -162,13 +162,13 @@ export default function AicConsolidationPage() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.1 }}
               >
-                <Badge className="bg-orange-100 text-orange-700">Consolidation</Badge>
+                <Badge className="bg-orange-500/20 text-orange-400">Consolidation</Badge>
               </motion.div>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <h1 className="text-3xl font-bold tracking-tight text-white">
                 Consolidation & Reporting
               </h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Consolidate all results, view dashboards, and generate final report
             </p>
           </div>
@@ -178,7 +178,7 @@ export default function AicConsolidationPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Button variant="outline" onClick={handleLoadDemoData}>
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
@@ -194,6 +194,7 @@ export default function AicConsolidationPage() {
                     variant="outline"
                     onClick={handleRefreshConsolidation}
                     disabled={isGenerating}
+                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/30"
                   >
                     {isGenerating ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -243,20 +244,20 @@ export default function AicConsolidationPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mb-6 p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3"
+            className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg flex items-center gap-3"
           >
             <motion.div
               initial={shouldReduceMotion ? undefined : { scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
             >
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <CheckCircle2 className="h-5 w-5 text-green-400" />
             </motion.div>
             <div>
-              <p className="font-medium text-green-700 dark:text-green-300">
+              <p className="font-medium text-green-400">
                 Consolidation Available
               </p>
-              <p className="text-sm text-green-600 dark:text-green-400">
+              <p className="text-sm text-green-400/80">
                 Last generated: {new Date(consolidation.generatedAt).toLocaleString()} •{" "}
                 {consolidation.rawData.totalRows} rows from {consolidation.rawData.workbookIds.length} workbook(s)
               </p>
@@ -268,19 +269,19 @@ export default function AicConsolidationPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg flex items-center gap-3"
+            className="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg flex items-center gap-3"
           >
             <motion.div
               animate={shouldReduceMotion ? undefined : { rotate: [0, -10, 10, -10, 0] }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <AlertCircle className="h-5 w-5 text-yellow-600" />
+              <AlertCircle className="h-5 w-5 text-yellow-400" />
             </motion.div>
             <div>
-              <p className="font-medium text-yellow-700 dark:text-yellow-300">
+              <p className="font-medium text-yellow-400">
                 No Consolidation Yet
               </p>
-              <p className="text-sm text-yellow-600 dark:text-yellow-400">
+              <p className="text-sm text-yellow-400/80">
                 Click &quot;Generate Consolidation&quot; or &quot;Load Demo Data&quot; to aggregate results
               </p>
             </div>
@@ -341,10 +342,10 @@ export default function AicConsolidationPage() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ delay: 0.3 }}
           >
-            <Card className="mb-8">
+            <Card className="mb-8 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
               <CardHeader>
-                <CardTitle>Prerequisites</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-white">Prerequisites</CardTitle>
+                <CardDescription className="text-white/60">
                   Complete these steps before generating consolidation
                 </CardDescription>
               </CardHeader>
@@ -373,15 +374,15 @@ export default function AicConsolidationPage() {
                         transition={{ delay: index * 0.1, type: "spring", stiffness: 400 }}
                       >
                         {step.complete ? (
-                          <CheckCircle2 className="h-5 w-5 text-green-500" />
+                          <CheckCircle2 className="h-5 w-5 text-green-400" />
                         ) : (
-                          <AlertCircle className="h-5 w-5 text-yellow-500" />
+                          <AlertCircle className="h-5 w-5 text-yellow-400" />
                         )}
                       </motion.div>
-                      <span>
+                      <span className="text-white">
                         {step.label}
                         {step.required && (
-                          <Badge variant="outline" className="ml-2">
+                          <Badge variant="outline" className="ml-2 border-white/30 text-white/70">
                             Required
                           </Badge>
                         )}
@@ -389,7 +390,7 @@ export default function AicConsolidationPage() {
                     </motion.div>
                   ))}
                 </motion.div>
-                <p className="text-sm text-muted-foreground mt-4">
+                <p className="text-sm text-white/50 mt-4">
                   Demo mode: Click &quot;Load Demo Data&quot; to populate all stages with sample data.
                 </p>
               </CardContent>
@@ -406,13 +407,13 @@ export default function AicConsolidationPage() {
         transition={{ delay: 0.5 }}
       >
         <Link href={`/aic/audit-runs/${id}/monitor`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Live Monitor
           </Button>
         </Link>
         <Link href={`/aic/audit-runs/${id}`}>
-          <Button variant="outline">Back to Overview</Button>
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">Back to Overview</Button>
         </Link>
       </motion.div>
     </div>

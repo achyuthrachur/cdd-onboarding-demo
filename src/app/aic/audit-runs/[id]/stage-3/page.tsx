@@ -280,7 +280,7 @@ export default function AicStage3Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -288,16 +288,16 @@ export default function AicStage3Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-amber-100 text-amber-700">Stage 3</Badge>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <Badge className="bg-amber-500/20 text-amber-400">Stage 3</Badge>
+              <h1 className="text-3xl font-bold tracking-tight text-white">
                 FLU Procedure Extraction
               </h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Extract CIP, CDD, and EDD testing attributes from Front Line Unit procedures
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData}>
+          <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <Database className="h-4 w-4 mr-2" />
             Load Demo Data
           </Button>
@@ -313,12 +313,12 @@ export default function AicStage3Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={step.isComplete ? "border-green-500" : ""}>
+            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
                   <motion.div
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      step.isComplete ? step.completeColor : step.activeColor
+                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor.replace('bg-green-100 text-green-600', 'bg-green-500/20 text-green-400').replace('bg-amber-100 text-amber-600', 'bg-amber-500/20 text-amber-400').replace('bg-gray-100 text-gray-400', 'bg-white/10 text-white/40')
                     }`}
                   >
                     {step.isComplete ? (
@@ -328,13 +328,13 @@ export default function AicStage3Page() {
                     )}
                   </motion.div>
                   <div>
-                    <CardTitle className="text-base">{step.title}</CardTitle>
-                    <CardDescription>{step.description}</CardDescription>
+                    <CardTitle className="text-base text-white">{step.title}</CardTitle>
+                    <CardDescription className="text-white/60">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <Badge variant={step.isComplete ? "default" : "outline"}>
+                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/70" : ""}>
                   {step.badgeText}
                 </Badge>
               </CardContent>
@@ -398,11 +398,11 @@ export default function AicStage3Page() {
                     onExportExcel={handleExportExcel}
                   />
                 ) : (
-                  <Card className="h-full flex items-center justify-center">
+                  <Card className="h-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                     <div className="text-center">
-                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-30" />
-                      <h3 className="font-medium mb-2">No Extraction Results</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-white/30" />
+                      <h3 className="font-medium mb-2 text-white">No Extraction Results</h3>
+                      <p className="text-sm text-white/50">
                         Upload FLU procedures and run extraction to view results
                       </p>
                     </div>
@@ -416,13 +416,13 @@ export default function AicStage3Page() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between pt-4 flex-shrink-0 border-t mt-4"
+        className="flex justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-4"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
         <Link href={`/aic/audit-runs/${id}/stage-2`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 2
           </Button>

@@ -95,15 +95,15 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       <div className="mb-8">
         <Link
           href="/aic/audit-runs"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Runs
         </Link>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">{auditRun.name}</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="text-3xl font-bold tracking-tight text-white">{auditRun.name}</h1>
+            <p className="text-white/50 mt-2">
               {auditRun.scope?.description || "CDD Onboarding Audit"}
             </p>
           </div>
@@ -143,8 +143,8 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
           return (
             <Card
               key={stage.number}
-              className={`transition-all ${
-                isCurrent ? "border-primary shadow-md" : ""
+              className={`transition-all bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-white/15 hover:border-white/30 ${
+                isCurrent ? "border-crowe-amber shadow-md" : ""
               } ${!isActive ? "opacity-60" : ""} ${
                 isMonitor && auditRun.publishedWorkbooks > 0 ? "border-teal-500" : ""
               }`}
@@ -154,18 +154,18 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                   <div
                     className={`flex h-12 w-12 items-center justify-center rounded-lg ${
                       isCurrent
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-crowe-amber text-crowe-indigo-dark"
                         : isMonitor && auditRun.publishedWorkbooks > 0
-                        ? "bg-crowe-teal/15 text-crowe-teal-dark"
+                        ? "bg-crowe-teal/15 text-crowe-teal"
                         : isActive
-                        ? "bg-green-100 text-green-600"
-                        : "bg-muted text-muted-foreground"
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-white/10 text-white/40"
                     }`}
                   >
                     <stage.icon className="h-6 w-6" />
                   </div>
                   <div>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-white">
                       {stage.name}
                       {isCurrent && (
                         <Badge variant="default" className="text-xs">
@@ -173,19 +173,23 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                         </Badge>
                       )}
                       {isMonitor && auditRun.publishedWorkbooks > 0 && (
-                        <Badge className="text-xs bg-crowe-teal/15 text-crowe-teal-dark">
+                        <Badge className="text-xs bg-crowe-teal/15 text-crowe-teal">
                           Live
                         </Badge>
                       )}
                     </CardTitle>
-                    <CardDescription>{stage.description}</CardDescription>
+                    <CardDescription className="text-white/60">{stage.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <Link href={stage.href}>
                   <Button
-                    className="w-full"
+                    className={`w-full ${
+                      isCurrent || (isMonitor && auditRun.publishedWorkbooks > 0)
+                        ? ""
+                        : "border-white/20 text-white hover:bg-white/10 hover:border-white/30"
+                    }`}
                     variant={isCurrent || (isMonitor && auditRun.publishedWorkbooks > 0) ? "default" : "outline"}
                     disabled={!isActive && !isCurrent}
                   >
@@ -200,36 +204,36 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       </div>
 
       {/* AIC Workflow Summary */}
-      <Card className="mt-8">
+      <Card className="mt-8 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
-          <CardTitle>AIC Workflow Summary</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-white">AIC Workflow Summary</CardTitle>
+          <CardDescription className="text-white/60">
             Your responsibilities in the audit lifecycle
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center gap-4">
-              <div className="w-32 font-medium">Stages 1-4</div>
-              <div className="flex-1 text-sm text-muted-foreground">
+              <div className="w-32 font-medium text-white">Stages 1-4</div>
+              <div className="flex-1 text-sm text-white/50">
                 Setup: Gap analysis, sampling, attribute extraction, workbook generation
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-32 font-medium">Stage 4</div>
-              <div className="flex-1 text-sm text-muted-foreground">
-                <span className="font-medium text-amber-600">Publish</span> workbooks to assigned auditors
+              <div className="w-32 font-medium text-white">Stage 4</div>
+              <div className="flex-1 text-sm text-white/50">
+                <span className="font-medium text-crowe-amber">Publish</span> workbooks to assigned auditors
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-32 font-medium">Monitor</div>
-              <div className="flex-1 text-sm text-muted-foreground">
+              <div className="w-32 font-medium text-white">Monitor</div>
+              <div className="flex-1 text-sm text-white/50">
                 <span className="font-medium text-crowe-teal">Live tracking</span> of auditor completion (5-second refresh)
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-32 font-medium">Consolidation</div>
-              <div className="flex-1 text-sm text-muted-foreground">
+              <div className="w-32 font-medium text-white">Consolidation</div>
+              <div className="flex-1 text-sm text-white/50">
                 Aggregate submitted results and generate final report
               </div>
             </div>

@@ -351,12 +351,12 @@ export default function Stage5Page() {
   const animatedNACount = useCountUp(testingProgress.naCount, { duration: 0.8, delay: 0.4 });
 
   return (
-    <div className="p-8">
+    <div className="p-8 min-h-screen bg-crowe-indigo-dark">
       {/* Header */}
       <FadeInUp className="mb-8">
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -371,9 +371,9 @@ export default function Stage5Page() {
               >
                 <Badge className="bg-teal-100 text-teal-700">Stage 5</Badge>
               </motion.div>
-              <h1 className="text-3xl font-bold tracking-tight">Testing</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-white">Testing</h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Execute testing workbook - Rows: Test Questions, Columns: Customers
             </p>
           </div>
@@ -415,12 +415,12 @@ export default function Stage5Page() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg"
+            className="mb-6 p-4 bg-yellow-500/10 backdrop-blur-xl border border-yellow-500/30 rounded-lg"
           >
-            <h3 className="font-medium text-yellow-700 dark:text-yellow-300 mb-2">
+            <h3 className="font-medium text-yellow-300 mb-2">
               Prerequisites Required
             </h3>
-            <ul className="text-sm text-yellow-600 dark:text-yellow-400 space-y-1">
+            <ul className="text-sm text-yellow-400 space-y-1">
               <li>• Complete Stage 4 (Generate Workbooks) or click &quot;Load Demo Data&quot;</li>
             </ul>
           </motion.div>
@@ -435,16 +435,16 @@ export default function Stage5Page() {
         animate="visible"
       >
         <motion.div variants={staggerItem}>
-          <Card>
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+              <CardTitle className="text-sm font-medium text-white/50">
                 Progress
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{completionPercentage.toFixed(0)}%</div>
+              <div className="text-2xl font-bold text-white">{completionPercentage.toFixed(0)}%</div>
               <AnimatedProgress value={completionPercentage} className="mt-2" showShimmer={isSaving} />
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-white/50 mt-1">
                 {testingProgress.completedTests} / {testingProgress.totalTests} tests
               </p>
             </CardContent>
@@ -452,15 +452,15 @@ export default function Stage5Page() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className={testingProgress.passCount > 0 ? "border-green-200" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.passCount > 0 ? "border-green-500/50" : ""}`}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-green-600">Pass</CardTitle>
+              <CardTitle className="text-sm font-medium text-green-400">Pass</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600 tabular-nums">
+              <div className="text-2xl font-bold text-green-400 tabular-nums">
                 {animatedPassCount}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-white/50 mt-1">
                 {testingProgress.totalTests > 0
                   ? (((testingProgress.passCount + testingProgress.passWithObsCount) / testingProgress.totalTests) * 100).toFixed(1)
                   : 0}% pass rate
@@ -470,15 +470,15 @@ export default function Stage5Page() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className={testingProgress.fail1RegulatoryCount > 0 ? "border-red-200" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.fail1RegulatoryCount > 0 ? "border-red-500/50" : ""}`}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-red-600">Fail</CardTitle>
+              <CardTitle className="text-sm font-medium text-red-400">Fail</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600 tabular-nums">
+              <div className="text-2xl font-bold text-red-400 tabular-nums">
                 {animatedFailCount}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-white/50 mt-1">
                 {testingProgress.fail1RegulatoryCount + testingProgress.fail2ProcedureCount} exception(s)
               </p>
             </CardContent>
@@ -486,13 +486,13 @@ export default function Stage5Page() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card>
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">N/A</CardTitle>
+              <CardTitle className="text-sm font-medium text-white/50">N/A</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tabular-nums">{animatedNACount}</div>
-              <p className="text-xs text-muted-foreground mt-1">Not applicable</p>
+              <div className="text-2xl font-bold tabular-nums text-white">{animatedNACount}</div>
+              <p className="text-xs text-white/50 mt-1">Not applicable</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -505,15 +505,15 @@ export default function Stage5Page() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card className="mb-6">
+          <Card className="mb-6 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-white">
                     <ClipboardCheck className="h-5 w-5" />
                     Testing Workbook
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-white/60">
                     Rows: Test Questions | Columns: Customer Results (Result + Observation)
                   </CardDescription>
                 </div>
@@ -555,8 +555,8 @@ export default function Stage5Page() {
 
               {/* Customer Legend */}
               {activeWorkbook && (
-                <div className="mb-4 p-3 bg-muted/50 rounded-lg">
-                  <div className="text-xs font-medium text-muted-foreground mb-2">Assigned Customers:</div>
+                <div className="mb-4 p-3 bg-white/5 rounded-lg">
+                  <div className="text-xs font-medium text-white/50 mb-2">Assigned Customers:</div>
                   <div className="flex flex-wrap gap-2">
                     {activeWorkbook.assignedCustomers.map((customer, idx) => (
                       <Badge key={customer.customerId} variant="outline" className="text-xs">
@@ -610,9 +610,9 @@ export default function Stage5Page() {
 
               {/* Empty State */}
               {(!activeWorkbook || tableData.length === 0) && (
-                <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+                <div className="flex flex-col items-center justify-center py-16 text-white/50">
                   <ClipboardCheck className="h-16 w-16 mb-4 opacity-30" />
-                  <h3 className="font-medium mb-2">No Testing Data</h3>
+                  <h3 className="font-medium mb-2 text-white">No Testing Data</h3>
                   <p className="text-sm text-center max-w-md">
                     Complete Stage 4 to generate workbooks, or click &quot;Load Demo Data&quot;.
                   </p>
@@ -631,15 +631,15 @@ export default function Stage5Page() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
           >
-            <Card className="mb-6 border-yellow-200">
+            <Card className="mb-6 bg-yellow-500/10 backdrop-blur-xl border border-yellow-500/30 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-yellow-600" />
-                  <CardTitle className="text-yellow-700">Completion Required</CardTitle>
+                  <AlertCircle className="h-5 w-5 text-yellow-400" />
+                  <CardTitle className="text-yellow-300">Completion Required</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-yellow-600">
+                <p className="text-sm text-yellow-200">
                   At least 95% of tests must be completed to proceed to consolidation.
                   Currently at {completionPercentage.toFixed(1)}%.
                 </p>

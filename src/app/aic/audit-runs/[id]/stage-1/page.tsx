@@ -121,7 +121,7 @@ export default function AicStage1Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -134,11 +134,11 @@ export default function AicStage1Page() {
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
               >
-                <Badge className="bg-blue-100 text-blue-700">Stage 1</Badge>
+                <Badge className="bg-blue-500/20 text-blue-400">Stage 1</Badge>
               </motion.div>
-              <h1 className="text-3xl font-bold tracking-tight">Gap Assessment</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-white">Gap Assessment</h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Run sequential gap assessments using the AI assistant
             </p>
           </div>
@@ -146,7 +146,7 @@ export default function AicStage1Page() {
             whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
             whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
           >
-            <Button variant="outline" onClick={handleLoadDemoData}>
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
@@ -162,24 +162,24 @@ export default function AicStage1Page() {
         className="grid gap-4 md:grid-cols-3 mb-8"
       >
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
-          <Card className={assessment1Result ? "border-green-500" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment1Result ? "border-green-500" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    assessment1Result ? "bg-green-100 text-green-600" : "bg-amber-100 text-amber-600"
+                    assessment1Result ? "bg-green-500/20 text-green-400" : "bg-amber-500/20 text-amber-400"
                   }`}
                 >
                   {assessment1Result ? <CheckCircle2 className="h-5 w-5" /> : <span className="font-bold">1</span>}
                 </motion.div>
                 <div>
-                  <CardTitle className="text-base">Gap Assessment 1</CardTitle>
-                  <CardDescription>Old GFC vs Current GFC</CardDescription>
+                  <CardTitle className="text-base text-white">Gap Assessment 1</CardTitle>
+                  <CardDescription className="text-white/60">Old GFC vs Current GFC</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={assessment1Result ? "default" : "outline"}>
+              <Badge variant={assessment1Result ? "default" : "outline"} className={!assessment1Result ? "border-white/30 text-white/70" : ""}>
                 {assessment1Result ? "Completed" : "Pending"}
               </Badge>
             </CardContent>
@@ -187,24 +187,24 @@ export default function AicStage1Page() {
         </motion.div>
 
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
-          <Card className={assessment2Result ? "border-green-500" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment2Result ? "border-green-500" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    assessment2Result ? "bg-green-100 text-green-600" : "bg-blue-100 text-blue-600"
+                    assessment2Result ? "bg-green-500/20 text-green-400" : "bg-blue-500/20 text-blue-400"
                   }`}
                 >
                   {assessment2Result ? <CheckCircle2 className="h-5 w-5" /> : <span className="font-bold">2</span>}
                 </motion.div>
                 <div>
-                  <CardTitle className="text-base">Gap Assessment 2</CardTitle>
-                  <CardDescription>Current GFC vs FLU Procedures</CardDescription>
+                  <CardTitle className="text-base text-white">Gap Assessment 2</CardTitle>
+                  <CardDescription className="text-white/60">Current GFC vs FLU Procedures</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={assessment2Result ? "default" : "outline"}>
+              <Badge variant={assessment2Result ? "default" : "outline"} className={!assessment2Result ? "border-white/30 text-white/70" : ""}>
                 {assessment2Result ? "Completed" : "Pending"}
               </Badge>
             </CardContent>
@@ -212,24 +212,24 @@ export default function AicStage1Page() {
         </motion.div>
 
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
-          <Card className={canProceed ? "border-green-500" : ""}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${canProceed ? "border-green-500" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    canProceed ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"
+                    canProceed ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/40"
                   }`}
                 >
                   <CheckCircle2 className="h-5 w-5" />
                 </motion.div>
                 <div>
-                  <CardTitle className="text-base">Ready for Sampling</CardTitle>
-                  <CardDescription>Review & proceed</CardDescription>
+                  <CardTitle className="text-base text-white">Ready for Sampling</CardTitle>
+                  <CardDescription className="text-white/60">Review & proceed</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={canProceed ? "default" : "outline"}>
+              <Badge variant={canProceed ? "default" : "outline"} className={!canProceed ? "border-white/30 text-white/70" : ""}>
                 {canProceed ? "Ready" : "Pending"}
               </Badge>
             </CardContent>
@@ -287,7 +287,7 @@ export default function AicStage1Page() {
         className="flex justify-between"
       >
         <Link href={`/aic/audit-runs/${id}`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Overview
           </Button>

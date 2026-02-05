@@ -337,7 +337,7 @@ export default function Stage3Page() {
   ];
 
   return (
-    <div className="p-8 h-[calc(100vh-4rem)] flex flex-col">
+    <div className="p-8 h-[calc(100vh-4rem)] flex flex-col min-h-screen bg-crowe-indigo-dark">
       {/* Header - Animated */}
       <motion.div
         className="mb-6 flex-shrink-0"
@@ -347,7 +347,7 @@ export default function Stage3Page() {
       >
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -356,11 +356,11 @@ export default function Stage3Page() {
           <div>
             <div className="flex items-center gap-3">
               <Badge className="bg-amber-100 text-amber-700">Stage 3</Badge>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <h1 className="text-3xl font-bold tracking-tight text-white">
                 FLU Procedure Extraction
               </h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Extract CIP, CDD, and EDD testing attributes from Front Line Unit procedures
             </p>
           </div>
@@ -380,7 +380,7 @@ export default function Stage3Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={step.isComplete ? "border-green-500" : ""}>
+            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -397,8 +397,8 @@ export default function Stage3Page() {
                     )}
                   </motion.div>
                   <div>
-                    <CardTitle className="text-base">{step.title}</CardTitle>
-                    <CardDescription>{step.description}</CardDescription>
+                    <CardTitle className="text-base text-white">{step.title}</CardTitle>
+                    <CardDescription className="text-white/60">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -478,11 +478,11 @@ export default function Stage3Page() {
                     onExportExcel={handleExportExcel}
                   />
                 ) : (
-                  <Card className="h-full flex items-center justify-center">
+                  <Card className="h-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                     <div className="text-center">
-                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-30" />
-                      <h3 className="font-medium mb-2">No Extraction Results</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-white/30" />
+                      <h3 className="font-medium mb-2 text-white">No Extraction Results</h3>
+                      <p className="text-sm text-white/50">
                         Upload FLU procedures and run extraction to view results
                       </p>
                     </div>

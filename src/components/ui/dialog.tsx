@@ -51,7 +51,7 @@ function DialogOverlay({
         animate="visible"
         exit="exit"
         className={cn(
-          "fixed inset-0 z-50 bg-black/50",
+          "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm",
           className
         )}
       />
@@ -84,7 +84,12 @@ function DialogContent({
             animate="visible"
             exit="exit"
             className={cn(
-              "bg-background fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg outline-none sm:max-w-lg",
+              // Liquid glass dialog
+              "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6 outline-none sm:max-w-lg",
+              "bg-white/10 backdrop-blur-2xl rounded-2xl",
+              "border border-white/20",
+              "shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]",
+              "text-white",
               className
             )}
           >
@@ -92,7 +97,7 @@ function DialogContent({
             {showCloseButton && (
               <DialogPrimitive.Close
                 data-slot="dialog-close"
-                className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+                className="absolute top-4 right-4 rounded-lg p-1 text-white/60 transition-all hover:text-white hover:bg-white/10 focus:ring-2 focus:ring-white/30 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
               >
                 <XIcon />
                 <span className="sr-only">Close</span>
@@ -162,7 +167,7 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-white/60 text-sm", className)}
       {...props}
     />
   )

@@ -213,7 +213,7 @@ export default function AicMonitorPage() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -221,8 +221,8 @@ export default function AicMonitorPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-crowe-teal/15 text-crowe-teal-dark">Live Monitor</Badge>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <Badge className="bg-crowe-teal/20 text-crowe-teal">Live Monitor</Badge>
+              <h1 className="text-3xl font-bold tracking-tight text-white">
                 Auditor Progress Tracking
               </h1>
               {isPolling && isPublished && (
@@ -237,17 +237,17 @@ export default function AicMonitorPage() {
                 </motion.div>
               )}
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Real-time tracking of auditor workbook completion (5-second refresh)
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={handleLoadDemoData}>
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
             {isPublished && (
-              <Button variant="outline" onClick={handleSimulateProgress}>
+              <Button variant="outline" onClick={handleSimulateProgress} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Simulate Progress
               </Button>
@@ -259,17 +259,17 @@ export default function AicMonitorPage() {
       {/* Status Banner */}
       {!isPublished && (
         <motion.div
-          className="mb-6 p-4 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg"
+          className="mb-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="flex items-center gap-3">
-            <AlertCircle className="h-5 w-5 text-amber-600" />
+            <AlertCircle className="h-5 w-5 text-amber-400" />
             <div>
-              <p className="font-medium text-amber-700 dark:text-amber-300">
+              <p className="font-medium text-amber-400">
                 Workbooks Not Published
               </p>
-              <p className="text-sm text-amber-600 dark:text-amber-400">
+              <p className="text-sm text-amber-400/80">
                 Publish workbooks in Stage 4 to enable live monitoring.
               </p>
             </div>
@@ -285,13 +285,13 @@ export default function AicMonitorPage() {
         variants={staggerContainer}
       >
         <motion.div variants={staggerItem}>
-          <Card>
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription>Total Auditors</CardDescription>
-              <CardTitle className="text-3xl">{totalAuditors}</CardTitle>
+              <CardDescription className="text-white/60">Total Auditors</CardDescription>
+              <CardTitle className="text-3xl text-white">{totalAuditors}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-white/50">
                 <User className="h-4 w-4" />
                 Assigned to workbooks
               </div>
@@ -300,10 +300,10 @@ export default function AicMonitorPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card>
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription>Submitted</CardDescription>
-              <CardTitle className="text-3xl">{submittedCount} / {totalAuditors}</CardTitle>
+              <CardDescription className="text-white/60">Submitted</CardDescription>
+              <CardTitle className="text-3xl text-white">{submittedCount} / {totalAuditors}</CardTitle>
             </CardHeader>
             <CardContent>
               <Progress
@@ -315,10 +315,10 @@ export default function AicMonitorPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card>
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription>Average Completion</CardDescription>
-              <CardTitle className="text-3xl">{averageCompletion}%</CardTitle>
+              <CardDescription className="text-white/60">Average Completion</CardDescription>
+              <CardTitle className="text-3xl text-white">{averageCompletion}%</CardTitle>
             </CardHeader>
             <CardContent>
               <Progress value={averageCompletion} className="h-2" />
@@ -327,15 +327,15 @@ export default function AicMonitorPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card>
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription>Last Updated</CardDescription>
-              <CardTitle className="text-lg">
+              <CardDescription className="text-white/60">Last Updated</CardDescription>
+              <CardTitle className="text-lg text-white">
                 {lastRefresh ? lastRefresh.toLocaleTimeString() : '--:--:--'}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-white/50">
                 <Clock className="h-4 w-4" />
                 {isPolling ? 'Auto-refresh every 5s' : 'Paused'}
               </div>
@@ -351,12 +351,12 @@ export default function AicMonitorPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Card>
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Auditor Progress</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-white">Auditor Progress</CardTitle>
+                <CardDescription className="text-white/60">
                   Individual completion status for each auditor
                 </CardDescription>
               </div>
@@ -364,10 +364,11 @@ export default function AicMonitorPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsPolling(!isPolling)}
+                className="text-white hover:bg-white/10"
               >
                 {isPolling ? (
                   <>
-                    <Activity className="h-4 w-4 mr-2 text-green-500" />
+                    <Activity className="h-4 w-4 mr-2 text-green-400" />
                     Pause
                   </>
                 ) : (
@@ -382,10 +383,10 @@ export default function AicMonitorPage() {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                <Loader2 className="h-8 w-8 animate-spin text-white/50" />
               </div>
             ) : progress.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12 text-white/50">
                 <User className="h-12 w-12 mx-auto mb-4 opacity-30" />
                 <p>No auditor workbooks found</p>
                 <p className="text-sm">Generate and publish workbooks in Stage 4</p>
@@ -404,20 +405,20 @@ export default function AicMonitorPage() {
                       variants={staggerItem}
                       layout
                     >
-                      <Card className={`transition-all ${
+                      <Card className={`transition-all bg-white/5 border border-white/10 ${
                         auditor.status === 'submitted'
-                          ? 'border-green-500 bg-green-50/50 dark:bg-green-950/20'
+                          ? 'border-green-500 bg-green-500/10'
                           : ''
                       }`}>
                         <CardHeader className="pb-2">
                           <div className="flex items-start justify-between">
                             <div>
-                              <CardTitle className="text-lg">{auditor.auditorName}</CardTitle>
-                              <CardDescription>{auditor.auditorEmail}</CardDescription>
+                              <CardTitle className="text-lg text-white">{auditor.auditorName}</CardTitle>
+                              <CardDescription className="text-white/60">{auditor.auditorEmail}</CardDescription>
                             </div>
                             <Badge
                               variant={auditor.status === 'submitted' ? 'default' : 'outline'}
-                              className={auditor.status === 'submitted' ? 'bg-green-600' : ''}
+                              className={auditor.status === 'submitted' ? 'bg-green-600' : 'border-white/30 text-white/70'}
                             >
                               {auditor.status === 'submitted' ? (
                                 <>
@@ -436,8 +437,8 @@ export default function AicMonitorPage() {
                           {/* Progress Bar */}
                           <div>
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-muted-foreground">Completion</span>
-                              <span className="font-medium">{auditor.completionPercentage}%</span>
+                              <span className="text-white/50">Completion</span>
+                              <span className="font-medium text-white">{auditor.completionPercentage}%</span>
                             </div>
                             <Progress
                               value={auditor.completionPercentage}
@@ -452,12 +453,12 @@ export default function AicMonitorPage() {
                           </div>
 
                           {/* Stats */}
-                          <div className="flex items-center justify-between text-sm text-muted-foreground">
+                          <div className="flex items-center justify-between text-sm text-white/50">
                             <span>{auditor.totalAttributes} attributes × {auditor.totalCustomers} customers</span>
                           </div>
 
                           {/* Last Activity */}
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-2 text-xs text-white/40">
                             <Clock className="h-3 w-3" />
                             {auditor.submittedAt ? (
                               <span>Submitted {new Date(auditor.submittedAt).toLocaleString()}</span>
@@ -482,7 +483,7 @@ export default function AicMonitorPage() {
       <AnimatePresence>
         {allSubmitted && (
           <motion.div
-            className="mb-8 p-6 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg"
+            className="mb-8 p-6 bg-green-500/10 border border-green-500/30 rounded-lg"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -493,13 +494,13 @@ export default function AicMonitorPage() {
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300, delay: 0.2 }}
               >
-                <CheckCircle2 className="h-12 w-12 text-green-600" />
+                <CheckCircle2 className="h-12 w-12 text-green-400" />
               </motion.div>
               <div>
-                <h3 className="text-lg font-semibold text-green-700 dark:text-green-300">
+                <h3 className="text-lg font-semibold text-green-400">
                   All Workbooks Submitted
                 </h3>
-                <p className="text-green-600 dark:text-green-400">
+                <p className="text-green-400/80">
                   All {totalAuditors} auditors have completed and submitted their workbooks.
                   You can now proceed to consolidation.
                 </p>
@@ -517,7 +518,7 @@ export default function AicMonitorPage() {
         transition={{ delay: 0.4 }}
       >
         <Link href={`/aic/audit-runs/${id}/stage-4`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 4
           </Button>

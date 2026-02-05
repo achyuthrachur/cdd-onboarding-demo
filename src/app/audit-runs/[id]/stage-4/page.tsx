@@ -343,7 +343,7 @@ export default function Stage4Page() {
   ];
 
   return (
-    <div className="p-8 h-[calc(100vh-4rem)] flex flex-col">
+    <div className="p-8 h-[calc(100vh-4rem)] flex flex-col min-h-screen bg-crowe-indigo-dark">
       {/* Header - Animated */}
       <motion.div
         className="mb-6 flex-shrink-0"
@@ -353,7 +353,7 @@ export default function Stage4Page() {
       >
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -362,11 +362,11 @@ export default function Stage4Page() {
           <div>
             <div className="flex items-center gap-3">
               <Badge className="bg-purple-100 text-purple-700">Stage 4</Badge>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <h1 className="text-3xl font-bold tracking-tight text-white">
                 Auditor Workbook Generation
               </h1>
             </div>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-white/50 mt-2">
               Assign samples to auditors and generate per-auditor testing workbooks
             </p>
           </div>
@@ -386,7 +386,7 @@ export default function Stage4Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={step.isComplete ? "border-green-500" : ""}>
+            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -403,8 +403,8 @@ export default function Stage4Page() {
                     )}
                   </motion.div>
                   <div>
-                    <CardTitle className="text-base">{step.title}</CardTitle>
-                    <CardDescription>{step.description}</CardDescription>
+                    <CardTitle className="text-base text-white">{step.title}</CardTitle>
+                    <CardDescription className="text-white/60">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -491,10 +491,10 @@ export default function Stage4Page() {
                 >
                   {/* Sampling Data */}
                   <motion.div variants={staggerItem}>
-                    <Card className="h-full">
+                    <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
-                        <CardTitle className="text-lg">Sampling Data (Stage 2)</CardTitle>
-                        <CardDescription>
+                        <CardTitle className="text-lg text-white">Sampling Data (Stage 2)</CardTitle>
+                        <CardDescription className="text-white/60">
                           Sample records from the locked sampling plan
                         </CardDescription>
                       </CardHeader>
@@ -502,18 +502,18 @@ export default function Stage4Page() {
                         {samples.length > 0 ? (
                           <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">Total Samples:</span>
+                              <span className="text-white/50">Total Samples:</span>
                               <Badge variant="default">{samples.length}</Badge>
                             </div>
                             {samplingResult?.config && (
                               <>
                                 <div className="flex items-center justify-between">
-                                  <span className="text-muted-foreground">Sample Method:</span>
-                                  <span className="capitalize">{samplingResult.config.method}</span>
+                                  <span className="text-white/50">Sample Method:</span>
+                                  <span className="capitalize text-white">{samplingResult.config.method}</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                  <span className="text-muted-foreground">Confidence Level:</span>
-                                  <span>{Math.round((samplingResult.config.confidence || 0.95) * 100)}%</span>
+                                  <span className="text-white/50">Confidence Level:</span>
+                                  <span className="text-white">{Math.round((samplingResult.config.confidence || 0.95) * 100)}%</span>
                                 </div>
                               </>
                             )}
@@ -530,7 +530,7 @@ export default function Stage4Page() {
                             </motion.div>
                           </div>
                         ) : (
-                          <div className="text-center py-8 text-muted-foreground">
+                          <div className="text-center py-8 text-white/50">
                             <Database className="h-12 w-12 mx-auto mb-3 opacity-30" />
                             <p>No sampling data available</p>
                             <p className="text-sm">Complete Stage 2 or load demo data</p>
@@ -542,10 +542,10 @@ export default function Stage4Page() {
 
                   {/* Attributes Data */}
                   <motion.div variants={staggerItem}>
-                    <Card className="h-full">
+                    <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
-                        <CardTitle className="text-lg">Attributes (Stage 3)</CardTitle>
-                        <CardDescription>
+                        <CardTitle className="text-lg text-white">Attributes (Stage 3)</CardTitle>
+                        <CardDescription className="text-white/60">
                           CIP/CDD/EDD testing attributes from FLU procedures
                         </CardDescription>
                       </CardHeader>
@@ -553,11 +553,11 @@ export default function Stage4Page() {
                         {extractedAttributes.length > 0 ? (
                           <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">Total Attributes:</span>
+                              <span className="text-white/50">Total Attributes:</span>
                               <Badge variant="default">{extractedAttributes.length}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">Acceptable Docs:</span>
+                              <span className="text-white/50">Acceptable Docs:</span>
                               <Badge variant="secondary">{acceptableDocs.length}</Badge>
                             </div>
                             <div className="flex gap-2 flex-wrap">
@@ -584,7 +584,7 @@ export default function Stage4Page() {
                             </motion.div>
                           </div>
                         ) : (
-                          <div className="text-center py-8 text-muted-foreground">
+                          <div className="text-center py-8 text-white/50">
                             <FileSpreadsheet className="h-12 w-12 mx-auto mb-3 opacity-30" />
                             <p>No attributes available</p>
                             <p className="text-sm">Complete Stage 3 or load demo data</p>
@@ -632,10 +632,10 @@ export default function Stage4Page() {
               variants={tabContent}
             >
               <TabsContent value="generate" className="h-full m-0">
-                <Card>
+                <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                   <CardHeader>
-                    <CardTitle>Generate Auditor Workbooks</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-white">Generate Auditor Workbooks</CardTitle>
+                    <CardDescription className="text-white/60">
                       Create testing workbooks for each selected auditor
                     </CardDescription>
                   </CardHeader>
@@ -647,39 +647,39 @@ export default function Stage4Page() {
                       animate="visible"
                       variants={staggerContainer}
                     >
-                      <motion.div variants={staggerItem} className="p-4 bg-muted rounded-lg text-center">
-                        <div className="text-2xl font-bold">{samples.length}</div>
-                        <div className="text-sm text-muted-foreground">Samples</div>
+                      <motion.div variants={staggerItem} className="p-4 bg-white/10 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-white">{samples.length}</div>
+                        <div className="text-sm text-white/50">Samples</div>
                       </motion.div>
-                      <motion.div variants={staggerItem} className="p-4 bg-muted rounded-lg text-center">
-                        <div className="text-2xl font-bold">{selectedAuditors.length}</div>
-                        <div className="text-sm text-muted-foreground">Auditors</div>
+                      <motion.div variants={staggerItem} className="p-4 bg-white/10 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-white">{selectedAuditors.length}</div>
+                        <div className="text-sm text-white/50">Auditors</div>
                       </motion.div>
-                      <motion.div variants={staggerItem} className="p-4 bg-muted rounded-lg text-center">
-                        <div className="text-2xl font-bold">{extractedAttributes.length}</div>
-                        <div className="text-sm text-muted-foreground">Attributes</div>
+                      <motion.div variants={staggerItem} className="p-4 bg-white/10 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-white">{extractedAttributes.length}</div>
+                        <div className="text-sm text-white/50">Attributes</div>
                       </motion.div>
                     </motion.div>
 
                     {/* Estimated Output */}
                     <motion.div
-                      className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg"
+                      className="p-4 bg-white/5 border border-white/10 rounded-lg"
                       initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <h4 className="font-medium mb-2">Estimated Output</h4>
-                      <div className="text-sm space-y-1">
+                      <h4 className="font-medium mb-2 text-white">Estimated Output</h4>
+                      <div className="text-sm space-y-1 text-white">
                         <p>
-                          <span className="text-muted-foreground">Samples per auditor: </span>
+                          <span className="text-white/50">Samples per auditor: </span>
                           {Math.floor(samples.length / selectedAuditors.length)} (round-robin)
                         </p>
                         <p>
-                          <span className="text-muted-foreground">Rows per workbook: </span>
+                          <span className="text-white/50">Rows per workbook: </span>
                           ~{Math.floor(samples.length / selectedAuditors.length) * extractedAttributes.length}
                         </p>
                         <p>
-                          <span className="text-muted-foreground">Total test rows: </span>
+                          <span className="text-white/50">Total test rows: </span>
                           {samples.length * extractedAttributes.length}
                         </p>
                       </div>

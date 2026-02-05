@@ -26,21 +26,21 @@ export default function AuditorLayout({
 
   if (!isAuthorized) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-muted-foreground">Checking authorization...</div>
+      <div className="flex h-screen items-center justify-center bg-crowe-indigo-dark">
+        <div className="text-white/60">Checking authorization...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-crowe-indigo-dark">
       <AuditorSidebar />
-      <main className="flex-1 overflow-auto bg-background">
-        {/* Auditor identity banner - warm Crowe styling */}
+      <main className="flex-1 overflow-auto">
+        {/* Auditor identity banner - liquid glass styling */}
         {auditorName && (
-          <div className="bg-crowe-amber/10 dark:bg-crowe-amber/15 border-b border-crowe-amber/20 px-6 py-2">
-            <div className="flex items-center gap-2 text-sm text-tint-900 dark:text-crowe-amber">
-              <span className="font-medium">Logged in as:</span>
+          <div className="bg-white/5 backdrop-blur-md border-b border-white/10 px-6 py-2">
+            <div className="flex items-center gap-2 text-sm text-white/80">
+              <span className="font-medium text-crowe-amber">Logged in as:</span>
               <span>{auditorName}</span>
             </div>
           </div>
