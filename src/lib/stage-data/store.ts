@@ -327,16 +327,16 @@ export function setStageData<K extends keyof StageDataStore>(
   // Notify listeners
   listeners.forEach(listener => listener(key, value));
 
-  // Persist to sessionStorage for cross-page persistence
+  // Persist to localStorage for cross-page persistence
   try {
     if (typeof window !== 'undefined') {
-      sessionStorage.setItem(
+      localStorage.setItem(
         `stageData_${key}`,
         JSON.stringify(value)
       );
     }
   } catch (error) {
-    console.warn('Failed to persist stage data to sessionStorage:', error);
+    console.warn('Failed to persist stage data to localStorage:', error);
   }
 }
 
@@ -353,17 +353,17 @@ export function hasStageData(key: keyof StageDataStore): boolean {
 export function clearStageData(): void {
   stageDataStore = {};
 
-  // Clear from sessionStorage
+  // Clear from localStorage
   try {
     if (typeof window !== 'undefined') {
-      Object.keys(sessionStorage).forEach(key => {
+      Object.keys(localStorage).forEach(key => {
         if (key.startsWith('stageData_')) {
-          sessionStorage.removeItem(key);
+          localStorage.removeItem(key);
         }
       });
     }
   } catch (error) {
-    console.warn('Failed to clear stage data from sessionStorage:', error);
+    console.warn('Failed to clear stage data from localStorage:', error);
   }
 
   // Notify listeners
@@ -401,7 +401,7 @@ export function clearStageDataForStage(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): void
     delete stageDataStore[key];
     try {
       if (typeof window !== 'undefined') {
-        sessionStorage.removeItem(`stageData_${key}`);
+        localStorage.removeItem(`stageData_${key}`);
       }
     } catch (error) {
       console.warn('Failed to clear stage data key:', error);
@@ -410,7 +410,7 @@ export function clearStageDataForStage(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): void
 }
 
 /**
- * Load stage data from sessionStorage (for page reloads)
+ * Load stage data from localStorage (for page reloads)
  */
 export function loadStageDataFromStorage(): void {
   if (typeof window === 'undefined') return;
@@ -434,7 +434,7 @@ export function loadStageDataFromStorage(): void {
     ];
 
     keys.forEach(key => {
-      const stored = sessionStorage.getItem(`stageData_${key}`);
+      const stored = localStorage.getItem(`stageData_${key}`);
       if (stored) {
         try {
           stageDataStore[key] = JSON.parse(stored);
@@ -444,7 +444,7 @@ export function loadStageDataFromStorage(): void {
       }
     });
   } catch (error) {
-    console.warn('Failed to load stage data from sessionStorage:', error);
+    console.warn('Failed to load stage data from localStorage:', error);
   }
 }
 

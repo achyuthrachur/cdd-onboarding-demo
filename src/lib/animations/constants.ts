@@ -6,12 +6,13 @@
  */
 
 // Duration tokens (in seconds for Framer Motion)
+// Slightly slower for more polished, professional feel
 export const duration = {
-  instant: 0.075,
-  fast: 0.15,
-  normal: 0.25,
-  slow: 0.35,
-  slower: 0.5,
+  instant: 0.1,
+  fast: 0.2,
+  normal: 0.35,
+  slow: 0.45,
+  slower: 0.6,
 } as const;
 
 // Easing curves matching the design system
@@ -27,22 +28,24 @@ export const ease = {
 };
 
 // Spring configurations for physics-based animations
+// Tuned for smooth, professional feel
 export const spring = {
   // Snappy response
-  snappy: { type: 'spring' as const, stiffness: 400, damping: 30 },
+  snappy: { type: 'spring' as const, stiffness: 350, damping: 35 },
   // Gentle bounce
-  gentle: { type: 'spring' as const, stiffness: 200, damping: 20 },
+  gentle: { type: 'spring' as const, stiffness: 180, damping: 22 },
   // Bouncy feel
-  bouncy: { type: 'spring' as const, stiffness: 300, damping: 15 },
+  bouncy: { type: 'spring' as const, stiffness: 280, damping: 18 },
   // Smooth, no overshoot
-  smooth: { type: 'spring' as const, stiffness: 100, damping: 20 },
+  smooth: { type: 'spring' as const, stiffness: 90, damping: 22 },
 };
 
 // Stagger delay between children (in seconds)
+// Slightly slower for smoother visual flow
 export const stagger = {
-  fast: 0.05,
-  normal: 0.08,
-  slow: 0.12,
+  fast: 0.07,
+  normal: 0.1,
+  slow: 0.15,
 } as const;
 
 // Common transition presets
