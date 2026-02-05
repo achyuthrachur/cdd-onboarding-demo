@@ -10,6 +10,10 @@ import type {
   AuditorWorkbookRow,
   ExtractedAttribute,
   AuditorWorkbookSummary,
+  PivotedAuditorWorkbook,
+  PivotedWorkbookRow,
+  AssignedCustomer,
+  CustomerTestResult,
 } from "@/lib/stage-data/store";
 import { getAcceptableDocsForAttribute } from "@/lib/stage-data/store";
 
@@ -251,6 +255,236 @@ export function getAssignmentSummary(
   return {
     totalSamples: auditorBreakdown.reduce((sum, a) => sum + a.sampleCount, 0),
     totalRows: auditorBreakdown.reduce((sum, a) => sum + a.rowCount, 0),
+    auditorBreakdown,
+  };
+}
+
+// ============================================
+// PIVOTED WORKBOOK GENERATION (NEW)
+// Rows = Attributes/Questions
+// Columns = Customer results (Result + Observation per customer)
+// ============================================
+
+/**
+ * Convert sample data to AssignedCustomer format
+ */
+function sampleToAssignedCustomer(sample: Record<string, unknown>, index: number): AssignedCustomer {
+  return {
+    customerId: String(sample.GCI || sample.Case_ID || sample.caseId || `CASE-${index + 1}`),
+    customerName: String(sample.Legal_Name || sample.legalName || sample["Legal Name"] || ""),
+    jurisdiction: String(sample.Jurisdiction || sample.jurisdiction || ""),
+    irr: String(sample.IRR || sample.irr || ""),
+    drr: String(sample.DRR || sample.drr || ""),
+    partyType: String(sample.Party_Type || sample.partyType || sample["Party Type"] || ""),
+    kycDate: String(sample.KYC_Date || sample.kycDate || sample["KYC Date"] || ""),
+    primaryFlu: String(sample.Primary_FLU || sample.primaryFlu || sample["Primary FLU"] || ""),
+    samplingIndex: index + 1,
+  };
+}
+
+/**
+ * Generate pivoted workbook rows for a single auditor
+ * Each row = one attribute, with customer results as columns
+ */
+export function generatePivotedWorkbookRows(
+  assignedCustomers: AssignedCustomer[],
+  attributes: ExtractedAttribute[]
+): PivotedWorkbookRow[] {
+  const rows: PivotedWorkbookRow[] = [];
+
+  // For each attribute, create one row with results for all assigned customers
+  attributes.forEach((attr) => {
+    const customerResults: Record<string, CustomerTestResult> = {};
+
+    // Initialize empty result for each customer
+    assignedCustomers.forEach((customer) => {
+      // Check if this attribute applies to this customer based on risk scope
+      const isHighRisk = customer.irr.toLowerCase().includes("high") ||
+                         customer.irr.toLowerCase().includes("enhanced");
+
+      // Determine if attribute applies
+      let applies = true;
+      if (attr.RiskScope === "EDD" && !isHighRisk) {
+        applies = false;
+      }
+
+      if (applies) {
+        customerResults[customer.customerId] = {
+          customerId: customer.customerId,
+          customerName: customer.customerName,
+          result: "",
+          observation: "",
+        };
+      }
+    });
+
+    // Only add row if at least one customer needs this test
+    if (Object.keys(customerResults).length > 0) {
+      const row: PivotedWorkbookRow = {
+        id: uuidv4(),
+        attributeId: attr.Attribute_ID,
+        attributeCategory: attr.Category,
+        questionText: attr.Question_Text,
+        attributeName: attr.Attribute_Name,
+        sourceFile: attr.Source_File,
+        source: attr.Source,
+        sourcePage: attr.Source_Page,
+        group: attr.Group,
+        customerResults,
+      };
+
+      rows.push(row);
+    }
+  });
+
+  return rows;
+}
+
+/**
+ * Calculate summary for pivoted workbook
+ */
+export function calculatePivotedWorkbookSummary(rows: PivotedWorkbookRow[]): AuditorWorkbookSummary {
+  let totalCells = 0;
+  let passCount = 0;
+  let passWithObsCount = 0;
+  let fail1RegulatoryCount = 0;
+  let fail2ProcedureCount = 0;
+  let questionToLOBCount = 0;
+  let naCount = 0;
+  let emptyCount = 0;
+
+  rows.forEach((row) => {
+    Object.values(row.customerResults).forEach((result) => {
+      totalCells++;
+      switch (result.result) {
+        case "Pass":
+          passCount++;
+          break;
+        case "Pass w/Observation":
+          passWithObsCount++;
+          break;
+        case "Fail 1 - Regulatory":
+          fail1RegulatoryCount++;
+          break;
+        case "Fail 2 - Procedure":
+          fail2ProcedureCount++;
+          break;
+        case "Question to LOB":
+          questionToLOBCount++;
+          break;
+        case "N/A":
+          naCount++;
+          break;
+        default:
+          emptyCount++;
+      }
+    });
+  });
+
+  const completedCells = totalCells - emptyCount;
+  const completionPercentage = totalCells > 0 ? Math.round((completedCells / totalCells) * 100) : 0;
+
+  return {
+    totalRows: totalCells,
+    completedRows: completedCells,
+    passCount,
+    passWithObsCount,
+    fail1RegulatoryCount,
+    fail2ProcedureCount,
+    questionToLOBCount,
+    naCount,
+    emptyCount,
+    completionPercentage,
+  };
+}
+
+/**
+ * Generate pivoted auditor workbooks
+ * Structure: Rows = Attributes, Columns = Customer results
+ */
+export function generatePivotedAuditorWorkbooks(
+  samples: Record<string, unknown>[],
+  attributes: ExtractedAttribute[],
+  auditors: Auditor[],
+  config: AssignmentConfig = { strategy: "round-robin" }
+): PivotedAuditorWorkbook[] {
+  // Assign samples to auditors (same logic as before)
+  const assignments = assignSamplesToAuditors(samples, auditors, config);
+
+  // Generate pivoted workbooks for each auditor
+  const workbooks: PivotedAuditorWorkbook[] = auditors.map((auditor) => {
+    const assignedSamples = assignments.get(auditor.id) || [];
+
+    // Convert samples to AssignedCustomer format
+    const assignedCustomers = assignedSamples.map((sample, index) =>
+      sampleToAssignedCustomer(sample, index)
+    );
+
+    // Generate pivoted rows (one per attribute)
+    const rows = generatePivotedWorkbookRows(assignedCustomers, attributes);
+    const summary = calculatePivotedWorkbookSummary(rows);
+
+    // Build attribute list for reference
+    const attributeList = attributes.map((attr) => ({
+      attributeId: attr.Attribute_ID,
+      attributeName: attr.Attribute_Name,
+      attributeCategory: attr.Category,
+      questionText: attr.Question_Text,
+    }));
+
+    return {
+      id: uuidv4(),
+      auditorId: auditor.id,
+      auditorName: auditor.name,
+      auditorEmail: auditor.email,
+      assignedCustomers,
+      rows,
+      attributes: attributeList,
+      status: "draft" as const,
+      summary,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+  });
+
+  return workbooks;
+}
+
+/**
+ * Get pivoted assignment summary
+ */
+export function getPivotedAssignmentSummary(
+  workbooks: PivotedAuditorWorkbook[]
+): {
+  totalCustomers: number;
+  totalAttributes: number;
+  totalTestCells: number;
+  auditorBreakdown: Array<{
+    auditorId: string;
+    auditorName: string;
+    customerCount: number;
+    attributeCount: number;
+    testCellCount: number;
+  }>;
+} {
+  const auditorBreakdown = workbooks.map((wb) => {
+    const testCellCount = wb.rows.reduce(
+      (sum, row) => sum + Object.keys(row.customerResults).length,
+      0
+    );
+    return {
+      auditorId: wb.auditorId,
+      auditorName: wb.auditorName,
+      customerCount: wb.assignedCustomers.length,
+      attributeCount: wb.rows.length,
+      testCellCount,
+    };
+  });
+
+  return {
+    totalCustomers: auditorBreakdown.reduce((sum, a) => sum + a.customerCount, 0),
+    totalAttributes: workbooks[0]?.rows.length || 0,
+    totalTestCells: auditorBreakdown.reduce((sum, a) => sum + a.testCellCount, 0),
     auditorBreakdown,
   };
 }

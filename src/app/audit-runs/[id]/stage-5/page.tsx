@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AnimatedProgress } from "@/components/ui/progress";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,20 +18,16 @@ import {
   Database,
   AlertCircle,
   Loader2,
+  User,
 } from "lucide-react";
 import {
   motion,
   AnimatePresence,
   FadeInUp,
-  StaggerContainer,
-  StaggerItem,
-  Presence,
   useCountUp,
   useReducedMotion,
   staggerContainer,
   staggerItem,
-  fadeInUp,
-  scaleIn,
 } from "@/lib/animations";
 import { HotTable, HotTableClass } from "@handsontable/react";
 import { registerAllModules } from "handsontable/registry";
@@ -41,35 +38,26 @@ import * as XLSX from "xlsx";
 import {
   loadFallbackDataForStage,
   getStageData,
-  hasStageData,
   setStageData,
-  TestResult,
+  PivotedAuditorWorkbook,
+  PivotedWorkbookRow,
+  AssignedCustomer,
 } from "@/lib/stage-data";
 import { RESULT_OPTIONS, STANDARD_OBSERVATIONS } from "@/lib/workbook/builder";
 
 // Register Handsontable modules
 registerAllModules();
 
-interface TestRow {
-  id: string;
-  sampleItemId: string;
-  entityName: string;
-  attributeId: string;
-  attributeName: string;
-  questionText: string;
-  result: "Pass" | "Fail" | "N/A" | "";
-  observation: string;
-  evidenceReference: string;
-  auditorNotes: string;
-}
+// Result options for dropdown
+const RESULT_DROPDOWN_OPTIONS = ['', 'Pass', 'Pass w/Observation', 'Fail 1 - Regulatory', 'Fail 2 - Procedure', 'Question to LOB', 'N/A'];
 
 export default function Stage5Page() {
   const params = useParams();
   const id = params.id as string;
   const hotRef = useRef<HotTableClass>(null);
 
-  const [hasWorkbook, setHasWorkbook] = useState(false);
-  const [testRows, setTestRows] = useState<TestRow[]>([]);
+  const [pivotedWorkbooks, setPivotedWorkbooks] = useState<PivotedAuditorWorkbook[]>([]);
+  const [activeAuditorId, setActiveAuditorId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [testingProgress, setTestingProgress] = useState({
     totalTests: 0,
@@ -82,185 +70,285 @@ export default function Stage5Page() {
     naCount: 0,
   });
 
-  // Check for prerequisite data and load test rows
-  useEffect(() => {
-    const workbookData = getStageData('workbookState');
-    const generatedWorkbooks = getStageData('generatedWorkbooks');
-    setHasWorkbook(!!(workbookData || (generatedWorkbooks && generatedWorkbooks.length > 0)));
+  const shouldReduceMotion = useReducedMotion();
 
-    // Load existing test results
-    const storedResults = getStageData('testResults');
-    if (storedResults && storedResults.length > 0) {
-      // Convert TestResult to TestRow format
-      const rows = convertResultsToRows(storedResults);
-      setTestRows(rows);
-      updateProgress(rows);
-    } else if (workbookData?.rows) {
-      // Use workbook rows as starting point
-      setTestRows(workbookData.rows.map((row: TestRow) => ({
-        ...row,
-        result: row.result || '',
-        observation: row.observation || '',
-        evidenceReference: row.evidenceReference || '',
-        auditorNotes: row.auditorNotes || '',
-      })));
-      setTestingProgress({
-        totalTests: workbookData.rows.length,
-        completedTests: 0,
-        passCount: 0,
-        passWithObsCount: 0,
-        fail1RegulatoryCount: 0,
-        fail2ProcedureCount: 0,
-        questionToLOBCount: 0,
-        naCount: 0,
-      });
+  // Load pivoted workbooks on mount
+  useEffect(() => {
+    const storedPivotedWorkbooks = getStageData("pivotedWorkbooks");
+    if (storedPivotedWorkbooks && storedPivotedWorkbooks.length > 0) {
+      setPivotedWorkbooks(storedPivotedWorkbooks);
+      setActiveAuditorId(storedPivotedWorkbooks[0].auditorId);
+      updateProgressFromWorkbooks(storedPivotedWorkbooks);
     }
   }, []);
 
-  const convertResultsToRows = (results: TestResult[]): TestRow[] => {
-    const workbookData = getStageData('workbookState');
-    if (!workbookData?.rows) return [];
+  // Get active workbook
+  const activeWorkbook = useMemo(() => {
+    if (!activeAuditorId) return pivotedWorkbooks[0] || null;
+    return pivotedWorkbooks.find(wb => wb.auditorId === activeAuditorId) || null;
+  }, [pivotedWorkbooks, activeAuditorId]);
 
-    return workbookData.rows.map((row: TestRow, index: number) => {
-      const result = results.find(r => r.sampleItemId === row.sampleItemId && r.attributeId === row.attributeId);
-      return {
-        ...row,
-        result: result?.result || '',
-        observation: result?.observation || '',
-        evidenceReference: result?.evidenceReference || '',
-        auditorNotes: result?.auditorNotes || '',
-      };
+  // Build Handsontable columns dynamically based on assigned customers
+  const { columns, colHeaders } = useMemo(() => {
+    if (!activeWorkbook) {
+      return { columns: [], colHeaders: [] };
+    }
+
+    const cols: Handsontable.ColumnSettings[] = [
+      { data: 0, readOnly: true, width: 80 },   // Attr ID
+      { data: 1, readOnly: true, width: 60 },   // Category
+      { data: 2, readOnly: true, width: 300 },  // Question Text
+    ];
+
+    const headers: string[] = ['Attr ID', 'Category', 'Question Text'];
+
+    // Add columns for each customer (Result + Observation)
+    activeWorkbook.assignedCustomers.forEach((customer, idx) => {
+      const baseCol = 3 + (idx * 2);
+
+      // Result column
+      cols.push({
+        data: baseCol,
+        type: 'dropdown',
+        source: RESULT_DROPDOWN_OPTIONS,
+        width: 120,
+      });
+      headers.push(`${customer.customerName.substring(0, 15)}... Result`);
+
+      // Observation column
+      cols.push({
+        data: baseCol + 1,
+        type: 'dropdown',
+        source: ['', ...STANDARD_OBSERVATIONS.map(o => o.text)],
+        width: 150,
+      });
+      headers.push(`Observation`);
+    });
+
+    return { columns: cols, colHeaders: headers };
+  }, [activeWorkbook]);
+
+  // Convert pivoted rows to Handsontable format
+  const tableData = useMemo(() => {
+    if (!activeWorkbook) return [];
+
+    return activeWorkbook.rows.map(row => {
+      const rowData: (string | number)[] = [
+        row.attributeId,
+        row.attributeCategory,
+        row.questionText,
+      ];
+
+      // Add customer results in order
+      activeWorkbook.assignedCustomers.forEach(customer => {
+        const result = row.customerResults[customer.customerId];
+        rowData.push(result?.result || '');
+        rowData.push(result?.observation || '');
+      });
+
+      return rowData;
+    });
+  }, [activeWorkbook]);
+
+  // Update progress from all workbooks
+  const updateProgressFromWorkbooks = (workbooks: PivotedAuditorWorkbook[]) => {
+    let totalTests = 0;
+    let passCount = 0;
+    let passWithObsCount = 0;
+    let fail1RegulatoryCount = 0;
+    let fail2ProcedureCount = 0;
+    let questionToLOBCount = 0;
+    let naCount = 0;
+
+    workbooks.forEach(wb => {
+      wb.rows.forEach(row => {
+        Object.values(row.customerResults).forEach(result => {
+          totalTests++;
+          switch (result.result) {
+            case 'Pass':
+              passCount++;
+              break;
+            case 'Pass w/Observation':
+              passWithObsCount++;
+              break;
+            case 'Fail 1 - Regulatory':
+              fail1RegulatoryCount++;
+              break;
+            case 'Fail 2 - Procedure':
+              fail2ProcedureCount++;
+              break;
+            case 'Question to LOB':
+              questionToLOBCount++;
+              break;
+            case 'N/A':
+              naCount++;
+              break;
+          }
+        });
+      });
+    });
+
+    const completedTests = passCount + passWithObsCount + fail1RegulatoryCount +
+                          fail2ProcedureCount + questionToLOBCount + naCount;
+
+    setTestingProgress({
+      totalTests,
+      completedTests,
+      passCount,
+      passWithObsCount,
+      fail1RegulatoryCount,
+      fail2ProcedureCount,
+      questionToLOBCount,
+      naCount,
+    });
+
+    setStageData('testingProgress', {
+      totalTests,
+      completedTests,
+      passCount,
+      passWithObsCount,
+      fail1RegulatoryCount,
+      fail2ProcedureCount,
+      questionToLOBCount,
+      naCount,
     });
   };
 
-  const updateProgress = (rows: TestRow[]) => {
-    const passCount = rows.filter(r => r.result === 'Pass').length;
-    const failCount = rows.filter(r => r.result === 'Fail').length;
-    const naCount = rows.filter(r => r.result === 'N/A').length;
-    const completedTests = passCount + failCount + naCount;
+  // Handle cell changes
+  const handleDataChange = useCallback((changes: Handsontable.CellChange[] | null) => {
+    if (!changes || !activeWorkbook) return;
 
-    const progress = {
-      totalTests: rows.length,
-      completedTests,
-      passCount,
-      passWithObsCount: 0,
-      fail1RegulatoryCount: failCount, // Map legacy Fail to regulatory for compatibility
-      fail2ProcedureCount: 0,
-      questionToLOBCount: 0,
-      naCount,
-    };
+    const updatedWorkbooks = [...pivotedWorkbooks];
+    const workbookIndex = updatedWorkbooks.findIndex(wb => wb.auditorId === activeWorkbook.auditorId);
+    if (workbookIndex === -1) return;
 
-    setTestingProgress(progress);
-    setStageData('testingProgress', progress);
-  };
+    const workbook = { ...updatedWorkbooks[workbookIndex] };
+    const updatedRows = [...workbook.rows];
 
+    changes.forEach(([rowIndex, colIndex, , newValue]) => {
+      if (typeof colIndex !== 'number' || colIndex < 3) return; // Skip attribute columns
+
+      // Calculate which customer and field this change is for
+      const customerIndex = Math.floor((colIndex - 3) / 2);
+      const isResultField = (colIndex - 3) % 2 === 0;
+      const customer = activeWorkbook.assignedCustomers[customerIndex];
+
+      if (!customer) return;
+
+      const row = { ...updatedRows[rowIndex] };
+      const customerResults = { ...row.customerResults };
+      const customerResult = { ...(customerResults[customer.customerId] || {
+        customerId: customer.customerId,
+        customerName: customer.customerName,
+        result: '',
+        observation: '',
+      }) };
+
+      if (isResultField) {
+        customerResult.result = newValue as PivotedWorkbookRow['customerResults'][string]['result'];
+      } else {
+        customerResult.observation = String(newValue || '');
+      }
+
+      customerResults[customer.customerId] = customerResult;
+      row.customerResults = customerResults;
+      updatedRows[rowIndex] = row;
+    });
+
+    workbook.rows = updatedRows;
+    updatedWorkbooks[workbookIndex] = workbook;
+
+    setPivotedWorkbooks(updatedWorkbooks);
+    updateProgressFromWorkbooks(updatedWorkbooks);
+  }, [activeWorkbook, pivotedWorkbooks]);
+
+  // Load demo data
   const handleLoadDemoData = () => {
     loadFallbackDataForStage(5);
-    const results = getStageData('testResults');
-    if (results) {
-      const rows = convertResultsToRows(results);
-      setTestRows(rows);
-      updateProgress(rows);
+
+    // Also reload pivoted workbooks
+    const storedPivotedWorkbooks = getStageData("pivotedWorkbooks");
+    if (storedPivotedWorkbooks && storedPivotedWorkbooks.length > 0) {
+      // Populate with demo results
+      const populatedWorkbooks = storedPivotedWorkbooks.map((wb: PivotedAuditorWorkbook) => ({
+        ...wb,
+        rows: wb.rows.map((row: PivotedWorkbookRow) => ({
+          ...row,
+          customerResults: Object.fromEntries(
+            Object.entries(row.customerResults).map(([customerId, result]) => {
+              // Random demo results
+              const resultOptions = ['Pass', 'Pass', 'Pass', 'Pass w/Observation', 'N/A', 'Fail 1 - Regulatory'] as const;
+              const randomResult = resultOptions[Math.floor(Math.random() * resultOptions.length)];
+              const needsObs = randomResult === 'Pass w/Observation' || randomResult.startsWith('Fail');
+              const obs = needsObs ? STANDARD_OBSERVATIONS[Math.floor(Math.random() * STANDARD_OBSERVATIONS.length)]?.text || '' : '';
+
+              return [customerId, {
+                ...result,
+                result: randomResult,
+                observation: obs,
+              }];
+            })
+          ),
+        })),
+      }));
+
+      setPivotedWorkbooks(populatedWorkbooks);
+      setStageData("pivotedWorkbooks", populatedWorkbooks);
+      setActiveAuditorId(populatedWorkbooks[0]?.auditorId || null);
+      updateProgressFromWorkbooks(populatedWorkbooks);
     }
-    setHasWorkbook(true);
+
     toast.success("Demo data loaded for Stage 5");
   };
 
-  const handleDataChange = useCallback((changes: Handsontable.CellChange[] | null) => {
-    if (!changes) return;
-
-    const updatedRows = [...testRows];
-    changes.forEach((change) => {
-      const [row, prop, , newVal] = change;
-      if (typeof prop === 'number') {
-        // Map column index to property
-        const propMap = ['sampleItemId', 'entityName', 'attributeId', 'attributeName', 'questionText', 'result', 'observation', 'evidenceReference', 'auditorNotes'];
-        const propName = propMap[prop];
-        if (propName && updatedRows[row]) {
-          (updatedRows[row] as unknown as Record<string, unknown>)[propName] = newVal;
-        }
-      }
-    });
-
-    setTestRows(updatedRows);
-    updateProgress(updatedRows);
-  }, [testRows]);
-
+  // Save results
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Convert rows to TestResult format
-      const results: TestResult[] = testRows
-        .filter(row => row.result !== '')
-        .map(row => ({
-          id: `TEST-${row.id}`,
-          sampleItemId: row.sampleItemId,
-          attributeId: row.attributeId,
-          result: row.result,
-          observation: row.observation,
-          evidenceReference: row.evidenceReference,
-          auditorNotes: row.auditorNotes,
-          testedAt: new Date().toISOString(),
-          testedBy: 'Current User',
-        }));
-
-      setStageData('testResults', results);
-      updateProgress(testRows);
-      toast.success('Test results saved');
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setStageData("pivotedWorkbooks", pivotedWorkbooks);
+      toast.success("Test results saved");
     } catch (error) {
-      console.error('Save failed:', error);
-      toast.error('Failed to save test results');
+      console.error("Save failed:", error);
+      toast.error("Failed to save test results");
     } finally {
       setIsSaving(false);
     }
   };
 
+  // Export to Excel
   const handleExportToExcel = () => {
+    if (!activeWorkbook) return;
+
     const wb = XLSX.utils.book_new();
-    const wsData = [
-      ['Sample ID', 'Entity Name', 'Attribute ID', 'Attribute', 'Question', 'Result', 'Observation', 'Evidence Ref', 'Notes'],
-      ...testRows.map(row => [
-        row.sampleItemId,
-        row.entityName,
-        row.attributeId,
-        row.attributeName,
-        row.questionText,
-        row.result,
-        row.observation,
-        row.evidenceReference,
-        row.auditorNotes,
-      ]),
-    ];
-    const ws = XLSX.utils.aoa_to_sheet(wsData);
-    XLSX.utils.book_append_sheet(wb, ws, 'Testing Workbook');
-    XLSX.writeFile(wb, `Testing_Workbook_${id}.xlsx`);
-    toast.success('Exported to Excel');
+
+    // Build header row
+    const headers = ['Attribute ID', 'Category', 'Question Text'];
+    activeWorkbook.assignedCustomers.forEach(customer => {
+      headers.push(`${customer.customerName} - Result`);
+      headers.push(`${customer.customerName} - Observation`);
+    });
+
+    // Build data rows
+    const data = [headers, ...tableData];
+
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, `${activeWorkbook.auditorName} Workbook`);
+    XLSX.writeFile(wb, `Testing_Workbook_${activeWorkbook.auditorName}_${id}.xlsx`);
+    toast.success("Exported to Excel");
   };
 
+  // Calculate completion percentage
   const completionPercentage = testingProgress.totalTests > 0
     ? (testingProgress.completedTests / testingProgress.totalTests) * 100
     : 0;
 
   const canProceed = completionPercentage >= 95;
-  const shouldReduceMotion = useReducedMotion();
 
-  // Animated count-ups for metrics
-  const animatedPassCount = useCountUp(testingProgress.passCount, { duration: 0.8, delay: 0.2 });
-  const animatedFailCount = useCountUp(testingProgress.fail1RegulatoryCount, { duration: 0.8, delay: 0.3 });
+  // Animated count-ups
+  const animatedPassCount = useCountUp(testingProgress.passCount + testingProgress.passWithObsCount, { duration: 0.8, delay: 0.2 });
+  const animatedFailCount = useCountUp(testingProgress.fail1RegulatoryCount + testingProgress.fail2ProcedureCount, { duration: 0.8, delay: 0.3 });
   const animatedNACount = useCountUp(testingProgress.naCount, { duration: 0.8, delay: 0.4 });
-
-  // Prepare data for Handsontable
-  const tableData = testRows.map(row => [
-    row.sampleItemId,
-    row.entityName,
-    row.attributeId,
-    row.attributeName,
-    row.questionText,
-    row.result,
-    row.observation,
-    row.evidenceReference,
-    row.auditorNotes,
-  ]);
 
   return (
     <div className="p-8">
@@ -283,12 +371,10 @@ export default function Stage5Page() {
               >
                 <Badge className="bg-teal-100 text-teal-700">Stage 5</Badge>
               </motion.div>
-              <h1 className="text-3xl font-bold tracking-tight">
-                Testing
-              </h1>
+              <h1 className="text-3xl font-bold tracking-tight">Testing</h1>
             </div>
             <p className="text-muted-foreground mt-2">
-              Execute testing workbook and record results
+              Execute testing workbook - Rows: Test Questions, Columns: Customers
             </p>
           </div>
           <motion.div
@@ -301,52 +387,45 @@ export default function Stage5Page() {
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
-            <Button variant="outline" onClick={handleExportToExcel} disabled={testRows.length === 0}>
+            <Button variant="outline" onClick={handleExportToExcel} disabled={!activeWorkbook}>
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
-            <Button onClick={handleSave} disabled={isSaving || testRows.length === 0}>
-              <AnimatePresence mode="wait">
-                {isSaving ? (
-                  <motion.span
-                    key="saving"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    className="flex items-center"
-                  >
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Saving...
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="save"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    className="flex items-center"
-                  >
-                    <Save className="h-4 w-4 mr-2" />
-                    Save Results
-                  </motion.span>
-                )}
-              </AnimatePresence>
+            <Button onClick={handleSave} disabled={isSaving || pivotedWorkbooks.length === 0}>
+              {isSaving ? (
+                <span className="flex items-center">
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving...
+                </span>
+              ) : (
+                <span className="flex items-center">
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Results
+                </span>
+              )}
             </Button>
           </motion.div>
         </div>
       </FadeInUp>
 
       {/* Prerequisites Check */}
-      <Presence isVisible={!hasWorkbook && testRows.length === 0}>
-        <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <h3 className="font-medium text-yellow-700 dark:text-yellow-300 mb-2">
-            Prerequisites Required
-          </h3>
-          <ul className="text-sm text-yellow-600 dark:text-yellow-400 space-y-1">
-            <li>• Complete Stage 4 (Workbook Generation) or load demo data</li>
-          </ul>
-        </div>
-      </Presence>
+      <AnimatePresence>
+        {pivotedWorkbooks.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg"
+          >
+            <h3 className="font-medium text-yellow-700 dark:text-yellow-300 mb-2">
+              Prerequisites Required
+            </h3>
+            <ul className="text-sm text-yellow-600 dark:text-yellow-400 space-y-1">
+              <li>• Complete Stage 4 (Generate Workbooks) or click &quot;Load Demo Data&quot;</li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Progress Summary */}
       <motion.div
@@ -363,14 +442,7 @@ export default function Stage5Page() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <motion.div
-                className="text-2xl font-bold"
-                initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                {completionPercentage.toFixed(0)}%
-              </motion.div>
+              <div className="text-2xl font-bold">{completionPercentage.toFixed(0)}%</div>
               <AnimatedProgress value={completionPercentage} className="mt-2" showShimmer={isSaving} />
               <p className="text-xs text-muted-foreground mt-1">
                 {testingProgress.completedTests} / {testingProgress.totalTests} tests
@@ -382,17 +454,15 @@ export default function Stage5Page() {
         <motion.div variants={staggerItem}>
           <Card className={testingProgress.passCount > 0 ? "border-green-200" : ""}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-green-600">
-                Pass
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-green-600">Pass</CardTitle>
             </CardHeader>
             <CardContent>
-              <motion.div className="text-2xl font-bold text-green-600 tabular-nums">
+              <div className="text-2xl font-bold text-green-600 tabular-nums">
                 {animatedPassCount}
-              </motion.div>
+              </div>
               <p className="text-xs text-muted-foreground mt-1">
                 {testingProgress.totalTests > 0
-                  ? ((testingProgress.passCount / testingProgress.totalTests) * 100).toFixed(1)
+                  ? (((testingProgress.passCount + testingProgress.passWithObsCount) / testingProgress.totalTests) * 100).toFixed(1)
                   : 0}% pass rate
               </p>
             </CardContent>
@@ -402,16 +472,14 @@ export default function Stage5Page() {
         <motion.div variants={staggerItem}>
           <Card className={testingProgress.fail1RegulatoryCount > 0 ? "border-red-200" : ""}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-red-600">
-                Fail
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-red-600">Fail</CardTitle>
             </CardHeader>
             <CardContent>
-              <motion.div className="text-2xl font-bold text-red-600 tabular-nums">
+              <div className="text-2xl font-bold text-red-600 tabular-nums">
                 {animatedFailCount}
-              </motion.div>
+              </div>
               <p className="text-xs text-muted-foreground mt-1">
-                {testingProgress.fail1RegulatoryCount} exception(s)
+                {testingProgress.fail1RegulatoryCount + testingProgress.fail2ProcedureCount} exception(s)
               </p>
             </CardContent>
           </Card>
@@ -420,155 +488,153 @@ export default function Stage5Page() {
         <motion.div variants={staggerItem}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                N/A
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">N/A</CardTitle>
             </CardHeader>
             <CardContent>
-              <motion.div className="text-2xl font-bold tabular-nums">
-                {animatedNACount}
-              </motion.div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Not applicable
-              </p>
+              <div className="text-2xl font-bold tabular-nums">{animatedNACount}</div>
+              <p className="text-xs text-muted-foreground mt-1">Not applicable</p>
             </CardContent>
           </Card>
         </motion.div>
       </motion.div>
 
-      {/* Testing Workbook */}
-      <motion.div
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.35 }}
-      >
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <ClipboardCheck className="h-5 w-5" />
-                  Testing Workbook
-                </CardTitle>
-                <CardDescription>
-                  Enter test results for each attribute
-                </CardDescription>
-              </div>
-              <AnimatePresence>
-                {canProceed && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8, x: 20 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, x: 20 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  >
-                    <Badge className="bg-green-100 text-green-700">
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.1, type: "spring" }}
-                      >
+      {/* Auditor Tabs + Testing Workbook */}
+      {pivotedWorkbooks.length > 0 && (
+        <motion.div
+          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card className="mb-6">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <ClipboardCheck className="h-5 w-5" />
+                    Testing Workbook
+                  </CardTitle>
+                  <CardDescription>
+                    Rows: Test Questions | Columns: Customer Results (Result + Observation)
+                  </CardDescription>
+                </div>
+                <AnimatePresence>
+                  {canProceed && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8, x: 20 }}
+                      animate={{ opacity: 1, scale: 1, x: 0 }}
+                      exit={{ opacity: 0, scale: 0.8, x: 20 }}
+                    >
+                      <Badge className="bg-green-100 text-green-700">
                         <CheckCircle2 className="h-4 w-4 mr-1" />
-                      </motion.div>
-                      Ready for Consolidation
-                    </Badge>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {testRows.length > 0 ? (
-              <motion.div
-                className="border rounded-lg overflow-hidden"
-                initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
+                        Ready for Consolidation
+                      </Badge>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {/* Auditor Tabs */}
+              <Tabs
+                value={activeAuditorId || pivotedWorkbooks[0]?.auditorId}
+                onValueChange={setActiveAuditorId}
+                className="mb-4"
               >
-                <HotTable
-                ref={hotRef}
-                data={tableData}
-                colHeaders={['Sample ID', 'Entity Name', 'Attr ID', 'Attribute', 'Test Question', 'Result', 'Observation', 'Evidence Ref', 'Notes']}
-                rowHeaders={true}
-                width="100%"
-                height="auto"
-                licenseKey="non-commercial-and-evaluation"
-                stretchH="all"
-                autoRowSize={true}
-                columnSorting={true}
-                filters={true}
-                dropdownMenu={true}
-                manualColumnResize={true}
-                afterChange={handleDataChange}
-                columns={[
-                  { data: 0, readOnly: true, width: 100 },
-                  { data: 1, readOnly: true, width: 150 },
-                  { data: 2, readOnly: true, width: 80 },
-                  { data: 3, readOnly: true, width: 150 },
-                  { data: 4, readOnly: true, width: 250 },
-                  { data: 5, type: 'dropdown', source: ['', ...RESULT_OPTIONS], width: 100 },
-                  { data: 6, type: 'dropdown', source: ['', ...STANDARD_OBSERVATIONS.map(o => o.text)], width: 200 },
-                  { data: 7, width: 120 },
-                  { data: 8, width: 150 },
-                ]}
-                cells={(row, col) => {
-                  const cellProperties: { className?: string } = {};
-                  if (col === 5 && tableData[row]) {
-                    const value = String(tableData[row][5] || '').toLowerCase();
-                    if (value === 'pass') {
-                      cellProperties.className = 'bg-green-50 dark:bg-green-950';
-                    } else if (value === 'fail') {
-                      cellProperties.className = 'bg-red-50 dark:bg-red-950';
-                    } else if (value === 'n/a') {
-                      cellProperties.className = 'bg-gray-50 dark:bg-gray-950';
-                    }
-                  }
-                  return cellProperties;
-                }}
-              />
-              </motion.div>
-            ) : (
-              <motion.div
-                className="flex flex-col items-center justify-center py-16 text-muted-foreground"
-                initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <motion.div
-                  initial={shouldReduceMotion ? undefined : { scale: 0.8 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.3, type: "spring" }}
-                >
+                <TabsList>
+                  {pivotedWorkbooks.map(wb => (
+                    <TabsTrigger key={wb.auditorId} value={wb.auditorId} className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      {wb.auditorName}
+                      <Badge variant="secondary" className="ml-1">
+                        {wb.assignedCustomers.length} customers
+                      </Badge>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+
+              {/* Customer Legend */}
+              {activeWorkbook && (
+                <div className="mb-4 p-3 bg-muted/50 rounded-lg">
+                  <div className="text-xs font-medium text-muted-foreground mb-2">Assigned Customers:</div>
+                  <div className="flex flex-wrap gap-2">
+                    {activeWorkbook.assignedCustomers.map((customer, idx) => (
+                      <Badge key={customer.customerId} variant="outline" className="text-xs">
+                        {idx + 1}. {customer.customerName} ({customer.customerId})
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Handsontable */}
+              {activeWorkbook && tableData.length > 0 && (
+                <div className="border rounded-lg overflow-hidden">
+                  <HotTable
+                    ref={hotRef}
+                    data={tableData}
+                    colHeaders={colHeaders}
+                    rowHeaders={true}
+                    width="100%"
+                    height={500}
+                    licenseKey="non-commercial-and-evaluation"
+                    stretchH="all"
+                    autoRowSize={true}
+                    columnSorting={true}
+                    filters={true}
+                    dropdownMenu={true}
+                    manualColumnResize={true}
+                    fixedColumnsStart={3}
+                    afterChange={handleDataChange}
+                    columns={columns}
+                    cells={(row, col) => {
+                      const cellProperties: { className?: string } = {};
+                      // Color result columns based on value
+                      if (col >= 3 && (col - 3) % 2 === 0 && tableData[row]) {
+                        const value = String(tableData[row][col] || '').toLowerCase();
+                        if (value.startsWith('pass')) {
+                          cellProperties.className = 'bg-green-50 dark:bg-green-950';
+                        } else if (value.startsWith('fail')) {
+                          cellProperties.className = 'bg-red-50 dark:bg-red-950';
+                        } else if (value === 'n/a') {
+                          cellProperties.className = 'bg-gray-50 dark:bg-gray-950';
+                        } else if (value === 'question to lob') {
+                          cellProperties.className = 'bg-blue-50 dark:bg-blue-950';
+                        }
+                      }
+                      return cellProperties;
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Empty State */}
+              {(!activeWorkbook || tableData.length === 0) && (
+                <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
                   <ClipboardCheck className="h-16 w-16 mb-4 opacity-30" />
-                </motion.div>
-                <h3 className="font-medium mb-2">No Testing Data</h3>
-                <p className="text-sm text-center max-w-md">
-                  Complete Stage 4 to generate a workbook, or click &quot;Load Demo Data&quot; to see sample testing data.
-                </p>
-              </motion.div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
+                  <h3 className="font-medium mb-2">No Testing Data</h3>
+                  <p className="text-sm text-center max-w-md">
+                    Complete Stage 4 to generate workbooks, or click &quot;Load Demo Data&quot;.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Completion Requirements */}
       <AnimatePresence>
-        {!canProceed && testRows.length > 0 && (
+        {!canProceed && pivotedWorkbooks.length > 0 && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
           >
             <Card className="mb-6 border-yellow-200">
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
-                  <motion.div
-                    animate={{ rotate: [0, -10, 10, -10, 0] }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                  >
-                    <AlertCircle className="h-5 w-5 text-yellow-600" />
-                  </motion.div>
+                  <AlertCircle className="h-5 w-5 text-yellow-600" />
                   <CardTitle className="text-yellow-700">Completion Required</CardTitle>
                 </div>
               </CardHeader>
@@ -597,15 +663,10 @@ export default function Stage5Page() {
           </Button>
         </Link>
         <Link href={`/audit-runs/${id}/stage-6`}>
-          <motion.div
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-          >
-            <Button disabled={!canProceed}>
-              Continue to Consolidation
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </motion.div>
+          <Button disabled={!canProceed}>
+            Continue to Consolidation
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
         </Link>
       </motion.div>
     </div>

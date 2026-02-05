@@ -129,7 +129,7 @@ export interface AuditorWorkbookSummary {
   completionPercentage: number;
 }
 
-// Auditor Workbook (Stage 4)
+// Auditor Workbook (Stage 4) - LEGACY format (sample × attribute rows)
 export interface AuditorWorkbook {
   id: string;
   auditorId: string;
@@ -137,6 +137,80 @@ export interface AuditorWorkbook {
   auditorEmail: string;
   assignedSamples: Record<string, unknown>[];
   rows: AuditorWorkbookRow[];
+  status: 'draft' | 'in_progress' | 'completed' | 'submitted';
+  summary: AuditorWorkbookSummary;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ============================================
+// PIVOTED WORKBOOK STRUCTURE (NEW)
+// Rows = Attributes/Questions
+// Columns = Customer results (Result + Observation per customer)
+// ============================================
+
+// Result for a single customer on a single attribute
+export interface CustomerTestResult {
+  customerId: string;       // GCI/Case ID
+  customerName: string;     // Legal Name
+  result: 'Pass' | 'Pass w/Observation' | 'Fail 1 - Regulatory' | 'Fail 2 - Procedure' | 'Question to LOB' | 'N/A' | '';
+  observation: string;
+}
+
+// Customer info for column headers
+export interface AssignedCustomer {
+  customerId: string;       // GCI
+  customerName: string;     // Legal Name
+  jurisdiction: string;
+  irr: string;
+  drr: string;
+  partyType: string;
+  kycDate: string;
+  primaryFlu: string;
+  samplingIndex: number;
+}
+
+// A single row in the pivoted workbook (one per attribute)
+export interface PivotedWorkbookRow {
+  id: string;
+  // Attribute info (fixed columns - visible to auditor)
+  attributeId: string;
+  attributeCategory: string;  // CIP/CDD/EDD
+  questionText: string;
+
+  // Additional attribute metadata
+  attributeName?: string;
+  sourceFile?: string;
+  source?: string;
+  sourcePage?: string;
+  group?: string;
+
+  // Customer results (keyed by customerId)
+  // Each entry has: result, observation
+  customerResults: Record<string, CustomerTestResult>;
+}
+
+// Pivoted Auditor Workbook (NEW structure for Stage 5)
+export interface PivotedAuditorWorkbook {
+  id: string;
+  auditorId: string;
+  auditorName: string;
+  auditorEmail: string;
+
+  // Customers assigned to this auditor (for column headers)
+  assignedCustomers: AssignedCustomer[];
+
+  // Rows (one per attribute, with customer results as nested columns)
+  rows: PivotedWorkbookRow[];
+
+  // Attribute list for reference
+  attributes: Array<{
+    attributeId: string;
+    attributeName: string;
+    attributeCategory: string;
+    questionText: string;
+  }>;
+
   status: 'draft' | 'in_progress' | 'completed' | 'submitted';
   summary: AuditorWorkbookSummary;
   createdAt: string;
@@ -188,13 +262,14 @@ export interface StageDataStore {
   // Stage 4: Workbook Generation (per-auditor)
   selectedAuditors?: Auditor[];
   auditorWorkbooks?: AuditorWorkbook[];
+  pivotedWorkbooks?: PivotedAuditorWorkbook[];  // NEW: Pivoted structure for testing
   activeAuditorId?: string;
   workbookGenerationComplete?: boolean;
   // Legacy fields for backward compatibility
   workbookState?: WorkbookState;
   generatedWorkbooks?: WorkbookState[];
 
-  // Stage 5: Testing
+  // Stage 5: Testing (uses pivotedWorkbooks)
   testResults?: TestResult[];
   testingProgress?: {
     totalTests: number;

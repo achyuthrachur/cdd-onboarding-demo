@@ -46,7 +46,12 @@ import type { Auditor, AcceptableDoc } from "@/lib/attribute-library/types";
 import { mockAuditors } from "@/lib/attribute-library/mock-data";
 import { AuditorSelector } from "@/components/stage-4/auditor-selector";
 import { AuditorWorkbookView } from "@/components/stage-4/auditor-workbook-view";
-import { generateAuditorWorkbooks, getAssignmentSummary } from "@/lib/workbook/auditor-assignment";
+import {
+  generateAuditorWorkbooks,
+  getAssignmentSummary,
+  generatePivotedAuditorWorkbooks,
+  getPivotedAssignmentSummary,
+} from "@/lib/workbook/auditor-assignment";
 import { populateAllWorkbooksWithDemoData, getPopulationSummary, DEFAULT_POPULATION_CONFIG } from "@/lib/workbook/demo-data-populator";
 
 type WorkflowStep = "load" | "auditors" | "generate" | "view";
@@ -145,8 +150,16 @@ export default function Stage4Page() {
       // Simulate processing delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Generate workbooks
+      // Generate workbooks (legacy format for backward compatibility)
       const workbooks = generateAuditorWorkbooks(
+        samples,
+        extractedAttributes,
+        selectedAuditors,
+        { strategy: "round-robin" }
+      );
+
+      // Generate pivoted workbooks (NEW format: rows=attributes, columns=customers)
+      const pivotedWorkbooks = generatePivotedAuditorWorkbooks(
         samples,
         extractedAttributes,
         selectedAuditors,
@@ -156,6 +169,7 @@ export default function Stage4Page() {
       // Store in state and persist
       setAuditorWorkbooks(workbooks);
       setStageData("auditorWorkbooks", workbooks);
+      setStageData("pivotedWorkbooks", pivotedWorkbooks);  // NEW: Store pivoted format
       setStageData("selectedAuditors", selectedAuditors);
       setStageData("workbookGenerationComplete", true);
 
@@ -163,9 +177,9 @@ export default function Stage4Page() {
       setCurrentStep("view");
       setActiveAuditorId(workbooks[0]?.auditorId || null);
 
-      const summary = getAssignmentSummary(workbooks);
+      const pivotedSummary = getPivotedAssignmentSummary(pivotedWorkbooks);
       toast.success(
-        `Generated ${workbooks.length} workbooks with ${summary.totalRows} total test rows`
+        `Generated ${pivotedWorkbooks.length} workbooks: ${pivotedSummary.totalAttributes} attributes × ${pivotedSummary.totalCustomers} customers`
       );
     } catch (error) {
       console.error("Workbook generation failed:", error);
@@ -581,19 +595,6 @@ export default function Stage4Page() {
                   </motion.div>
                 </motion.div>
 
-                {hasPrerequisites && (
-                  <motion.div
-                    className="mt-4 flex justify-end"
-                    initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    <Button onClick={() => setCurrentStep("auditors")}>
-                      Continue to Auditor Selection
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </motion.div>
-                )}
               </TabsContent>
             </motion.div>
           )}
@@ -616,21 +617,6 @@ export default function Stage4Page() {
                   sampleCount={samples.length}
                 />
 
-                <AnimatePresence>
-                  {selectedAuditors.length > 0 && (
-                    <motion.div
-                      className="mt-4 flex justify-end"
-                      initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                    >
-                      <Button onClick={() => setCurrentStep("generate")}>
-                        Continue to Generation
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </TabsContent>
             </motion.div>
           )}
@@ -735,21 +721,6 @@ export default function Stage4Page() {
                       )}
                     </motion.div>
 
-                    <AnimatePresence>
-                      {auditorWorkbooks.length > 0 && (
-                        <motion.div
-                          className="flex justify-end"
-                          initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                        >
-                          <Button onClick={() => setCurrentStep("view")}>
-                            View Workbooks
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                          </Button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -828,12 +799,43 @@ export default function Stage4Page() {
             Back to Stage 3
           </Button>
         </Link>
-        <Link href={`/audit-runs/${id}/stage-5`}>
-          <Button disabled={!canProceed}>
-            Continue to Testing
+
+        {/* Context-aware forward navigation */}
+        {currentStep === "load" && (
+          <Button
+            onClick={() => setCurrentStep("auditors")}
+            disabled={!hasPrerequisites}
+          >
+            Continue to Auditor Selection
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
-        </Link>
+        )}
+        {currentStep === "auditors" && (
+          <Button
+            onClick={() => setCurrentStep("generate")}
+            disabled={selectedAuditors.length === 0}
+          >
+            Continue to Generation
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        )}
+        {currentStep === "generate" && (
+          <Button
+            onClick={() => setCurrentStep("view")}
+            disabled={auditorWorkbooks.length === 0}
+          >
+            View Workbooks
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        )}
+        {currentStep === "view" && (
+          <Link href={`/audit-runs/${id}/stage-5`}>
+            <Button disabled={!canProceed}>
+              Continue to Testing
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        )}
       </motion.div>
     </div>
   );
