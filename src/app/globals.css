@@ -698,6 +698,107 @@
 }
 
 /* ============================================
+   UI Sizing & Layout Utilities
+   Standardized sizing for consistent UI
+   ============================================ */
+
+/* Responsive container with max-width constraints */
+.container-narrow {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-wide {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.container-full {
+  @apply w-full px-4 sm:px-6 lg:px-8;
+}
+
+/* Standardized card sizes */
+.card-sm {
+  @apply p-4 rounded-lg;
+}
+
+.card-md {
+  @apply p-6 rounded-xl;
+}
+
+.card-lg {
+  @apply p-8 rounded-2xl;
+}
+
+/* Card with consistent glassmorphic styling */
+.card-glass {
+  @apply bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md;
+}
+
+.card-glass-elevated {
+  @apply bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-lg;
+}
+
+.dark .card-glass-elevated {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+/* Standardized badge sizes */
+.badge-sm {
+  @apply text-[10px] px-1.5 py-0.5 rounded;
+}
+
+.badge-md {
+  @apply text-xs px-2 py-1 rounded-md;
+}
+
+.badge-lg {
+  @apply text-sm px-3 py-1.5 rounded-md;
+}
+
+/* Stat card styling - expanded without self-reference */
+.stat-card {
+  @apply bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md rounded-xl p-4;
+}
+
+.stat-value {
+  @apply text-2xl font-bold tabular-nums text-gray-900 dark:text-white;
+}
+
+.stat-label {
+  @apply text-sm font-medium text-gray-600 dark:text-white/80;
+}
+
+.stat-description {
+  @apply text-xs text-gray-500 dark:text-white/60 mt-1;
+}
+
+/* Touch-friendly interactive targets */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px];
+}
+
+/* Consistent spacing scale */
+.space-section {
+  @apply py-8 md:py-12 lg:py-16;
+}
+
+.space-card {
+  @apply p-4 md:p-6;
+}
+
+/* Grid layouts */
+.grid-cards-2 {
+  @apply grid gap-4 sm:gap-6 md:grid-cols-2;
+}
+
+.grid-cards-3 {
+  @apply grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.grid-cards-4 {
+  @apply grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4;
+}
+
+/* ============================================
    Crowe Design System: Animation Keyframes
    ============================================ */
 

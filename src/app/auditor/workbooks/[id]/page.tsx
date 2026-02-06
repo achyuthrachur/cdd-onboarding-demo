@@ -264,6 +264,7 @@ export default function AuditorWorkbookPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [entityFilter, setEntityFilter] = useState<string[]>([]);  // Empty = show all
 
   // Observation modal state
   const [observationModal, setObservationModal] = useState<{
@@ -372,6 +373,13 @@ export default function AuditorWorkbookPage() {
     const cats = new Set(workbook.rows.map(r => r.attributeCategory));
     return Array.from(cats);
   }, [workbook]);
+
+  // Get filtered customers based on entity filter
+  const filteredCustomers = useMemo(() => {
+    if (!workbook) return [];
+    if (entityFilter.length === 0) return workbook.assignedCustomers;
+    return workbook.assignedCustomers.filter(c => entityFilter.includes(c.customerId));
+  }, [workbook, entityFilter]);
 
   // Filter rows
   const filteredRows = useMemo(() => {
@@ -878,15 +886,72 @@ export default function AuditorWorkbookPage() {
                   ))}
                 </SelectContent>
               </Select>
+
+              {/* Entity Filter */}
+              <Select
+                value={entityFilter.length === 0 ? 'all' : entityFilter.length === 1 ? entityFilter[0] : 'multiple'}
+                onValueChange={(val) => {
+                  if (val === 'all') {
+                    setEntityFilter([]);
+                  } else if (val === 'multiple') {
+                    // Do nothing, this is just a display state
+                  } else {
+                    setEntityFilter([val]);
+                  }
+                }}
+              >
+                <SelectTrigger className="w-48 bg-gray-50 dark:bg-white/10 border-gray-200 dark:border-white/20 text-gray-900 dark:text-white">
+                  <Eye className="h-4 w-4 mr-2 text-gray-400 dark:text-white/80" />
+                  <SelectValue placeholder="Filter Entities">
+                    {entityFilter.length === 0
+                      ? 'All Entities'
+                      : entityFilter.length === 1
+                      ? workbook?.assignedCustomers.find(c => c.customerId === entityFilter[0])?.customerName?.substring(0, 12) + '...'
+                      : `${entityFilter.length} selected`}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border-gray-200 dark:border-white/20">
+                  <SelectItem value="all" className="text-gray-900 dark:text-white">All Entities</SelectItem>
+                  <SelectSeparator className="bg-gray-200 dark:bg-white/20" />
+                  {workbook?.assignedCustomers.map((customer, idx) => (
+                    <SelectItem key={customer.customerId} value={customer.customerId} className="text-gray-900 dark:text-white">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500 dark:text-white/60">{idx + 1}.</span>
+                        <span className="truncate">{customer.customerName}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Clear filters button */}
+              {(searchTerm || categoryFilter !== 'all' || entityFilter.length > 0) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setCategoryFilter('all');
+                    setEntityFilter([]);
+                  }}
+                  className="text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white"
+                >
+                  Clear filters
+                </Button>
+              )}
             </div>
 
             {/* Customer Legend */}
             <div className="mb-4 p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
-              <div className="text-xs font-medium text-gray-600 dark:text-white/80 mb-2">Assigned Customers:</div>
+              <div className="text-xs font-medium text-gray-600 dark:text-white/80 mb-2">
+                {entityFilter.length > 0
+                  ? `Showing ${filteredCustomers.length} of ${workbook.assignedCustomers.length} Customers:`
+                  : 'Assigned Customers:'}
+              </div>
               <div className="flex flex-wrap gap-2">
-                {workbook.assignedCustomers.map((customer, idx) => (
+                {filteredCustomers.map((customer, idx) => (
                   <Badge key={customer.customerId} variant="outline" className="text-xs border-gray-300 dark:border-white/20 text-gray-600 dark:text-white/80">
-                    {idx + 1}. {customer.customerName} ({customer.customerId})
+                    {workbook.assignedCustomers.findIndex(c => c.customerId === customer.customerId) + 1}. {customer.customerName} ({customer.customerId})
                   </Badge>
                 ))}
               </div>
@@ -901,21 +966,24 @@ export default function AuditorWorkbookPage() {
                       <TableHead className="w-24 text-gray-600 dark:text-white/80 bg-gray-100 dark:bg-crowe-indigo-dark">Attr ID</TableHead>
                       <TableHead className="w-20 text-gray-600 dark:text-white/80 bg-gray-100 dark:bg-crowe-indigo-dark">Category</TableHead>
                       <TableHead className="min-w-[200px] text-gray-600 dark:text-white/80 bg-gray-100 dark:bg-crowe-indigo-dark">Question</TableHead>
-                      {workbook.assignedCustomers.map((customer, idx) => (
-                        <TableHead
-                          key={customer.customerId}
-                          className="min-w-[180px] text-gray-600 dark:text-white/80 bg-gray-100 dark:bg-crowe-indigo-dark"
-                        >
-                          <div className="flex flex-col">
-                            <span className="truncate" title={customer.customerName}>
-                              {idx + 1}. {customer.customerName.substring(0, 12)}...
-                            </span>
-                            <span className="text-[10px] text-gray-500 dark:text-white/80 font-normal">
-                              {customer.customerId}
-                            </span>
-                          </div>
-                        </TableHead>
-                      ))}
+                      {filteredCustomers.map((customer) => {
+                        const originalIdx = workbook.assignedCustomers.findIndex(c => c.customerId === customer.customerId);
+                        return (
+                          <TableHead
+                            key={customer.customerId}
+                            className="min-w-[180px] text-gray-600 dark:text-white/80 bg-gray-100 dark:bg-crowe-indigo-dark"
+                          >
+                            <div className="flex flex-col">
+                              <span className="truncate" title={customer.customerName}>
+                                {originalIdx + 1}. {customer.customerName.substring(0, 12)}...
+                              </span>
+                              <span className="text-[10px] text-gray-500 dark:text-white/80 font-normal">
+                                {customer.customerId}
+                              </span>
+                            </div>
+                          </TableHead>
+                        );
+                      })}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -932,7 +1000,7 @@ export default function AuditorWorkbookPage() {
                         <TableCell className="text-xs text-gray-600 dark:text-white/80" title={row.questionText}>
                           <div className="line-clamp-2">{row.questionText}</div>
                         </TableCell>
-                        {workbook.assignedCustomers.map((customer) => (
+                        {filteredCustomers.map((customer) => (
                           <TableCell key={`${row.id}-${customer.customerId}`} className="p-2">
                             <DocumentSelectionCell
                               row={row}
@@ -949,7 +1017,7 @@ export default function AuditorWorkbookPage() {
                     {filteredRows.length === 0 && (
                       <TableRow>
                         <TableCell
-                          colSpan={3 + workbook.assignedCustomers.length}
+                          colSpan={3 + filteredCustomers.length}
                           className="text-center py-8 text-gray-500 dark:text-white/80"
                         >
                           No rows match your filter criteria

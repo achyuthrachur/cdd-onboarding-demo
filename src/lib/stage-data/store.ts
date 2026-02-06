@@ -621,7 +621,195 @@ export function getAcceptableDocsForAttribute(attributeId: string): AcceptableDo
   return docs.filter(doc => doc.Attribute_ID === attributeId);
 }
 
-// Initialize from storage on module load (client-side only)
-if (typeof window !== 'undefined') {
-  loadStageDataFromStorage();
+// ============================================
+// NEW: Selective Loading Functions
+// Separate INPUT data from OUTPUT data
+// ============================================
+
+/**
+ * Keys that represent INPUT data (documents, procedures, configs)
+ * These can be preloaded without showing results
+ */
+const INPUT_KEYS: (keyof StageDataStore)[] = [
+  'population',
+  'populationMetadata',
+  'samplingConfig',
+  'fluProcedures',
+  'selectedAuditors',
+];
+
+/**
+ * Keys that represent OUTPUT data (results, extractions)
+ * These should only appear after explicit user action
+ */
+const OUTPUT_KEYS: (keyof StageDataStore)[] = [
+  'gapAssessment1',
+  'gapAssessment2',
+  'combinedGaps',
+  'samplingResult',
+  'fluExtractionResult',
+  'extractedAttributes',
+  'acceptableDocs',
+  'attributeExtractionComplete',
+  'auditorWorkbooks',
+  'pivotedWorkbooks',
+  'workbookGenerationComplete',
+  'workbookState',
+  'generatedWorkbooks',
+  'testResults',
+  'testingProgress',
+  'consolidatedReport',
+  'workbooksPublished',
+  'auditorProgress',
+];
+
+/**
+ * Load only INPUT data from localStorage (not outputs/results)
+ * Call this on app initialization to restore document uploads etc.
+ * without showing previously generated results
+ */
+export function loadStageInputsFromStorage(): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    INPUT_KEYS.forEach(key => {
+      const stored = localStorage.getItem(`stageData_${key}`);
+      if (stored) {
+        try {
+          stageDataStore[key] = JSON.parse(stored);
+        } catch {
+          stageDataLogger.warn(`Failed to parse stored input data for ${key}`);
+        }
+      }
+    });
+    stageDataLogger.info('Loaded stage inputs from storage');
+  } catch (error) {
+    stageDataLogger.warn('Failed to load stage inputs from localStorage:', error);
+  }
 }
+
+/**
+ * Load OUTPUT data from localStorage for a specific stage
+ * Call this when user explicitly wants to restore previous results
+ */
+export function loadStageOutputsFromStorage(stageNumber?: 1 | 2 | 3 | 4 | 5 | 6): void {
+  if (typeof window === 'undefined') return;
+
+  const keysToLoad: (keyof StageDataStore)[] = [];
+
+  if (!stageNumber) {
+    // Load all outputs
+    keysToLoad.push(...OUTPUT_KEYS);
+  } else {
+    // Load stage-specific outputs
+    switch (stageNumber) {
+      case 1:
+        keysToLoad.push('gapAssessment1', 'gapAssessment2', 'combinedGaps');
+        break;
+      case 2:
+        keysToLoad.push('samplingResult');
+        break;
+      case 3:
+        keysToLoad.push('fluExtractionResult', 'extractedAttributes', 'acceptableDocs', 'attributeExtractionComplete');
+        break;
+      case 4:
+        keysToLoad.push('auditorWorkbooks', 'pivotedWorkbooks', 'workbookGenerationComplete', 'workbookState', 'generatedWorkbooks', 'workbooksPublished', 'auditorProgress');
+        break;
+      case 5:
+        keysToLoad.push('testResults', 'testingProgress');
+        break;
+      case 6:
+        keysToLoad.push('consolidatedReport');
+        break;
+    }
+  }
+
+  try {
+    keysToLoad.forEach(key => {
+      const stored = localStorage.getItem(`stageData_${key}`);
+      if (stored) {
+        try {
+          stageDataStore[key] = JSON.parse(stored);
+        } catch {
+          stageDataLogger.warn(`Failed to parse stored output data for ${key}`);
+        }
+      }
+    });
+    stageDataLogger.info(`Loaded stage ${stageNumber || 'all'} outputs from storage`);
+  } catch (error) {
+    stageDataLogger.warn('Failed to load stage outputs from localStorage:', error);
+  }
+}
+
+/**
+ * Clear OUTPUT data for a specific stage (keep inputs)
+ * Use this when user wants to re-run with real AI instead of demo data
+ */
+export function clearStageOutputs(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): void {
+  const keysToRemove: (keyof StageDataStore)[] = [];
+
+  switch (stageNumber) {
+    case 1:
+      keysToRemove.push('gapAssessment1', 'gapAssessment2', 'combinedGaps');
+      break;
+    case 2:
+      keysToRemove.push('samplingResult');
+      break;
+    case 3:
+      keysToRemove.push('fluExtractionResult', 'extractedAttributes', 'acceptableDocs', 'attributeExtractionComplete');
+      break;
+    case 4:
+      keysToRemove.push('auditorWorkbooks', 'pivotedWorkbooks', 'workbookGenerationComplete', 'workbookState', 'generatedWorkbooks', 'workbooksPublished', 'auditorProgress');
+      break;
+    case 5:
+      keysToRemove.push('testResults', 'testingProgress');
+      break;
+    case 6:
+      keysToRemove.push('consolidatedReport');
+      break;
+  }
+
+  keysToRemove.forEach(key => {
+    delete stageDataStore[key];
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(`stageData_${key}`);
+      }
+    } catch (error) {
+      stageDataLogger.warn('Failed to clear stage output key:', error);
+    }
+  });
+
+  // Notify listeners
+  listeners.forEach(listener => listener('gapAssessment1' as keyof StageDataStore, undefined));
+  stageDataLogger.info(`Cleared stage ${stageNumber} outputs`);
+}
+
+/**
+ * Check if OUTPUT data exists for a specific stage
+ */
+export function hasStageOutputs(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): boolean {
+  switch (stageNumber) {
+    case 1:
+      return !!(stageDataStore.gapAssessment1 || stageDataStore.gapAssessment2);
+    case 2:
+      return !!stageDataStore.samplingResult;
+    case 3:
+      return !!(stageDataStore.fluExtractionResult || stageDataStore.extractedAttributes);
+    case 4:
+      return !!(stageDataStore.auditorWorkbooks || stageDataStore.pivotedWorkbooks || stageDataStore.workbookState);
+    case 5:
+      return !!(stageDataStore.testResults || stageDataStore.testingProgress);
+    case 6:
+      return !!stageDataStore.consolidatedReport;
+    default:
+      return false;
+  }
+}
+
+// ============================================
+// REMOVED: Auto-load on module import
+// Previously: loadStageDataFromStorage() was called here
+// Now: Apps should call loadStageInputsFromStorage() explicitly
+// or loadStageOutputsFromStorage() when restoring previous session
+// ============================================

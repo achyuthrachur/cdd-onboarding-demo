@@ -630,7 +630,88 @@ export function loadFallbackDataForStage(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): vo
 }
 
 /**
+ * Load ONLY the OUTPUT (results) data for a specific stage - for "Load Demo Data" button
+ * This does NOT load inputs or prerequisite data - just the results/outputs
+ */
+export function loadDemoOutputsForStage(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): void {
+  switch (stageNumber) {
+    case 1:
+      // Stage 1 outputs: gap assessment results
+      setStageData('gapAssessment1', getFallbackGapAssessment1());
+      setStageData('gapAssessment2', getFallbackGapAssessment2());
+      setStageData('combinedGaps', getFallbackCombinedGaps());
+      break;
+
+    case 2:
+      // Stage 2 outputs: sampling result (but NOT population - that's an input)
+      setStageData('samplingResult', getFallbackSamplingResult());
+      break;
+
+    case 3:
+      // Stage 3 outputs: extraction results
+      setStageData('fluExtractionResult', getFallbackFLUExtractionResult());
+      setStageData('extractedAttributes', getFallbackFLUAttributes());
+      setStageData('acceptableDocs', getFallbackAcceptableDocs());
+      setStageData('attributeExtractionComplete', true);
+      break;
+
+    case 4:
+      // Stage 4 outputs: workbook generation
+      const auditors = getFallbackAuditors();
+      const auditorWorkbooks = getFallbackAuditorWorkbooks();
+      setStageData('selectedAuditors', auditors);
+      setStageData('auditorWorkbooks', auditorWorkbooks);
+      setStageData('activeAuditorId', auditors[0]?.id);
+      setStageData('workbookGenerationComplete', true);
+      // Legacy support
+      const workbook = getFallbackWorkbook();
+      setStageData('workbookState', workbook);
+      setStageData('generatedWorkbooks', [workbook]);
+      break;
+
+    case 5:
+      // Stage 5 outputs: test results
+      const testResults = getFallbackTestResults();
+      const auditorWorkbooks5 = getFallbackAuditorWorkbooks();
+      let totalRows = 0;
+      let passCount = 0;
+      let passWithObsCount = 0;
+      let fail1RegulatoryCount = 0;
+      let fail2ProcedureCount = 0;
+      let questionToLOBCount = 0;
+      let naCount = 0;
+      auditorWorkbooks5.forEach(wb => {
+        totalRows += wb.summary.totalRows;
+        passCount += wb.summary.passCount;
+        passWithObsCount += wb.summary.passWithObsCount;
+        fail1RegulatoryCount += wb.summary.fail1RegulatoryCount;
+        fail2ProcedureCount += wb.summary.fail2ProcedureCount;
+        questionToLOBCount += wb.summary.questionToLOBCount;
+        naCount += wb.summary.naCount;
+      });
+      setStageData('testResults', testResults);
+      setStageData('testingProgress', {
+        totalTests: totalRows,
+        completedTests: totalRows,
+        passCount,
+        passWithObsCount,
+        fail1RegulatoryCount,
+        fail2ProcedureCount,
+        questionToLOBCount,
+        naCount,
+      });
+      break;
+
+    case 6:
+      // Stage 6 outputs: consolidation report
+      setStageData('consolidatedReport', getFallbackConsolidation('demo'));
+      break;
+  }
+}
+
+/**
  * Load only the fallback data for a specific stage (no prerequisites)
+ * @deprecated Use loadDemoOutputsForStage instead for clearer naming
  */
 export function loadFallbackDataForStageOnly(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): void {
   switch (stageNumber) {
