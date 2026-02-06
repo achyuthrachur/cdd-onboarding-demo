@@ -413,7 +413,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold text-gray-900 dark:text-white">
                     {summary.sample_selection_method.final_sample_size.toLocaleString()}
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-300">Sample Size</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Sample Size</p>
                 </CardContent>
               </Card>
               <Card>
@@ -421,7 +421,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold text-gray-900 dark:text-white">
                     {(summary.sampling_rationale.confidence_level * 100).toFixed(0)}%
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-300">Confidence Level</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Confidence Level</p>
                 </CardContent>
               </Card>
               <Card>
@@ -429,7 +429,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold text-gray-900 dark:text-white">
                     {(summary.sampling_rationale.tolerable_error_rate * 100).toFixed(1)}%
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-300">Tolerable Error Rate</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Tolerable Error Rate</p>
                 </CardContent>
               </Card>
               <Card>
@@ -437,7 +437,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold text-gray-900 dark:text-white">
                     {summary.sample_selection_method.seed}
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-300">Random Seed</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Random Seed</p>
                 </CardContent>
               </Card>
             </div>
