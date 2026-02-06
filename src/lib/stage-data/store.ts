@@ -3,6 +3,7 @@
  * In-memory store for stage results with persistence between stages
  */
 
+import { stageDataLogger } from "@/lib/logger";
 import type { Attribute, Auditor, AcceptableDoc } from "@/lib/attribute-library/types";
 import type { WorkbookState, WorkbookRow } from "@/lib/workbook/builder";
 import type { ConsolidationResult } from "@/lib/consolidation/engine";
@@ -349,7 +350,7 @@ export function setStageData<K extends keyof StageDataStore>(
       );
     }
   } catch (error) {
-    console.warn('Failed to persist stage data to localStorage:', error);
+    stageDataLogger.warn('Failed to persist stage data to localStorage:', error);
   }
 }
 
@@ -376,7 +377,7 @@ export function clearStageData(): void {
       });
     }
   } catch (error) {
-    console.warn('Failed to clear stage data from localStorage:', error);
+    stageDataLogger.warn('Failed to clear stage data from localStorage:', error);
   }
 
   // Notify listeners
@@ -417,7 +418,7 @@ export function clearStageDataForStage(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): void
         localStorage.removeItem(`stageData_${key}`);
       }
     } catch (error) {
-      console.warn('Failed to clear stage data key:', error);
+      stageDataLogger.warn('Failed to clear stage data key:', error);
     }
   });
 }
@@ -452,12 +453,12 @@ export function loadStageDataFromStorage(): void {
         try {
           stageDataStore[key] = JSON.parse(stored);
         } catch {
-          console.warn(`Failed to parse stored data for ${key}`);
+          stageDataLogger.warn(`Failed to parse stored data for ${key}`);
         }
       }
     });
   } catch (error) {
-    console.warn('Failed to load stage data from localStorage:', error);
+    stageDataLogger.warn('Failed to load stage data from localStorage:', error);
   }
 }
 

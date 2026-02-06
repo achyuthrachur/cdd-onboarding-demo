@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AicSidebar } from "@/components/layout/aic-sidebar";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { getSession } from "@/lib/auth/session";
 
 export default function AicLayout({
@@ -34,7 +35,9 @@ export default function AicLayout({
     <div className="flex h-screen bg-soft-gradient dark:bg-crowe-indigo-dark">
       <AicSidebar />
       <main className="flex-1 overflow-auto bg-soft-gradient dark:bg-transparent">
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
       </main>
     </div>
   );

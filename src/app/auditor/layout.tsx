@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuditorSidebar } from "@/components/layout/auditor-sidebar";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { getSession, isAuditor } from "@/lib/auth/session";
 
 export default function AuditorLayout({
@@ -45,7 +46,9 @@ export default function AuditorLayout({
             </div>
           </div>
         )}
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
       </main>
     </div>
   );

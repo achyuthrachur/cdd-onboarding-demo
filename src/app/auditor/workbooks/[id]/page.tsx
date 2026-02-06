@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -291,7 +291,44 @@ export default function AuditorWorkbookPage() {
     naCount: 0,
   });
 
+  // Ref to track latest workbook for stable callbacks
+  const workbookRef = useRef<PivotedAuditorWorkbook | null>(null);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    workbookRef.current = workbook;
+  }, [workbook]);
+
   const shouldReduceMotion = useReducedMotion();
+
+  // Auto-save workbook changes to localStorage (debounced)
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  useEffect(() => {
+    if (!workbook || isSubmitted) return;
+
+    // Clear any pending save
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    // Debounced save to localStorage
+    saveTimeoutRef.current = setTimeout(() => {
+      const pivotedWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
+      if (pivotedWorkbooks) {
+        const idx = pivotedWorkbooks.findIndex(wb => wb.auditorId === workbook.auditorId);
+        if (idx !== -1) {
+          pivotedWorkbooks[idx] = workbook;
+          setStageData("pivotedWorkbooks", pivotedWorkbooks);
+        }
+      }
+    }, 300);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, [workbook, isSubmitted]);
 
   // Load workbook on mount
   useEffect(() => {
@@ -400,50 +437,46 @@ export default function AuditorWorkbookPage() {
     });
   };
 
-  // Handle document selection change
+  // Handle document selection change - uses functional updater for stable callback
   const handleSelectionChange = useCallback((
     rowId: string,
     customerId: string,
     selectedDoc: string,
     result: CustomerTestResult['result']
   ) => {
-    if (!workbook || isSubmitted) return;
+    if (isSubmitted) return;
 
-    const updatedWorkbook = { ...workbook };
-    const updatedRows = [...updatedWorkbook.rows];
-    const rowIndex = updatedRows.findIndex(r => r.id === rowId);
+    setWorkbook(prevWorkbook => {
+      if (!prevWorkbook) return prevWorkbook;
 
-    if (rowIndex === -1) return;
+      const updatedRows = prevWorkbook.rows.map(row => {
+        if (row.id !== rowId) return row;
 
-    const row = { ...updatedRows[rowIndex] };
-    const customerResults = { ...row.customerResults };
-    const existingResult = customerResults[customerId];
+        const existingResult = row.customerResults[customerId];
+        return {
+          ...row,
+          customerResults: {
+            ...row.customerResults,
+            [customerId]: {
+              customerId: existingResult?.customerId || customerId,
+              customerName: existingResult?.customerName || '',
+              selectedDocument: selectedDoc,
+              result: result,
+              observation: existingResult?.observation || '',
+            },
+          },
+        };
+      });
 
-    customerResults[customerId] = {
-      customerId: existingResult?.customerId || customerId,
-      customerName: existingResult?.customerName || '',
-      selectedDocument: selectedDoc,
-      result: result,
-      observation: existingResult?.observation || '',
-    };
+      const updatedWorkbook = { ...prevWorkbook, rows: updatedRows };
 
-    row.customerResults = customerResults;
-    updatedRows[rowIndex] = row;
-    updatedWorkbook.rows = updatedRows;
+      // Update progress with new workbook state
+      updateProgressFromWorkbook(updatedWorkbook);
 
-    setWorkbook(updatedWorkbook);
-    updateProgressFromWorkbook(updatedWorkbook);
-
-    // Auto-save to storage
-    const pivotedWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
-    if (pivotedWorkbooks) {
-      const idx = pivotedWorkbooks.findIndex(wb => wb.auditorId === workbook.auditorId);
-      if (idx !== -1) {
-        pivotedWorkbooks[idx] = updatedWorkbook;
-        setStageData("pivotedWorkbooks", pivotedWorkbooks);
-      }
-    }
-  }, [workbook, isSubmitted]);
+      return updatedWorkbook;
+    });
+    // Note: Auto-save to localStorage is handled by the separate useEffect
+  }, [isSubmitted]);
 
   // Handle observation required (opens modal)
   const handleObservationRequired = useCallback((rowId: string, customerId: string, selectedDoc: string) => {
@@ -456,53 +489,49 @@ export default function AuditorWorkbookPage() {
     });
   }, []);
 
-  // Handle observation submit
+  // Handle observation submit - uses functional updater for stable callback
   const handleObservationSubmit = useCallback(() => {
     const { rowId, customerId, selectedDoc, observation } = observationModal;
-    if (!workbook || isSubmitted) return;
+    if (isSubmitted) return;
 
-    const row = workbook.rows.find(r => r.id === rowId);
-    if (!row) return;
+    setWorkbook(prevWorkbook => {
+      if (!prevWorkbook) return prevWorkbook;
 
-    const result = getResultFromSelection(selectedDoc, row.acceptableDocs || []);
+      const row = prevWorkbook.rows.find(r => r.id === rowId);
+      if (!row) return prevWorkbook;
 
-    const updatedWorkbook = { ...workbook };
-    const updatedRows = [...updatedWorkbook.rows];
-    const rowIndex = updatedRows.findIndex(r => r.id === rowId);
+      const result = getResultFromSelection(selectedDoc, row.acceptableDocs || []);
 
-    if (rowIndex === -1) return;
+      const updatedRows = prevWorkbook.rows.map(r => {
+        if (r.id !== rowId) return r;
 
-    const updatedRow = { ...updatedRows[rowIndex] };
-    const customerResults = { ...updatedRow.customerResults };
-    const existingResult = customerResults[customerId];
+        const existingResult = r.customerResults[customerId];
+        return {
+          ...r,
+          customerResults: {
+            ...r.customerResults,
+            [customerId]: {
+              customerId: existingResult?.customerId || customerId,
+              customerName: existingResult?.customerName || '',
+              selectedDocument: selectedDoc,
+              result: result,
+              observation: observation,
+            },
+          },
+        };
+      });
 
-    customerResults[customerId] = {
-      customerId: existingResult?.customerId || customerId,
-      customerName: existingResult?.customerName || '',
-      selectedDocument: selectedDoc,
-      result: result,
-      observation: observation,
-    };
+      const updatedWorkbook = { ...prevWorkbook, rows: updatedRows };
 
-    updatedRow.customerResults = customerResults;
-    updatedRows[rowIndex] = updatedRow;
-    updatedWorkbook.rows = updatedRows;
+      // Update progress with new workbook state
+      updateProgressFromWorkbook(updatedWorkbook);
 
-    setWorkbook(updatedWorkbook);
-    updateProgressFromWorkbook(updatedWorkbook);
+      return updatedWorkbook;
+    });
 
-    // Auto-save to storage
-    const pivotedWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
-    if (pivotedWorkbooks) {
-      const idx = pivotedWorkbooks.findIndex(wb => wb.auditorId === workbook.auditorId);
-      if (idx !== -1) {
-        pivotedWorkbooks[idx] = updatedWorkbook;
-        setStageData("pivotedWorkbooks", pivotedWorkbooks);
-      }
-    }
-
+    // Note: Auto-save to localStorage is handled by the separate useEffect
     setObservationModal({ isOpen: false, rowId: '', customerId: '', selectedDoc: '', observation: '' });
-  }, [workbook, isSubmitted, observationModal]);
+  }, [isSubmitted, observationModal]);
 
   // Save progress
   const handleSave = async () => {
