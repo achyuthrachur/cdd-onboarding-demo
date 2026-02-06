@@ -243,13 +243,13 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-5">
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{workbook.summary.totalRows}</div>
             <p className="text-xs text-white/60">Total Tests</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold text-crowe-teal-bright">
               {workbook.summary.passCount}
             </div>
@@ -257,7 +257,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold text-crowe-coral-bright">
               {workbook.summary.failCount}
             </div>
@@ -265,7 +265,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold text-white/70">
               {workbook.summary.naCount}
             </div>
@@ -273,7 +273,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">
               {workbook.summary.completionPercentage.toFixed(0)}%
             </div>
@@ -380,24 +380,24 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Sample ID</TableHead>
-                  <TableHead className="w-[150px]">Entity</TableHead>
-                  <TableHead className="w-[150px]">Attribute</TableHead>
-                  <TableHead className="w-[100px]">Result</TableHead>
-                  <TableHead className="w-[200px]">Observation</TableHead>
-                  <TableHead className="w-[80px]">Actions</TableHead>
+                  <TableHead className="w-[100px] px-4 py-3">Sample ID</TableHead>
+                  <TableHead className="w-[150px] px-4 py-3">Entity</TableHead>
+                  <TableHead className="w-[150px] px-4 py-3">Attribute</TableHead>
+                  <TableHead className="w-[100px] px-4 py-3">Result</TableHead>
+                  <TableHead className="w-[200px] px-4 py-3">Observation</TableHead>
+                  <TableHead className="w-[80px] px-4 py-3">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredRows.slice(0, 50).map((row) => (
                   <TableRow key={row.id} className={row.result === "Fail" ? "bg-crowe-coral/10" : ""}>
-                    <TableCell className="font-mono text-sm">
+                    <TableCell className="px-4 py-2 font-mono text-sm">
                       {row.sampleItemId}
                     </TableCell>
-                    <TableCell className="max-w-[150px] truncate">
+                    <TableCell className="px-4 py-2 max-w-[150px] truncate">
                       {row.entityName}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="px-4 py-2">
                       <div className="flex flex-col">
                         <span className="font-medium text-sm">{row.attributeId}</span>
                         <span className="text-xs text-white/60 truncate max-w-[150px]">
@@ -405,7 +405,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="px-4 py-2">
                       <Select
                         value={row.result || ""}
                         onValueChange={(v) => updateRow(row.id, "result", v)}
@@ -429,7 +429,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                         </SelectContent>
                       </Select>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="px-4 py-2">
                       <Select
                         value={row.observation || "none"}
                         onValueChange={(v) => updateRow(row.id, "observation", v === "none" ? "" : v)}
@@ -450,7 +450,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                         </SelectContent>
                       </Select>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="px-4 py-2">
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button

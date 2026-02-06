@@ -111,13 +111,13 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
       {/* Summary */}
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{attributes.length}</div>
             <p className="text-xs text-white/60">Total Attributes</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.IsRequired === "Y").length}
             </div>
@@ -125,13 +125,13 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{acceptableDocs.length}</div>
             <p className="text-xs text-white/60">Acceptable Documents</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{categories.length}</div>
             <p className="text-xs text-white/60">Categories</p>
           </CardContent>
@@ -194,13 +194,13 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[80px]">ID</TableHead>
-                  <TableHead className="w-[180px]">Attribute</TableHead>
-                  <TableHead className="w-[130px]">Category</TableHead>
-                  <TableHead className="w-[120px]">Group</TableHead>
-                  <TableHead>Question</TableHead>
-                  <TableHead className="w-[80px]">Required</TableHead>
-                  <TableHead className="w-[80px]">Actions</TableHead>
+                  <TableHead className="w-[80px] px-4 py-3">ID</TableHead>
+                  <TableHead className="w-[180px] px-4 py-3">Attribute</TableHead>
+                  <TableHead className="w-[130px] px-4 py-3">Category</TableHead>
+                  <TableHead className="w-[120px] px-4 py-3">Group</TableHead>
+                  <TableHead className="px-4 py-3">Question</TableHead>
+                  <TableHead className="w-[80px] px-4 py-3">Required</TableHead>
+                  <TableHead className="w-[80px] px-4 py-3">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -213,29 +213,29 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                 ) : (
                   filteredAttributes.map((attr) => (
                     <TableRow key={attr.Attribute_ID}>
-                      <TableCell className="font-mono text-sm">{attr.Attribute_ID}</TableCell>
-                      <TableCell className="font-medium">{attr.Attribute_Name}</TableCell>
-                      <TableCell>
-                        <Badge className={CATEGORY_COLORS[attr.Category] || "bg-white/10 text-white/70"}>
+                      <TableCell className="px-4 py-2 font-mono text-sm">{attr.Attribute_ID}</TableCell>
+                      <TableCell className="px-4 py-2 font-medium">{attr.Attribute_Name}</TableCell>
+                      <TableCell className="px-4 py-2">
+                        <Badge className={`px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[attr.Category] || "bg-white/10 text-white/70"}`}>
                           {attr.Category}
                         </Badge>
                       </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={GROUP_COLORS[attr.Group] || ""}>
+                      <TableCell className="px-4 py-2">
+                        <Badge variant="outline" className={`px-2.5 py-0.5 text-xs font-medium ${GROUP_COLORS[attr.Group] || ""}`}>
                           {attr.Group}
                         </Badge>
                       </TableCell>
-                      <TableCell className="max-w-[250px] truncate text-sm">
+                      <TableCell className="px-4 py-2 max-w-[250px] truncate text-sm">
                         {attr.Question_Text}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2">
                         {attr.IsRequired === "Y" ? (
                           <CheckCircle className="h-4 w-4 text-crowe-teal-bright" />
                         ) : (
                           <span className="text-white/50">-</span>
                         )}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2">
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button

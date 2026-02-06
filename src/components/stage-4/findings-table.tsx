@@ -145,22 +145,22 @@ export function FindingsTable({
                         <div className="flex gap-2">
                           <Badge
                             variant="outline"
-                            className="bg-crowe-teal/20 text-crowe-teal-bright"
+                            className="px-2.5 py-0.5 text-xs font-medium bg-crowe-teal/20 text-crowe-teal-bright"
                           >
                             {attr.passCount} pass
                           </Badge>
                           <Badge
                             variant="outline"
-                            className={
+                            className={`px-2.5 py-0.5 text-xs font-medium ${
                               attr.failCount > 0
                                 ? "bg-crowe-coral/20 text-crowe-coral-bright"
                                 : ""
-                            }
+                            }`}
                           >
                             {attr.failCount} fail
                           </Badge>
                           {attr.naCount > 0 && (
-                            <Badge variant="outline">
+                            <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                               {attr.naCount} N/A
                             </Badge>
                           )}
@@ -168,13 +168,13 @@ export function FindingsTable({
                       </div>
                       {attr.failRate > 0 && (
                         <Badge
-                          className={
+                          className={`px-2.5 py-0.5 text-xs font-medium ${
                             attr.failRate >= 15
                               ? "bg-crowe-coral"
                               : attr.failRate >= 10
                               ? "bg-crowe-amber"
                               : "bg-white/30"
-                          }
+                          }`}
                         >
                           {attr.failRate.toFixed(1)}%
                         </Badge>
@@ -303,12 +303,12 @@ export function FindingsTable({
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Entity</TableHead>
-                      <TableHead>Attribute</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead className="max-w-[300px]">Observation</TableHead>
-                      <TableHead>Evidence</TableHead>
-                      <TableHead></TableHead>
+                      <TableHead className="px-4 py-3">Entity</TableHead>
+                      <TableHead className="px-4 py-3">Attribute</TableHead>
+                      <TableHead className="px-4 py-3">Category</TableHead>
+                      <TableHead className="px-4 py-3 max-w-[300px]">Observation</TableHead>
+                      <TableHead className="px-4 py-3">Evidence</TableHead>
+                      <TableHead className="px-4 py-3"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -321,24 +321,24 @@ export function FindingsTable({
                         transition={{ delay: Math.min(index * 0.03, 0.5) }}
                         whileHover={shouldReduceMotion ? undefined : { backgroundColor: "rgba(0,0,0,0.02)" }}
                       >
-                        <TableCell className="font-medium">
+                        <TableCell className="px-4 py-2 font-medium">
                           {exception.entityName}
                         </TableCell>
-                        <TableCell>{exception.attributeName}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{exception.category}</Badge>
+                        <TableCell className="px-4 py-2">{exception.attributeName}</TableCell>
+                        <TableCell className="px-4 py-2">
+                          <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">{exception.category}</Badge>
                         </TableCell>
-                        <TableCell className="max-w-[300px]">
+                        <TableCell className="px-4 py-2 max-w-[300px]">
                           <p className="truncate" title={exception.observation}>
                             {exception.observation}
                           </p>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="px-4 py-2">
                           <span className="text-sm text-white/60">
                             {exception.evidenceReference}
                           </span>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="px-4 py-2">
                           <motion.div
                             whileHover={shouldReduceMotion ? undefined : { scale: 1.1 }}
                             whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}

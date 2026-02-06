@@ -158,7 +158,7 @@ export function TestGridGenerator({
           {/* Prerequisites */}
           <div className="space-y-2">
             <p className="text-sm font-medium">Prerequisites:</p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Badge
                 variant={hasAssignments ? "default" : "outline"}
                 className={hasAssignments ? "bg-green-500/20 text-green-300" : ""}
@@ -201,7 +201,7 @@ export function TestGridGenerator({
 
           {/* Generation Summary */}
           <div className="rounded-md bg-white/10 p-4">
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-3 gap-3 text-center">
               <div>
                 <p className="text-2xl font-bold text-white">{assignments.length}</p>
                 <p className="text-xs text-white/60">Entities</p>
@@ -260,7 +260,7 @@ export function TestGridGenerator({
           </CardHeader>
           <CardContent>
             {/* Summary Statistics */}
-            <div className="grid gap-4 md:grid-cols-5 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
               <Card>
                 <CardContent className="pt-4">
                   <div className="text-2xl font-bold">
@@ -311,47 +311,47 @@ export function TestGridGenerator({
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Auditor</TableHead>
-                    <TableHead className="text-center">Entities</TableHead>
-                    <TableHead className="text-center">Test Rows</TableHead>
-                    <TableHead className="text-center">Pass</TableHead>
-                    <TableHead className="text-center">Fail</TableHead>
-                    <TableHead className="text-center">Pending</TableHead>
-                    <TableHead className="text-center">% Complete</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="px-4 py-3 text-left text-sm font-medium">Auditor</TableHead>
+                    <TableHead className="px-4 py-3 text-center text-sm font-medium">Entities</TableHead>
+                    <TableHead className="px-4 py-3 text-center text-sm font-medium">Test Rows</TableHead>
+                    <TableHead className="px-4 py-3 text-center text-sm font-medium">Pass</TableHead>
+                    <TableHead className="px-4 py-3 text-center text-sm font-medium">Fail</TableHead>
+                    <TableHead className="px-4 py-3 text-center text-sm font-medium">Pending</TableHead>
+                    <TableHead className="px-4 py-3 text-center text-sm font-medium">% Complete</TableHead>
+                    <TableHead className="px-4 py-3 text-right text-sm font-medium">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {generatedWorkbooks.map((workbook) => (
                     <TableRow key={workbook.auditorId}>
-                      <TableCell>
+                      <TableCell className="px-4 py-2">
                         <div>
-                          <p className="font-medium">{workbook.auditorName}</p>
+                          <p className="font-medium text-sm">{workbook.auditorName}</p>
                           <p className="text-xs text-white/60">
                             {workbook.auditorId}
                           </p>
                         </div>
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="px-4 py-2 text-center text-sm">
                         {workbook.entityCount}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="px-4 py-2 text-center text-sm">
                         {workbook.summary.totalRows}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="px-4 py-2 text-center text-sm">
                         <span className="text-green-600 font-medium">
                           {workbook.summary.passCount}
                         </span>
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="px-4 py-2 text-center text-sm">
                         <span className="text-red-600 font-medium">
                           {workbook.summary.fail1Count + workbook.summary.fail2Count}
                         </span>
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="px-4 py-2 text-center text-sm">
                         {workbook.summary.emptyCount}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="px-4 py-2 text-center">
                         <Badge
                           variant={
                             workbook.summary.completionPercentage >= 100
@@ -369,8 +369,8 @@ export function TestGridGenerator({
                           {workbook.summary.completionPercentage.toFixed(0)}%
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
+                      <TableCell className="px-4 py-2 text-right">
+                        <div className="flex items-center justify-end gap-2">
                           {onViewWorkbook && (
                             <Button
                               variant="ghost"

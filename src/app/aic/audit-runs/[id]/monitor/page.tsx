@@ -242,12 +242,12 @@ export default function AicMonitorPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
+            <Button variant="outline" size="sm" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
             {isPublished && (
-              <Button variant="outline" onClick={handleSimulateProgress} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
+              <Button variant="outline" size="sm" onClick={handleSimulateProgress} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Simulate Progress
               </Button>
@@ -279,7 +279,7 @@ export default function AicMonitorPage() {
 
       {/* Summary Stats */}
       <motion.div
-        className="grid gap-4 md:grid-cols-4 mb-8"
+        className="grid gap-3 md:grid-cols-4 mb-6"
         initial={shouldReduceMotion ? undefined : "hidden"}
         animate="visible"
         variants={staggerContainer}
@@ -346,7 +346,7 @@ export default function AicMonitorPage() {
 
       {/* Auditor Progress Cards */}
       <motion.div
-        className="mb-8"
+        className="mb-6"
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
@@ -393,7 +393,7 @@ export default function AicMonitorPage() {
               </div>
             ) : (
               <motion.div
-                className="grid gap-4 md:grid-cols-2"
+                className="grid gap-3 md:grid-cols-2"
                 variants={staggerContainer}
                 initial="hidden"
                 animate="visible"
@@ -433,7 +433,7 @@ export default function AicMonitorPage() {
                             </Badge>
                           </div>
                         </CardHeader>
-                        <CardContent className="space-y-4">
+                        <CardContent className="space-y-3">
                           {/* Progress Bar */}
                           <div>
                             <div className="flex justify-between text-sm mb-1">
@@ -483,24 +483,24 @@ export default function AicMonitorPage() {
       <AnimatePresence>
         {allSubmitted && (
           <motion.div
-            className="mb-8 p-6 bg-green-500/10 border border-green-500/30 rounded-lg"
+            className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300, delay: 0.2 }}
               >
-                <CheckCircle2 className="h-12 w-12 text-green-400" />
+                <CheckCircle2 className="h-10 w-10 text-green-400" />
               </motion.div>
               <div>
-                <h3 className="text-lg font-semibold text-green-400">
+                <h3 className="font-semibold text-green-400">
                   All Workbooks Submitted
                 </h3>
-                <p className="text-green-400/80">
+                <p className="text-sm text-green-400/80">
                   All {totalAuditors} auditors have completed and submitted their workbooks.
                   You can now proceed to consolidation.
                 </p>
@@ -512,7 +512,7 @@ export default function AicMonitorPage() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between"
+        className="flex items-center justify-between mt-6 pt-4 border-t border-white/10"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}

@@ -107,7 +107,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
               {auditRun.scope?.description || "CDD Onboarding Audit"}
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <Badge
               variant={auditRun.status === "completed" ? "default" : "secondary"}
               className="text-sm"
@@ -133,7 +133,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       />
 
       {/* Stage Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-6">
         {stages.map((stage) => {
           const isActive = stage.status === "active";
           const isCurrent = auditRun.currentStage === stage.number && stage.number <= 4;
@@ -149,10 +149,10 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                 isMonitor && auditRun.publishedWorkbooks > 0 ? "border-teal-500" : ""
               }`}
             >
-              <CardHeader>
-                <div className="flex items-center gap-4">
+              <CardHeader className="p-4">
+                <div className="flex items-center gap-3">
                   <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-lg ${
+                    className={`flex h-10 w-10 items-center justify-center rounded-lg ${
                       isCurrent
                         ? "bg-crowe-amber text-crowe-indigo-dark"
                         : isMonitor && auditRun.publishedWorkbooks > 0
@@ -162,7 +162,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                         : "bg-white/10 text-white/40"
                     }`}
                   >
-                    <stage.icon className="h-6 w-6" />
+                    <stage.icon className="h-5 w-5" />
                   </div>
                   <div>
                     <CardTitle className="flex items-center gap-2 text-white">
@@ -182,7 +182,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="px-4 pb-4 pt-0">
                 <Link href={stage.href}>
                   <Button
                     className={`w-full ${
@@ -204,7 +204,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       </div>
 
       {/* AIC Workflow Summary */}
-      <Card className="mt-8 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+      <Card className="mt-6 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
           <CardTitle className="text-white">AIC Workflow Summary</CardTitle>
           <CardDescription className="text-white/60">
@@ -212,26 +212,26 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-white">Stages 1-4</div>
               <div className="flex-1 text-sm text-white/50">
                 Setup: Gap analysis, sampling, attribute extraction, workbook generation
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-white">Stage 4</div>
               <div className="flex-1 text-sm text-white/50">
                 <span className="font-medium text-crowe-amber">Publish</span> workbooks to assigned auditors
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-white">Monitor</div>
               <div className="flex-1 text-sm text-white/50">
                 <span className="font-medium text-crowe-teal">Live tracking</span> of auditor completion (5-second refresh)
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-white">Consolidation</div>
               <div className="flex-1 text-sm text-white/50">
                 Aggregate submitted results and generate final report

@@ -175,19 +175,19 @@ export function ExtractionResultsView({
           variants={staggerContainer}
         >
           <motion.div variants={staggerItem}>
-            <Badge variant="default" className="gap-1 px-3 py-1">
+            <Badge variant="default" className="gap-1 px-2.5 py-0.5 text-xs font-medium">
               <ShieldCheck className="h-3 w-3" />
               CIP: {categoryCounts.CIP}
             </Badge>
           </motion.div>
           <motion.div variants={staggerItem}>
-            <Badge variant="secondary" className="gap-1 px-3 py-1">
+            <Badge variant="secondary" className="gap-1 px-2.5 py-0.5 text-xs font-medium">
               <FileText className="h-3 w-3" />
               CDD: {categoryCounts.CDD}
             </Badge>
           </motion.div>
           <motion.div variants={staggerItem}>
-            <Badge variant="destructive" className="gap-1 px-3 py-1">
+            <Badge variant="destructive" className="gap-1 px-2.5 py-0.5 text-xs font-medium">
               <AlertTriangle className="h-3 w-3" />
               EDD: {categoryCounts.EDD}
             </Badge>
@@ -251,12 +251,12 @@ export function ExtractionResultsView({
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="w-24">ID</TableHead>
-                          <TableHead className="w-20">Category</TableHead>
-                          <TableHead className="w-48">Attribute Name</TableHead>
-                          <TableHead>Question Text</TableHead>
-                          <TableHead className="w-20">Scope</TableHead>
-                          <TableHead className="w-20">Docs</TableHead>
+                          <TableHead className="w-24 px-4 py-3">ID</TableHead>
+                          <TableHead className="w-20 px-4 py-3">Category</TableHead>
+                          <TableHead className="w-48 px-4 py-3">Attribute Name</TableHead>
+                          <TableHead className="px-4 py-3">Question Text</TableHead>
+                          <TableHead className="w-20 px-4 py-3">Scope</TableHead>
+                          <TableHead className="w-20 px-4 py-3">Docs</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -270,31 +270,31 @@ export function ExtractionResultsView({
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: Math.min(index * 0.02, 0.3) }}
                             >
-                              <TableCell className="font-mono text-xs">
+                              <TableCell className="px-4 py-2 font-mono text-xs">
                                 {attr.Attribute_ID}
                               </TableCell>
-                              <TableCell>
+                              <TableCell className="px-4 py-2">
                                 <Badge
                                   variant={getCategoryBadgeVariant(attr.Category)}
-                                  className="gap-1"
+                                  className="gap-1 px-2.5 py-0.5 text-xs font-medium"
                                 >
                                   {getCategoryIcon(attr.Category)}
                                   {attr.Category}
                                 </Badge>
                               </TableCell>
-                              <TableCell className="font-medium">
+                              <TableCell className="px-4 py-2 font-medium">
                                 {attr.Attribute_Name}
                               </TableCell>
-                              <TableCell className="text-sm text-white/60">
+                              <TableCell className="px-4 py-2 text-sm text-white/60">
                                 {attr.Question_Text}
                               </TableCell>
-                              <TableCell>
-                                <Badge variant="outline" className="text-xs">
+                              <TableCell className="px-4 py-2">
+                                <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                                   {attr.RiskScope}
                                 </Badge>
                               </TableCell>
-                              <TableCell>
-                                <Badge variant="secondary" className="text-xs">
+                              <TableCell className="px-4 py-2">
+                                <Badge variant="secondary" className="px-2.5 py-0.5 text-xs font-medium">
                                   {docs.length}
                                 </Badge>
                               </TableCell>
@@ -329,11 +329,11 @@ export function ExtractionResultsView({
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="w-24">Attribute ID</TableHead>
-                          <TableHead className="w-48">Document Name</TableHead>
-                          <TableHead>Evidence Source</TableHead>
-                          <TableHead className="w-32">Jurisdiction</TableHead>
-                          <TableHead>Notes</TableHead>
+                          <TableHead className="w-24 px-4 py-3">Attribute ID</TableHead>
+                          <TableHead className="w-48 px-4 py-3">Document Name</TableHead>
+                          <TableHead className="px-4 py-3">Evidence Source</TableHead>
+                          <TableHead className="w-32 px-4 py-3">Jurisdiction</TableHead>
+                          <TableHead className="px-4 py-3">Notes</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -347,31 +347,31 @@ export function ExtractionResultsView({
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: Math.min(index * 0.02, 0.3) }}
                             >
-                              <TableCell className="font-mono text-xs">
+                              <TableCell className="px-4 py-2 font-mono text-xs">
                                 <div className="flex items-center gap-2">
                                   {doc.Attribute_ID}
                                   {attr && (
                                     <Badge
                                       variant={getCategoryBadgeVariant(attr.Category)}
-                                      className="text-[10px] px-1"
+                                      className="px-1.5 py-0 text-[10px] font-medium"
                                     >
                                       {attr.Category}
                                     </Badge>
                                   )}
                                 </div>
                               </TableCell>
-                              <TableCell className="font-medium">
+                              <TableCell className="px-4 py-2 font-medium">
                                 {doc.Document_Name}
                               </TableCell>
-                              <TableCell className="text-sm text-white/60">
+                              <TableCell className="px-4 py-2 text-sm text-white/60">
                                 {doc.Evidence_Source_Document}
                               </TableCell>
-                              <TableCell>
-                                <Badge variant="outline" className="text-xs">
+                              <TableCell className="px-4 py-2">
+                                <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                                   {doc.Jurisdiction_ID}
                                 </Badge>
                               </TableCell>
-                              <TableCell className="text-xs text-white/60">
+                              <TableCell className="px-4 py-2 text-xs text-white/60">
                                 {doc.Notes}
                               </TableCell>
                             </motion.tr>

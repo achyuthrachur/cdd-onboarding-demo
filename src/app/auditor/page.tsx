@@ -111,7 +111,7 @@ export default function AuditorDashboardPage() {
 
       {/* Stats Cards */}
       <motion.div
-        className="grid gap-4 md:grid-cols-4 mb-8"
+        className="grid gap-3 md:grid-cols-4 mb-6"
         initial={shouldReduceMotion ? undefined : "hidden"}
         animate="visible"
         variants={staggerContainer}
@@ -211,7 +211,7 @@ export default function AuditorDashboardPage() {
               </div>
             ) : (
               <motion.div
-                className="space-y-4"
+                className="space-y-3"
                 variants={staggerContainer}
                 initial="hidden"
                 animate="visible"
@@ -227,7 +227,7 @@ export default function AuditorDashboardPage() {
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-2">
+                              <div className="flex items-center gap-2 mb-2">
                                 <h3 className="font-medium text-white">Testing Workbook</h3>
                                 <Badge
                                   variant={workbook.status === 'submitted' ? 'default' : 'outline'}
@@ -243,12 +243,12 @@ export default function AuditorDashboardPage() {
                                   )}
                                 </Badge>
                               </div>
-                              <div className="flex items-center gap-4 text-sm text-white/50 mb-3">
+                              <div className="flex items-center gap-3 text-sm text-white/50 mb-3">
                                 <span>{workbook.totalAttributes} attributes</span>
                                 <span>|</span>
                                 <span>{workbook.totalCustomers} customers</span>
                               </div>
-                              <div className="flex items-center gap-4">
+                              <div className="flex items-center gap-3">
                                 <div className="flex-1 max-w-xs">
                                   <div className="flex justify-between text-sm mb-1">
                                     <span>Completion</span>

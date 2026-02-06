@@ -244,86 +244,74 @@ export function ConsolidationDashboard({
             >
               <motion.div
                 variants={staggerItem}
-                className="flex items-center gap-4 p-4 bg-crowe-teal/10 rounded-lg"
+                className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-teal/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <CheckCircle2 className="h-8 w-8 text-crowe-teal-bright" />
-                <div>
-                  <motion.div className="text-xl font-bold text-crowe-teal-bright tabular-nums">
-                    {animatedPassCount}
-                  </motion.div>
-                  <p className="text-xs text-white/60">Pass</p>
-                </div>
+                <CheckCircle2 className="h-6 w-6 text-crowe-teal-bright mb-1" />
+                <motion.div className="text-xl font-bold text-crowe-teal-bright tabular-nums">
+                  {animatedPassCount}
+                </motion.div>
+                <p className="text-xs text-white/60">Pass</p>
               </motion.div>
 
               <motion.div
                 variants={staggerItem}
-                className="flex items-center gap-4 p-4 bg-crowe-amber/10 rounded-lg"
+                className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-amber/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <CheckCircle2 className="h-8 w-8 text-crowe-amber-bright" />
-                <div>
-                  <motion.div className="text-xl font-bold text-crowe-amber-bright tabular-nums">
-                    {animatedPassWithObs}
-                  </motion.div>
-                  <p className="text-xs text-white/60">Pass w/Obs</p>
-                </div>
+                <CheckCircle2 className="h-6 w-6 text-crowe-amber-bright mb-1" />
+                <motion.div className="text-xl font-bold text-crowe-amber-bright tabular-nums">
+                  {animatedPassWithObs}
+                </motion.div>
+                <p className="text-xs text-white/60">Pass w/Obs</p>
               </motion.div>
 
               <motion.div
                 variants={staggerItem}
-                className="flex items-center gap-4 p-4 bg-crowe-coral/10 rounded-lg"
+                className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-coral/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <XCircle className="h-8 w-8 text-crowe-coral-bright" />
-                <div>
-                  <motion.div className="text-xl font-bold text-crowe-coral-bright tabular-nums">
-                    {animatedFail1}
-                  </motion.div>
-                  <p className="text-xs text-white/60">Fail 1 - Reg</p>
-                </div>
+                <XCircle className="h-6 w-6 text-crowe-coral-bright mb-1" />
+                <motion.div className="text-xl font-bold text-crowe-coral-bright tabular-nums">
+                  {animatedFail1}
+                </motion.div>
+                <p className="text-xs text-white/60">Fail 1 - Reg</p>
               </motion.div>
 
               <motion.div
                 variants={staggerItem}
-                className="flex items-center gap-4 p-4 bg-crowe-amber-dark/10 rounded-lg"
+                className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-amber-dark/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <XCircle className="h-8 w-8 text-crowe-amber" />
-                <div>
-                  <motion.div className="text-xl font-bold text-crowe-amber tabular-nums">
-                    {animatedFail2}
-                  </motion.div>
-                  <p className="text-xs text-white/60">Fail 2 - Proc</p>
-                </div>
+                <XCircle className="h-6 w-6 text-crowe-amber mb-1" />
+                <motion.div className="text-xl font-bold text-crowe-amber tabular-nums">
+                  {animatedFail2}
+                </motion.div>
+                <p className="text-xs text-white/60">Fail 2 - Proc</p>
               </motion.div>
 
               <motion.div
                 variants={staggerItem}
-                className="flex items-center gap-4 p-4 bg-crowe-blue/10 rounded-lg"
+                className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-blue/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <AlertTriangle className="h-8 w-8 text-crowe-blue-light" />
-                <div>
-                  <motion.div className="text-xl font-bold text-crowe-blue-light tabular-nums">
-                    {animatedQLOB}
-                  </motion.div>
-                  <p className="text-xs text-white/60">Q to LOB</p>
-                </div>
+                <AlertTriangle className="h-6 w-6 text-crowe-blue-light mb-1" />
+                <motion.div className="text-xl font-bold text-crowe-blue-light tabular-nums">
+                  {animatedQLOB}
+                </motion.div>
+                <p className="text-xs text-white/60">Q to LOB</p>
               </motion.div>
 
               <motion.div
                 variants={staggerItem}
-                className="flex items-center gap-4 p-4 bg-white/10 rounded-lg"
+                className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-white/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <MinusCircle className="h-8 w-8 text-white/60" />
-                <div>
-                  <motion.div className="text-xl font-bold text-white/70 tabular-nums">
-                    {animatedNA}
-                  </motion.div>
-                  <p className="text-xs text-white/60">N/A</p>
-                </div>
+                <MinusCircle className="h-6 w-6 text-white/60 mb-1" />
+                <motion.div className="text-xl font-bold text-white/70 tabular-nums">
+                  {animatedNA}
+                </motion.div>
+                <p className="text-xs text-white/60">N/A</p>
               </motion.div>
             </motion.div>
           </CardContent>
@@ -385,7 +373,7 @@ export function ConsolidationDashboard({
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{category.category}</span>
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                               {category.totalTests} tests
                             </Badge>
                           </div>
@@ -403,7 +391,7 @@ export function ConsolidationDashboard({
                             )}
                           </div>
                         </div>
-                        <div className="h-3 rounded-full bg-white/10 overflow-hidden flex">
+                        <div className="h-2 rounded-full bg-white/10 overflow-hidden flex">
                           <div
                             className="bg-crowe-teal h-full transition-all"
                             style={{ width: `${passPercent}%` }}
@@ -458,10 +446,10 @@ export function ConsolidationDashboard({
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{jur.jurisdictionName || jur.jurisdictionId}</span>
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                               {jur.entityCount} entities
                             </Badge>
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge variant="secondary" className="px-2.5 py-0.5 text-xs font-medium">
                               {jur.totalTests} tests
                             </Badge>
                           </div>
@@ -473,7 +461,7 @@ export function ConsolidationDashboard({
                             )}
                           </div>
                         </div>
-                        <div className="h-3 rounded-full bg-white/10 overflow-hidden flex">
+                        <div className="h-2 rounded-full bg-white/10 overflow-hidden flex">
                           <div
                             className="bg-crowe-teal h-full transition-all"
                             style={{ width: `${passPercent}%` }}
@@ -527,15 +515,15 @@ export function ConsolidationDashboard({
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{aud.auditorName}</span>
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                               {aud.entityCount} entities
                             </Badge>
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge variant="secondary" className="px-2.5 py-0.5 text-xs font-medium">
                               {aud.totalTests} tests
                             </Badge>
                             <Badge
                               variant={aud.completionRate >= 100 ? "default" : "destructive"}
-                              className="text-xs"
+                              className="px-2.5 py-0.5 text-xs font-medium"
                             >
                               {aud.completionRate.toFixed(0)}% complete
                             </Badge>
@@ -545,7 +533,7 @@ export function ConsolidationDashboard({
                             <span className="text-crowe-coral-bright">{totalFail} fail</span>
                           </div>
                         </div>
-                        <div className="h-3 rounded-full bg-white/10 overflow-hidden flex">
+                        <div className="h-2 rounded-full bg-white/10 overflow-hidden flex">
                           <div
                             className="bg-crowe-teal h-full transition-all"
                             style={{ width: `${passPercent}%` }}
@@ -603,11 +591,11 @@ export function ConsolidationDashboard({
                       <div key={tier.riskTier} className="space-y-2">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Badge className={tierColor}>{tier.riskTier}</Badge>
-                            <Badge variant="outline" className="text-xs">
+                            <Badge className={`px-2.5 py-0.5 text-xs font-medium ${tierColor}`}>{tier.riskTier}</Badge>
+                            <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                               {tier.entityCount} entities
                             </Badge>
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge variant="secondary" className="px-2.5 py-0.5 text-xs font-medium">
                               {tier.totalTests} tests
                             </Badge>
                           </div>
@@ -619,7 +607,7 @@ export function ConsolidationDashboard({
                             )}
                           </div>
                         </div>
-                        <div className="h-3 rounded-full bg-white/10 overflow-hidden flex">
+                        <div className="h-2 rounded-full bg-white/10 overflow-hidden flex">
                           <div
                             className="bg-crowe-teal h-full transition-all"
                             style={{ width: `${passPercent}%` }}

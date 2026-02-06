@@ -96,12 +96,12 @@ export function DocumentCard({
             <div className="flex items-center gap-2 mt-1">
               <Badge
                 variant="secondary"
-                className={cn("text-xs", DOC_TYPE_COLORS[docType])}
+                className={cn("px-2.5 py-0.5 text-xs font-medium", DOC_TYPE_COLORS[docType])}
               >
                 {DOC_TYPE_LABELS[docType] || docType}
               </Badge>
               {jurisdiction && (
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                   {jurisdiction}
                 </Badge>
               )}

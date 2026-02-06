@@ -139,7 +139,7 @@ export default function AuditorWorkbooksPage() {
               View and complete your assigned testing workbooks
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" size="sm" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10">
             <Database className="h-4 w-4 mr-2" />
             Load Demo Data
           </Button>
@@ -182,7 +182,7 @@ export default function AuditorWorkbooksPage() {
             </div>
           ) : (
             <motion.div
-              className="space-y-4"
+              className="space-y-3"
               variants={staggerContainer}
               initial="hidden"
               animate="visible"
@@ -195,10 +195,10 @@ export default function AuditorWorkbooksPage() {
                         ? 'border-crowe-teal/50'
                         : 'hover:border-crowe-amber/50'
                     }`}>
-                      <CardContent className="p-6">
+                      <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
+                            <div className="flex items-center gap-2 mb-2">
                               <FileSpreadsheet className="h-5 w-5 text-crowe-amber" />
                               <h3 className="font-medium text-lg text-white">Testing Workbook</h3>
                               <Badge
@@ -215,14 +215,14 @@ export default function AuditorWorkbooksPage() {
                                 )}
                               </Badge>
                             </div>
-                            <div className="flex items-center gap-4 text-sm text-white/50 mb-4">
+                            <div className="flex items-center gap-3 text-sm text-white/50 mb-3">
                               <span>{workbook.totalAttributes} attributes to test</span>
                               <span>|</span>
                               <span>{workbook.totalCustomers} customers assigned</span>
                               <span>|</span>
                               <span>{workbook.totalAttributes * workbook.totalCustomers} total tests</span>
                             </div>
-                            <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-4">
                               <div className="flex-1 max-w-md">
                                 <div className="flex justify-between text-sm mb-1 text-white/70">
                                   <span>Completion Progress</span>
@@ -252,7 +252,7 @@ export default function AuditorWorkbooksPage() {
                               )}
                             </div>
                           </div>
-                          <Button variant="ghost" size="lg" className="ml-4 text-white hover:bg-white/10">
+                          <Button variant="ghost" size="sm" className="ml-3 text-white hover:bg-white/10">
                             {workbook.status === 'submitted' ? 'View' : 'Continue'}
                             <ArrowRight className="h-5 w-5 ml-2" />
                           </Button>

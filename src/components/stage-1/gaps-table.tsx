@@ -114,7 +114,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
         <div className="grid gap-4 md:grid-cols-4 lg:grid-cols-7">
           {summary.map((item) => (
             <Card key={item.Metric}>
-              <CardContent className="pt-4">
+              <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
                 <div className="text-2xl font-bold">{item.Value}</div>
                 <p className="text-xs text-white/60">{item.Metric}</p>
               </CardContent>
@@ -179,11 +179,11 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Gap ID</TableHead>
-                  <TableHead className="w-[130px]">Disposition</TableHead>
-                  <TableHead className="w-[100px]">Severity</TableHead>
-                  <TableHead>Gap Description</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
+                  <TableHead className="w-[100px] px-4 py-3">Gap ID</TableHead>
+                  <TableHead className="w-[130px] px-4 py-3">Disposition</TableHead>
+                  <TableHead className="w-[100px] px-4 py-3">Severity</TableHead>
+                  <TableHead className="px-4 py-3">Gap Description</TableHead>
+                  <TableHead className="w-[100px] px-4 py-3">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -196,22 +196,22 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
                 ) : (
                   filteredGaps.map((gap) => (
                     <TableRow key={gap.Gap_ID}>
-                      <TableCell className="font-mono text-sm">{gap.Gap_ID}</TableCell>
-                      <TableCell>
-                        <Badge className={DISPOSITION_COLORS[gap.Disposition] || ""}>
+                      <TableCell className="px-4 py-2 font-mono text-sm">{gap.Gap_ID}</TableCell>
+                      <TableCell className="px-4 py-2">
+                        <Badge className={`px-2.5 py-0.5 text-xs font-medium ${DISPOSITION_COLORS[gap.Disposition] || ""}`}>
                           {getDispositionIcon(gap.Disposition)}
                           <span className="ml-1">{gap.Disposition}</span>
                         </Badge>
                       </TableCell>
-                      <TableCell>
-                        <Badge className={SEVERITY_COLORS[gap.Severity] || ""}>
+                      <TableCell className="px-4 py-2">
+                        <Badge className={`px-2.5 py-0.5 text-xs font-medium ${SEVERITY_COLORS[gap.Severity] || ""}`}>
                           {gap.Severity}
                         </Badge>
                       </TableCell>
-                      <TableCell className="max-w-[300px] truncate">
+                      <TableCell className="px-4 py-2 max-w-[300px] truncate">
                         {gap.Gap_Description}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2">
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button

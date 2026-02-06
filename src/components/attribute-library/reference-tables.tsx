@@ -36,19 +36,19 @@ export function JurisdictionsTable({ jurisdictions }: JurisdictionsTableProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[120px]">Jurisdiction ID</TableHead>
-                  <TableHead>Jurisdiction Name</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[120px]">Jurisdiction ID</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium">Jurisdiction Name</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {jurisdictions.map((j) => (
                   <TableRow key={j.Jurisdiction_ID}>
-                    <TableCell>
+                    <TableCell className="px-4 py-2 text-sm">
                       <Badge variant="outline" className="font-mono">
                         {j.Jurisdiction_ID}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-medium">{j.Jurisdiction_Name}</TableCell>
+                    <TableCell className="px-4 py-2 text-sm font-medium">{j.Jurisdiction_Name}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -83,21 +83,21 @@ export function AuditorsTable({ auditors }: AuditorsTableProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Auditor ID</TableHead>
-                  <TableHead>Auditor Name</TableHead>
-                  <TableHead>Email</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[100px]">Auditor ID</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium">Auditor Name</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium">Email</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {auditors.map((a) => (
                   <TableRow key={a.id}>
-                    <TableCell>
+                    <TableCell className="px-4 py-2 text-sm">
                       <Badge variant="outline" className="font-mono">
                         {a.id}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-medium">{a.name}</TableCell>
-                    <TableCell className="text-white/60">{a.email}</TableCell>
+                    <TableCell className="px-4 py-2 text-sm font-medium">{a.name}</TableCell>
+                    <TableCell className="px-4 py-2 text-sm text-white/60">{a.email}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -125,9 +125,9 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.RiskTier === "Low").length}
             </div>
@@ -135,7 +135,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.RiskTier === "Medium").length}
             </div>
@@ -143,7 +143,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.RiskTier === "High" || c.RiskTier === "Critical").length}
             </div>
@@ -151,7 +151,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.IsEDD).length}
             </div>
@@ -175,21 +175,21 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Client Type</TableHead>
-                  <TableHead className="w-[120px]">Risk Tier</TableHead>
-                  <TableHead className="w-[100px]">EDD Required</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium">Client Type</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[120px]">Risk Tier</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[100px]">EDD Required</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {clientTypeRisks.map((ctr) => (
                   <TableRow key={ctr.ClientType}>
-                    <TableCell className="font-medium">{ctr.ClientType}</TableCell>
-                    <TableCell>
+                    <TableCell className="px-4 py-2 text-sm font-medium">{ctr.ClientType}</TableCell>
+                    <TableCell className="px-4 py-2 text-sm">
                       <Badge className={RISK_TIER_COLORS[ctr.RiskTier] || "bg-white/10 text-white/70"}>
                         {ctr.RiskTier}
                       </Badge>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="px-4 py-2 text-sm">
                       {ctr.IsEDD ? (
                         <div className="flex items-center gap-1 text-red-600">
                           <CheckCircle className="h-4 w-4" />
@@ -237,27 +237,27 @@ export function SamplingTable({ samplingConfig }: SamplingTableProps) {
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.SampleSize}</div>
             <p className="text-xs text-white/60">Sample Size</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.PopulationSize.toLocaleString()}</div>
             <p className="text-xs text-white/60">Population Size</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.ConfidenceLevel}%</div>
             <p className="text-xs text-white/60">Confidence Level</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.MarginOfError}%</div>
             <p className="text-xs text-white/60">Margin of Error</p>
           </CardContent>
@@ -284,48 +284,48 @@ export function SamplingTable({ samplingConfig }: SamplingTableProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Parameter</TableHead>
-                  <TableHead>Value</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium">Parameter</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium">Value</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell className="font-medium">Batch ID</TableCell>
-                  <TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-medium">Batch ID</TableCell>
+                  <TableCell className="px-4 py-2 text-sm">
                     <Badge variant="outline" className="font-mono">
                       {samplingConfig.BatchID}
                     </Badge>
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Sampling Method</TableCell>
-                  <TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-medium">Sampling Method</TableCell>
+                  <TableCell className="px-4 py-2 text-sm">
                     <Badge variant="secondary">{samplingConfig.SamplingMethod}</Badge>
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Confidence Level</TableCell>
-                  <TableCell>{samplingConfig.ConfidenceLevel}%</TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-medium">Confidence Level</TableCell>
+                  <TableCell className="px-4 py-2 text-sm">{samplingConfig.ConfidenceLevel}%</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Margin of Error</TableCell>
-                  <TableCell>{samplingConfig.MarginOfError}%</TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-medium">Margin of Error</TableCell>
+                  <TableCell className="px-4 py-2 text-sm">{samplingConfig.MarginOfError}%</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Sample Size</TableCell>
-                  <TableCell className="font-mono">{samplingConfig.SampleSize}</TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-medium">Sample Size</TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-mono">{samplingConfig.SampleSize}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Population Size</TableCell>
-                  <TableCell className="font-mono">{samplingConfig.PopulationSize.toLocaleString()}</TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-medium">Population Size</TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-mono">{samplingConfig.PopulationSize.toLocaleString()}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Locked Date</TableCell>
-                  <TableCell>{formatDate(samplingConfig.LockedDate)}</TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-medium">Locked Date</TableCell>
+                  <TableCell className="px-4 py-2 text-sm">{formatDate(samplingConfig.LockedDate)}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Status</TableCell>
-                  <TableCell>
+                  <TableCell className="px-4 py-2 text-sm font-medium">Status</TableCell>
+                  <TableCell className="px-4 py-2 text-sm">
                     <Badge className={SAMPLING_STATUS_COLORS[samplingConfig.Status] || "bg-white/10 text-white/70"}>
                       {samplingConfig.Status}
                     </Badge>

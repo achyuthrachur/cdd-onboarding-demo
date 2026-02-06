@@ -159,7 +159,7 @@ export default function AicStage1Page() {
         initial="hidden"
         animate="visible"
         variants={shouldReduceMotion ? {} : staggerContainer}
-        className="grid gap-4 md:grid-cols-3 mb-8"
+        className="grid gap-3 md:grid-cols-3 mb-6"
       >
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
           <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment1Result ? "border-green-500" : ""}`}>
@@ -284,7 +284,7 @@ export default function AicStage1Page() {
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3 }}
-        className="flex justify-between"
+        className="flex items-center justify-between mt-6 pt-4 border-t border-white/10"
       >
         <Link href={`/aic/audit-runs/${id}`}>
           <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">

@@ -599,10 +599,10 @@ export function GenerationReview({
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="space-y-1">
               <p className="text-sm text-white/60">Last Refresh</p>
-              <p className="font-medium">{formatDate(batchConfig.LastRefresh)}</p>
+              <p className="font-medium text-sm">{formatDate(batchConfig.LastRefresh)}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-white/60">Output Folder</p>
@@ -612,11 +612,11 @@ export function GenerationReview({
             </div>
             <div className="space-y-1">
               <p className="text-sm text-white/60">Total Samples</p>
-              <p className="font-medium">{batchConfig.TotalSamples}</p>
+              <p className="font-medium text-sm">{batchConfig.TotalSamples}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-white/60">Assignment Status</p>
-              <p className="font-medium">
+              <p className="font-medium text-sm">
                 {batchConfig.AssignedCount}/{batchConfig.TotalSamples} Assigned
               </p>
             </div>
@@ -625,7 +625,7 @@ export function GenerationReview({
           {/* Primary Action Buttons - 6 Main Actions */}
           <div className="mt-4 pt-4 border-t">
             <p className="text-sm font-medium text-white/60 mb-3">Primary Actions</p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {/* Button 1: Import Attributes and Acceptable Docs */}
               <Button
                 variant="outline"
@@ -694,7 +694,7 @@ export function GenerationReview({
           </div>
 
           {/* Secondary Action Buttons */}
-          <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-dashed">
+          <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-dashed">
             <Button variant="ghost" size="sm" onClick={handleRefreshData}>
               <RefreshCw className="mr-2 h-4 w-4" />
               Refresh
@@ -735,27 +735,27 @@ export function GenerationReview({
       </Card>
 
       {/* Summary Statistics */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{displayRows.length}</div>
             <p className="text-xs text-white/60">Total Samples</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{Object.keys(stats.byJurisdiction).length}</div>
             <p className="text-xs text-white/60">Jurisdictions</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{stats.avgIRR.toFixed(1)}</div>
             <p className="text-xs text-white/60">Avg IRR</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{stats.avgDRR.toFixed(1)}</div>
             <p className="text-xs text-white/60">Avg DRR</p>
           </CardContent>
@@ -772,7 +772,7 @@ export function GenerationReview({
         </CardHeader>
         <CardContent>
           {/* Filters */}
-          <div className="flex flex-wrap gap-4 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
@@ -784,48 +784,50 @@ export function GenerationReview({
                 />
               </div>
             </div>
-            <Select value={jurisdictionFilter} onValueChange={setJurisdictionFilter}>
-              <SelectTrigger className="w-[150px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Jurisdiction" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Jurisdictions</SelectItem>
-                {uniqueJurisdictions.map((j) => (
-                  <SelectItem key={j} value={j}>
-                    {j}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={auditorFilter} onValueChange={setAuditorFilter}>
-              <SelectTrigger className="w-[180px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Auditor" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Auditors</SelectItem>
-                {uniqueAuditors.map((a) => (
-                  <SelectItem key={a} value={a}>
-                    {a}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={partyTypeFilter} onValueChange={setPartyTypeFilter}>
-              <SelectTrigger className="w-[180px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Party Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Party Types</SelectItem>
-                {partyTypes.map((pt) => (
-                  <SelectItem key={pt} value={pt}>
-                    {pt}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex items-center gap-3">
+              <Select value={jurisdictionFilter} onValueChange={setJurisdictionFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Jurisdiction" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Jurisdictions</SelectItem>
+                  {uniqueJurisdictions.map((j) => (
+                    <SelectItem key={j} value={j}>
+                      {j}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={auditorFilter} onValueChange={setAuditorFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Auditor" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Auditors</SelectItem>
+                  {uniqueAuditors.map((a) => (
+                    <SelectItem key={a} value={a}>
+                      {a}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={partyTypeFilter} onValueChange={setPartyTypeFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Party Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Party Types</SelectItem>
+                  {partyTypes.map((pt) => (
+                    <SelectItem key={pt} value={pt}>
+                      {pt}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Table */}
@@ -833,16 +835,16 @@ export function GenerationReview({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[60px]">#</TableHead>
-                  <TableHead className="w-[100px]">GCI</TableHead>
-                  <TableHead className="min-w-[180px]">Legal Name</TableHead>
-                  <TableHead className="w-[80px]">Jurisdiction</TableHead>
-                  <TableHead className="w-[120px]">Auditor</TableHead>
-                  <TableHead className="w-[60px]">IRR</TableHead>
-                  <TableHead className="w-[60px]">DRR</TableHead>
-                  <TableHead className="min-w-[150px]">Party Type</TableHead>
-                  <TableHead className="w-[100px]">KYC Date</TableHead>
-                  <TableHead className="w-[120px]">Primary FLU</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[60px]">#</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[100px]">GCI</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium min-w-[180px]">Legal Name</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[80px]">Jurisdiction</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[120px]">Auditor</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[60px]">IRR</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[60px]">DRR</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium min-w-[150px]">Party Type</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[100px]">KYC Date</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[120px]">Primary FLU</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -857,16 +859,16 @@ export function GenerationReview({
                 ) : (
                   filteredRows.map((row) => (
                     <TableRow key={row.Sampling_Index}>
-                      <TableCell className="font-mono text-sm">{row.Sampling_Index}</TableCell>
-                      <TableCell className="font-mono text-sm">{row.GCI}</TableCell>
-                      <TableCell className="font-medium">{row.Legal_Name}</TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 font-mono text-sm">{row.Sampling_Index}</TableCell>
+                      <TableCell className="px-4 py-2 font-mono text-sm">{row.GCI}</TableCell>
+                      <TableCell className="px-4 py-2 font-medium text-sm">{row.Legal_Name}</TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         <Badge variant="outline">{row.Jurisdiction_ID}</Badge>
                       </TableCell>
-                      <TableCell className="text-sm">{row.Auditor_Name}</TableCell>
-                      <TableCell className="font-mono text-sm">{row.IRR.toFixed(1)}</TableCell>
-                      <TableCell className="font-mono text-sm">{row.DRR.toFixed(1)}</TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 text-sm">{row.Auditor_Name}</TableCell>
+                      <TableCell className="px-4 py-2 font-mono text-sm">{row.IRR.toFixed(1)}</TableCell>
+                      <TableCell className="px-4 py-2 font-mono text-sm">{row.DRR.toFixed(1)}</TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         <Badge
                           variant="secondary"
                           className={PARTY_TYPE_COLORS[row.Party_Type] || ""}
@@ -874,8 +876,8 @@ export function GenerationReview({
                           {row.Party_Type}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-sm">{formatDate(row.KYC_Date)}</TableCell>
-                      <TableCell className="text-sm">{row.Primary_FLU}</TableCell>
+                      <TableCell className="px-4 py-2 text-sm">{formatDate(row.KYC_Date)}</TableCell>
+                      <TableCell className="px-4 py-2 text-sm">{row.Primary_FLU}</TableCell>
                     </TableRow>
                   ))
                 )}

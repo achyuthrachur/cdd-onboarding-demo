@@ -110,7 +110,7 @@ export function AuditorWorkbookView({
     }
 
     return (
-      <Badge variant={variant} className="gap-1">
+      <Badge variant={variant} className="gap-1 px-2.5 py-0.5 text-xs font-medium">
         <Icon className={cn("h-3 w-3", option.color)} />
         <span className="truncate max-w-[100px]">{option.label}</span>
       </Badge>
@@ -167,27 +167,27 @@ export function AuditorWorkbookView({
 
         {/* Summary Stats */}
         <div className="grid grid-cols-6 gap-4">
-          <div className="text-center p-2 bg-crowe-teal/10 rounded">
+          <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-teal/10">
             <div className="text-lg font-bold text-crowe-teal-bright">{summary.passCount}</div>
             <div className="text-xs text-white/60">Pass</div>
           </div>
-          <div className="text-center p-2 bg-crowe-amber/10 rounded">
+          <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-amber/10">
             <div className="text-lg font-bold text-crowe-amber-bright">{summary.passWithObsCount}</div>
             <div className="text-xs text-white/60">Pass w/Obs</div>
           </div>
-          <div className="text-center p-2 bg-crowe-coral/10 rounded">
+          <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-coral/10">
             <div className="text-lg font-bold text-crowe-coral-bright">{summary.fail1RegulatoryCount}</div>
             <div className="text-xs text-white/60">Fail 1</div>
           </div>
-          <div className="text-center p-2 bg-crowe-amber-dark/10 rounded">
+          <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-amber-dark/10">
             <div className="text-lg font-bold text-crowe-amber">{summary.fail2ProcedureCount}</div>
             <div className="text-xs text-white/60">Fail 2</div>
           </div>
-          <div className="text-center p-2 bg-crowe-blue/10 rounded">
+          <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-blue/10">
             <div className="text-lg font-bold text-crowe-blue-light">{summary.questionToLOBCount}</div>
             <div className="text-xs text-white/60">Questions</div>
           </div>
-          <div className="text-center p-2 bg-white/10 rounded">
+          <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-white/10">
             <div className="text-lg font-bold text-white/70">{summary.naCount}</div>
             <div className="text-xs text-white/60">N/A</div>
           </div>
@@ -199,7 +199,7 @@ export function AuditorWorkbookView({
             <span className="text-white/60">Completion Progress</span>
             <span className="font-medium">{summary.completionPercentage}%</span>
           </div>
-          <Progress value={summary.completionPercentage} className="h-2" />
+          <Progress value={summary.completionPercentage} className="h-2 [&>div]:h-2" />
           <div className="text-xs text-white/60 mt-1">
             {summary.completedRows} of {summary.totalRows} rows completed
           </div>
@@ -242,35 +242,35 @@ export function AuditorWorkbookView({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-24 sticky top-0 bg-background">Case ID</TableHead>
-              <TableHead className="w-40 sticky top-0 bg-background">Legal Name</TableHead>
-              <TableHead className="w-20 sticky top-0 bg-background">Category</TableHead>
-              <TableHead className="w-28 sticky top-0 bg-background">Attribute</TableHead>
-              <TableHead className="w-32 sticky top-0 bg-background">Result</TableHead>
-              <TableHead className="w-40 sticky top-0 bg-background">Acceptable Doc</TableHead>
-              <TableHead className="sticky top-0 bg-background">Observation</TableHead>
+              <TableHead className="w-24 px-4 py-3 sticky top-0 bg-background">Case ID</TableHead>
+              <TableHead className="w-40 px-4 py-3 sticky top-0 bg-background">Legal Name</TableHead>
+              <TableHead className="w-20 px-4 py-3 sticky top-0 bg-background">Category</TableHead>
+              <TableHead className="w-28 px-4 py-3 sticky top-0 bg-background">Attribute</TableHead>
+              <TableHead className="w-32 px-4 py-3 sticky top-0 bg-background">Result</TableHead>
+              <TableHead className="w-40 px-4 py-3 sticky top-0 bg-background">Acceptable Doc</TableHead>
+              <TableHead className="px-4 py-3 sticky top-0 bg-background">Observation</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredRows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell className="font-mono text-xs">{row.caseId}</TableCell>
-                <TableCell className="text-sm truncate max-w-[160px]" title={row.legalName}>
+                <TableCell className="px-4 py-2 font-mono text-xs">{row.caseId}</TableCell>
+                <TableCell className="px-4 py-2 text-sm truncate max-w-[160px]" title={row.legalName}>
                   {row.legalName}
                 </TableCell>
-                <TableCell>
-                  <Badge variant="outline" className="text-xs">
+                <TableCell className="px-4 py-2">
+                  <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                     {row.attributeCategory}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-xs truncate max-w-[120px]" title={row.attributeName}>
+                <TableCell className="px-4 py-2 text-xs truncate max-w-[120px]" title={row.attributeName}>
                   {row.attributeId}
                 </TableCell>
-                <TableCell>{getResultBadge(row.result)}</TableCell>
-                <TableCell className="text-xs truncate max-w-[160px]" title={row.acceptableDocUsed}>
+                <TableCell className="px-4 py-2">{getResultBadge(row.result)}</TableCell>
+                <TableCell className="px-4 py-2 text-xs truncate max-w-[160px]" title={row.acceptableDocUsed}>
                   {row.acceptableDocUsed || "-"}
                 </TableCell>
-                <TableCell className="text-xs text-white/60 truncate max-w-[200px]" title={row.observation}>
+                <TableCell className="px-4 py-2 text-xs text-white/60 truncate max-w-[200px]" title={row.observation}>
                   {row.observation || "-"}
                 </TableCell>
               </TableRow>

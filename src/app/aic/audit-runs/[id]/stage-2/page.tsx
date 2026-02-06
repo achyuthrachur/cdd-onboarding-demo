@@ -268,7 +268,7 @@ export default function AicStage2Page() {
 
       {/* Workflow Steps */}
       <motion.div
-        className="grid gap-6 md:grid-cols-3 mb-8"
+        className="grid gap-3 md:grid-cols-3 mb-6"
         initial={shouldReduceMotion ? undefined : "hidden"}
         animate="visible"
         variants={staggerContainer}
@@ -295,8 +295,8 @@ export default function AicStage2Page() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-white/50 mb-4">
+              <CardContent className="pt-0">
+                <p className="text-sm text-white/50 mb-3">
                   {step.helpText}
                 </p>
                 <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/70" : ""}>
@@ -372,7 +372,7 @@ export default function AicStage2Page() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between"
+        className="flex items-center justify-between mt-6 pt-4 border-t border-white/10"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}

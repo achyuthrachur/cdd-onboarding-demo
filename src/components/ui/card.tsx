@@ -76,11 +76,20 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+interface CardContentProps extends React.ComponentProps<"div"> {
+  /** Size variant - 'sm' for compact cards (p-4), 'default' for standard cards (px-6) */
+  size?: "sm" | "default"
+}
+
+function CardContent({ className, size = "default", ...props }: CardContentProps) {
   return (
     <div
       data-slot="card-content"
-      className={cn("px-6", className)}
+      data-size={size}
+      className={cn(
+        size === "sm" ? "p-4" : "px-6",
+        className
+      )}
       {...props}
     />
   )

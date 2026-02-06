@@ -37,7 +37,7 @@ export default function AicDashboardPage() {
 
       {/* Quick Stats */}
       <motion.div
-        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8"
+        className="grid gap-3 md:grid-cols-2 lg:grid-cols-4 mb-8"
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
@@ -105,7 +105,7 @@ export default function AicDashboardPage() {
 
       {/* Getting Started & Workflow */}
       <motion.div
-        className="grid gap-6 md:grid-cols-2"
+        className="grid gap-4 md:grid-cols-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
@@ -134,7 +134,7 @@ export default function AicDashboardPage() {
               Your responsibilities in the audit lifecycle
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white text-sm font-medium">
                 1

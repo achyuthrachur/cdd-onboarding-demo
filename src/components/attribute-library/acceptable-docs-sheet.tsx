@@ -108,27 +108,27 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
   return (
     <div className="space-y-6">
       {/* Summary */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{acceptableDocs.length}</div>
             <p className="text-xs text-white/60">Total Documents</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{docsByAttribute.size}</div>
             <p className="text-xs text-white/60">Attributes Covered</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{sources.length}</div>
             <p className="text-xs text-white/60">Evidence Sources</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{jurisdictions.length}</div>
             <p className="text-xs text-white/60">Jurisdictions</p>
           </CardContent>
@@ -148,7 +148,7 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
         </CardHeader>
         <CardContent>
           {/* Filters */}
-          <div className="flex flex-wrap gap-4 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
@@ -160,34 +160,36 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
                 />
               </div>
             </div>
-            <Select value={jurisdictionFilter} onValueChange={setJurisdictionFilter}>
-              <SelectTrigger className="w-[150px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Jurisdiction" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Jurisdictions</SelectItem>
-                {jurisdictions.map((j) => (
-                  <SelectItem key={j} value={j}>
-                    {j}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={sourceFilter} onValueChange={setSourceFilter}>
-              <SelectTrigger className="w-[180px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Evidence Source" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Sources</SelectItem>
-                {sources.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex items-center gap-3">
+              <Select value={jurisdictionFilter} onValueChange={setJurisdictionFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Jurisdiction" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Jurisdictions</SelectItem>
+                  {jurisdictions.map((j) => (
+                    <SelectItem key={j} value={j}>
+                      {j}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={sourceFilter} onValueChange={setSourceFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Evidence Source" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Sources</SelectItem>
+                  {sources.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Table */}
@@ -195,20 +197,20 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[100px]">
                     <SortableHeader field="Attribute_ID">Attribute ID</SortableHeader>
                   </TableHead>
-                  <TableHead className="min-w-[200px]">
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium min-w-[200px]">
                     <SortableHeader field="Document_Name">Document Name</SortableHeader>
                   </TableHead>
-                  <TableHead className="w-[160px]">
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[160px]">
                     <SortableHeader field="Evidence_Source_Document">Evidence Source</SortableHeader>
                   </TableHead>
-                  <TableHead className="w-[100px]">
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[100px]">
                     <SortableHeader field="Jurisdiction_ID">Jurisdiction</SortableHeader>
                   </TableHead>
-                  <TableHead className="w-[150px]">Source File</TableHead>
-                  <TableHead className="min-w-[200px]">Notes</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[150px]">Source File</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium min-w-[200px]">Notes</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -221,23 +223,23 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
                 ) : (
                   filteredDocs.map((doc, idx) => (
                     <TableRow key={`${doc.Attribute_ID}-${doc.Document_Name}-${idx}`}>
-                      <TableCell className="font-mono text-sm">{doc.Attribute_ID}</TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 font-mono text-sm">{doc.Attribute_ID}</TableCell>
+                      <TableCell className="px-4 py-2">
                         <div className="flex items-center gap-2">
                           <FileText className="h-4 w-4 text-white/50" />
-                          <span className="font-medium">{doc.Document_Name}</span>
+                          <span className="font-medium text-sm">{doc.Document_Name}</span>
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         <Badge variant="secondary">{doc.Evidence_Source_Document}</Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         <Badge variant="outline">{doc.Jurisdiction_ID}</Badge>
                       </TableCell>
-                      <TableCell className="text-sm text-white/60 truncate max-w-[150px]" title={doc.Source_File}>
+                      <TableCell className="px-4 py-2 text-sm text-white/60 truncate max-w-[150px]" title={doc.Source_File}>
                         {doc.Source_File}
                       </TableCell>
-                      <TableCell className="text-sm text-white/60">
+                      <TableCell className="px-4 py-2 text-sm text-white/60">
                         {doc.Notes || "-"}
                       </TableCell>
                     </TableRow>

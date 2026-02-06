@@ -224,25 +224,25 @@ export function SamplePreview({
         <CardContent>
           {/* Plan Summary */}
           <div className="flex flex-wrap gap-3 mb-4">
-            <Badge variant="secondary" className="text-sm">
+            <Badge variant="secondary" className="px-2.5 py-0.5 text-xs font-medium">
               Target: {plan.desiredSize.toLocaleString()} samples
             </Badge>
-            <Badge variant="secondary" className="text-sm">
+            <Badge variant="secondary" className="px-2.5 py-0.5 text-xs font-medium">
               Population: {(plan.populationSize || 0).toLocaleString()}
             </Badge>
             {plan.stratifyFields.length > 0 && (
-              <Badge variant="outline" className="text-sm">
+              <Badge variant="outline" className="px-2.5 py-0.5 text-xs font-medium">
                 Stratified by: {plan.stratifyFields.join(", ")}
               </Badge>
             )}
             {hasZeroStrata && (
-              <Badge variant="destructive" className="text-sm">
+              <Badge variant="destructive" className="px-2.5 py-0.5 text-xs font-medium">
                 <AlertCircle className="mr-1 h-3 w-3" />
                 {zeroStrata.length} stratum/strata with 0 samples
               </Badge>
             )}
             {coverageOverrideCount > 0 && (
-              <Badge variant="default" className="text-sm bg-amber-500">
+              <Badge variant="default" className="px-2.5 py-0.5 text-xs font-medium bg-amber-500">
                 {coverageOverrideCount} coverage override(s) applied
               </Badge>
             )}
@@ -254,11 +254,11 @@ export function SamplePreview({
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>#</TableHead>
-                    <TableHead>Stratum</TableHead>
-                    <TableHead className="text-right">Population</TableHead>
-                    <TableHead className="text-right">Sample Size</TableHead>
-                    <TableHead className="text-right">Share</TableHead>
+                    <TableHead className="px-4 py-3">#</TableHead>
+                    <TableHead className="px-4 py-3">Stratum</TableHead>
+                    <TableHead className="px-4 py-3 text-right">Population</TableHead>
+                    <TableHead className="px-4 py-3 text-right">Sample Size</TableHead>
+                    <TableHead className="px-4 py-3 text-right">Share</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -278,8 +278,8 @@ export function SamplePreview({
                             : ""
                         }
                       >
-                        <TableCell className="font-mono text-sm">{idx + 1}</TableCell>
-                        <TableCell>
+                        <TableCell className="px-4 py-2 font-mono text-sm">{idx + 1}</TableCell>
+                        <TableCell className="px-4 py-2">
                           {Object.entries(alloc.stratum)
                             .map(([k, v]) => `${k}: ${v ?? "NULL"}`)
                             .join(", ") || "(All)"}
@@ -289,28 +289,28 @@ export function SamplePreview({
                             </span>
                           )}
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="px-4 py-2 text-right">
                           {alloc.population_count.toLocaleString()}
                         </TableCell>
-                        <TableCell className="text-right font-medium">
+                        <TableCell className="px-4 py-2 text-right font-medium">
                           {alloc.sample_count.toLocaleString()}
                         </TableCell>
-                        <TableCell className="text-right text-white/60">
+                        <TableCell className="px-4 py-2 text-right text-white/60">
                           {(((alloc.population_count || 0) / (plan.populationSize || 1)) * 100).toFixed(1)}%
                         </TableCell>
                       </TableRow>
                     );
                   })}
                   <TableRow className="font-medium">
-                    <TableCell></TableCell>
-                    <TableCell>Total</TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="px-4 py-2"></TableCell>
+                    <TableCell className="px-4 py-2">Total</TableCell>
+                    <TableCell className="px-4 py-2 text-right">
                       {(plan.populationSize || 0).toLocaleString()}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="px-4 py-2 text-right">
                       {plan.plannedSize.toLocaleString()}
                     </TableCell>
-                    <TableCell className="text-right">100%</TableCell>
+                    <TableCell className="px-4 py-2 text-right">100%</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -406,7 +406,7 @@ export function SamplePreview({
             {/* Summary Stats */}
             <div className="grid gap-4 md:grid-cols-4 mb-6">
               <Card>
-                <CardContent className="pt-4">
+                <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
                   <div className="text-2xl font-bold">
                     {summary.sample_selection_method.final_sample_size.toLocaleString()}
                   </div>
@@ -414,7 +414,7 @@ export function SamplePreview({
                 </CardContent>
               </Card>
               <Card>
-                <CardContent className="pt-4">
+                <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
                   <div className="text-2xl font-bold">
                     {(summary.sampling_rationale.confidence_level * 100).toFixed(0)}%
                   </div>
@@ -422,7 +422,7 @@ export function SamplePreview({
                 </CardContent>
               </Card>
               <Card>
-                <CardContent className="pt-4">
+                <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
                   <div className="text-2xl font-bold">
                     {(summary.sampling_rationale.tolerable_error_rate * 100).toFixed(1)}%
                   </div>
@@ -430,7 +430,7 @@ export function SamplePreview({
                 </CardContent>
               </Card>
               <Card>
-                <CardContent className="pt-4">
+                <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
                   <div className="text-2xl font-bold">
                     {summary.sample_selection_method.seed}
                   </div>
@@ -472,14 +472,14 @@ export function SamplePreview({
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[50px]">#</TableHead>
+                    <TableHead className="w-[50px] px-4 py-3">#</TableHead>
                     {Object.keys(sample[0] || {})
                       .slice(0, 5)
                       .map((col) => (
-                        <TableHead key={col}>{col}</TableHead>
+                        <TableHead key={col} className="px-4 py-3">{col}</TableHead>
                       ))}
                     {Object.keys(sample[0] || {}).length > 5 && (
-                      <TableHead className="text-white/60">
+                      <TableHead className="px-4 py-3 text-white/60">
                         +{Object.keys(sample[0]).length - 5} more
                       </TableHead>
                     )}
@@ -488,16 +488,16 @@ export function SamplePreview({
                 <TableBody>
                   {sample.slice(0, 10).map((row, idx) => (
                     <TableRow key={idx}>
-                      <TableCell className="font-mono text-sm">{idx + 1}</TableCell>
+                      <TableCell className="px-4 py-2 font-mono text-sm">{idx + 1}</TableCell>
                       {Object.keys(row)
                         .slice(0, 5)
                         .map((col) => (
-                          <TableCell key={col} className="max-w-[150px] truncate">
+                          <TableCell key={col} className="px-4 py-2 max-w-[150px] truncate">
                             {String(row[col] ?? "")}
                           </TableCell>
                         ))}
                       {Object.keys(row).length > 5 && (
-                        <TableCell className="text-white/60">...</TableCell>
+                        <TableCell className="px-4 py-2 text-white/60">...</TableCell>
                       )}
                     </TableRow>
                   ))}
@@ -505,7 +505,7 @@ export function SamplePreview({
                     <TableRow>
                       <TableCell
                         colSpan={Math.min(7, Object.keys(sample[0] || {}).length + 1)}
-                        className="text-center text-white/60"
+                        className="text-center py-4 text-white/60"
                       >
                         ... and {sample.length - 10} more rows
                       </TableCell>

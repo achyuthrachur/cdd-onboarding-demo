@@ -181,7 +181,7 @@ export function SamplingConfig({
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Method Selection */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <Label>Sampling Method</Label>
           <Select
             value={method}
@@ -214,7 +214,7 @@ export function SamplingConfig({
         {/* Statistical Parameters */}
         {(method === "statistical" || method === "systematic") && (
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label htmlFor="confidence">Confidence Level (%)</Label>
               <Input
                 id="confidence"
@@ -227,7 +227,7 @@ export function SamplingConfig({
               />
               <p className="text-xs text-white/60">50-99.9%</p>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label htmlFor="margin">Tolerable Error Rate (%)</Label>
               <Input
                 id="margin"
@@ -240,7 +240,7 @@ export function SamplingConfig({
               />
               <p className="text-xs text-white/60">Must exceed Expected Error Rate</p>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label htmlFor="expectedError">Expected Error Rate (%)</Label>
               <Input
                 id="expectedError"
@@ -258,7 +258,7 @@ export function SamplingConfig({
 
         {/* Percentage Method */}
         {method === "percentage" && (
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <Label htmlFor="samplePercentage">Sample Percentage (%) <span className="text-red-500">*</span></Label>
             <Input
               id="samplePercentage"
@@ -277,7 +277,7 @@ export function SamplingConfig({
         {/* Simple Random Method - requires sample size or percentage */}
         {method === "simple_random" && (
           <div className="grid gap-4 md:grid-cols-2 p-4 border border-crowe-blue/30 bg-crowe-blue/10 rounded-lg">
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label htmlFor="simpleRandomSize">Sample Size <span className="text-red-500">*</span></Label>
               <Input
                 id="simpleRandomSize"
@@ -290,7 +290,7 @@ export function SamplingConfig({
               />
               <p className="text-xs text-white/60">Number of records to sample</p>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label htmlFor="simpleRandomPercentage">Or Sample Percentage (%)</Label>
               <Input
                 id="simpleRandomPercentage"
@@ -313,7 +313,7 @@ export function SamplingConfig({
         {/* Overrides - only show for methods where these are actual overrides */}
         {method !== "simple_random" && (
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label htmlFor="populationOverride">Population Size Override</Label>
               <Input
                 id="populationOverride"
@@ -328,7 +328,7 @@ export function SamplingConfig({
               </p>
             </div>
             {method !== "percentage" && (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <Label htmlFor="sampleSizeOverride">Sample Size Override</Label>
                 <Input
                   id="sampleSizeOverride"
@@ -349,7 +349,7 @@ export function SamplingConfig({
 
         {/* Population Override for simple_random method */}
         {method === "simple_random" && (
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <Label htmlFor="populationOverride">Population Size Override (Optional)</Label>
             <Input
               id="populationOverride"
@@ -367,7 +367,7 @@ export function SamplingConfig({
 
         <div className="grid gap-4 md:grid-cols-2">
           {method === "systematic" && (
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label htmlFor="systematicStep">Systematic Step (Interval)</Label>
               <Input
                 id="systematicStep"
@@ -382,7 +382,7 @@ export function SamplingConfig({
               </p>
             </div>
           )}
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <Label htmlFor="seed">Random Seed</Label>
             <Input
               id="seed"
@@ -460,7 +460,7 @@ export function SamplingConfig({
         </div>
 
         {/* ID Column */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <Label>ID Column (for tracking)</Label>
           <Select value={idColumn || "none"} onValueChange={(v) => setIdColumn(v === "none" ? "" : v)}>
             <SelectTrigger>

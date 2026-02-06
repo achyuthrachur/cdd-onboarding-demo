@@ -146,15 +146,15 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
   return (
     <div className="space-y-6">
       {/* Summary */}
-      <div className="grid gap-4 md:grid-cols-5">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{attributes.length}</div>
             <p className="text-xs text-white/60">Total Attributes</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.IsRequired === "Y").length}
             </div>
@@ -162,7 +162,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.RiskScope === "EDD" || a.RiskScope === "Both").length}
             </div>
@@ -170,13 +170,13 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{categories.length}</div>
             <p className="text-xs text-white/60">Categories</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
+          <CardContent className="p-4">
             <div className="text-2xl font-bold">{jurisdictions.length}</div>
             <p className="text-xs text-white/60">Jurisdictions</p>
           </CardContent>
@@ -193,7 +193,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
         </CardHeader>
         <CardContent>
           {/* Filters */}
-          <div className="flex flex-wrap gap-4 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
@@ -205,62 +205,64 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                 />
               </div>
             </div>
-            <Select value={jurisdictionFilter} onValueChange={setJurisdictionFilter}>
-              <SelectTrigger className="w-[140px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Jurisdiction" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Jurisdictions</SelectItem>
-                {jurisdictions.map((j) => (
-                  <SelectItem key={j} value={j}>
-                    {j}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-[160px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {categories.map((cat) => (
-                  <SelectItem key={cat} value={cat}>
-                    {cat}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={groupFilter} onValueChange={setGroupFilter}>
-              <SelectTrigger className="w-[150px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Group" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Groups</SelectItem>
-                {groups.map((group) => (
-                  <SelectItem key={group} value={group}>
-                    {group}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={riskScopeFilter} onValueChange={setRiskScopeFilter}>
-              <SelectTrigger className="w-[130px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Risk Scope" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Scopes</SelectItem>
-                {riskScopes.map((scope) => (
-                  <SelectItem key={scope} value={scope}>
-                    {scope}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex items-center gap-3">
+              <Select value={jurisdictionFilter} onValueChange={setJurisdictionFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Jurisdiction" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Jurisdictions</SelectItem>
+                  {jurisdictions.map((j) => (
+                    <SelectItem key={j} value={j}>
+                      {j}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={groupFilter} onValueChange={setGroupFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Group" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Groups</SelectItem>
+                  {groups.map((group) => (
+                    <SelectItem key={group} value={group}>
+                      {group}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={riskScopeFilter} onValueChange={setRiskScopeFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Risk Scope" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Scopes</SelectItem>
+                  {riskScopes.map((scope) => (
+                    <SelectItem key={scope} value={scope}>
+                      {scope}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Table */}
@@ -268,26 +270,26 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[90px]">
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[90px]">
                     <SortableHeader field="Attribute_ID">ID</SortableHeader>
                   </TableHead>
-                  <TableHead className="min-w-[180px]">
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium min-w-[180px]">
                     <SortableHeader field="Attribute_Name">Attribute</SortableHeader>
                   </TableHead>
-                  <TableHead className="w-[130px]">
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[130px]">
                     <SortableHeader field="Category">Category</SortableHeader>
                   </TableHead>
-                  <TableHead className="w-[120px]">
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[120px]">
                     <SortableHeader field="Group">Group</SortableHeader>
                   </TableHead>
-                  <TableHead className="w-[80px]">
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[80px]">
                     <SortableHeader field="Jurisdiction_ID">Jur.</SortableHeader>
                   </TableHead>
-                  <TableHead className="w-[80px]">Scope</TableHead>
-                  <TableHead className="min-w-[250px]">Question</TableHead>
-                  <TableHead className="w-[60px]">Req</TableHead>
-                  <TableHead className="w-[80px]">Docs</TableHead>
-                  <TableHead className="w-[60px]">View</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[80px]">Scope</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium min-w-[250px]">Question</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[60px]">Req</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[80px]">Docs</TableHead>
+                  <TableHead className="px-4 py-3 text-left text-sm font-medium w-[60px]">View</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -300,22 +302,22 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                 ) : (
                   filteredAttributes.map((attr) => (
                     <TableRow key={attr.Attribute_ID}>
-                      <TableCell className="font-mono text-sm">{attr.Attribute_ID}</TableCell>
-                      <TableCell className="font-medium">{attr.Attribute_Name}</TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 font-mono text-sm">{attr.Attribute_ID}</TableCell>
+                      <TableCell className="px-4 py-2 font-medium text-sm">{attr.Attribute_Name}</TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         <Badge className={CATEGORY_COLORS[attr.Category] || "bg-white/10 text-white/70"}>
                           {attr.Category}
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         <Badge variant="outline" className={GROUP_COLORS[attr.Group] || ""}>
                           {attr.Group}
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         <Badge variant="secondary">{attr.Jurisdiction_ID}</Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         <Badge
                           variant="outline"
                           className={RISK_SCOPE_COLORS[attr.RiskScope] || ""}
@@ -323,22 +325,22 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                           {attr.RiskScope}
                         </Badge>
                       </TableCell>
-                      <TableCell className="max-w-[300px] truncate text-sm" title={attr.Question_Text}>
+                      <TableCell className="px-4 py-2 max-w-[300px] truncate text-sm" title={attr.Question_Text}>
                         {attr.Question_Text}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         {attr.IsRequired === "Y" ? (
                           <CheckCircle className="h-4 w-4 text-green-400" />
                         ) : (
                           <span className="text-white/50">-</span>
                         )}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="px-4 py-2 text-center text-sm">
                         <Badge variant="outline">
                           {getDocsForAttribute(attr.Attribute_ID).length}
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="px-4 py-2 text-sm">
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button variant="ghost" size="sm">

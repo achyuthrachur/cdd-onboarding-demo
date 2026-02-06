@@ -306,7 +306,7 @@ export default function AicStage3Page() {
 
       {/* Workflow Steps */}
       <motion.div
-        className="grid gap-4 md:grid-cols-3 mb-6 flex-shrink-0"
+        className="grid gap-3 md:grid-cols-3 mb-6 flex-shrink-0"
         initial={shouldReduceMotion ? undefined : "hidden"}
         animate="visible"
         variants={staggerContainer}
@@ -416,7 +416,7 @@ export default function AicStage3Page() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-4"
+        className="flex items-center justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-6"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}

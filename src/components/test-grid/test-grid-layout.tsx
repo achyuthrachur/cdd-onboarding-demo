@@ -308,47 +308,47 @@ export function TestGridLayout({
         </CardHeader>
         <CardContent>
           {/* Summary Stats */}
-          <div className="grid grid-cols-9 gap-2 mb-4">
-            <div className="text-center p-2 rounded bg-white/10">
+          <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-3 mb-4">
+            <div className="text-center p-3 rounded bg-white/10">
               <p className="text-lg font-bold text-white">{summary.total}</p>
               <p className="text-xs text-white/60">Total</p>
             </div>
-            <div className="text-center p-2 rounded bg-green-500/20">
+            <div className="text-center p-3 rounded bg-green-500/20">
               <p className="text-lg font-bold text-green-300">{summary.pass}</p>
               <p className="text-xs text-white/60">Pass</p>
             </div>
-            <div className="text-center p-2 rounded bg-yellow-500/20">
+            <div className="text-center p-3 rounded bg-yellow-500/20">
               <p className="text-lg font-bold text-yellow-300">{summary.passObs}</p>
               <p className="text-xs text-white/60">Pass Obs</p>
             </div>
-            <div className="text-center p-2 rounded bg-red-500/20">
+            <div className="text-center p-3 rounded bg-red-500/20">
               <p className="text-lg font-bold text-red-300">{summary.fail1}</p>
               <p className="text-xs text-white/60">Fail 1</p>
             </div>
-            <div className="text-center p-2 rounded bg-red-500/20">
+            <div className="text-center p-3 rounded bg-red-500/20">
               <p className="text-lg font-bold text-red-300">{summary.fail2}</p>
               <p className="text-xs text-white/60">Fail 2</p>
             </div>
-            <div className="text-center p-2 rounded bg-blue-500/20">
+            <div className="text-center p-3 rounded bg-blue-500/20">
               <p className="text-lg font-bold text-blue-300">{summary.qLob}</p>
               <p className="text-xs text-white/60">Q to LOB</p>
             </div>
-            <div className="text-center p-2 rounded bg-white/5">
+            <div className="text-center p-3 rounded bg-white/5">
               <p className="text-lg font-bold text-white/70">{summary.na}</p>
               <p className="text-xs text-white/60">N/A</p>
             </div>
-            <div className="text-center p-2 rounded bg-white/10">
+            <div className="text-center p-3 rounded bg-white/10">
               <p className="text-lg font-bold text-white">{summary.empty}</p>
               <p className="text-xs text-white/60">Empty</p>
             </div>
-            <div className="text-center p-2 rounded bg-crowe-amber/20">
+            <div className="text-center p-3 rounded bg-crowe-amber/20">
               <p className="text-lg font-bold text-crowe-amber">{summary.percentage.toFixed(0)}%</p>
               <p className="text-xs text-white/60">Complete</p>
             </div>
           </div>
 
           {/* Filters */}
-          <div className="flex flex-wrap gap-3 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
@@ -360,52 +360,54 @@ export function TestGridLayout({
                 />
               </div>
             </div>
-            <Select value={entityFilter} onValueChange={setEntityFilter}>
-              <SelectTrigger className="w-[200px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Entity" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Entities</SelectItem>
-                {entities.map((e) => (
-                  <SelectItem key={e.caseId} value={e.caseId}>
-                    {e.legalName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-[150px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {categories.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={resultFilter} onValueChange={setResultFilter}>
-              <SelectTrigger className="w-[180px]">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Result" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Results</SelectItem>
-                <SelectItem value="empty">Empty (Pending)</SelectItem>
-                {RESULT_OPTIONS.filter((r) => r).map((r) => (
-                  <SelectItem key={r} value={r}>
-                    {r}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button variant="ghost" size="icon" onClick={handleResetFilters}>
-              <RefreshCw className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-3">
+              <Select value={entityFilter} onValueChange={setEntityFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Entity" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Entities</SelectItem>
+                  {entities.map((e) => (
+                    <SelectItem key={e.caseId} value={e.caseId}>
+                      {e.legalName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {categories.map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {c}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={resultFilter} onValueChange={setResultFilter}>
+                <SelectTrigger className="w-[160px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Result" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Results</SelectItem>
+                  <SelectItem value="empty">Empty (Pending)</SelectItem>
+                  {RESULT_OPTIONS.filter((r) => r).map((r) => (
+                    <SelectItem key={r} value={r}>
+                      {r}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button variant="ghost" size="icon" onClick={handleResetFilters}>
+                <RefreshCw className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
 
           {/* Row count */}
@@ -485,7 +487,7 @@ export function TestGridLayout({
           <CardTitle className="text-sm">Entity Quick Navigation</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {entities.map((entity) => (
               <Button
                 key={entity.caseId}

@@ -173,12 +173,12 @@ export default function AicConsolidationPage() {
             </p>
           </div>
           <motion.div
-            className="flex gap-2"
+            className="flex items-center gap-2"
             initial={shouldReduceMotion ? undefined : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
+            <Button variant="outline" size="sm" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
@@ -192,6 +192,7 @@ export default function AicConsolidationPage() {
                 >
                   <Button
                     variant="outline"
+                    size="sm"
                     onClick={handleRefreshConsolidation}
                     disabled={isGenerating}
                     className="border-white/20 text-white hover:bg-white/10 hover:border-white/30"
@@ -217,6 +218,7 @@ export default function AicConsolidationPage() {
                   exit={{ opacity: 0, scale: 0.9 }}
                 >
                   <Button
+                    size="sm"
                     onClick={handleGenerateConsolidation}
                     disabled={isGenerating}
                   >
@@ -291,7 +293,7 @@ export default function AicConsolidationPage() {
 
       {/* Consolidation Dashboard */}
       <motion.div
-        className="mb-8"
+        className="mb-6"
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.35 }}
@@ -306,7 +308,7 @@ export default function AicConsolidationPage() {
       <AnimatePresence>
         {consolidation && (
           <motion.div
-            className="mb-8"
+            className="mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -322,7 +324,7 @@ export default function AicConsolidationPage() {
 
       {/* Report Generator */}
       <motion.div
-        className="mb-8"
+        className="mb-6"
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.35 }}
@@ -342,7 +344,7 @@ export default function AicConsolidationPage() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ delay: 0.3 }}
           >
-            <Card className="mb-8 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+            <Card className="mb-6 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
               <CardHeader>
                 <CardTitle className="text-white">Prerequisites</CardTitle>
                 <CardDescription className="text-white/60">
@@ -401,7 +403,7 @@ export default function AicConsolidationPage() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between"
+        className="flex items-center justify-between mt-6 pt-4 border-t border-white/10"
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}

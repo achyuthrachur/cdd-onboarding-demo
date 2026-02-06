@@ -75,13 +75,13 @@ export function SheetTabs({ activeSheet, onSheetChange, children }: SheetTabsPro
       onValueChange={(value) => onSheetChange(value as AttributeLibrarySheet)}
       className="w-full"
     >
-      <div className="border-b border-white/10 bg-white/5 px-4">
+      <div className="border-b border-white/10 bg-white/5 px-3">
         <TabsList variant="line" className="h-auto flex-wrap gap-0">
           {SHEET_CONFIG.map((sheet) => (
             <TabsTrigger
               key={sheet.id}
               value={sheet.id}
-              className="flex items-center gap-2 px-4 py-3 data-[state=active]:bg-background"
+              className="flex items-center gap-2 px-3 py-3 data-[state=active]:bg-background"
             >
               {sheet.icon}
               <span className="hidden sm:inline">{sheet.label}</span>
@@ -89,7 +89,7 @@ export function SheetTabs({ activeSheet, onSheetChange, children }: SheetTabsPro
           ))}
         </TabsList>
       </div>
-      <div className="p-4">
+      <div className="p-3">
         {SHEET_CONFIG.map((sheet) => (
           <TabsContent key={sheet.id} value={sheet.id} className="mt-0">
             {activeSheet === sheet.id && children}
