@@ -241,7 +241,7 @@ export default function AicStage2Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-gray-500 dark:text-white/80 hover:text-gray-900 dark:hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -254,7 +254,7 @@ export default function AicStage2Page() {
                 Statistical Sampling
               </h1>
             </div>
-            <p className="text-gray-600 dark:text-white/80 mt-2">
+            <p className="text-gray-600 dark:text-gray-300 mt-2">
               Upload population data, configure sampling parameters, and generate
               your sample set
             </p>
@@ -291,15 +291,15 @@ export default function AicStage2Page() {
                   </motion.div>
                   <div>
                     <CardTitle className="text-base text-gray-900 dark:text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-white/80">{step.description}</CardDescription>
+                    <CardDescription className="text-gray-600 dark:text-gray-300">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <p className="text-sm text-gray-600 dark:text-white/80 mb-3">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
                   {step.helpText}
                 </p>
-                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-gray-300 dark:border-white/30 text-gray-600 dark:text-white/80" : ""}>
+                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-gray-300 dark:border-white/30 text-gray-600 dark:text-gray-300" : ""}>
                   {step.badgeText}
                 </Badge>
               </CardContent>

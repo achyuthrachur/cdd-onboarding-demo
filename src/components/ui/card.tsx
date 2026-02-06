@@ -58,7 +58,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-gray-500 dark:text-white/80 text-sm", className)}
+      className={cn("text-gray-500 dark:text-gray-300 text-sm", className)}
       {...props}
     />
   )

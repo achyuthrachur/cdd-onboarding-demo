@@ -97,19 +97,19 @@ export function RoleSelector() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
-                    <FileSpreadsheet className="h-4 w-4 text-gray-500 dark:text-white/80" />
+                    <FileSpreadsheet className="h-4 w-4 text-gray-500 dark:text-gray-300" />
                     <span>Gap analysis & attribute extraction</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <BarChart3 className="h-4 w-4 text-gray-500 dark:text-white/80" />
+                    <BarChart3 className="h-4 w-4 text-gray-500 dark:text-gray-300" />
                     <span>Sampling configuration</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <Users className="h-4 w-4 text-gray-500 dark:text-white/80" />
+                    <Users className="h-4 w-4 text-gray-500 dark:text-gray-300" />
                     <span>Workbook generation & assignment</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <Eye className="h-4 w-4 text-gray-500 dark:text-white/80" />
+                    <Eye className="h-4 w-4 text-gray-500 dark:text-gray-300" />
                     <span>Live progress monitoring</span>
                   </div>
                 </div>
@@ -157,22 +157,22 @@ export function RoleSelector() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
-                    <FileSpreadsheet className="h-4 w-4 text-gray-500 dark:text-white/80" />
+                    <FileSpreadsheet className="h-4 w-4 text-gray-500 dark:text-gray-300" />
                     <span>View assigned workbooks</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <ClipboardCheck className="h-4 w-4 text-gray-500 dark:text-white/80" />
+                    <ClipboardCheck className="h-4 w-4 text-gray-500 dark:text-gray-300" />
                     <span>Complete CDD testing</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <ArrowRight className="h-4 w-4 text-gray-500 dark:text-white/80" />
+                    <ArrowRight className="h-4 w-4 text-gray-500 dark:text-gray-300" />
                     <span>Submit completed workbooks</span>
                   </div>
                 </div>
 
                 {/* Auditor Selection */}
                 <div className="pt-2 border-t border-gray-200 dark:border-white/10">
-                  <label className="text-sm font-medium mb-2 block text-gray-600 dark:text-white/80">
+                  <label className="text-sm font-medium mb-2 block text-gray-600 dark:text-gray-300">
                     Select your identity:
                   </label>
                   <Select value={selectedAuditor} onValueChange={setSelectedAuditor}>

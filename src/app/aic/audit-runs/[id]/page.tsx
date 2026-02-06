@@ -95,7 +95,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       <div className="mb-8">
         <Link
           href="/aic/audit-runs"
-          className="inline-flex items-center text-sm text-gray-500 dark:text-white/80 hover:text-gray-900 dark:hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Runs
@@ -103,7 +103,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{auditRun.name}</h1>
-            <p className="text-gray-600 dark:text-white/80 mt-2">
+            <p className="text-gray-600 dark:text-gray-300 mt-2">
               {auditRun.scope?.description || "CDD Onboarding Audit"}
             </p>
           </div>
@@ -159,7 +159,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                         ? "bg-crowe-teal/15 text-crowe-teal"
                         : isActive
                         ? "bg-green-500/20 text-green-400"
-                        : "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/80"
+                        : "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-300"
                     }`}
                   >
                     <stage.icon className="h-5 w-5" />
@@ -178,7 +178,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                         </Badge>
                       )}
                     </CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-white/80">{stage.description}</CardDescription>
+                    <CardDescription className="text-gray-600 dark:text-gray-300">{stage.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -207,7 +207,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       <Card className="mt-6 bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
           <CardTitle className="text-gray-900 dark:text-white">AIC Workflow Summary</CardTitle>
-          <CardDescription className="text-gray-600 dark:text-white/80">
+          <CardDescription className="text-gray-600 dark:text-gray-300">
             Your responsibilities in the audit lifecycle
           </CardDescription>
         </CardHeader>
@@ -215,25 +215,25 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-gray-900 dark:text-white">Stages 1-4</div>
-              <div className="flex-1 text-sm text-gray-600 dark:text-white/80">
+              <div className="flex-1 text-sm text-gray-600 dark:text-gray-300">
                 Setup: Gap analysis, sampling, attribute extraction, workbook generation
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-gray-900 dark:text-white">Stage 4</div>
-              <div className="flex-1 text-sm text-gray-600 dark:text-white/80">
+              <div className="flex-1 text-sm text-gray-600 dark:text-gray-300">
                 <span className="font-medium text-crowe-amber">Publish</span> workbooks to assigned auditors
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-gray-900 dark:text-white">Monitor</div>
-              <div className="flex-1 text-sm text-gray-600 dark:text-white/80">
+              <div className="flex-1 text-sm text-gray-600 dark:text-gray-300">
                 <span className="font-medium text-crowe-teal">Live tracking</span> of auditor completion (5-second refresh)
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-gray-900 dark:text-white">Consolidation</div>
-              <div className="flex-1 text-sm text-gray-600 dark:text-white/80">
+              <div className="flex-1 text-sm text-gray-600 dark:text-gray-300">
                 Aggregate submitted results and generate final report
               </div>
             </div>

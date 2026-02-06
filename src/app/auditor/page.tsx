@@ -92,7 +92,7 @@ export default function AuditorDashboardPage() {
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
           Welcome back, {auditorName || "Auditor"}
         </h1>
-        <p className="text-gray-500 dark:text-white/80 mt-2">
+        <p className="text-gray-500 dark:text-gray-300 mt-2">
           View and complete your assigned testing workbooks
         </p>
       </motion.div>
@@ -111,7 +111,7 @@ export default function AuditorDashboardPage() {
               <CardTitle className="text-3xl">{stats.total}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/80">
+              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300">
                 <FileSpreadsheet className="h-4 w-4" />
                 Assigned to you
               </div>
@@ -126,7 +126,7 @@ export default function AuditorDashboardPage() {
               <CardTitle className="text-3xl text-crowe-amber-dark dark:text-crowe-amber">{stats.inProgress}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/80">
+              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300">
                 <Clock className="h-4 w-4" />
                 Awaiting completion
               </div>
@@ -141,7 +141,7 @@ export default function AuditorDashboardPage() {
               <CardTitle className="text-3xl text-crowe-teal-dark dark:text-crowe-teal-bright">{stats.submitted}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/80">
+              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300">
                 <CheckCircle2 className="h-4 w-4" />
                 Completed
               </div>
@@ -178,7 +178,7 @@ export default function AuditorDashboardPage() {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
-                <div className="text-gray-500 dark:text-white/80">Loading...</div>
+                <div className="text-gray-500 dark:text-gray-300">Loading...</div>
               </div>
             ) : hasWorkbooks ? (
               <div className="space-y-4">
@@ -189,7 +189,7 @@ export default function AuditorDashboardPage() {
                       <p className="font-medium text-gray-900 dark:text-white">
                         {stats.inProgress > 0 ? `${stats.inProgress} workbook${stats.inProgress > 1 ? 's' : ''} in progress` : 'All workbooks submitted'}
                       </p>
-                      <p className="text-sm text-gray-500 dark:text-white/80">
+                      <p className="text-sm text-gray-500 dark:text-gray-300">
                         {stats.averageCompletion}% average completion
                       </p>
                     </div>
@@ -204,9 +204,9 @@ export default function AuditorDashboardPage() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-white/50" />
+                <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
                 <h3 className="font-medium mb-2 text-gray-900 dark:text-white">No Workbooks Assigned</h3>
-                <p className="text-sm text-gray-500 dark:text-white/80 mb-4">
+                <p className="text-sm text-gray-500 dark:text-gray-300 mb-4">
                   You don&apos;t have any published workbooks assigned to you yet.
                 </p>
                 <div className="p-4 bg-crowe-amber/10 border border-crowe-amber/30 rounded-lg inline-block">

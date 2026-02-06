@@ -164,6 +164,7 @@ export default function AicStage3Page() {
     setStageData('attributeExtractionComplete', true);
     setExtractionResult(result);
     setHasSample(true);
+    setViewMode("results"); // Switch to results view after loading demo data
 
     if (!hasStageData('samplingResult')) {
       loadFallbackDataForStage(2);
@@ -301,7 +302,7 @@ export default function AicStage3Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-gray-500 dark:text-white/80 hover:text-gray-900 dark:hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -314,7 +315,7 @@ export default function AicStage3Page() {
                 FLU Procedure Extraction
               </h1>
             </div>
-            <p className="text-gray-600 dark:text-white/80 mt-2">
+            <p className="text-gray-600 dark:text-gray-300 mt-2">
               Extract CIP, CDD, and EDD testing attributes from Front Line Unit procedures
             </p>
           </div>
@@ -350,12 +351,12 @@ export default function AicStage3Page() {
                   </motion.div>
                   <div>
                     <CardTitle className="text-base text-gray-900 dark:text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-white/80">{step.description}</CardDescription>
+                    <CardDescription className="text-gray-600 dark:text-gray-300">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-gray-300 dark:border-white/30 text-gray-600 dark:text-white/80" : ""}>
+                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-gray-300 dark:border-white/30 text-gray-600 dark:text-gray-300" : ""}>
                   {step.badgeText}
                 </Badge>
               </CardContent>
@@ -422,9 +423,9 @@ export default function AicStage3Page() {
                 ) : (
                   <Card className="h-full flex items-center justify-center bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                     <div className="text-center">
-                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-white/50" />
+                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
                       <h3 className="font-medium mb-2 text-gray-900 dark:text-white">No Extraction Results</h3>
-                      <p className="text-sm text-gray-600 dark:text-white/80">
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
                         Upload FLU procedures and run extraction to view results
                       </p>
                     </div>

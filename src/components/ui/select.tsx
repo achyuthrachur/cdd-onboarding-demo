@@ -44,7 +44,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-4 text-gray-500 dark:text-white/80" />
+        <ChevronDownIcon className="size-4 text-gray-500 dark:text-gray-300" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
@@ -94,7 +94,7 @@ function SelectLabel({
   return (
     <SelectPrimitive.Label
       data-slot="select-label"
-      className={cn("text-gray-500 dark:text-white/80 px-2 py-1.5 text-xs", className)}
+      className={cn("text-gray-500 dark:text-gray-300 px-2 py-1.5 text-xs", className)}
       {...props}
     />
   )
@@ -109,7 +109,7 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "focus:bg-gray-100 dark:focus:bg-white/15 focus:text-gray-900 dark:focus:text-white text-gray-600 dark:text-white/80 [&_svg:not([class*='text-'])]:text-gray-500 dark:[&_svg:not([class*='text-'])]:text-white/80 relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2 hover:bg-gray-100 dark:hover:bg-white/15",
+        "focus:bg-gray-100 dark:focus:bg-white/15 focus:text-gray-900 dark:focus:text-white text-gray-600 dark:text-gray-300 [&_svg:not([class*='text-'])]:text-gray-500 dark:[&_svg:not([class*='text-'])]:text-white/80 relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2 hover:bg-gray-100 dark:hover:bg-white/15",
         className
       )}
       {...props}
@@ -148,7 +148,7 @@ function SelectScrollUpButton({
     <SelectPrimitive.ScrollUpButton
       data-slot="select-scroll-up-button"
       className={cn(
-        "flex cursor-default items-center justify-center py-1 text-gray-500 dark:text-white/80",
+        "flex cursor-default items-center justify-center py-1 text-gray-500 dark:text-gray-300",
         className
       )}
       {...props}
@@ -166,7 +166,7 @@ function SelectScrollDownButton({
     <SelectPrimitive.ScrollDownButton
       data-slot="select-scroll-down-button"
       className={cn(
-        "flex cursor-default items-center justify-center py-1 text-gray-500 dark:text-white/80",
+        "flex cursor-default items-center justify-center py-1 text-gray-500 dark:text-gray-300",
         className
       )}
       {...props}

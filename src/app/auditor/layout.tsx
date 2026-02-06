@@ -28,7 +28,7 @@ export default function AuditorLayout({
   if (!isAuthorized) {
     return (
       <div className="flex h-screen items-center justify-center bg-soft-gradient dark:bg-crowe-indigo-dark">
-        <div className="text-gray-500 dark:text-white/80">Checking authorization...</div>
+        <div className="text-gray-500 dark:text-gray-300">Checking authorization...</div>
       </div>
     );
   }
@@ -40,7 +40,7 @@ export default function AuditorLayout({
         {/* Auditor identity banner - liquid glass styling */}
         {auditorName && (
           <div className="bg-white/60 dark:bg-white/5 backdrop-blur-md border-b border-gray-200/50 dark:border-white/10 px-6 py-2">
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white/80">
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
               <span className="font-medium text-crowe-amber-dark dark:text-crowe-amber">Logged in as:</span>
               <span>{auditorName}</span>
             </div>

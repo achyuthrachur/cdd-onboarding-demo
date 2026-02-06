@@ -26,7 +26,7 @@ export default function AicLayout({
   if (!isAuthorized) {
     return (
       <div className="flex h-screen items-center justify-center bg-soft-gradient dark:bg-crowe-indigo-dark">
-        <p className="text-gray-500 dark:text-white/80">Checking authorization...</p>
+        <p className="text-gray-500 dark:text-gray-300">Checking authorization...</p>
       </div>
     );
   }
