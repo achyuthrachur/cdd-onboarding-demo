@@ -291,23 +291,23 @@ export function ExtractionResultsView({
             {activeTab === "attributes" && (
               <motion.div
                 key="attributes"
-                className="flex-1 overflow-auto px-4 pb-4"
+                className="flex-1 overflow-auto pb-4 mt-4"
                 initial={shouldReduceMotion ? undefined : "hidden"}
                 animate="visible"
                 exit="exit"
                 variants={tabContent}
               >
                 <TabsContent value="attributes" className="m-0">
-                  <div className="border rounded-lg">
+                  <div className="border border-white/20 rounded-lg overflow-hidden">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-24 px-4 py-3">ID</TableHead>
-                          <TableHead className="w-20 px-4 py-3">Category</TableHead>
-                          <TableHead className="w-48 px-4 py-3">Attribute Name</TableHead>
-                          <TableHead className="px-4 py-3">Question Text</TableHead>
-                          <TableHead className="w-20 px-4 py-3">Scope</TableHead>
-                          <TableHead className="w-20 px-4 py-3">Docs</TableHead>
+                        <TableRow className="bg-white/5 border-b border-white/10">
+                          <TableHead className="w-24 px-4 py-3 text-white/80">ID</TableHead>
+                          <TableHead className="w-20 px-4 py-3 text-white/80">Category</TableHead>
+                          <TableHead className="w-48 px-4 py-3 text-white/80">Attribute Name</TableHead>
+                          <TableHead className="px-4 py-3 text-white/80">Question Text</TableHead>
+                          <TableHead className="w-20 px-4 py-3 text-white/80">Scope</TableHead>
+                          <TableHead className="w-20 px-4 py-3 text-white/80">Docs</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -369,22 +369,22 @@ export function ExtractionResultsView({
             {activeTab === "documents" && (
               <motion.div
                 key="documents"
-                className="flex-1 overflow-auto px-4 pb-4"
+                className="flex-1 overflow-auto pb-4 mt-4"
                 initial={shouldReduceMotion ? undefined : "hidden"}
                 animate="visible"
                 exit="exit"
                 variants={tabContent}
               >
                 <TabsContent value="documents" className="m-0">
-                  <div className="border rounded-lg">
+                  <div className="border border-white/20 rounded-lg overflow-hidden">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-24 px-4 py-3">Attribute ID</TableHead>
-                          <TableHead className="w-48 px-4 py-3">Document Name</TableHead>
-                          <TableHead className="px-4 py-3">Evidence Source</TableHead>
-                          <TableHead className="w-32 px-4 py-3">Jurisdiction</TableHead>
-                          <TableHead className="px-4 py-3">Notes</TableHead>
+                        <TableRow className="bg-white/5 border-b border-white/10">
+                          <TableHead className="w-24 px-4 py-3 text-white/80">Attribute ID</TableHead>
+                          <TableHead className="w-48 px-4 py-3 text-white/80">Document Name</TableHead>
+                          <TableHead className="px-4 py-3 text-white/80">Evidence Source</TableHead>
+                          <TableHead className="w-32 px-4 py-3 text-white/80">Jurisdiction</TableHead>
+                          <TableHead className="px-4 py-3 text-white/80">Notes</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
