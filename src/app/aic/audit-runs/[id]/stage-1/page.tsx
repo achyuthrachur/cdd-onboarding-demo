@@ -121,7 +121,7 @@ export default function AicStage1Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-gray-500 dark:text-white/80 hover:text-gray-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -136,9 +136,9 @@ export default function AicStage1Page() {
               >
                 <Badge className="bg-blue-500/20 text-blue-400">Stage 1</Badge>
               </motion.div>
-              <h1 className="text-3xl font-bold tracking-tight text-white">Gap Assessment</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Gap Assessment</h1>
             </div>
-            <p className="text-white/80 mt-2">
+            <p className="text-gray-600 dark:text-white/80 mt-2">
               Run sequential gap assessments using the AI assistant
             </p>
           </div>
@@ -146,7 +146,7 @@ export default function AicStage1Page() {
             whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
             whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
           >
-            <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
@@ -162,7 +162,7 @@ export default function AicStage1Page() {
         className="grid gap-3 md:grid-cols-3 mb-6"
       >
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
-          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment1Result ? "border-green-500" : ""}`}>
+          <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment1Result ? "border-green-500" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
                 <motion.div
@@ -173,13 +173,13 @@ export default function AicStage1Page() {
                   {assessment1Result ? <CheckCircle2 className="h-5 w-5" /> : <span className="font-bold">1</span>}
                 </motion.div>
                 <div>
-                  <CardTitle className="text-base text-white">Gap Assessment 1</CardTitle>
-                  <CardDescription className="text-white/80">Old GFC vs Current GFC</CardDescription>
+                  <CardTitle className="text-base text-gray-900 dark:text-white">Gap Assessment 1</CardTitle>
+                  <CardDescription className="text-gray-600 dark:text-white/80">Old GFC vs Current GFC</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={assessment1Result ? "default" : "outline"} className={!assessment1Result ? "border-white/30 text-white/80" : ""}>
+              <Badge variant={assessment1Result ? "default" : "outline"} className={!assessment1Result ? "border-gray-300 dark:border-white/30 text-gray-600 dark:text-white/80" : ""}>
                 {assessment1Result ? "Completed" : "Pending"}
               </Badge>
             </CardContent>
@@ -187,7 +187,7 @@ export default function AicStage1Page() {
         </motion.div>
 
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
-          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment2Result ? "border-green-500" : ""}`}>
+          <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment2Result ? "border-green-500" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
                 <motion.div
@@ -198,13 +198,13 @@ export default function AicStage1Page() {
                   {assessment2Result ? <CheckCircle2 className="h-5 w-5" /> : <span className="font-bold">2</span>}
                 </motion.div>
                 <div>
-                  <CardTitle className="text-base text-white">Gap Assessment 2</CardTitle>
-                  <CardDescription className="text-white/80">Current GFC vs FLU Procedures</CardDescription>
+                  <CardTitle className="text-base text-gray-900 dark:text-white">Gap Assessment 2</CardTitle>
+                  <CardDescription className="text-gray-600 dark:text-white/80">Current GFC vs FLU Procedures</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={assessment2Result ? "default" : "outline"} className={!assessment2Result ? "border-white/30 text-white/80" : ""}>
+              <Badge variant={assessment2Result ? "default" : "outline"} className={!assessment2Result ? "border-gray-300 dark:border-white/30 text-gray-600 dark:text-white/80" : ""}>
                 {assessment2Result ? "Completed" : "Pending"}
               </Badge>
             </CardContent>
@@ -212,24 +212,24 @@ export default function AicStage1Page() {
         </motion.div>
 
         <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
-          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${canProceed ? "border-green-500" : ""}`}>
+          <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${canProceed ? "border-green-500" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    canProceed ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/80"
+                    canProceed ? "bg-green-500/20 text-green-400" : "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/80"
                   }`}
                 >
                   <CheckCircle2 className="h-5 w-5" />
                 </motion.div>
                 <div>
-                  <CardTitle className="text-base text-white">Ready for Sampling</CardTitle>
-                  <CardDescription className="text-white/80">Review & proceed</CardDescription>
+                  <CardTitle className="text-base text-gray-900 dark:text-white">Ready for Sampling</CardTitle>
+                  <CardDescription className="text-gray-600 dark:text-white/80">Review & proceed</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={canProceed ? "default" : "outline"} className={!canProceed ? "border-white/30 text-white/80" : ""}>
+              <Badge variant={canProceed ? "default" : "outline"} className={!canProceed ? "border-gray-300 dark:border-white/30 text-gray-600 dark:text-white/80" : ""}>
                 {canProceed ? "Ready" : "Pending"}
               </Badge>
             </CardContent>
@@ -284,10 +284,10 @@ export default function AicStage1Page() {
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3 }}
-        className="flex items-center justify-between mt-6 pt-4 border-t border-white/10"
+        className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-white/10"
       >
         <Link href={`/aic/audit-runs/${id}`}>
-          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
+          <Button variant="outline" className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Overview
           </Button>

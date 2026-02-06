@@ -134,12 +134,12 @@ export default function AuditorWorkbooksPage() {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">My Workbooks</h1>
-            <p className="text-white/80 mt-2">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">My Workbooks</h1>
+            <p className="text-gray-600 dark:text-white/80 mt-2">
               View and complete your assigned testing workbooks
             </p>
           </div>
-          <Button variant="outline" size="sm" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" size="sm" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
             <Database className="h-4 w-4 mr-2" />
             Load Demo Data
           </Button>
@@ -147,23 +147,23 @@ export default function AuditorWorkbooksPage() {
       </motion.div>
 
       {/* Workbooks List */}
-      <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+      <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
-          <CardTitle className="text-white">Assigned Workbooks</CardTitle>
-          <CardDescription className="text-white/80">
+          <CardTitle className="text-gray-900 dark:text-white">Assigned Workbooks</CardTitle>
+          <CardDescription className="text-gray-600 dark:text-white/80">
             Testing workbooks published by the AIC for your completion
           </CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="text-white/80">Loading workbooks...</div>
+              <div className="text-gray-600 dark:text-white/80">Loading workbooks...</div>
             </div>
           ) : workbooks.length === 0 ? (
             <div className="text-center py-12">
-              <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-white/50" />
-              <h3 className="font-medium mb-2 text-white">No Workbooks Available</h3>
-              <p className="text-sm text-white/80 mb-4">
+              <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-white/50" />
+              <h3 className="font-medium mb-2 text-gray-900 dark:text-white">No Workbooks Available</h3>
+              <p className="text-sm text-gray-600 dark:text-white/80 mb-4">
                 You don&apos;t have any published workbooks assigned to you yet.
               </p>
               <div className="p-4 bg-crowe-amber/20 border border-crowe-amber/40 rounded-lg inline-block">
@@ -190,7 +190,7 @@ export default function AuditorWorkbooksPage() {
               {workbooks.map((workbook) => (
                 <motion.div key={workbook.id} variants={staggerItem}>
                   <Link href={`/auditor/workbooks/${workbook.id}`}>
-                    <Card className={`transition-all cursor-pointer bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-white/15 ${
+                    <Card className={`transition-all cursor-pointer bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-gray-50 dark:hover:bg-white/15 ${
                       workbook.status === 'submitted'
                         ? 'border-crowe-teal/50'
                         : 'hover:border-crowe-amber/50'
@@ -200,7 +200,7 @@ export default function AuditorWorkbooksPage() {
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                               <FileSpreadsheet className="h-5 w-5 text-crowe-amber" />
-                              <h3 className="font-medium text-lg text-white">Testing Workbook</h3>
+                              <h3 className="font-medium text-lg text-gray-900 dark:text-white">Testing Workbook</h3>
                               <Badge
                                 variant={workbook.status === 'submitted' ? 'default' : 'outline'}
                                 className={workbook.status === 'submitted' ? 'bg-crowe-teal' : ''}
@@ -215,7 +215,7 @@ export default function AuditorWorkbooksPage() {
                                 )}
                               </Badge>
                             </div>
-                            <div className="flex items-center gap-3 text-sm text-white/80 mb-3">
+                            <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-white/80 mb-3">
                               <span>{workbook.totalAttributes} attributes to test</span>
                               <span>|</span>
                               <span>{workbook.totalCustomers} customers assigned</span>
@@ -224,9 +224,9 @@ export default function AuditorWorkbooksPage() {
                             </div>
                             <div className="flex items-center gap-4">
                               <div className="flex-1 max-w-md">
-                                <div className="flex justify-between text-sm mb-1 text-white/80">
+                                <div className="flex justify-between text-sm mb-1 text-gray-600 dark:text-white/80">
                                   <span>Completion Progress</span>
-                                  <span className="font-medium text-white">{workbook.completionPercentage}%</span>
+                                  <span className="font-medium text-gray-900 dark:text-white">{workbook.completionPercentage}%</span>
                                 </div>
                                 <Progress
                                   value={workbook.completionPercentage}
@@ -245,14 +245,14 @@ export default function AuditorWorkbooksPage() {
                                 )}
                               </div>
                               {workbook.lastActivityAt && (
-                                <div className="flex items-center gap-2 text-sm text-white/80">
+                                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/80">
                                   <Clock className="h-4 w-4" />
                                   Last activity: {new Date(workbook.lastActivityAt).toLocaleString()}
                                 </div>
                               )}
                             </div>
                           </div>
-                          <Button variant="ghost" size="sm" className="ml-3 text-white hover:bg-white/10">
+                          <Button variant="ghost" size="sm" className="ml-3 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
                             {workbook.status === 'submitted' ? 'View' : 'Continue'}
                             <ArrowRight className="h-5 w-5 ml-2" />
                           </Button>

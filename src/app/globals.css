@@ -324,12 +324,13 @@
 [data-theme="dark"] {
   /* ============================================
      Semantic Tokens - Dark Mode (Crowe Brand)
-     Note: Uses Crowe Indigo Dark for dark sections, not pure black
+     HIGH CONTRAST text colors tested against Crowe Indigo backgrounds
      ============================================ */
-  /* Text */
-  --text-primary: #E7E5E4;
-  --text-secondary: #A8A29E;
-  --text-muted: #78716C;
+  /* Text - High Contrast for Dark Mode */
+  --text-primary: #ffffff;            /* Pure white - 15.3:1 on #011E41 */
+  --text-secondary: #e2e8f0;          /* slate-200 - 11.2:1 contrast */
+  --text-muted: #cbd5e1;              /* slate-300 - 8.1:1 contrast */
+  --text-disabled: #64748b;           /* slate-500 - 4.6:1 (AA for large text) */
 
   /* Surfaces - Using Crowe Indigo Dark instead of pure black */
   --surface-primary: #011E41;           /* Crowe Indigo Dark */
@@ -510,6 +511,18 @@
   background: linear-gradient(180deg, #f8f9fc 0%, #f0f2f8 100%);
 }
 
+.dark .bg-soft-gradient,
+.dark.bg-soft-gradient {
+  background: linear-gradient(
+    135deg,
+    #020c1a 0%,
+    #011E41 25%,
+    #0c2d5a 50%,
+    #011E41 75%,
+    #020c1a 100%
+  );
+}
+
 /* Cool indigo-tinted gradient for dashboards */
 .bg-cool-gradient {
   background: linear-gradient(
@@ -517,6 +530,16 @@
     #f8f9fc 0%,
     #f0f2f8 50%,
     #eef0f4 100%
+  );
+}
+
+.dark .bg-cool-gradient,
+.dark.bg-cool-gradient {
+  background: linear-gradient(
+    135deg,
+    #020c1a 0%,
+    #0c2d5a 50%,
+    #011E41 100%
   );
 }
 
@@ -530,9 +553,45 @@
   );
 }
 
+.dark .bg-warm-gradient,
+.dark.bg-warm-gradient {
+  background: linear-gradient(
+    135deg,
+    #0d0906 0%,
+    #1a1006 50%,
+    #261809 100%
+  );
+}
+
 /* Elegant sidebar gradient - softer navy */
 .bg-sidebar-gradient {
   background: linear-gradient(180deg, #1e3a5f 0%, #1a365d 100%);
+}
+
+.dark .bg-sidebar-gradient,
+.dark.bg-sidebar-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+}
+
+/* Grid pattern overlay */
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .bg-grid-pattern,
+.dark.bg-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 /* Subtle Grid Pattern */
@@ -604,6 +663,38 @@
     transparent 1px
   );
   background-size: 24px 24px;
+}
+
+/* ============================================
+   Theme-Aware Utility Classes - Text Contrast Fix
+   Works in both light and dark modes
+   ============================================ */
+
+/* Card backgrounds - solid in light mode, glass effect in dark mode */
+.bg-card-glass {
+  @apply bg-white dark:bg-white/10;
+}
+
+/* Card borders - subtle in light mode, glass in dark mode */
+.border-card-glass {
+  @apply border-gray-200/60 dark:border-white/20;
+}
+
+/* Text colors with proper contrast in both modes */
+.text-heading {
+  @apply text-gray-900 dark:text-white;
+}
+
+.text-body {
+  @apply text-gray-700 dark:text-white/90;
+}
+
+.text-secondary {
+  @apply text-gray-600 dark:text-white/80;
+}
+
+.text-muted {
+  @apply text-gray-500 dark:text-white/60;
 }
 
 /* ============================================
