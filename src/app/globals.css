@@ -470,58 +470,10 @@
   }
 
   /* ============================================
-     SIMPLIFIED: Black text and borders by default
-     Maximum contrast, no theme complexity
+     BODY & BASE STYLES - Theme Aware
      ============================================ */
   body {
-    @apply font-body;
-    background: white;
-    color: #000000;
-  }
-
-  /* Default text color for all content */
-  p, span, div, section, article, main, aside, header, footer,
-  h1, h2, h3, h4, h5, h6,
-  label, legend, caption,
-  td, th, li, dt, dd {
-    color: #000000;
-  }
-
-  /* Default border color - black with some opacity for subtlety */
-  *[class*="border"] {
-    border-color: rgba(0, 0, 0, 0.2);
-  }
-
-  /* Strong borders use solid black */
-  .border-2, .border-4 {
-    border-color: #000000;
-  }
-
-  /* Input and form elements */
-  input, textarea, select {
-    color: #000000;
-    border-color: rgba(0, 0, 0, 0.3);
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  /* Cards and surfaces keep their backgrounds but use black text */
-  .card, [class*="card-"] {
-    color: #000000;
-  }
-
-  /* Override utility classes */
-  .text-heading { color: #000000; }
-  .text-body { color: #000000; }
-  .text-secondary { color: rgba(0, 0, 0, 0.7); }
-  .text-muted { color: rgba(0, 0, 0, 0.5); }
-
-  /* Keep button text and links with their intended colors */
-  button, a, [role="button"] {
-    /* Allow these to keep their specific colors */
+    @apply bg-background text-foreground font-body;
   }
 }
 
