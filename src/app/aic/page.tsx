@@ -30,7 +30,7 @@ export default function AicDashboardPage() {
             Auditor in Charge
           </Badge>
         </div>
-        <p className="text-gray-500 dark:text-white/60 mt-2">
+        <p className="text-gray-500 dark:text-white/70 mt-2">
           Manage audit engagements, generate workbooks, and monitor auditor progress.
         </p>
       </motion.div>
@@ -46,11 +46,11 @@ export default function AicDashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Audit Runs</CardTitle>
-              <FileStack className="h-4 w-4 text-gray-400 dark:text-white/70" />
+              <FileStack className="h-4 w-4 text-gray-500 dark:text-white/70" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">0</div>
-              <p className="text-xs text-gray-400 dark:text-white/70">
+              <p className="text-xs text-gray-500 dark:text-white/70">
                 Create your first audit run
               </p>
             </CardContent>
@@ -61,11 +61,11 @@ export default function AicDashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Published Workbooks</CardTitle>
-              <FileText className="h-4 w-4 text-gray-400 dark:text-white/70" />
+              <FileText className="h-4 w-4 text-gray-500 dark:text-white/70" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">0</div>
-              <p className="text-xs text-gray-400 dark:text-white/70">
+              <p className="text-xs text-gray-500 dark:text-white/70">
                 Assigned to auditors
               </p>
             </CardContent>
@@ -76,11 +76,11 @@ export default function AicDashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Auditors</CardTitle>
-              <Users className="h-4 w-4 text-gray-400 dark:text-white/70" />
+              <Users className="h-4 w-4 text-gray-500 dark:text-white/70" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">4</div>
-              <p className="text-xs text-gray-400 dark:text-white/70">
+              <p className="text-xs text-gray-500 dark:text-white/70">
                 Available for assignment
               </p>
             </CardContent>
@@ -91,11 +91,11 @@ export default function AicDashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Completed</CardTitle>
-              <CheckCircle2 className="h-4 w-4 text-gray-400 dark:text-white/70" />
+              <CheckCircle2 className="h-4 w-4 text-gray-500 dark:text-white/70" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">0</div>
-              <p className="text-xs text-gray-400 dark:text-white/70">
+              <p className="text-xs text-gray-500 dark:text-white/70">
                 Submitted workbooks
               </p>
             </CardContent>
@@ -141,7 +141,7 @@ export default function AicDashboardPage() {
               </div>
               <div>
                 <p className="font-medium text-sm text-gray-900 dark:text-white">Gap Assessment</p>
-                <p className="text-xs text-gray-400 dark:text-white/70">Upload docs, extract attributes</p>
+                <p className="text-xs text-gray-500 dark:text-white/70">Upload docs, extract attributes</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -150,7 +150,7 @@ export default function AicDashboardPage() {
               </div>
               <div>
                 <p className="font-medium text-sm text-gray-900 dark:text-white">Sampling</p>
-                <p className="text-xs text-gray-400 dark:text-white/70">Configure and generate samples</p>
+                <p className="text-xs text-gray-500 dark:text-white/70">Configure and generate samples</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -159,7 +159,7 @@ export default function AicDashboardPage() {
               </div>
               <div>
                 <p className="font-medium text-sm text-gray-900 dark:text-white">Attribute Extraction</p>
-                <p className="text-xs text-gray-400 dark:text-white/70">AI-powered CDD/EDD extraction</p>
+                <p className="text-xs text-gray-500 dark:text-white/70">AI-powered CDD/EDD extraction</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -168,7 +168,7 @@ export default function AicDashboardPage() {
               </div>
               <div>
                 <p className="font-medium text-sm text-gray-900 dark:text-white">Workbook Generation & Publish</p>
-                <p className="text-xs text-gray-400 dark:text-white/70">Assign to auditors and publish</p>
+                <p className="text-xs text-gray-500 dark:text-white/70">Assign to auditors and publish</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -177,7 +177,7 @@ export default function AicDashboardPage() {
               </div>
               <div>
                 <p className="font-medium text-sm text-gray-900 dark:text-white">Live Monitoring</p>
-                <p className="text-xs text-gray-400 dark:text-white/70">Track auditor progress in real-time</p>
+                <p className="text-xs text-gray-500 dark:text-white/70">Track auditor progress in real-time</p>
               </div>
             </div>
           </CardContent>
@@ -199,8 +199,8 @@ export default function AicDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center justify-center py-8 text-center">
-              <FileStack className="h-12 w-12 text-gray-400 dark:text-white/70 mb-4" />
-              <p className="text-gray-400 dark:text-white/70 mb-4">No audit runs yet</p>
+              <FileStack className="h-12 w-12 text-gray-500 dark:text-white/70 mb-4" />
+              <p className="text-gray-500 dark:text-white/70 mb-4">No audit runs yet</p>
               <Link href="/aic/audit-runs/new">
                 <Button variant="outline">
                   Create your first audit run

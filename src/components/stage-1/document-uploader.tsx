@@ -188,7 +188,7 @@ export function DocumentUploader({
                 <FileText className="h-8 w-8 text-primary" />
                 <div className="text-left">
                   <p className="font-medium">{selectedFile.name}</p>
-                  <p className="text-sm text-white/60">
+                  <p className="text-sm text-white/70">
                     {(selectedFile.size / 1024).toFixed(1)} KB
                   </p>
                 </div>
@@ -202,11 +202,11 @@ export function DocumentUploader({
               </div>
             ) : (
               <>
-                <Upload className="h-12 w-12 text-white/60 mx-auto mb-4" />
+                <Upload className="h-12 w-12 text-white/70 mx-auto mb-4" />
                 <p className="font-medium mb-2">
                   Drag and drop a file here, or click to browse
                 </p>
-                <p className="text-sm text-white/60 mb-4">
+                <p className="text-sm text-white/70 mb-4">
                   Supported formats: PDF, DOCX, DOC, TXT
                 </p>
                 <Input
@@ -293,7 +293,7 @@ export function DocumentUploader({
                   className="flex items-center justify-between p-3 bg-white/10 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-white/60" />
+                    <FileText className="h-5 w-5 text-white/70" />
                     <div>
                       <p className="font-medium text-sm">{doc.fileName}</p>
                       <div className="flex items-center gap-2 mt-1">

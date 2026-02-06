@@ -216,15 +216,15 @@ export function PopulationUploader({
           {isLoading ? (
             <div className="flex flex-col items-center gap-3">
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              <p className="text-sm text-white/60">Loading population data...</p>
+              <p className="text-sm text-white/70">Loading population data...</p>
             </div>
           ) : (
             <>
-              <FileSpreadsheet className="h-12 w-12 text-white/60 mx-auto mb-4" />
+              <FileSpreadsheet className="h-12 w-12 text-white/70 mx-auto mb-4" />
               <p className="font-medium mb-2">
                 Drag and drop an Excel or CSV file here
               </p>
-              <p className="text-sm text-white/60 mb-4">
+              <p className="text-sm text-white/70 mb-4">
                 Or click below to browse files
               </p>
               <input
@@ -249,7 +249,7 @@ export function PopulationUploader({
 
         {/* Demo Data Option */}
         <div className="text-center">
-          <p className="text-sm text-white/60 mb-3">
+          <p className="text-sm text-white/70 mb-3">
             Or use demo data to try the sampling tool
           </p>
           <Button

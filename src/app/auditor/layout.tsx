@@ -27,7 +27,7 @@ export default function AuditorLayout({
   if (!isAuthorized) {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-crowe-indigo-dark">
-        <div className="text-gray-500 dark:text-white/60">Checking authorization...</div>
+        <div className="text-gray-500 dark:text-white/70">Checking authorization...</div>
       </div>
     );
   }

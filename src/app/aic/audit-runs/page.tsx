@@ -59,7 +59,7 @@ export default function AicAuditRunsPage() {
       {auditRuns.length === 0 ? (
         <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
           <CardContent className="flex flex-col items-center justify-center py-16">
-            <FileStack className="h-16 w-16 text-white/60 mb-4" />
+            <FileStack className="h-16 w-16 text-white/70 mb-4" />
             <h3 className="text-lg font-semibold mb-2 text-white">No audit runs yet</h3>
             <p className="text-white/70 mb-6 text-center max-w-md">
               Create your first audit run to start the AIC workflow: gap analysis, sampling, attribute extraction, workbook generation, and monitoring.
@@ -76,7 +76,7 @@ export default function AicAuditRunsPage() {
         <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
           <CardHeader>
             <CardTitle className="text-white">All Audit Runs</CardTitle>
-            <CardDescription className="text-white/60">
+            <CardDescription className="text-white/70">
               Click on an audit run to view details and continue working
             </CardDescription>
           </CardHeader>

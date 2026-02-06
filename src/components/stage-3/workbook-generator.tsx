@@ -116,12 +116,12 @@ export function WorkbookGenerator({
                   className="flex items-center justify-between p-3 bg-white/10 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <Database className="h-5 w-5 text-white/60" />
+                    <Database className="h-5 w-5 text-white/70" />
                     <div>
                       <p className="text-sm font-medium">
                         Workbook - {new Date(wb.createdAt).toLocaleDateString()}
                       </p>
-                      <div className="flex items-center gap-2 text-xs text-white/60">
+                      <div className="flex items-center gap-2 text-xs text-white/70">
                         <span>{wb.rowCount} rows</span>
                         <span>•</span>
                         <span>{wb.summary.completionPercentage.toFixed(0)}% complete</span>
@@ -165,12 +165,12 @@ export function WorkbookGenerator({
         </Button>
 
         {!canGenerate && (
-          <p className="text-xs text-white/60 text-center">
+          <p className="text-xs text-white/70 text-center">
             Complete Stages 1 and 2 (with locked sample) to generate a workbook.
           </p>
         )}
 
-        <p className="text-xs text-white/60 text-center">
+        <p className="text-xs text-white/70 text-center">
           Demo mode: Uses mock attributes and sample data.
         </p>
       </CardContent>

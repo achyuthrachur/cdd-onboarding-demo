@@ -335,7 +335,7 @@ export default function Stage4Page() {
       title: "Step 4: Populate",
       description: "Fill demo data",
       isComplete: stepComplete.view,
-      activeColor: "bg-white/10 text-white/60",
+      activeColor: "bg-white/10 text-white/70",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: ListChecks,
       badgeText: stepComplete.view ? "Ready" : "Pending",
@@ -404,7 +404,7 @@ export default function Stage4Page() {
                   </motion.div>
                   <div>
                     <CardTitle className="text-base text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-white/60">{step.description}</CardDescription>
+                    <CardDescription className="text-white/70">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -494,7 +494,7 @@ export default function Stage4Page() {
                     <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-white">Sampling Data (Stage 2)</CardTitle>
-                        <CardDescription className="text-white/60">
+                        <CardDescription className="text-white/70">
                           Sample records from the locked sampling plan
                         </CardDescription>
                       </CardHeader>
@@ -545,7 +545,7 @@ export default function Stage4Page() {
                     <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-white">Attributes (Stage 3)</CardTitle>
-                        <CardDescription className="text-white/60">
+                        <CardDescription className="text-white/70">
                           CIP/CDD/EDD testing attributes from FLU procedures
                         </CardDescription>
                       </CardHeader>
@@ -635,7 +635,7 @@ export default function Stage4Page() {
                 <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                   <CardHeader>
                     <CardTitle className="text-white">Generate Auditor Workbooks</CardTitle>
-                    <CardDescription className="text-white/60">
+                    <CardDescription className="text-white/70">
                       Create testing workbooks for each selected auditor
                     </CardDescription>
                   </CardHeader>

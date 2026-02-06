@@ -110,7 +110,7 @@ export function ObservationPicker({
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-crowe-indigo-dark px-2 text-white/60">
+              <span className="bg-crowe-indigo-dark px-2 text-white/70">
                 OR enter custom observation
               </span>
             </div>

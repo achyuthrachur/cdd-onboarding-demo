@@ -83,13 +83,13 @@ export function AicSidebar() {
       <div className="border-t border-gray-200 dark:border-white/10 px-3 py-4 space-y-2">
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-600 dark:text-white/60 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
+          className="w-full justify-start text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
           onClick={handleLogout}
         >
           <LogOut className="h-4 w-4 mr-3" />
           Switch Role
         </Button>
-        <p className="text-xs text-gray-400 dark:text-white/60 px-3">
+        <p className="text-xs text-gray-500 dark:text-white/70 px-3">
           CDD Demo v1.0 | AIC Portal
         </p>
       </div>

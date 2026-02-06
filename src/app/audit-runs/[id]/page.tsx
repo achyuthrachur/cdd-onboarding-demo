@@ -159,7 +159,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
                         </Badge>
                       )}
                     </CardTitle>
-                    <CardDescription className="text-white/60">{stage.description}</CardDescription>
+                    <CardDescription className="text-white/70">{stage.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -183,7 +183,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
       <Card className="mt-8 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
           <CardTitle className="text-white">Workflow Summary</CardTitle>
-          <CardDescription className="text-white/60">
+          <CardDescription className="text-white/70">
             Overview of the 6-stage audit workflow
           </CardDescription>
         </CardHeader>

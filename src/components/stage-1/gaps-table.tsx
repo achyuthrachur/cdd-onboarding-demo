@@ -116,7 +116,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
             <Card key={item.Metric}>
               <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
                 <div className="text-2xl font-bold">{item.Value}</div>
-                <p className="text-xs text-white/60">{item.Metric}</p>
+                <p className="text-xs text-white/70">{item.Metric}</p>
               </CardContent>
             </Card>
           ))}
@@ -189,7 +189,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
               <TableBody>
                 {filteredGaps.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-white/60">
+                    <TableCell colSpan={5} className="text-center py-8 text-white/70">
                       No gaps found matching your filters
                     </TableCell>
                   </TableRow>
@@ -271,11 +271,11 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Standard Citation</h4>
-                                  <p className="text-xs text-white/60">{gap.Standard_Citation}</p>
+                                  <p className="text-xs text-white/70">{gap.Standard_Citation}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Procedure Citation</h4>
-                                  <p className="text-xs text-white/60">{gap.Procedure_Citation}</p>
+                                  <p className="text-xs text-white/70">{gap.Procedure_Citation}</p>
                                 </div>
                               </div>
                               {gap.Notes && (

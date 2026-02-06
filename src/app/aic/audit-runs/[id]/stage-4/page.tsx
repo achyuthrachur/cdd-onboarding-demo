@@ -467,7 +467,7 @@ export default function AicStage4Page() {
                   </motion.div>
                   <div>
                     <CardTitle className="text-base text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-white/60">{step.description}</CardDescription>
+                    <CardDescription className="text-white/70">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -557,7 +557,7 @@ export default function AicStage4Page() {
                     <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-white">Sampling Data (Stage 2)</CardTitle>
-                        <CardDescription className="text-white/60">
+                        <CardDescription className="text-white/70">
                           Sample records from the locked sampling plan
                         </CardDescription>
                       </CardHeader>
@@ -608,7 +608,7 @@ export default function AicStage4Page() {
                     <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-white">Attributes (Stage 3)</CardTitle>
-                        <CardDescription className="text-white/60">
+                        <CardDescription className="text-white/70">
                           CIP/CDD/EDD testing attributes from FLU procedures
                         </CardDescription>
                       </CardHeader>
@@ -696,7 +696,7 @@ export default function AicStage4Page() {
                 <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                   <CardHeader>
                     <CardTitle className="text-white">Generate Auditor Workbooks</CardTitle>
-                    <CardDescription className="text-white/60">
+                    <CardDescription className="text-white/70">
                       Create testing workbooks for each selected auditor
                     </CardDescription>
                   </CardHeader>
@@ -942,7 +942,7 @@ export default function AicStage4Page() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="text-white">Publish Workbooks to Auditors</DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogDescription className="text-white/70">
               This will make workbooks available to the assigned auditors.
               They will be able to view and complete their assigned testing.
             </DialogDescription>

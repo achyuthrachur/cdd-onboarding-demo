@@ -329,7 +329,7 @@ export default function Stage3Page() {
       title: "Step 3: Review",
       description: "Confirm & Export",
       isComplete: canProceed,
-      activeColor: "bg-white/10 text-white/60",
+      activeColor: "bg-white/10 text-white/70",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: FileSpreadsheet,
       badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
@@ -398,7 +398,7 @@ export default function Stage3Page() {
                   </motion.div>
                   <div>
                     <CardTitle className="text-base text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-white/60">{step.description}</CardDescription>
+                    <CardDescription className="text-white/70">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -481,7 +481,7 @@ export default function Stage3Page() {
                 ) : (
                   <Card className="h-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                     <div className="text-center">
-                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-white/30" />
+                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-white/50" />
                       <h3 className="font-medium mb-2 text-white">No Extraction Results</h3>
                       <p className="text-sm text-white/70">
                         Upload FLU procedures and run extraction to view results

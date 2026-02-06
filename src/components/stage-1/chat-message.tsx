@@ -152,7 +152,7 @@ export function ChatMessage({
         <div className="flex items-center gap-2 mb-1">
           <span className="font-medium text-sm">{getLabel()}</span>
           {timestamp && (
-            <span className="text-xs text-white/60">
+            <span className="text-xs text-white/70">
               {timestamp.toLocaleTimeString()}
             </span>
           )}
@@ -170,7 +170,7 @@ export function ChatMessage({
                 <Badge variant="outline" className="text-xs">
                   System Prompt
                 </Badge>
-                <span className="text-xs text-white/60">Read-only</span>
+                <span className="text-xs text-white/70">Read-only</span>
               </div>
               <pre className="text-sm whitespace-pre-wrap font-mono text-white/70 leading-relaxed">
                 {content}
@@ -212,7 +212,7 @@ export function ChatMessage({
             className="flex items-center gap-2 mt-2"
           >
             <TypingIndicator />
-            <span className="text-xs text-white/60">Processing...</span>
+            <span className="text-xs text-white/70">Processing...</span>
           </motion.div>
         )}
 

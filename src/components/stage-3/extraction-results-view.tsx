@@ -150,8 +150,8 @@ export function ExtractionResultsView({
   };
 
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="border-b flex-shrink-0">
+    <Card className="h-full !gap-0 overflow-hidden">
+      <CardHeader className="border-b flex-shrink-0 !pb-4">
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2 text-lg">
@@ -246,15 +246,15 @@ export function ExtractionResultsView({
         </motion.div>
       </CardHeader>
 
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden px-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
-          <div className="px-4 pt-4 flex-shrink-0">
-            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="attributes" className="gap-2">
+          <div className="pt-4 flex-shrink-0">
+            <TabsList className="grid w-full grid-cols-2 mb-4 h-11 bg-white/5 border border-white/10">
+              <TabsTrigger value="attributes" className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white text-white/70">
                 <FileText className="h-4 w-4" />
                 Attributes ({filteredAttributes.length})
               </TabsTrigger>
-              <TabsTrigger value="documents" className="gap-2">
+              <TabsTrigger value="documents" className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white text-white/70">
                 <FileSpreadsheet className="h-4 w-4" />
                 Acceptable Docs ({filteredDocs.length})
               </TabsTrigger>
@@ -336,7 +336,7 @@ export function ExtractionResultsView({
                               <TableCell className="px-4 py-2 font-medium">
                                 {attr.Attribute_Name}
                               </TableCell>
-                              <TableCell className="px-4 py-2 text-sm text-white/60">
+                              <TableCell className="px-4 py-2 text-sm text-white/70">
                                 {attr.Question_Text}
                               </TableCell>
                               <TableCell className="px-4 py-2">
@@ -354,7 +354,7 @@ export function ExtractionResultsView({
                         })}
                         {filteredAttributes.length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={6} className="text-center py-8 text-white/60">
+                            <TableCell colSpan={6} className="text-center py-8 text-white/70">
                               No attributes match your search criteria
                             </TableCell>
                           </TableRow>
@@ -414,7 +414,7 @@ export function ExtractionResultsView({
                               <TableCell className="px-4 py-2 font-medium">
                                 {doc.Document_Name}
                               </TableCell>
-                              <TableCell className="px-4 py-2 text-sm text-white/60">
+                              <TableCell className="px-4 py-2 text-sm text-white/70">
                                 {doc.Evidence_Source_Document}
                               </TableCell>
                               <TableCell className="px-4 py-2">
@@ -422,7 +422,7 @@ export function ExtractionResultsView({
                                   {doc.Jurisdiction_ID}
                                 </Badge>
                               </TableCell>
-                              <TableCell className="px-4 py-2 text-xs text-white/60">
+                              <TableCell className="px-4 py-2 text-xs text-white/70">
                                 {doc.Notes}
                               </TableCell>
                             </motion.tr>
@@ -430,7 +430,7 @@ export function ExtractionResultsView({
                         })}
                         {filteredDocs.length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={5} className="text-center py-8 text-white/60">
+                            <TableCell colSpan={5} className="text-center py-8 text-white/70">
                               No documents match your search criteria
                             </TableCell>
                           </TableRow>

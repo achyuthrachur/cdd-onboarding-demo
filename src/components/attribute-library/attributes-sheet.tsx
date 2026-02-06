@@ -150,7 +150,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{attributes.length}</div>
-            <p className="text-xs text-white/60">Total Attributes</p>
+            <p className="text-xs text-white/70">Total Attributes</p>
           </CardContent>
         </Card>
         <Card>
@@ -158,7 +158,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.IsRequired === "Y").length}
             </div>
-            <p className="text-xs text-white/60">Required</p>
+            <p className="text-xs text-white/70">Required</p>
           </CardContent>
         </Card>
         <Card>
@@ -166,19 +166,19 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.RiskScope === "EDD" || a.RiskScope === "Both").length}
             </div>
-            <p className="text-xs text-white/60">EDD Attributes</p>
+            <p className="text-xs text-white/70">EDD Attributes</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{categories.length}</div>
-            <p className="text-xs text-white/60">Categories</p>
+            <p className="text-xs text-white/70">Categories</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{jurisdictions.length}</div>
-            <p className="text-xs text-white/60">Jurisdictions</p>
+            <p className="text-xs text-white/70">Jurisdictions</p>
           </CardContent>
         </Card>
       </div>
@@ -295,7 +295,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
               <TableBody>
                 {filteredAttributes.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center py-8 text-white/60">
+                    <TableCell colSpan={10} className="text-center py-8 text-white/70">
                       No attributes found matching your filters
                     </TableCell>
                   </TableRow>
@@ -379,25 +379,25 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source</h4>
-                                  <p className="text-sm text-white/60">{attr.Source}</p>
+                                  <p className="text-sm text-white/70">{attr.Source}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source Page</h4>
-                                  <p className="text-sm text-white/60">{attr.Source_Page || "-"}</p>
+                                  <p className="text-sm text-white/70">{attr.Source_Page || "-"}</p>
                                 </div>
                               </div>
                               <div className="grid grid-cols-3 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Risk Scope</h4>
-                                  <p className="text-sm text-white/60">{attr.RiskScope}</p>
+                                  <p className="text-sm text-white/70">{attr.RiskScope}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source File</h4>
-                                  <p className="text-sm text-white/60">{attr.Source_File}</p>
+                                  <p className="text-sm text-white/70">{attr.Source_File}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Doc Age Rule</h4>
-                                  <p className="text-sm text-white/60">
+                                  <p className="text-sm text-white/70">
                                     {attr.DocumentationAgeRule ? `${attr.DocumentationAgeRule} days` : "-"}
                                   </p>
                                 </div>
@@ -405,7 +405,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                               {attr.Notes && (
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Notes</h4>
-                                  <p className="text-sm text-white/60">{attr.Notes}</p>
+                                  <p className="text-sm text-white/70">{attr.Notes}</p>
                                 </div>
                               )}
 
@@ -417,7 +417,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                                 </h4>
                                 <div className="space-y-2">
                                   {getDocsForAttribute(attr.Attribute_ID).length === 0 ? (
-                                    <p className="text-sm text-white/60">No documents specified</p>
+                                    <p className="text-sm text-white/70">No documents specified</p>
                                   ) : (
                                     getDocsForAttribute(attr.Attribute_ID).map((doc, idx) => (
                                       <div
@@ -427,11 +427,11 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                                         <FileText className="h-4 w-4 mt-0.5 text-white/70" />
                                         <div>
                                           <p className="font-medium">{doc.Document_Name}</p>
-                                          <p className="text-xs text-white/60">
+                                          <p className="text-xs text-white/70">
                                             Source: {doc.Evidence_Source_Document}
                                           </p>
                                           {doc.Notes && (
-                                            <p className="text-xs text-white/60 mt-1">{doc.Notes}</p>
+                                            <p className="text-xs text-white/70 mt-1">{doc.Notes}</p>
                                           )}
                                         </div>
                                       </div>

@@ -333,7 +333,7 @@ export default function AicMonitorPage() {
         <motion.div variants={staggerItem}>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription className="text-white/60">Total Auditors</CardDescription>
+              <CardDescription className="text-white/70">Total Auditors</CardDescription>
               <CardTitle className="text-3xl text-white">{totalAuditors}</CardTitle>
             </CardHeader>
             <CardContent>
@@ -348,7 +348,7 @@ export default function AicMonitorPage() {
         <motion.div variants={staggerItem}>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription className="text-white/60">Submitted</CardDescription>
+              <CardDescription className="text-white/70">Submitted</CardDescription>
               <CardTitle className="text-3xl text-white">{submittedCount} / {totalAuditors}</CardTitle>
             </CardHeader>
             <CardContent>
@@ -363,7 +363,7 @@ export default function AicMonitorPage() {
         <motion.div variants={staggerItem}>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription className="text-white/60">Average Completion</CardDescription>
+              <CardDescription className="text-white/70">Average Completion</CardDescription>
               <CardTitle className="text-3xl text-white">{averageCompletion}%</CardTitle>
             </CardHeader>
             <CardContent>
@@ -375,7 +375,7 @@ export default function AicMonitorPage() {
         <motion.div variants={staggerItem}>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription className="text-white/60">Last Updated</CardDescription>
+              <CardDescription className="text-white/70">Last Updated</CardDescription>
               <CardTitle className="text-lg text-white">
                 {lastRefresh ? lastRefresh.toLocaleTimeString() : '--:--:--'}
               </CardTitle>
@@ -426,7 +426,7 @@ export default function AicMonitorPage() {
                     <PieChart className="h-5 w-5" />
                     Completion Status Distribution
                   </CardTitle>
-                  <CardDescription className="text-white/60">
+                  <CardDescription className="text-white/70">
                     Overview of workbook submission status across all auditors
                   </CardDescription>
                 </CardHeader>
@@ -442,21 +442,21 @@ export default function AicMonitorPage() {
                     </div>
                     <div className="flex flex-col justify-center space-y-4">
                       <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                        <div className="text-sm text-white/60 mb-1">Total Auditors</div>
+                        <div className="text-sm text-white/70 mb-1">Total Auditors</div>
                         <div className="text-3xl font-bold text-white">{totalAuditors}</div>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         <div className="p-3 rounded-lg bg-crowe-teal/10 border border-crowe-teal/30 text-center">
                           <div className="text-xl font-bold text-crowe-teal-bright">{submittedCount}</div>
-                          <div className="text-xs text-white/60">Submitted</div>
+                          <div className="text-xs text-white/70">Submitted</div>
                         </div>
                         <div className="p-3 rounded-lg bg-crowe-cyan/10 border border-crowe-cyan/30 text-center">
                           <div className="text-xl font-bold text-crowe-cyan">{inProgressCount}</div>
-                          <div className="text-xs text-white/60">In Progress</div>
+                          <div className="text-xs text-white/70">In Progress</div>
                         </div>
                         <div className="p-3 rounded-lg bg-white/5 border border-white/10 text-center">
                           <div className="text-xl font-bold text-white/70">{draftCount}</div>
-                          <div className="text-xs text-white/60">Draft</div>
+                          <div className="text-xs text-white/70">Draft</div>
                         </div>
                       </div>
                     </div>
@@ -473,7 +473,7 @@ export default function AicMonitorPage() {
                     <BarChart3 className="h-5 w-5" />
                     Auditor Completion Progress
                   </CardTitle>
-                  <CardDescription className="text-white/60">
+                  <CardDescription className="text-white/70">
                     Individual completion percentage for each assigned auditor
                   </CardDescription>
                 </CardHeader>
@@ -496,7 +496,7 @@ export default function AicMonitorPage() {
                     <LineChart className="h-5 w-5" />
                     Completion Progress Over Time
                   </CardTitle>
-                  <CardDescription className="text-white/60">
+                  <CardDescription className="text-white/70">
                     Tracking average completion rate throughout the audit period
                   </CardDescription>
                 </CardHeader>
@@ -518,7 +518,7 @@ export default function AicMonitorPage() {
                     <BarChart3 className="h-5 w-5" />
                     Results by Attribute Category
                   </CardTitle>
-                  <CardDescription className="text-white/60">
+                  <CardDescription className="text-white/70">
                     Pass/Fail breakdown by testing category (preliminary data)
                   </CardDescription>
                 </CardHeader>
@@ -548,7 +548,7 @@ export default function AicMonitorPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-white">Auditor Progress</CardTitle>
-                <CardDescription className="text-white/60">
+                <CardDescription className="text-white/70">
                   Individual completion status for each auditor
                 </CardDescription>
               </div>
@@ -606,7 +606,7 @@ export default function AicMonitorPage() {
                           <div className="flex items-start justify-between">
                             <div>
                               <CardTitle className="text-lg text-white">{auditor.auditorName}</CardTitle>
-                              <CardDescription className="text-white/60">{auditor.auditorEmail}</CardDescription>
+                              <CardDescription className="text-white/70">{auditor.auditorEmail}</CardDescription>
                             </div>
                             <Badge
                               variant={auditor.status === 'submitted' ? 'default' : 'outline'}
@@ -650,7 +650,7 @@ export default function AicMonitorPage() {
                           </div>
 
                           {/* Last Activity */}
-                          <div className="flex items-center gap-2 text-xs text-white/60">
+                          <div className="flex items-center gap-2 text-xs text-white/70">
                             <Clock className="h-3 w-3" />
                             {auditor.submittedAt ? (
                               <span>Submitted {new Date(auditor.submittedAt).toLocaleString()}</span>

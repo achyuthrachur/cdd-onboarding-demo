@@ -220,7 +220,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
     return (
       <Card>
         <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-white/60" />
+          <Loader2 className="h-8 w-8 animate-spin text-white/70" />
         </CardContent>
       </Card>
     );
@@ -230,7 +230,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
     return (
       <Card>
         <CardContent className="flex items-center justify-center py-12">
-          <p className="text-white/60">Workbook not found</p>
+          <p className="text-white/70">Workbook not found</p>
         </CardContent>
       </Card>
     );
@@ -245,7 +245,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{workbook.summary.totalRows}</div>
-            <p className="text-xs text-white/60">Total Tests</p>
+            <p className="text-xs text-white/70">Total Tests</p>
           </CardContent>
         </Card>
         <Card>
@@ -253,7 +253,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
             <div className="text-2xl font-bold text-crowe-teal-bright">
               {workbook.summary.passCount}
             </div>
-            <p className="text-xs text-white/60">Passed</p>
+            <p className="text-xs text-white/70">Passed</p>
           </CardContent>
         </Card>
         <Card>
@@ -261,7 +261,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
             <div className="text-2xl font-bold text-crowe-coral-bright">
               {workbook.summary.failCount}
             </div>
-            <p className="text-xs text-white/60">Failed</p>
+            <p className="text-xs text-white/70">Failed</p>
           </CardContent>
         </Card>
         <Card>
@@ -269,7 +269,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
             <div className="text-2xl font-bold text-white/70">
               {workbook.summary.naCount}
             </div>
-            <p className="text-xs text-white/60">N/A</p>
+            <p className="text-xs text-white/70">N/A</p>
           </CardContent>
         </Card>
         <Card>
@@ -277,7 +277,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
             <div className="text-2xl font-bold">
               {workbook.summary.completionPercentage.toFixed(0)}%
             </div>
-            <p className="text-xs text-white/60">Complete</p>
+            <p className="text-xs text-white/70">Complete</p>
           </CardContent>
         </Card>
       </div>
@@ -400,7 +400,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                     <TableCell className="px-4 py-2">
                       <div className="flex flex-col">
                         <span className="font-medium text-sm">{row.attributeId}</span>
-                        <span className="text-xs text-white/60 truncate max-w-[150px]">
+                        <span className="text-xs text-white/70 truncate max-w-[150px]">
                           {row.attributeName}
                         </span>
                       </div>
@@ -552,7 +552,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                 ))}
                 {filteredRows.length > 50 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-4 text-white/60">
+                    <TableCell colSpan={6} className="text-center py-4 text-white/70">
                       <AlertTriangle className="h-4 w-4 inline mr-2" />
                       Showing first 50 of {filteredRows.length} rows. Use filters to narrow results.
                     </TableCell>
@@ -560,7 +560,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                 )}
                 {filteredRows.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-white/60">
+                    <TableCell colSpan={6} className="text-center py-8 text-white/70">
                       No rows match your filters
                     </TableCell>
                   </TableRow>

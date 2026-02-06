@@ -75,7 +75,7 @@ export function StageNav({ stages, currentStage }: StageNavProps) {
                   <span
                     className={cn(
                       "text-sm font-medium",
-                      isCurrent ? "text-primary" : "text-white/60"
+                      isCurrent ? "text-primary" : "text-white/70"
                     )}
                   >
                     {stage.name}

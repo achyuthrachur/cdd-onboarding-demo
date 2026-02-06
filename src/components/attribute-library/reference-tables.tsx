@@ -97,7 +97,7 @@ export function AuditorsTable({ auditors }: AuditorsTableProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="px-4 py-2 text-sm font-medium">{a.name}</TableCell>
-                    <TableCell className="px-4 py-2 text-sm text-white/60">{a.email}</TableCell>
+                    <TableCell className="px-4 py-2 text-sm text-white/70">{a.email}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -131,7 +131,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.RiskTier === "Low").length}
             </div>
-            <p className="text-xs text-white/60">Low Risk Types</p>
+            <p className="text-xs text-white/70">Low Risk Types</p>
           </CardContent>
         </Card>
         <Card>
@@ -139,7 +139,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.RiskTier === "Medium").length}
             </div>
-            <p className="text-xs text-white/60">Medium Risk Types</p>
+            <p className="text-xs text-white/70">Medium Risk Types</p>
           </CardContent>
         </Card>
         <Card>
@@ -147,7 +147,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.RiskTier === "High" || c.RiskTier === "Critical").length}
             </div>
-            <p className="text-xs text-white/60">High/Critical Types</p>
+            <p className="text-xs text-white/70">High/Critical Types</p>
           </CardContent>
         </Card>
         <Card>
@@ -155,7 +155,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.IsEDD).length}
             </div>
-            <p className="text-xs text-white/60">EDD Required</p>
+            <p className="text-xs text-white/70">EDD Required</p>
           </CardContent>
         </Card>
       </div>
@@ -241,25 +241,25 @@ export function SamplingTable({ samplingConfig }: SamplingTableProps) {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.SampleSize}</div>
-            <p className="text-xs text-white/60">Sample Size</p>
+            <p className="text-xs text-white/70">Sample Size</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.PopulationSize.toLocaleString()}</div>
-            <p className="text-xs text-white/60">Population Size</p>
+            <p className="text-xs text-white/70">Population Size</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.ConfidenceLevel}%</div>
-            <p className="text-xs text-white/60">Confidence Level</p>
+            <p className="text-xs text-white/70">Confidence Level</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.MarginOfError}%</div>
-            <p className="text-xs text-white/60">Margin of Error</p>
+            <p className="text-xs text-white/70">Margin of Error</p>
           </CardContent>
         </Card>
       </div>

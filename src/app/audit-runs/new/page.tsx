@@ -83,7 +83,7 @@ export default function NewAuditRunPage() {
       <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
           <CardTitle className="text-white">Audit Run Details</CardTitle>
-          <CardDescription className="text-white/60">
+          <CardDescription className="text-white/70">
             Provide basic information about this audit run
           </CardDescription>
         </CardHeader>
@@ -99,7 +99,7 @@ export default function NewAuditRunPage() {
                   setFormData({ ...formData, name: e.target.value })
                 }
                 disabled={isLoading}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/70"
               />
             </div>
 
@@ -113,7 +113,7 @@ export default function NewAuditRunPage() {
                   setFormData({ ...formData, description: e.target.value })
                 }
                 disabled={isLoading}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/70"
               />
             </div>
 

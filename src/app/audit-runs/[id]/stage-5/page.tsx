@@ -513,7 +513,7 @@ export default function Stage5Page() {
                     <ClipboardCheck className="h-5 w-5" />
                     Testing Workbook
                   </CardTitle>
-                  <CardDescription className="text-white/60">
+                  <CardDescription className="text-white/70">
                     Rows: Test Questions | Columns: Customer Results (Result + Observation)
                   </CardDescription>
                 </div>

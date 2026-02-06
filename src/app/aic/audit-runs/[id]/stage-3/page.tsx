@@ -62,12 +62,49 @@ export default function AicStage3Page() {
   useEffect(() => {
     setHasSample(hasStageData('samplingResult'));
 
-    const storedFluProcedures = getStageData('fluProcedures');
-    if (storedFluProcedures && storedFluProcedures.length > 0) {
-      setPreloadedDoc(storedFluProcedures[0]);
-    } else {
+    // Try to load FLU document from multiple sources
+    const loadFluDocument = async () => {
+      // 1. Check stored fluProcedures first
+      const storedFluProcedures = getStageData('fluProcedures');
+      if (storedFluProcedures && storedFluProcedures.length > 0) {
+        setPreloadedDoc(storedFluProcedures[0]);
+        return;
+      }
+
+      // 2. Try to fetch FLU jurisdiction documents from the documents API
+      try {
+        const response = await fetch(`/api/documents?auditRunId=${id}`);
+        if (response.ok) {
+          const documents = await response.json();
+          // Find FLU jurisdiction document (uploaded in Stage 1)
+          const fluDoc = documents.find((doc: { docType: string; fileName: string; id: string; jurisdiction?: string; uploadedAt?: string }) =>
+            doc.docType === 'flu_jurisdiction'
+          );
+
+          if (fluDoc) {
+            const fluProcedureDoc: FLUProcedureDocument = {
+              id: fluDoc.id,
+              fileName: fluDoc.fileName,
+              docType: 'flu_procedure',
+              jurisdiction: fluDoc.jurisdiction || 'ENT',
+              uploadedAt: fluDoc.uploadedAt || new Date().toISOString(),
+              content: `[Document: ${fluDoc.fileName}]`,
+            };
+            setPreloadedDoc(fluProcedureDoc);
+            // Store it for future use
+            setStageData('fluProcedures', [fluProcedureDoc]);
+            return;
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load FLU document from API:', error);
+      }
+
+      // 3. Fall back to demo document
       setPreloadedDoc(DEMO_FLU_DOCUMENT);
-    }
+    };
+
+    loadFluDocument();
 
     const storedResult = getStageData('fluExtractionResult');
     if (storedResult) {
@@ -88,7 +125,7 @@ export default function AicStage3Page() {
         },
       });
     }
-  }, []);
+  }, [id]);
 
   const handleLoadDemoData = () => {
     const mockResult = getMockFLUExtractionResult();
@@ -262,7 +299,7 @@ export default function AicStage3Page() {
       title: "Step 3: Review",
       description: "Confirm & Export",
       isComplete: canProceed,
-      activeColor: "bg-white/10 text-white/60",
+      activeColor: "bg-white/10 text-white/70",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: FileSpreadsheet,
       badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
@@ -329,7 +366,7 @@ export default function AicStage3Page() {
                   </motion.div>
                   <div>
                     <CardTitle className="text-base text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-white/60">{step.description}</CardDescription>
+                    <CardDescription className="text-white/70">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -401,7 +438,7 @@ export default function AicStage3Page() {
                 ) : (
                   <Card className="h-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                     <div className="text-center">
-                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-white/30" />
+                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-white/50" />
                       <h3 className="font-medium mb-2 text-white">No Extraction Results</h3>
                       <p className="text-sm text-white/70">
                         Upload FLU procedures and run extraction to view results

@@ -195,7 +195,7 @@ export function ConsolidationDashboard({
   if (!consolidation) {
     return (
       <motion.div
-        className="text-center py-12 text-white/60"
+        className="text-center py-12 text-white/70"
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
@@ -263,7 +263,7 @@ export function ConsolidationDashboard({
         <motion.div variants={staggerItem}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/60 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                 <ClipboardList className="h-4 w-4" />
                 Total Tests
               </CardTitle>
@@ -272,7 +272,7 @@ export function ConsolidationDashboard({
               <motion.div className="text-2xl font-bold tabular-nums">
                 {animatedTotalTests}
               </motion.div>
-              <p className="text-xs text-white/60">
+              <p className="text-xs text-white/70">
                 across {metrics.uniqueEntitiesTested} entities
               </p>
             </CardContent>
@@ -282,7 +282,7 @@ export function ConsolidationDashboard({
         <motion.div variants={staggerItem}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/60 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                 <TrendingUp className="h-4 w-4" />
                 Pass Rate
               </CardTitle>
@@ -301,7 +301,7 @@ export function ConsolidationDashboard({
         <motion.div variants={staggerItem}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/60 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                 <TrendingDown className="h-4 w-4" />
                 Exceptions
               </CardTitle>
@@ -310,7 +310,7 @@ export function ConsolidationDashboard({
               <motion.div className="text-2xl font-bold text-crowe-coral-bright tabular-nums">
                 {animatedExceptions}
               </motion.div>
-              <p className="text-xs text-white/60">
+              <p className="text-xs text-white/70">
                 {metrics.failRate.toFixed(1)}% fail rate
               </p>
             </CardContent>
@@ -320,7 +320,7 @@ export function ConsolidationDashboard({
         <motion.div variants={staggerItem}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/60 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 Workbooks
               </CardTitle>
@@ -329,7 +329,7 @@ export function ConsolidationDashboard({
               <motion.div className="text-2xl font-bold tabular-nums">
                 {animatedWorkbooks}
               </motion.div>
-              <p className="text-xs text-white/60">
+              <p className="text-xs text-white/70">
                 submitted for consolidation
               </p>
             </CardContent>
@@ -366,7 +366,7 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-teal-bright tabular-nums">
                   {animatedPassCount}
                 </motion.div>
-                <p className="text-xs text-white/60">Pass</p>
+                <p className="text-xs text-white/70">Pass</p>
               </motion.div>
 
               <motion.div
@@ -378,7 +378,7 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-amber-bright tabular-nums">
                   {animatedPassWithObs}
                 </motion.div>
-                <p className="text-xs text-white/60">Pass w/Obs</p>
+                <p className="text-xs text-white/70">Pass w/Obs</p>
               </motion.div>
 
               <motion.div
@@ -390,7 +390,7 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-coral-bright tabular-nums">
                   {animatedFail1}
                 </motion.div>
-                <p className="text-xs text-white/60">Fail 1 - Reg</p>
+                <p className="text-xs text-white/70">Fail 1 - Reg</p>
               </motion.div>
 
               <motion.div
@@ -402,7 +402,7 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-amber tabular-nums">
                   {animatedFail2}
                 </motion.div>
-                <p className="text-xs text-white/60">Fail 2 - Proc</p>
+                <p className="text-xs text-white/70">Fail 2 - Proc</p>
               </motion.div>
 
               <motion.div
@@ -414,7 +414,7 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-blue-light tabular-nums">
                   {animatedQLOB}
                 </motion.div>
-                <p className="text-xs text-white/60">Q to LOB</p>
+                <p className="text-xs text-white/70">Q to LOB</p>
               </motion.div>
 
               <motion.div
@@ -422,11 +422,11 @@ export function ConsolidationDashboard({
                 className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-white/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <MinusCircle className="h-6 w-6 text-white/60 mb-1" />
+                <MinusCircle className="h-6 w-6 text-white/70 mb-1" />
                 <motion.div className="text-xl font-bold text-white/70 tabular-nums">
                   {animatedNA}
                 </motion.div>
-                <p className="text-xs text-white/60">N/A</p>
+                <p className="text-xs text-white/70">N/A</p>
               </motion.div>
             </motion.div>
           </CardContent>
@@ -553,7 +553,7 @@ export function ConsolidationDashboard({
             </CardHeader>
             <CardContent>
               {findingsByCategory.length === 0 ? (
-                <div className="text-center py-8 text-white/60">
+                <div className="text-center py-8 text-white/70">
                   <p className="text-sm">No category data available</p>
                 </div>
               ) : (
@@ -580,7 +580,7 @@ export function ConsolidationDashboard({
                               {category.failCount} fail
                             </span>
                             {category.naCount > 0 && (
-                              <span className="text-white/60">
+                              <span className="text-white/70">
                                 {category.naCount} N/A
                               </span>
                             )}
@@ -624,7 +624,7 @@ export function ConsolidationDashboard({
             </CardHeader>
             <CardContent>
               {findingsByJurisdiction.length === 0 ? (
-                <div className="text-center py-8 text-white/60">
+                <div className="text-center py-8 text-white/70">
                   <p className="text-sm">No jurisdiction data available</p>
                 </div>
               ) : (
@@ -666,7 +666,7 @@ export function ConsolidationDashboard({
                             style={{ width: `${failPercent}%` }}
                           />
                         </div>
-                        <div className="flex gap-4 text-xs text-white/60">
+                        <div className="flex gap-4 text-xs text-white/70">
                           <span>Pass Rate: {jur.passRate.toFixed(1)}%</span>
                           <span>Fail Rate: {jur.failRate.toFixed(1)}%</span>
                         </div>
@@ -693,7 +693,7 @@ export function ConsolidationDashboard({
             </CardHeader>
             <CardContent>
               {findingsByAuditor.length === 0 ? (
-                <div className="text-center py-8 text-white/60">
+                <div className="text-center py-8 text-white/70">
                   <p className="text-sm">No auditor data available</p>
                 </div>
               ) : (
@@ -738,7 +738,7 @@ export function ConsolidationDashboard({
                             style={{ width: `${failPercent}%` }}
                           />
                         </div>
-                        <div className="flex gap-4 text-xs text-white/60">
+                        <div className="flex gap-4 text-xs text-white/70">
                           <span>Pass Rate: {aud.passRate.toFixed(1)}%</span>
                           <span>Fail Rate: {aud.failRate.toFixed(1)}%</span>
                         </div>
@@ -765,7 +765,7 @@ export function ConsolidationDashboard({
             </CardHeader>
             <CardContent>
               {findingsByRiskTier.length === 0 ? (
-                <div className="text-center py-8 text-white/60">
+                <div className="text-center py-8 text-white/70">
                   <p className="text-sm">No risk tier data available</p>
                 </div>
               ) : (
@@ -798,7 +798,7 @@ export function ConsolidationDashboard({
                             <span className="text-crowe-teal-bright">{tier.passCount} pass</span>
                             <span className="text-crowe-coral-bright">{tier.failCount} fail</span>
                             {tier.naCount > 0 && (
-                              <span className="text-white/60">{tier.naCount} N/A</span>
+                              <span className="text-white/70">{tier.naCount} N/A</span>
                             )}
                           </div>
                         </div>
@@ -812,7 +812,7 @@ export function ConsolidationDashboard({
                             style={{ width: `${failPercent}%` }}
                           />
                         </div>
-                        <div className="flex gap-4 text-xs text-white/60">
+                        <div className="flex gap-4 text-xs text-white/70">
                           <span>Pass Rate: {tier.passRate.toFixed(1)}%</span>
                           <span>Fail Rate: {tier.failRate.toFixed(1)}%</span>
                         </div>
@@ -847,7 +847,7 @@ export function ConsolidationDashboard({
                 <Bot className="h-5 w-5 text-crowe-amber" />
                 AI-Generated Testing Summary
               </CardTitle>
-              <CardDescription className="text-white/60">
+              <CardDescription className="text-white/70">
                 Comprehensive audit documentation generated from testing results
               </CardDescription>
             </div>
@@ -980,11 +980,11 @@ export function ConsolidationDashboard({
                   exit={{ opacity: 0 }}
                   className="text-center py-12"
                 >
-                  <Bot className="h-12 w-12 mx-auto mb-4 text-white/30" />
+                  <Bot className="h-12 w-12 mx-auto mb-4 text-white/50" />
                   <p className="text-white/70 mb-2">
                     No summary generated yet
                   </p>
-                  <p className="text-sm text-white/60">
+                  <p className="text-sm text-white/70">
                     Click &quot;Generate Summary&quot; to create comprehensive audit documentation
                   </p>
                 </motion.div>

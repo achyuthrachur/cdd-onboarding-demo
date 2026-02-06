@@ -113,7 +113,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{attributes.length}</div>
-            <p className="text-xs text-white/60">Total Attributes</p>
+            <p className="text-xs text-white/70">Total Attributes</p>
           </CardContent>
         </Card>
         <Card>
@@ -121,19 +121,19 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.IsRequired === "Y").length}
             </div>
-            <p className="text-xs text-white/60">Required</p>
+            <p className="text-xs text-white/70">Required</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{acceptableDocs.length}</div>
-            <p className="text-xs text-white/60">Acceptable Documents</p>
+            <p className="text-xs text-white/70">Acceptable Documents</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{categories.length}</div>
-            <p className="text-xs text-white/60">Categories</p>
+            <p className="text-xs text-white/70">Categories</p>
           </CardContent>
         </Card>
       </div>
@@ -206,7 +206,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
               <TableBody>
                 {filteredAttributes.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-white/60">
+                    <TableCell colSpan={7} className="text-center py-8 text-white/70">
                       No attributes found matching your filters
                     </TableCell>
                   </TableRow>
@@ -309,7 +309,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                                 </h4>
                                 <div className="space-y-2">
                                   {getDocsForAttribute(attr.Attribute_ID).length === 0 ? (
-                                    <p className="text-sm text-white/60">No documents specified</p>
+                                    <p className="text-sm text-white/70">No documents specified</p>
                                   ) : (
                                     getDocsForAttribute(attr.Attribute_ID).map((doc, idx) => (
                                       <div
@@ -320,7 +320,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                                         <div>
                                           <p className="font-medium">{doc.Document_Name}</p>
                                           {doc.Notes && (
-                                            <p className="text-xs text-white/60">{doc.Notes}</p>
+                                            <p className="text-xs text-white/70">{doc.Notes}</p>
                                           )}
                                         </div>
                                       </div>

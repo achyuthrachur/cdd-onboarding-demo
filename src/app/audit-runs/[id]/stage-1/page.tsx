@@ -180,7 +180,7 @@ export default function Stage1Page() {
                 </motion.div>
                 <div>
                   <CardTitle className="text-base text-white">Gap Assessment 1</CardTitle>
-                  <CardDescription className="text-white/60">Old GFC vs Current GFC</CardDescription>
+                  <CardDescription className="text-white/70">Old GFC vs Current GFC</CardDescription>
                 </div>
               </div>
             </CardHeader>
@@ -209,7 +209,7 @@ export default function Stage1Page() {
                 </motion.div>
                 <div>
                   <CardTitle className="text-base text-white">Gap Assessment 2</CardTitle>
-                  <CardDescription className="text-white/60">Current GFC vs FLU Procedures</CardDescription>
+                  <CardDescription className="text-white/70">Current GFC vs FLU Procedures</CardDescription>
                 </div>
               </div>
             </CardHeader>
@@ -227,7 +227,7 @@ export default function Stage1Page() {
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    canProceed ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/60"
+                    canProceed ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/70"
                   }`}
                   animate={canProceed && !shouldReduceMotion ? {
                     scale: [1, 1.15, 1],
@@ -238,7 +238,7 @@ export default function Stage1Page() {
                 </motion.div>
                 <div>
                   <CardTitle className="text-base text-white">Ready for Sampling</CardTitle>
-                  <CardDescription className="text-white/60">Review & proceed</CardDescription>
+                  <CardDescription className="text-white/70">Review & proceed</CardDescription>
                 </div>
               </div>
             </CardHeader>

@@ -437,7 +437,7 @@ export function ReportGenerator({
         </motion.div>
 
         <Presence isVisible={!canGenerate}>
-          <p className="text-sm text-white/60 text-center">
+          <p className="text-sm text-white/70 text-center">
             Generate a consolidation first to create reports
           </p>
         </Presence>

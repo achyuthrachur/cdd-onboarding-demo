@@ -76,7 +76,7 @@ export function AuditorSidebar() {
       <div className="border-t border-gray-200 dark:border-white/10 p-4">
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-600 dark:text-white/60 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
+          className="w-full justify-start text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
           onClick={handleSwitchRole}
         >
           <LogOut className="mr-2 h-4 w-4" />

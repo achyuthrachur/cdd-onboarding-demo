@@ -140,7 +140,7 @@ export function SamplingRationale({
               </Badge>
             )}
           </CardTitle>
-          <CardDescription className="text-white/60">
+          <CardDescription className="text-white/70">
             Generate audit documentation for the sampling methodology
           </CardDescription>
         </div>
@@ -230,7 +230,7 @@ export function SamplingRationale({
                   ),
                   hr: () => <hr className="border-white/20 my-6" />,
                   em: ({ children }) => (
-                    <em className="text-white/60 italic">{children}</em>
+                    <em className="text-white/70 italic">{children}</em>
                   ),
                 }}
               >
@@ -259,11 +259,11 @@ export function SamplingRationale({
           </div>
         ) : isLocked && !error ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <Sparkles className="h-12 w-12 text-white/30 mb-4" />
+            <Sparkles className="h-12 w-12 text-white/50 mb-4" />
             <p className="text-white/70 mb-2">
               Click &quot;Generate Rationale&quot; to create audit documentation
             </p>
-            <p className="text-sm text-white/30">
+            <p className="text-sm text-white/50">
               The AI will analyze your sampling configuration and generate a narrative summary
             </p>
           </div>

@@ -311,39 +311,39 @@ export function TestGridLayout({
           <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-3 mb-4">
             <div className="text-center p-3 rounded bg-white/10">
               <p className="text-lg font-bold text-white">{summary.total}</p>
-              <p className="text-xs text-white/60">Total</p>
+              <p className="text-xs text-white/70">Total</p>
             </div>
             <div className="text-center p-3 rounded bg-green-500/20">
               <p className="text-lg font-bold text-green-300">{summary.pass}</p>
-              <p className="text-xs text-white/60">Pass</p>
+              <p className="text-xs text-white/70">Pass</p>
             </div>
             <div className="text-center p-3 rounded bg-yellow-500/20">
               <p className="text-lg font-bold text-yellow-300">{summary.passObs}</p>
-              <p className="text-xs text-white/60">Pass Obs</p>
+              <p className="text-xs text-white/70">Pass Obs</p>
             </div>
             <div className="text-center p-3 rounded bg-red-500/20">
               <p className="text-lg font-bold text-red-300">{summary.fail1}</p>
-              <p className="text-xs text-white/60">Fail 1</p>
+              <p className="text-xs text-white/70">Fail 1</p>
             </div>
             <div className="text-center p-3 rounded bg-red-500/20">
               <p className="text-lg font-bold text-red-300">{summary.fail2}</p>
-              <p className="text-xs text-white/60">Fail 2</p>
+              <p className="text-xs text-white/70">Fail 2</p>
             </div>
             <div className="text-center p-3 rounded bg-blue-500/20">
               <p className="text-lg font-bold text-blue-300">{summary.qLob}</p>
-              <p className="text-xs text-white/60">Q to LOB</p>
+              <p className="text-xs text-white/70">Q to LOB</p>
             </div>
             <div className="text-center p-3 rounded bg-white/5">
               <p className="text-lg font-bold text-white/70">{summary.na}</p>
-              <p className="text-xs text-white/60">N/A</p>
+              <p className="text-xs text-white/70">N/A</p>
             </div>
             <div className="text-center p-3 rounded bg-white/10">
               <p className="text-lg font-bold text-white">{summary.empty}</p>
-              <p className="text-xs text-white/60">Empty</p>
+              <p className="text-xs text-white/70">Empty</p>
             </div>
             <div className="text-center p-3 rounded bg-crowe-amber/20">
               <p className="text-lg font-bold text-crowe-amber">{summary.percentage.toFixed(0)}%</p>
-              <p className="text-xs text-white/60">Complete</p>
+              <p className="text-xs text-white/70">Complete</p>
             </div>
           </div>
 
@@ -411,7 +411,7 @@ export function TestGridLayout({
           </div>
 
           {/* Row count */}
-          <p className="text-sm text-white/60 mb-2">
+          <p className="text-sm text-white/70 mb-2">
             Showing {filteredRows.length} of {rows.length} rows
           </p>
         </CardContent>

@@ -67,8 +67,8 @@ export function StatCard({
       whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
     >
       <div className="flex items-start justify-between mb-2">
-        <span className="text-sm text-white/60">{title}</span>
-        {Icon && <Icon className="h-4 w-4 text-white/60" />}
+        <span className="text-sm text-white/70">{title}</span>
+        {Icon && <Icon className="h-4 w-4 text-white/70" />}
       </div>
       <div className={cn("text-2xl font-bold tabular-nums", variantStyles[variant])}>
         {prefix}

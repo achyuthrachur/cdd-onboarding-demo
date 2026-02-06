@@ -150,7 +150,7 @@ export default function AuditorWorkbooksPage() {
       <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
           <CardTitle className="text-white">Assigned Workbooks</CardTitle>
-          <CardDescription className="text-white/60">
+          <CardDescription className="text-white/70">
             Testing workbooks published by the AIC for your completion
           </CardDescription>
         </CardHeader>
@@ -161,7 +161,7 @@ export default function AuditorWorkbooksPage() {
             </div>
           ) : workbooks.length === 0 ? (
             <div className="text-center py-12">
-              <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-white/30" />
+              <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-white/50" />
               <h3 className="font-medium mb-2 text-white">No Workbooks Available</h3>
               <p className="text-sm text-white/70 mb-4">
                 You don&apos;t have any published workbooks assigned to you yet.

@@ -234,7 +234,7 @@ export default function Stage2Page() {
       title: "Step 3",
       description: "Lock Sample",
       isComplete: isLocked,
-      activeColor: "bg-white/10 text-white/60",
+      activeColor: "bg-white/10 text-white/70",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: Lock,
       badgeText: isLocked ? "Locked" : "Pending",
@@ -305,7 +305,7 @@ export default function Stage2Page() {
                   </motion.div>
                   <div>
                     <CardTitle className="text-base text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-white/60">{step.description}</CardDescription>
+                    <CardDescription className="text-white/70">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>

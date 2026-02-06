@@ -103,9 +103,9 @@ function getResultBadgeClass(result: string): string {
     case 'Question to LOB':
       return 'bg-crowe-blue/20 text-crowe-blue-light border-crowe-blue/40';
     case 'N/A':
-      return 'bg-white/10 text-white/60 border-white/20';
+      return 'bg-white/10 text-white/70 border-white/20';
     default:
-      return 'bg-white/5 text-white/60 border-white/10';
+      return 'bg-white/5 text-white/70 border-white/10';
   }
 }
 
@@ -217,7 +217,7 @@ function DocumentSelectionCell({
           <SelectSeparator className="bg-white/20" />
 
           {/* System Options Section */}
-          <div className="px-2 py-1.5 text-xs font-semibold text-white/60 bg-white/5 sticky top-0">
+          <div className="px-2 py-1.5 text-xs font-semibold text-white/70 bg-white/5 sticky top-0">
             Other Options
           </div>
           {systemOptions.map((doc) => (
@@ -228,7 +228,7 @@ function DocumentSelectionCell({
                 "text-xs hover:bg-white/10",
                 doc.resultMapping.includes('Fail') && "text-crowe-coral-bright",
                 doc.resultMapping === 'Question to LOB' && "text-crowe-blue-light",
-                doc.resultMapping === 'N/A' && "text-white/60",
+                doc.resultMapping === 'N/A' && "text-white/70",
                 doc.resultMapping === 'Pass w/Observation' && "text-crowe-amber-bright"
               )}
             >
@@ -623,7 +623,7 @@ export default function AuditorWorkbookPage() {
     return (
       <div className="p-8">
         <div className="text-center py-12">
-          <AlertCircle className="h-12 w-12 mx-auto mb-4 text-white/30" />
+          <AlertCircle className="h-12 w-12 mx-auto mb-4 text-white/50" />
           <h2 className="text-lg font-medium mb-2 text-white">Workbook Not Found</h2>
           <p className="text-white/70 mb-4">
             This workbook doesn&apos;t exist or you don&apos;t have access to it.
@@ -805,7 +805,7 @@ export default function AuditorWorkbookPage() {
                   <ClipboardCheck className="h-5 w-5 text-crowe-amber" />
                   Testing Grid
                 </CardTitle>
-                <CardDescription className="text-white/60">
+                <CardDescription className="text-white/70">
                   Select the acceptable document found for each test
                 </CardDescription>
               </div>
@@ -829,17 +829,17 @@ export default function AuditorWorkbookPage() {
             {/* Filters */}
             <div className="flex gap-3 mb-4">
               <div className="relative flex-1 max-w-xs">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
                 <Input
                   placeholder="Search attributes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 bg-white/10 border-white/20 text-white placeholder:text-white/60"
+                  className="pl-9 bg-white/10 border-white/20 text-white placeholder:text-white/70"
                 />
               </div>
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="w-40 bg-white/10 border-white/20 text-white">
-                  <Filter className="h-4 w-4 mr-2 text-white/60" />
+                  <Filter className="h-4 w-4 mr-2 text-white/70" />
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent className="bg-crowe-indigo-dark/95 backdrop-blur-xl border-white/20">
@@ -881,7 +881,7 @@ export default function AuditorWorkbookPage() {
                             <span className="truncate" title={customer.customerName}>
                               {idx + 1}. {customer.customerName.substring(0, 12)}...
                             </span>
-                            <span className="text-[10px] text-white/60 font-normal">
+                            <span className="text-[10px] text-white/70 font-normal">
                               {customer.customerId}
                             </span>
                           </div>
@@ -896,7 +896,7 @@ export default function AuditorWorkbookPage() {
                           {row.attributeId}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="text-[10px] border-white/20 text-white/60">
+                          <Badge variant="outline" className="text-[10px] border-white/20 text-white/70">
                             {row.attributeCategory}
                           </Badge>
                         </TableCell>
@@ -932,7 +932,7 @@ export default function AuditorWorkbookPage() {
               </div>
             </div>
 
-            <div className="mt-3 text-xs text-white/60">
+            <div className="mt-3 text-xs text-white/70">
               Showing {filteredRows.length} of {workbook.rows.length} attributes
             </div>
           </CardContent>
@@ -974,7 +974,7 @@ export default function AuditorWorkbookPage() {
         <DialogContent className="bg-crowe-indigo-dark/95 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
           <DialogHeader>
             <DialogTitle className="text-white">Add Observation</DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogDescription className="text-white/70">
               Please provide an observation for this test result.
             </DialogDescription>
           </DialogHeader>
@@ -1008,7 +1008,7 @@ export default function AuditorWorkbookPage() {
                   value={observationModal.observation}
                   onChange={(e) => setObservationModal(prev => ({ ...prev, observation: e.target.value }))}
                   placeholder="Enter custom observation..."
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/70"
                   rows={3}
                 />
               </div>
@@ -1038,7 +1038,7 @@ export default function AuditorWorkbookPage() {
         <DialogContent className="bg-crowe-indigo-dark/95 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
           <DialogHeader>
             <DialogTitle className="text-white">Submit Workbook</DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogDescription className="text-white/70">
               Are you sure you want to submit this workbook? Once submitted,
               you will not be able to make further changes.
             </DialogDescription>

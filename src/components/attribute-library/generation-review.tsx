@@ -601,21 +601,21 @@ export function GenerationReview({
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="space-y-1">
-              <p className="text-sm text-white/60">Last Refresh</p>
+              <p className="text-sm text-white/70">Last Refresh</p>
               <p className="font-medium text-sm">{formatDate(batchConfig.LastRefresh)}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-white/60">Output Folder</p>
+              <p className="text-sm text-white/70">Output Folder</p>
               <p className="font-medium text-sm truncate" title={batchConfig.OutputFolder}>
                 {batchConfig.OutputFolder}
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-white/60">Total Samples</p>
+              <p className="text-sm text-white/70">Total Samples</p>
               <p className="font-medium text-sm">{batchConfig.TotalSamples}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-white/60">Assignment Status</p>
+              <p className="text-sm text-white/70">Assignment Status</p>
               <p className="font-medium text-sm">
                 {batchConfig.AssignedCount}/{batchConfig.TotalSamples} Assigned
               </p>
@@ -624,7 +624,7 @@ export function GenerationReview({
 
           {/* Primary Action Buttons - 6 Main Actions */}
           <div className="mt-4 pt-4 border-t">
-            <p className="text-sm font-medium text-white/60 mb-3">Primary Actions</p>
+            <p className="text-sm font-medium text-white/70 mb-3">Primary Actions</p>
             <div className="flex flex-wrap items-center gap-2">
               {/* Button 1: Import Attributes and Acceptable Docs */}
               <Button
@@ -739,25 +739,25 @@ export function GenerationReview({
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{displayRows.length}</div>
-            <p className="text-xs text-white/60">Total Samples</p>
+            <p className="text-xs text-white/70">Total Samples</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{Object.keys(stats.byJurisdiction).length}</div>
-            <p className="text-xs text-white/60">Jurisdictions</p>
+            <p className="text-xs text-white/70">Jurisdictions</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{stats.avgIRR.toFixed(1)}</div>
-            <p className="text-xs text-white/60">Avg IRR</p>
+            <p className="text-xs text-white/70">Avg IRR</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{stats.avgDRR.toFixed(1)}</div>
-            <p className="text-xs text-white/60">Avg DRR</p>
+            <p className="text-xs text-white/70">Avg DRR</p>
           </CardContent>
         </Card>
       </div>
@@ -850,7 +850,7 @@ export function GenerationReview({
               <TableBody>
                 {filteredRows.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center py-8 text-white/60">
+                    <TableCell colSpan={10} className="text-center py-8 text-white/70">
                       {displayRows.length === 0
                         ? "No samples loaded. Import sampling data or populate from existing records."
                         : "No samples found matching your filters"}

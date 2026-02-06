@@ -104,7 +104,7 @@ export default function AuditorDashboardPage() {
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
           Welcome back, {auditorName || "Auditor"}
         </h1>
-        <p className="text-gray-500 dark:text-white/60 mt-2">
+        <p className="text-gray-500 dark:text-white/70 mt-2">
           View and complete your assigned testing workbooks
         </p>
       </motion.div>
@@ -123,7 +123,7 @@ export default function AuditorDashboardPage() {
               <CardTitle className="text-3xl">{totalWorkbooks}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-white/70">
+              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/70">
                 <FileSpreadsheet className="h-4 w-4" />
                 Assigned to you
               </div>
@@ -138,7 +138,7 @@ export default function AuditorDashboardPage() {
               <CardTitle className="text-3xl text-crowe-amber-dark dark:text-crowe-amber">{inProgressCount}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-white/70">
+              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/70">
                 <Clock className="h-4 w-4" />
                 Awaiting completion
               </div>
@@ -153,7 +153,7 @@ export default function AuditorDashboardPage() {
               <CardTitle className="text-3xl text-crowe-teal-dark dark:text-crowe-teal-bright">{submittedCount}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-white/70">
+              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/70">
                 <CheckCircle2 className="h-4 w-4" />
                 Completed
               </div>
@@ -190,13 +190,13 @@ export default function AuditorDashboardPage() {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="text-gray-400 dark:text-white/70">Loading workbooks...</div>
+                <div className="text-gray-500 dark:text-white/70">Loading workbooks...</div>
               </div>
             ) : workbooks.length === 0 ? (
               <div className="text-center py-12">
-                <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-gray-300 dark:text-white/30" />
+                <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-white/50" />
                 <h3 className="font-medium mb-2 text-gray-900 dark:text-white">No Workbooks Assigned</h3>
-                <p className="text-sm text-gray-400 dark:text-white/70 mb-4">
+                <p className="text-sm text-gray-500 dark:text-white/70 mb-4">
                   You don&apos;t have any published workbooks assigned to you yet.
                 </p>
                 <div className="p-4 bg-crowe-amber/10 border border-crowe-amber/30 rounded-lg inline-block">
@@ -243,7 +243,7 @@ export default function AuditorDashboardPage() {
                                   )}
                                 </Badge>
                               </div>
-                              <div className="flex items-center gap-3 text-sm text-gray-400 dark:text-white/70 mb-3">
+                              <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-white/70 mb-3">
                                 <span>{workbook.totalAttributes} attributes</span>
                                 <span>|</span>
                                 <span>{workbook.totalCustomers} customers</span>
@@ -264,7 +264,7 @@ export default function AuditorDashboardPage() {
                                   />
                                 </div>
                                 {workbook.lastActivityAt && (
-                                  <div className="flex items-center gap-1 text-xs text-gray-400 dark:text-white/70">
+                                  <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-white/70">
                                     <Clock className="h-3 w-3" />
                                     Last activity: {new Date(workbook.lastActivityAt).toLocaleDateString()}
                                   </div>

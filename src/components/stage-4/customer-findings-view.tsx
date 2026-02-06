@@ -160,7 +160,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-white/60">Customers with Observations</p>
+                  <p className="text-sm text-white/70">Customers with Observations</p>
                   <p className="text-2xl font-bold text-crowe-amber-bright">
                     {customersWithObservations}
                   </p>
@@ -176,7 +176,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-white/60">Total Observations</p>
+                  <p className="text-sm text-white/70">Total Observations</p>
                   <p className="text-2xl font-bold text-crowe-amber-bright">
                     {totalObservations}
                   </p>
@@ -192,7 +192,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-white/60">Questions to LOB</p>
+                  <p className="text-sm text-white/70">Questions to LOB</p>
                   <p className="text-2xl font-bold text-crowe-blue-light">
                     {totalQuestions}
                   </p>
@@ -208,7 +208,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-white/60">Total Failures</p>
+                  <p className="text-sm text-white/70">Total Failures</p>
                   <p className="text-2xl font-bold text-crowe-coral-bright">
                     {totalFailures}
                   </p>
@@ -240,7 +240,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
             transition={{ delay: 0.1 }}
           >
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
               <Input
                 placeholder="Search customers..."
                 value={searchTerm}
@@ -275,7 +275,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
             {filteredCustomers.length === 0 ? (
               <motion.div
                 key="empty"
-                className="text-center py-12 text-white/60"
+                className="text-center py-12 text-white/70"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -318,7 +318,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                 animate={{ rotate: isExpanded ? 180 : 0 }}
                                 transition={{ duration: 0.2 }}
                               >
-                                <ChevronDown className="h-5 w-5 text-white/60" />
+                                <ChevronDown className="h-5 w-5 text-white/70" />
                               </motion.div>
                               <div className="text-left">
                                 <div className="flex items-center gap-2">
@@ -333,7 +333,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                     {customer.overallResult}
                                   </Badge>
                                 </div>
-                                <div className="flex items-center gap-4 mt-1 text-sm text-white/60">
+                                <div className="flex items-center gap-4 mt-1 text-sm text-white/70">
                                   <span className="flex items-center gap-1">
                                     <Building2 className="h-3 w-3" />
                                     {customer.partyType}
@@ -501,7 +501,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
 
                                 {/* Test Summary */}
                                 <div className="pt-3 border-t border-white/10">
-                                  <p className="text-white/60 text-sm">
+                                  <p className="text-white/70 text-sm">
                                     Test Summary: {customer.passCount} pass, {customer.passWithObservationCount} pass w/obs, {customer.failCount} fail, {customer.questionCount} questions, {customer.naCount} N/A
                                   </p>
                                 </div>

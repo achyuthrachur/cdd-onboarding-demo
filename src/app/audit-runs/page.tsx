@@ -74,7 +74,7 @@ export default function AuditRunsPage() {
         <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
           <CardHeader>
             <CardTitle className="text-white">All Audit Runs</CardTitle>
-            <CardDescription className="text-white/60">
+            <CardDescription className="text-white/70">
               Click on an audit run to view details and continue working
             </CardDescription>
           </CardHeader>
