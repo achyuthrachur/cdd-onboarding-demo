@@ -234,7 +234,7 @@ export default function Stage2Page() {
       title: "Step 3",
       description: "Lock Sample",
       isComplete: isLocked,
-      activeColor: "bg-white/10 text-white/70",
+      activeColor: "bg-white/10 text-white/80",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: Lock,
       badgeText: isLocked ? "Locked" : "Pending",
@@ -253,7 +253,7 @@ export default function Stage2Page() {
       >
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -266,7 +266,7 @@ export default function Stage2Page() {
                 Statistical Sampling
               </h1>
             </div>
-            <p className="text-white/70 mt-2">
+            <p className="text-white/80 mt-2">
               Upload population data, configure sampling parameters, and generate
               your sample set
             </p>
@@ -305,12 +305,12 @@ export default function Stage2Page() {
                   </motion.div>
                   <div>
                     <CardTitle className="text-base text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-white/70">{step.description}</CardDescription>
+                    <CardDescription className="text-white/80">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-white/70 mb-4">
+                <p className="text-sm text-white/80 mb-4">
                   {step.helpText}
                 </p>
                 <AnimatePresence mode="wait">
@@ -321,7 +321,7 @@ export default function Stage2Page() {
                     exit={{ scale: 0.8, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/70" : ""}>
+                    <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/80" : ""}>
                       {step.badgeText}
                     </Badge>
                   </motion.div>

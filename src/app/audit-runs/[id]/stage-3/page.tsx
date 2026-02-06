@@ -107,7 +107,7 @@ export default function Stage3Page() {
   const [hasSample, setHasSample] = useState(false);
   const [preloadedDoc, setPreloadedDoc] = useState<FLUProcedureDocument | null>(null);
 
-  // Check for prerequisite data and load existing extraction
+  // Check for prerequisite data and load FLU document for preloading
   useEffect(() => {
     setHasSample(hasStageData('samplingResult'));
 
@@ -120,28 +120,9 @@ export default function Stage3Page() {
       setPreloadedDoc(DEMO_FLU_DOCUMENT);
     }
 
-    // Load existing extraction result
-    const storedResult = getStageData('fluExtractionResult');
-    if (storedResult) {
-      setExtractionResult(storedResult);
-    }
-
-    // Also check if we have extracted attributes from a previous session
-    const storedAttributes = getStageData('extractedAttributes');
-    if (storedAttributes && storedAttributes.length > 0 && !storedResult) {
-      // Reconstruct the result from stored attributes
-      const acceptableDocs = getStageData('acceptableDocs') || [];
-      setExtractionResult({
-        workbook: {
-          title: "FLU Procedure Attribute Extraction — CIP/CDD/EDD",
-          generated_at: new Date().toISOString().split("T")[0],
-          sheets: [
-            { name: "Attributes", rows: storedAttributes },
-            { name: "Acceptable_Docs", rows: acceptableDocs },
-          ],
-        },
-      });
-    }
+    // NOTE: We intentionally do NOT auto-load fluExtractionResult from localStorage here.
+    // Results should only appear after user explicitly clicks "Load Demo Data" or runs extraction.
+    // This prevents stale results from previous sessions from showing up automatically.
   }, []);
 
   const handleLoadDemoData = () => {
@@ -329,7 +310,7 @@ export default function Stage3Page() {
       title: "Step 3: Review",
       description: "Confirm & Export",
       isComplete: canProceed,
-      activeColor: "bg-white/10 text-white/70",
+      activeColor: "bg-white/10 text-white/80",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: FileSpreadsheet,
       badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
@@ -347,7 +328,7 @@ export default function Stage3Page() {
       >
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -360,7 +341,7 @@ export default function Stage3Page() {
                 FLU Procedure Extraction
               </h1>
             </div>
-            <p className="text-white/70 mt-2">
+            <p className="text-white/80 mt-2">
               Extract CIP, CDD, and EDD testing attributes from Front Line Unit procedures
             </p>
           </div>
@@ -398,7 +379,7 @@ export default function Stage3Page() {
                   </motion.div>
                   <div>
                     <CardTitle className="text-base text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-white/70">{step.description}</CardDescription>
+                    <CardDescription className="text-white/80">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -411,7 +392,7 @@ export default function Stage3Page() {
                     exit={{ scale: 0.8, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/70" : ""}>
+                    <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/80" : ""}>
                       {step.badgeText}
                     </Badge>
                   </motion.div>
@@ -483,7 +464,7 @@ export default function Stage3Page() {
                     <div className="text-center">
                       <Sparkles className="h-16 w-16 mx-auto mb-4 text-white/50" />
                       <h3 className="font-medium mb-2 text-white">No Extraction Results</h3>
-                      <p className="text-sm text-white/70">
+                      <p className="text-sm text-white/80">
                         Upload FLU procedures and run extraction to view results
                       </p>
                     </div>

@@ -50,7 +50,7 @@ export function Sidebar() {
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-primary text-primary-foreground"
-                    : "text-white/70 hover:bg-white/10 hover:text-white"
+                    : "text-white/80 hover:bg-white/10 hover:text-white"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -74,7 +74,7 @@ export function Sidebar() {
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-primary text-primary-foreground"
-                    : "text-white/70 hover:bg-white/10 hover:text-white"
+                    : "text-white/80 hover:bg-white/10 hover:text-white"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -87,7 +87,7 @@ export function Sidebar() {
 
       {/* User/Version Info */}
       <div className="border-t border-white/10 px-6 py-4">
-        <p className="text-xs text-white/70">
+        <p className="text-xs text-white/80">
           CDD Onboarding Demo v1.0
         </p>
       </div>

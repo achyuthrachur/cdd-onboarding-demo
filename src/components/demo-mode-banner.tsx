@@ -88,7 +88,7 @@ export function DemoModeBanner({
                   Quick Start
                 </Badge>
               </div>
-              <p className="text-sm text-white/70">
+              <p className="text-sm text-white/80">
                 Populate all stages with sample data in one click
               </p>
             </div>
@@ -122,7 +122,7 @@ export function DemoModeBanner({
               variant="ghost"
               size="icon"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-white/70 hover:text-white hover:bg-white/10"
+              className="text-white/80 hover:text-white hover:bg-white/10"
             >
               {isExpanded ? (
                 <ChevronUp className="h-4 w-4" />
@@ -138,7 +138,7 @@ export function DemoModeBanner({
             {isRunning && (
               <div className="mb-4">
                 <Progress value={progress} className="h-2" />
-                <p className="text-sm text-white/70 mt-2">
+                <p className="text-sm text-white/80 mt-2">
                   {currentStage
                     ? `Running Stage ${currentStage}: ${stages[currentStage - 1].name}...`
                     : "Initializing..."}
@@ -159,7 +159,7 @@ export function DemoModeBanner({
                         ? "bg-crowe-teal/20 text-crowe-teal-bright"
                         : isCurrent
                         ? "bg-crowe-violet/20 text-crowe-violet-bright"
-                        : "bg-white/10 text-white/70"
+                        : "bg-white/10 text-white/80"
                     }`}
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -176,7 +176,7 @@ export function DemoModeBanner({
               })}
             </div>
 
-            <p className="text-xs text-white/70 mt-3">
+            <p className="text-xs text-white/80 mt-3">
               The demo will generate sample documents, population data, testing
               workbooks, and consolidation results using mock data.
             </p>

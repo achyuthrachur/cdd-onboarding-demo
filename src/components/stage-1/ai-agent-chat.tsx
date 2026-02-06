@@ -375,7 +375,7 @@ export function AIAgentChat({
                 initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="text-center py-8 text-white/70"
+                className="text-center py-8 text-white/80"
               >
                 <Upload className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No documents uploaded</p>
@@ -494,7 +494,7 @@ export function AIAgentChat({
               )}
             >
               <div className="text-center">
-                <p className="text-sm text-white/70 mb-2">
+                <p className="text-sm text-white/80 mb-2">
                   {getAssessmentInstructions()}
                 </p>
                 <AnimatePresence mode="popLayout">
@@ -535,7 +535,7 @@ export function AIAgentChat({
 
             {/* Action Button */}
             <div className="flex items-center justify-between">
-              <p className="text-xs text-white/70">
+              <p className="text-xs text-white/80">
                 {selectedDocs.length}/2 documents selected
               </p>
               <motion.div

@@ -97,7 +97,7 @@ export function AuditorsTable({ auditors }: AuditorsTableProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="px-4 py-2 text-sm font-medium">{a.name}</TableCell>
-                    <TableCell className="px-4 py-2 text-sm text-white/70">{a.email}</TableCell>
+                    <TableCell className="px-4 py-2 text-sm text-white/80">{a.email}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -131,7 +131,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.RiskTier === "Low").length}
             </div>
-            <p className="text-xs text-white/70">Low Risk Types</p>
+            <p className="text-xs text-white/80">Low Risk Types</p>
           </CardContent>
         </Card>
         <Card>
@@ -139,7 +139,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.RiskTier === "Medium").length}
             </div>
-            <p className="text-xs text-white/70">Medium Risk Types</p>
+            <p className="text-xs text-white/80">Medium Risk Types</p>
           </CardContent>
         </Card>
         <Card>
@@ -147,7 +147,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.RiskTier === "High" || c.RiskTier === "Critical").length}
             </div>
-            <p className="text-xs text-white/70">High/Critical Types</p>
+            <p className="text-xs text-white/80">High/Critical Types</p>
           </CardContent>
         </Card>
         <Card>
@@ -155,7 +155,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
             <div className="text-2xl font-bold">
               {clientTypeRisks.filter((c) => c.IsEDD).length}
             </div>
-            <p className="text-xs text-white/70">EDD Required</p>
+            <p className="text-xs text-white/80">EDD Required</p>
           </CardContent>
         </Card>
       </div>
@@ -185,7 +185,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
                   <TableRow key={ctr.ClientType}>
                     <TableCell className="px-4 py-2 text-sm font-medium">{ctr.ClientType}</TableCell>
                     <TableCell className="px-4 py-2 text-sm">
-                      <Badge className={RISK_TIER_COLORS[ctr.RiskTier] || "bg-white/10 text-white/70"}>
+                      <Badge className={RISK_TIER_COLORS[ctr.RiskTier] || "bg-white/10 text-white/80"}>
                         {ctr.RiskTier}
                       </Badge>
                     </TableCell>
@@ -196,7 +196,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
                           <span className="text-sm">Yes</span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1 text-white/70">
+                        <div className="flex items-center gap-1 text-white/80">
                           <XCircle className="h-4 w-4" />
                           <span className="text-sm">No</span>
                         </div>
@@ -219,7 +219,7 @@ interface SamplingTableProps {
 }
 
 const SAMPLING_STATUS_COLORS: Record<string, string> = {
-  Draft: "bg-white/10 text-white/70",
+  Draft: "bg-white/10 text-white/80",
   Locked: "bg-blue-500/20 text-blue-300",
   Completed: "bg-green-500/20 text-green-300",
 };
@@ -241,25 +241,25 @@ export function SamplingTable({ samplingConfig }: SamplingTableProps) {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.SampleSize}</div>
-            <p className="text-xs text-white/70">Sample Size</p>
+            <p className="text-xs text-white/80">Sample Size</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.PopulationSize.toLocaleString()}</div>
-            <p className="text-xs text-white/70">Population Size</p>
+            <p className="text-xs text-white/80">Population Size</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.ConfidenceLevel}%</div>
-            <p className="text-xs text-white/70">Confidence Level</p>
+            <p className="text-xs text-white/80">Confidence Level</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{samplingConfig.MarginOfError}%</div>
-            <p className="text-xs text-white/70">Margin of Error</p>
+            <p className="text-xs text-white/80">Margin of Error</p>
           </CardContent>
         </Card>
       </div>
@@ -269,7 +269,7 @@ export function SamplingTable({ samplingConfig }: SamplingTableProps) {
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
             Sampling Configuration
-            <Badge className={SAMPLING_STATUS_COLORS[samplingConfig.Status] || "bg-white/10 text-white/70"}>
+            <Badge className={SAMPLING_STATUS_COLORS[samplingConfig.Status] || "bg-white/10 text-white/80"}>
               {samplingConfig.Status === "Locked" && <Clock className="mr-1 h-3 w-3" />}
               {samplingConfig.Status === "Completed" && <CheckCircle className="mr-1 h-3 w-3" />}
               {samplingConfig.Status}
@@ -326,7 +326,7 @@ export function SamplingTable({ samplingConfig }: SamplingTableProps) {
                 <TableRow>
                   <TableCell className="px-4 py-2 text-sm font-medium">Status</TableCell>
                   <TableCell className="px-4 py-2 text-sm">
-                    <Badge className={SAMPLING_STATUS_COLORS[samplingConfig.Status] || "bg-white/10 text-white/70"}>
+                    <Badge className={SAMPLING_STATUS_COLORS[samplingConfig.Status] || "bg-white/10 text-white/80"}>
                       {samplingConfig.Status}
                     </Badge>
                   </TableCell>

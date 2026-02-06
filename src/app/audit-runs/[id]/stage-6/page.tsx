@@ -152,7 +152,7 @@ export default function Stage6Page() {
       <FadeInUp className="mb-8">
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -171,7 +171,7 @@ export default function Stage6Page() {
                 Consolidation & Reporting
               </h1>
             </div>
-            <p className="text-white/70 mt-2">
+            <p className="text-white/80 mt-2">
               Consolidate all results, view dashboards, and generate final report
             </p>
           </div>
@@ -347,7 +347,7 @@ export default function Stage6Page() {
             <Card className="mb-8 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
               <CardHeader>
                 <CardTitle className="text-white">Prerequisites</CardTitle>
-                <CardDescription className="text-white/70">
+                <CardDescription className="text-white/80">
                   Complete these steps before generating consolidation
                 </CardDescription>
               </CardHeader>
@@ -384,7 +384,7 @@ export default function Stage6Page() {
                       <span className="text-white">
                         {step.label}
                         {step.required && (
-                          <Badge variant="outline" className="ml-2 border-white/30 text-white/70">
+                          <Badge variant="outline" className="ml-2 border-white/30 text-white/80">
                             Required
                           </Badge>
                         )}
@@ -392,7 +392,7 @@ export default function Stage6Page() {
                     </motion.div>
                   ))}
                 </motion.div>
-                <p className="text-sm text-white/70 mt-4">
+                <p className="text-sm text-white/80 mt-4">
                   Demo mode: Click &quot;Load Demo Data&quot; to populate all stages with sample data.
                 </p>
               </CardContent>

@@ -38,11 +38,11 @@ function getStatusBadge(status: string) {
 
 export default function AuditRunsPage() {
   return (
-    <div className="p-8 min-h-screen bg-crowe-indigo-dark">
+    <div className="p-8 min-h-screen">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Audit Runs</h1>
-          <p className="text-white/70 mt-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Audit Runs</h1>
+          <p className="text-muted-foreground mt-2">
             Manage and track your CDD audit runs
           </p>
         </div>
@@ -55,11 +55,11 @@ export default function AuditRunsPage() {
       </div>
 
       {auditRuns.length === 0 ? (
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+        <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
-            <FileStack className="h-16 w-16 text-white/70 mb-4" />
-            <h3 className="text-lg font-semibold mb-2 text-white">No audit runs yet</h3>
-            <p className="text-white/70 mb-6 text-center max-w-md">
+            <FileStack className="h-16 w-16 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold mb-2 text-foreground">No audit runs yet</h3>
+            <p className="text-muted-foreground mb-6 text-center max-w-md">
               Create your first audit run to start the 4-stage CDD onboarding workflow.
             </p>
             <Link href="/audit-runs/new">
@@ -71,34 +71,34 @@ export default function AuditRunsPage() {
           </CardContent>
         </Card>
       ) : (
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-white">All Audit Runs</CardTitle>
-            <CardDescription className="text-white/70">
+            <CardTitle>All Audit Runs</CardTitle>
+            <CardDescription>
               Click on an audit run to view details and continue working
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow className="border-white/20 hover:bg-white/5">
-                  <TableHead className="text-white/70">Name</TableHead>
-                  <TableHead className="text-white/70">Status</TableHead>
-                  <TableHead className="text-white/70">Current Stage</TableHead>
-                  <TableHead className="text-white/70">Created</TableHead>
-                  <TableHead className="text-right text-white/70">Actions</TableHead>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Current Stage</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {auditRuns.map((run) => (
-                  <TableRow key={run.id} className="border-white/10 hover:bg-white/5">
-                    <TableCell className="font-medium text-white">{run.name}</TableCell>
+                  <TableRow key={run.id}>
+                    <TableCell className="font-medium">{run.name}</TableCell>
                     <TableCell>{getStatusBadge(run.status)}</TableCell>
-                    <TableCell className="text-white/70">Stage {run.stage}</TableCell>
-                    <TableCell className="text-white/70">{run.createdAt}</TableCell>
-                    <TableCell className="text-right text-white">
+                    <TableCell className="text-muted-foreground">Stage {run.stage}</TableCell>
+                    <TableCell className="text-muted-foreground">{run.createdAt}</TableCell>
+                    <TableCell className="text-right">
                       <Link href={`/audit-runs/${run.id}`}>
-                        <Button variant="ghost" size="sm" className="text-white hover:bg-white/15 hover:border-white/30">
+                        <Button variant="ghost" size="sm">
                           View
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>

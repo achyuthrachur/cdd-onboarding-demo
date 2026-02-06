@@ -62,7 +62,7 @@ const DISPOSITION_COLORS: Record<string, string> = {
   "Does Not Meet": "bg-crowe-coral/20 text-crowe-coral-bright",
   "Conflict": "bg-crowe-violet/20 text-crowe-violet-bright",
   "Exceeds": "bg-crowe-blue/20 text-crowe-blue-light",
-  "N/A": "bg-white/10 text-white/70",
+  "N/A": "bg-white/10 text-white/80",
 };
 
 const SEVERITY_COLORS: Record<string, string> = {
@@ -116,7 +116,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
             <Card key={item.Metric}>
               <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
                 <div className="text-2xl font-bold">{item.Value}</div>
-                <p className="text-xs text-white/70">{item.Metric}</p>
+                <p className="text-xs text-white/80">{item.Metric}</p>
               </CardContent>
             </Card>
           ))}
@@ -135,7 +135,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/80" />
                 <Input
                   placeholder="Search gaps..."
                   value={searchTerm}
@@ -189,7 +189,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
               <TableBody>
                 {filteredGaps.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-white/70">
+                    <TableCell colSpan={5} className="text-center py-8 text-white/80">
                       No gaps found matching your filters
                     </TableCell>
                   </TableRow>
@@ -240,11 +240,11 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
                             <div className="space-y-4 mt-4">
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Standard Requirement</h4>
-                                <p className="text-sm text-white/70">{gap.Standard_Requirement_Text}</p>
+                                <p className="text-sm text-white/80">{gap.Standard_Requirement_Text}</p>
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Procedure Reference</h4>
-                                <p className="text-sm text-white/70">
+                                <p className="text-sm text-white/80">
                                   {gap.Procedure_Reference_ID}: {gap.Procedure_Text_Summary}
                                 </p>
                               </div>
@@ -254,11 +254,11 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Impact Rationale</h4>
-                                <p className="text-sm text-white/70">{gap.Impact_Rationale}</p>
+                                <p className="text-sm text-white/80">{gap.Impact_Rationale}</p>
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Testing Implication</h4>
-                                <p className="text-sm text-white/70">{gap.Testing_Implication}</p>
+                                <p className="text-sm text-white/80">{gap.Testing_Implication}</p>
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Recommended Remediation</h4>
@@ -266,22 +266,22 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Evidence Expected</h4>
-                                <p className="text-sm text-white/70">{gap.Evidence_Expected}</p>
+                                <p className="text-sm text-white/80">{gap.Evidence_Expected}</p>
                               </div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Standard Citation</h4>
-                                  <p className="text-xs text-white/70">{gap.Standard_Citation}</p>
+                                  <p className="text-xs text-white/80">{gap.Standard_Citation}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Procedure Citation</h4>
-                                  <p className="text-xs text-white/70">{gap.Procedure_Citation}</p>
+                                  <p className="text-xs text-white/80">{gap.Procedure_Citation}</p>
                                 </div>
                               </div>
                               {gap.Notes && (
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Notes</h4>
-                                  <p className="text-sm text-white/70">{gap.Notes}</p>
+                                  <p className="text-sm text-white/80">{gap.Notes}</p>
                                 </div>
                               )}
                             </div>

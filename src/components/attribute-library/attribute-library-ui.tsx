@@ -163,7 +163,7 @@ export function AttributeLibraryUI({ auditRunId, onWorkbookGenerate }: Attribute
         <CardContent className="pt-4">
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-white/70">Attribute Library</span>
+              <span className="text-sm text-white/80">Attribute Library</span>
               <Badge variant="outline">{currentSummary.totalAttributes} Attributes</Badge>
               <Badge variant="outline">{currentSummary.totalAcceptableDocs} Documents</Badge>
               <Badge variant="outline">{currentSummary.totalJurisdictions} Jurisdictions</Badge>

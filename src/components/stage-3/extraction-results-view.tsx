@@ -207,9 +207,9 @@ export function ExtractionResultsView({
             <Alert variant="default" className="border-crowe-amber/30 bg-crowe-amber/5">
               <Bot className="h-4 w-4 text-crowe-amber" />
               <AlertTitle className="text-sm text-crowe-amber">Demo Mode Active</AlertTitle>
-              <AlertDescription className="text-xs text-white/70">
+              <AlertDescription className="text-xs text-muted-foreground">
                 These results are demonstration data. To enable AI-powered extraction, configure your{" "}
-                <code className="px-1 py-0.5 bg-white/10 rounded text-crowe-amber-bright">
+                <code className="px-1 py-0.5 bg-muted rounded text-crowe-amber-bright">
                   OPENAI_API_KEY
                 </code>{" "}
                 environment variable.
@@ -249,12 +249,12 @@ export function ExtractionResultsView({
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden px-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
           <div className="pt-4 flex-shrink-0">
-            <TabsList className="grid w-full grid-cols-2 mb-4 h-11 bg-white/5 border border-white/10">
-              <TabsTrigger value="attributes" className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white text-white/70">
+            <TabsList className="grid w-full grid-cols-2 mb-4 h-11 bg-muted border border-border">
+              <TabsTrigger value="attributes" className="gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground text-muted-foreground">
                 <FileText className="h-4 w-4" />
                 Attributes ({filteredAttributes.length})
               </TabsTrigger>
-              <TabsTrigger value="documents" className="gap-2 data-[state=active]:bg-white/15 data-[state=active]:text-white text-white/70">
+              <TabsTrigger value="documents" className="gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground text-muted-foreground">
                 <FileSpreadsheet className="h-4 w-4" />
                 Acceptable Docs ({filteredDocs.length})
               </TabsTrigger>
@@ -263,7 +263,7 @@ export function ExtractionResultsView({
             {/* Filters */}
             <div className="flex gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search attributes or documents..."
                   value={searchTerm}
@@ -298,16 +298,16 @@ export function ExtractionResultsView({
                 variants={tabContent}
               >
                 <TabsContent value="attributes" className="m-0">
-                  <div className="border border-white/20 rounded-lg overflow-hidden">
+                  <div className="border border-border rounded-lg overflow-hidden">
                     <Table>
                       <TableHeader>
-                        <TableRow className="bg-white/5 border-b border-white/10">
-                          <TableHead className="w-24 px-4 py-3 text-white/80">ID</TableHead>
-                          <TableHead className="w-20 px-4 py-3 text-white/80">Category</TableHead>
-                          <TableHead className="w-48 px-4 py-3 text-white/80">Attribute Name</TableHead>
-                          <TableHead className="px-4 py-3 text-white/80">Question Text</TableHead>
-                          <TableHead className="w-20 px-4 py-3 text-white/80">Scope</TableHead>
-                          <TableHead className="w-20 px-4 py-3 text-white/80">Docs</TableHead>
+                        <TableRow className="bg-muted border-b border-border">
+                          <TableHead className="w-24 px-4 py-3 text-foreground">ID</TableHead>
+                          <TableHead className="w-20 px-4 py-3 text-foreground">Category</TableHead>
+                          <TableHead className="w-48 px-4 py-3 text-foreground">Attribute Name</TableHead>
+                          <TableHead className="px-4 py-3 text-foreground">Question Text</TableHead>
+                          <TableHead className="w-20 px-4 py-3 text-foreground">Scope</TableHead>
+                          <TableHead className="w-20 px-4 py-3 text-foreground">Docs</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -336,7 +336,7 @@ export function ExtractionResultsView({
                               <TableCell className="px-4 py-2 font-medium">
                                 {attr.Attribute_Name}
                               </TableCell>
-                              <TableCell className="px-4 py-2 text-sm text-white/70">
+                              <TableCell className="px-4 py-2 text-sm text-muted-foreground">
                                 {attr.Question_Text}
                               </TableCell>
                               <TableCell className="px-4 py-2">
@@ -354,7 +354,7 @@ export function ExtractionResultsView({
                         })}
                         {filteredAttributes.length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={6} className="text-center py-8 text-white/70">
+                            <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                               No attributes match your search criteria
                             </TableCell>
                           </TableRow>
@@ -376,15 +376,15 @@ export function ExtractionResultsView({
                 variants={tabContent}
               >
                 <TabsContent value="documents" className="m-0">
-                  <div className="border border-white/20 rounded-lg overflow-hidden">
+                  <div className="border border-border rounded-lg overflow-hidden">
                     <Table>
                       <TableHeader>
-                        <TableRow className="bg-white/5 border-b border-white/10">
-                          <TableHead className="w-24 px-4 py-3 text-white/80">Attribute ID</TableHead>
-                          <TableHead className="w-48 px-4 py-3 text-white/80">Document Name</TableHead>
-                          <TableHead className="px-4 py-3 text-white/80">Evidence Source</TableHead>
-                          <TableHead className="w-32 px-4 py-3 text-white/80">Jurisdiction</TableHead>
-                          <TableHead className="px-4 py-3 text-white/80">Notes</TableHead>
+                        <TableRow className="bg-muted border-b border-border">
+                          <TableHead className="w-24 px-4 py-3 text-foreground">Attribute ID</TableHead>
+                          <TableHead className="w-48 px-4 py-3 text-foreground">Document Name</TableHead>
+                          <TableHead className="px-4 py-3 text-foreground">Evidence Source</TableHead>
+                          <TableHead className="w-32 px-4 py-3 text-foreground">Jurisdiction</TableHead>
+                          <TableHead className="px-4 py-3 text-foreground">Notes</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -414,7 +414,7 @@ export function ExtractionResultsView({
                               <TableCell className="px-4 py-2 font-medium">
                                 {doc.Document_Name}
                               </TableCell>
-                              <TableCell className="px-4 py-2 text-sm text-white/70">
+                              <TableCell className="px-4 py-2 text-sm text-muted-foreground">
                                 {doc.Evidence_Source_Document}
                               </TableCell>
                               <TableCell className="px-4 py-2">
@@ -422,7 +422,7 @@ export function ExtractionResultsView({
                                   {doc.Jurisdiction_ID}
                                 </Badge>
                               </TableCell>
-                              <TableCell className="px-4 py-2 text-xs text-white/70">
+                              <TableCell className="px-4 py-2 text-xs text-muted-foreground">
                                 {doc.Notes}
                               </TableCell>
                             </motion.tr>
@@ -430,7 +430,7 @@ export function ExtractionResultsView({
                         })}
                         {filteredDocs.length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={5} className="text-center py-8 text-white/70">
+                            <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                               No documents match your search criteria
                             </TableCell>
                           </TableRow>

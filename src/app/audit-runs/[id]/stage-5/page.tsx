@@ -356,7 +356,7 @@ export default function Stage5Page() {
       <FadeInUp className="mb-8">
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -373,7 +373,7 @@ export default function Stage5Page() {
               </motion.div>
               <h1 className="text-3xl font-bold tracking-tight text-white">Testing</h1>
             </div>
-            <p className="text-white/70 mt-2">
+            <p className="text-white/80 mt-2">
               Execute testing workbook - Rows: Test Questions, Columns: Customers
             </p>
           </div>
@@ -437,14 +437,14 @@ export default function Stage5Page() {
         <motion.div variants={staggerItem}>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/70">
+              <CardTitle className="text-sm font-medium text-white/80">
                 Progress
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">{completionPercentage.toFixed(0)}%</div>
               <AnimatedProgress value={completionPercentage} className="mt-2" showShimmer={isSaving} />
-              <p className="text-xs text-white/70 mt-1">
+              <p className="text-xs text-white/80 mt-1">
                 {testingProgress.completedTests} / {testingProgress.totalTests} tests
               </p>
             </CardContent>
@@ -460,7 +460,7 @@ export default function Stage5Page() {
               <div className="text-2xl font-bold text-green-400 tabular-nums">
                 {animatedPassCount}
               </div>
-              <p className="text-xs text-white/70 mt-1">
+              <p className="text-xs text-white/80 mt-1">
                 {testingProgress.totalTests > 0
                   ? (((testingProgress.passCount + testingProgress.passWithObsCount) / testingProgress.totalTests) * 100).toFixed(1)
                   : 0}% pass rate
@@ -478,7 +478,7 @@ export default function Stage5Page() {
               <div className="text-2xl font-bold text-red-400 tabular-nums">
                 {animatedFailCount}
               </div>
-              <p className="text-xs text-white/70 mt-1">
+              <p className="text-xs text-white/80 mt-1">
                 {testingProgress.fail1RegulatoryCount + testingProgress.fail2ProcedureCount} exception(s)
               </p>
             </CardContent>
@@ -488,11 +488,11 @@ export default function Stage5Page() {
         <motion.div variants={staggerItem}>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/70">N/A</CardTitle>
+              <CardTitle className="text-sm font-medium text-white/80">N/A</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold tabular-nums text-white">{animatedNACount}</div>
-              <p className="text-xs text-white/70 mt-1">Not applicable</p>
+              <p className="text-xs text-white/80 mt-1">Not applicable</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -513,7 +513,7 @@ export default function Stage5Page() {
                     <ClipboardCheck className="h-5 w-5" />
                     Testing Workbook
                   </CardTitle>
-                  <CardDescription className="text-white/70">
+                  <CardDescription className="text-white/80">
                     Rows: Test Questions | Columns: Customer Results (Result + Observation)
                   </CardDescription>
                 </div>
@@ -556,10 +556,10 @@ export default function Stage5Page() {
               {/* Customer Legend */}
               {activeWorkbook && (
                 <div className="mb-4 p-3 bg-white/5 rounded-lg">
-                  <div className="text-xs font-medium text-white/70 mb-2">Assigned Customers:</div>
+                  <div className="text-xs font-medium text-white/80 mb-2">Assigned Customers:</div>
                   <div className="flex flex-wrap gap-2">
                     {activeWorkbook.assignedCustomers.map((customer, idx) => (
-                      <Badge key={customer.customerId} variant="outline" className="text-xs border-white/30 text-white/70">
+                      <Badge key={customer.customerId} variant="outline" className="text-xs border-white/30 text-white/80">
                         {idx + 1}. {customer.customerName} ({customer.customerId})
                       </Badge>
                     ))}
@@ -610,7 +610,7 @@ export default function Stage5Page() {
 
               {/* Empty State */}
               {(!activeWorkbook || tableData.length === 0) && (
-                <div className="flex flex-col items-center justify-center py-16 text-white/70">
+                <div className="flex flex-col items-center justify-center py-16 text-white/80">
                   <ClipboardCheck className="h-16 w-16 mb-4 opacity-30" />
                   <h3 className="font-medium mb-2 text-white">No Testing Data</h3>
                   <p className="text-sm text-center max-w-md">

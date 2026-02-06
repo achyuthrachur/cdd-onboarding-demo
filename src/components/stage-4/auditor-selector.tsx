@@ -122,7 +122,7 @@ export function AuditorSelector({
             >
               <div className="text-sm">
                 <span className="font-medium">Sample Distribution (Round-Robin): </span>
-                <span className="text-white/70">
+                <span className="text-white/80">
                   {samplesPerAuditor} samples per auditor
                   {remainder > 0 && ` (+1 for first ${remainder} auditors)`}
                 </span>
@@ -163,7 +163,7 @@ export function AuditorSelector({
                   <Checkbox checked={isSelected} />
                   <div>
                     <div className="font-medium">{auditor.name}</div>
-                    <div className="text-sm text-white/70 flex items-center gap-1">
+                    <div className="text-sm text-white/80 flex items-center gap-1">
                       <Mail className="h-3 w-3" />
                       {auditor.email}
                     </div>
@@ -259,7 +259,7 @@ export function AuditorSelector({
         {/* Summary - Animated badge */}
         <div className="pt-3 border-t">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-white/70">Selected Auditors:</span>
+            <span className="text-white/80">Selected Auditors:</span>
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedAuditors.length}

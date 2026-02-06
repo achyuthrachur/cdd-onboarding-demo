@@ -97,19 +97,19 @@ export function RoleSelector() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
-                    <FileSpreadsheet className="h-4 w-4 text-gray-500 dark:text-white/70" />
+                    <FileSpreadsheet className="h-4 w-4 text-gray-500 dark:text-white/80" />
                     <span>Gap analysis & attribute extraction</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <BarChart3 className="h-4 w-4 text-gray-500 dark:text-white/70" />
+                    <BarChart3 className="h-4 w-4 text-gray-500 dark:text-white/80" />
                     <span>Sampling configuration</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <Users className="h-4 w-4 text-gray-500 dark:text-white/70" />
+                    <Users className="h-4 w-4 text-gray-500 dark:text-white/80" />
                     <span>Workbook generation & assignment</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <Eye className="h-4 w-4 text-gray-500 dark:text-white/70" />
+                    <Eye className="h-4 w-4 text-gray-500 dark:text-white/80" />
                     <span>Live progress monitoring</span>
                   </div>
                 </div>
@@ -157,15 +157,15 @@ export function RoleSelector() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
-                    <FileSpreadsheet className="h-4 w-4 text-gray-500 dark:text-white/70" />
+                    <FileSpreadsheet className="h-4 w-4 text-gray-500 dark:text-white/80" />
                     <span>View assigned workbooks</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <ClipboardCheck className="h-4 w-4 text-gray-500 dark:text-white/70" />
+                    <ClipboardCheck className="h-4 w-4 text-gray-500 dark:text-white/80" />
                     <span>Complete CDD testing</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <ArrowRight className="h-4 w-4 text-gray-500 dark:text-white/70" />
+                    <ArrowRight className="h-4 w-4 text-gray-500 dark:text-white/80" />
                     <span>Submit completed workbooks</span>
                   </div>
                 </div>

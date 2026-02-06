@@ -298,7 +298,7 @@ export function SamplePreview({
                         <TableCell className="px-4 py-2 text-right font-medium">
                           {alloc.sample_count.toLocaleString()}
                         </TableCell>
-                        <TableCell className="px-4 py-2 text-right text-white/70">
+                        <TableCell className="px-4 py-2 text-right text-white/80">
                           {(((alloc.population_count || 0) / (plan.populationSize || 1)) * 100).toFixed(1)}%
                         </TableCell>
                       </TableRow>
@@ -413,7 +413,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold">
                     {summary.sample_selection_method.final_sample_size.toLocaleString()}
                   </div>
-                  <p className="text-xs text-white/70">Sample Size</p>
+                  <p className="text-xs text-white/80">Sample Size</p>
                 </CardContent>
               </Card>
               <Card>
@@ -421,7 +421,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold">
                     {(summary.sampling_rationale.confidence_level * 100).toFixed(0)}%
                   </div>
-                  <p className="text-xs text-white/70">Confidence Level</p>
+                  <p className="text-xs text-white/80">Confidence Level</p>
                 </CardContent>
               </Card>
               <Card>
@@ -429,7 +429,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold">
                     {(summary.sampling_rationale.tolerable_error_rate * 100).toFixed(1)}%
                   </div>
-                  <p className="text-xs text-white/70">Tolerable Error Rate</p>
+                  <p className="text-xs text-white/80">Tolerable Error Rate</p>
                 </CardContent>
               </Card>
               <Card>
@@ -437,7 +437,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold">
                     {summary.sample_selection_method.seed}
                   </div>
-                  <p className="text-xs text-white/70">Random Seed</p>
+                  <p className="text-xs text-white/80">Random Seed</p>
                 </CardContent>
               </Card>
             </div>
@@ -482,7 +482,7 @@ export function SamplePreview({
                         <TableHead key={col} className="px-4 py-3">{col}</TableHead>
                       ))}
                     {Object.keys(sample[0] || {}).length > 5 && (
-                      <TableHead className="px-4 py-3 text-white/70">
+                      <TableHead className="px-4 py-3 text-white/80">
                         +{Object.keys(sample[0]).length - 5} more
                       </TableHead>
                     )}
@@ -500,7 +500,7 @@ export function SamplePreview({
                           </TableCell>
                         ))}
                       {Object.keys(row).length > 5 && (
-                        <TableCell className="px-4 py-2 text-white/70">...</TableCell>
+                        <TableCell className="px-4 py-2 text-white/80">...</TableCell>
                       )}
                     </TableRow>
                   ))}
@@ -508,7 +508,7 @@ export function SamplePreview({
                     <TableRow>
                       <TableCell
                         colSpan={Math.min(7, Object.keys(sample[0] || {}).length + 1)}
-                        className="text-center py-4 text-white/70"
+                        className="text-center py-4 text-white/80"
                       >
                         ... and {sample.length - 10} more rows
                       </TableCell>
@@ -539,7 +539,7 @@ export function SamplePreview({
                     </>
                   )}
                 </Button>
-                <p className="text-xs text-white/70 text-center mt-2">
+                <p className="text-xs text-white/80 text-center mt-2">
                   Locking the sample will finalize it for testing. This action cannot be undone.
                 </p>
               </div>

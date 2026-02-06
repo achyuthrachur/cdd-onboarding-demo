@@ -17,7 +17,7 @@ const buttonVariants = cva(
         secondary:
           "bg-crowe-amber text-crowe-indigo-dark hover:bg-crowe-amber/90 focus-visible:ring-crowe-amber/30",
         ghost:
-          "text-gray-500 dark:text-white/70 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30",
+          "text-gray-500 dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30",
         link: "text-crowe-amber-dark dark:text-crowe-amber underline-offset-4 hover:underline",
       },
       size: {

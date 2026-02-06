@@ -20,14 +20,14 @@ interface StatCardProps {
 }
 
 const variantStyles = {
-  default: "text-white",
-  success: "text-crowe-teal-bright",
-  warning: "text-crowe-amber-bright",
-  danger: "text-crowe-coral-bright",
+  default: "text-foreground",
+  success: "text-crowe-teal-bright dark:text-crowe-teal-bright",
+  warning: "text-crowe-amber-dark dark:text-crowe-amber-bright",
+  danger: "text-crowe-coral dark:text-crowe-coral-bright",
 };
 
 const bgStyles = {
-  default: "bg-white/5",
+  default: "bg-muted",
   success: "bg-crowe-teal/10",
   warning: "bg-crowe-amber/10",
   danger: "bg-crowe-coral/10",
@@ -58,7 +58,7 @@ export function StatCard({
   return (
     <motion.div
       className={cn(
-        "p-4 rounded-lg border border-white/10",
+        "p-4 rounded-lg border border-border",
         bgStyles[variant]
       )}
       initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
@@ -67,8 +67,8 @@ export function StatCard({
       whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
     >
       <div className="flex items-start justify-between mb-2">
-        <span className="text-sm text-white/70">{title}</span>
-        {Icon && <Icon className="h-4 w-4 text-white/70" />}
+        <span className="text-sm text-muted-foreground">{title}</span>
+        {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
       </div>
       <div className={cn("text-2xl font-bold tabular-nums", variantStyles[variant])}>
         {prefix}
@@ -77,14 +77,14 @@ export function StatCard({
       </div>
       {(subtitle || trendValue) && (
         <div className="flex items-center gap-2 mt-1">
-          {subtitle && <span className="text-xs text-white/70">{subtitle}</span>}
+          {subtitle && <span className="text-xs text-muted-foreground">{subtitle}</span>}
           {trendValue && (
             <span
               className={cn(
                 "text-xs",
-                trend === "up" && "text-crowe-teal-bright",
-                trend === "down" && "text-crowe-coral-bright",
-                trend === "neutral" && "text-white/70"
+                trend === "up" && "text-crowe-teal dark:text-crowe-teal-bright",
+                trend === "down" && "text-crowe-coral dark:text-crowe-coral-bright",
+                trend === "neutral" && "text-muted-foreground"
               )}
             >
               {trend === "up" && "+"}

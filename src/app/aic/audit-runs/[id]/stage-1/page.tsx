@@ -121,7 +121,7 @@ export default function AicStage1Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -138,7 +138,7 @@ export default function AicStage1Page() {
               </motion.div>
               <h1 className="text-3xl font-bold tracking-tight text-white">Gap Assessment</h1>
             </div>
-            <p className="text-white/70 mt-2">
+            <p className="text-white/80 mt-2">
               Run sequential gap assessments using the AI assistant
             </p>
           </div>
@@ -174,12 +174,12 @@ export default function AicStage1Page() {
                 </motion.div>
                 <div>
                   <CardTitle className="text-base text-white">Gap Assessment 1</CardTitle>
-                  <CardDescription className="text-white/70">Old GFC vs Current GFC</CardDescription>
+                  <CardDescription className="text-white/80">Old GFC vs Current GFC</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={assessment1Result ? "default" : "outline"} className={!assessment1Result ? "border-white/30 text-white/70" : ""}>
+              <Badge variant={assessment1Result ? "default" : "outline"} className={!assessment1Result ? "border-white/30 text-white/80" : ""}>
                 {assessment1Result ? "Completed" : "Pending"}
               </Badge>
             </CardContent>
@@ -199,12 +199,12 @@ export default function AicStage1Page() {
                 </motion.div>
                 <div>
                   <CardTitle className="text-base text-white">Gap Assessment 2</CardTitle>
-                  <CardDescription className="text-white/70">Current GFC vs FLU Procedures</CardDescription>
+                  <CardDescription className="text-white/80">Current GFC vs FLU Procedures</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={assessment2Result ? "default" : "outline"} className={!assessment2Result ? "border-white/30 text-white/70" : ""}>
+              <Badge variant={assessment2Result ? "default" : "outline"} className={!assessment2Result ? "border-white/30 text-white/80" : ""}>
                 {assessment2Result ? "Completed" : "Pending"}
               </Badge>
             </CardContent>
@@ -217,19 +217,19 @@ export default function AicStage1Page() {
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    canProceed ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/70"
+                    canProceed ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/80"
                   }`}
                 >
                   <CheckCircle2 className="h-5 w-5" />
                 </motion.div>
                 <div>
                   <CardTitle className="text-base text-white">Ready for Sampling</CardTitle>
-                  <CardDescription className="text-white/70">Review & proceed</CardDescription>
+                  <CardDescription className="text-white/80">Review & proceed</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={canProceed ? "default" : "outline"} className={!canProceed ? "border-white/30 text-white/70" : ""}>
+              <Badge variant={canProceed ? "default" : "outline"} className={!canProceed ? "border-white/30 text-white/80" : ""}>
                 {canProceed ? "Ready" : "Pending"}
               </Badge>
             </CardContent>

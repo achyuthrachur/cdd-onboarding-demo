@@ -553,6 +553,17 @@ export function loadFallbackDataForStage(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): vo
     const fluAttributes = getFallbackFLUAttributes();
     const acceptableDocs = getFallbackAcceptableDocs();
 
+    // Set FLU procedures for preloading in Stage 3
+    const fluProcedures = [{
+      id: 'demo-flu-procedures',
+      fileName: 'FLU_CIP_CDD_Procedures.docx',
+      docType: 'flu_procedure' as const,
+      jurisdiction: 'ENT',
+      uploadedAt: new Date().toISOString(),
+      content: '[Document: FLU_CIP_CDD_Procedures.docx - Enterprise CIP/CDD/EDD Procedures]',
+    }];
+    setStageData('fluProcedures', fluProcedures);
+
     setStageData('fluExtractionResult', fluResult);
     setStageData('extractedAttributes', fluAttributes);
     setStageData('acceptableDocs', acceptableDocs);

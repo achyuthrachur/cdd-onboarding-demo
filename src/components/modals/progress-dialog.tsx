@@ -45,7 +45,7 @@ export function ProgressDialog({
           <Progress value={clampedProgress} className="h-3" />
 
           <div className="flex items-center justify-between text-sm">
-            <span className="text-white/70">{status}</span>
+            <span className="text-white/80">{status}</span>
             <span className="font-medium">{Math.round(clampedProgress)}%</span>
           </div>
         </div>

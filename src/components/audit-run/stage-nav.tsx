@@ -61,7 +61,7 @@ export function StageNav({ stages, currentStage }: StageNavProps) {
                       isCompleted && "bg-primary text-primary-foreground",
                       isCurrent &&
                         "border-2 border-primary bg-crowe-indigo-dark text-primary",
-                      isPending && "border-2 border-white/30 bg-crowe-indigo-dark text-white/70"
+                      isPending && "border-2 border-white/30 bg-crowe-indigo-dark text-white/80"
                     )}
                   >
                     {isCompleted ? (
@@ -75,7 +75,7 @@ export function StageNav({ stages, currentStage }: StageNavProps) {
                   <span
                     className={cn(
                       "text-sm font-medium",
-                      isCurrent ? "text-primary" : "text-white/70"
+                      isCurrent ? "text-primary" : "text-white/80"
                     )}
                   >
                     {stage.name}

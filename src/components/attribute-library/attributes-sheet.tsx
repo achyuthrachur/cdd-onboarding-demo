@@ -37,27 +37,27 @@ interface AttributesSheetProps {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Entity Profile": "bg-blue-500/20 text-blue-300",
-  "Individual Profile": "bg-purple-500/20 text-purple-300",
-  Ownership: "bg-green-500/20 text-green-300",
-  Documentation: "bg-yellow-500/20 text-yellow-300",
-  AML: "bg-red-500/20 text-red-300",
-  EDD: "bg-orange-500/20 text-orange-300",
-  Compliance: "bg-indigo-500/20 text-indigo-300",
-  Registration: "bg-pink-500/20 text-pink-300",
+  "Entity Profile": "bg-blue-500/20 text-blue-700 dark:text-blue-300",
+  "Individual Profile": "bg-purple-500/20 text-purple-700 dark:text-purple-300",
+  Ownership: "bg-green-500/20 text-green-700 dark:text-green-300",
+  Documentation: "bg-yellow-500/20 text-yellow-700 dark:text-yellow-300",
+  AML: "bg-red-500/20 text-red-700 dark:text-red-300",
+  EDD: "bg-orange-500/20 text-orange-700 dark:text-orange-300",
+  Compliance: "bg-indigo-500/20 text-indigo-700 dark:text-indigo-300",
+  Registration: "bg-pink-500/20 text-pink-700 dark:text-pink-300",
 };
 
 const GROUP_COLORS: Record<string, string> = {
-  Individuals: "bg-cyan-500/20 text-cyan-300",
-  Entity: "bg-emerald-500/20 text-emerald-300",
-  "Beneficial Owner": "bg-violet-500/20 text-violet-300",
-  Screening: "bg-amber-500/20 text-amber-300",
+  Individuals: "bg-cyan-500/20 text-cyan-700 dark:text-cyan-300",
+  Entity: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300",
+  "Beneficial Owner": "bg-violet-500/20 text-violet-700 dark:text-violet-300",
+  Screening: "bg-amber-500/20 text-amber-700 dark:text-amber-300",
 };
 
 const RISK_SCOPE_COLORS: Record<string, string> = {
-  Base: "bg-white/10 text-white/70",
-  EDD: "bg-red-500/20 text-red-300",
-  Both: "bg-orange-500/20 text-orange-300",
+  Base: "bg-muted text-muted-foreground",
+  EDD: "bg-red-500/20 text-red-700 dark:text-red-300",
+  Both: "bg-orange-500/20 text-orange-700 dark:text-orange-300",
 };
 
 type SortField = "Attribute_ID" | "Attribute_Name" | "Category" | "Group" | "Jurisdiction_ID";
@@ -150,7 +150,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{attributes.length}</div>
-            <p className="text-xs text-white/70">Total Attributes</p>
+            <p className="text-xs text-muted-foreground">Total Attributes</p>
           </CardContent>
         </Card>
         <Card>
@@ -158,7 +158,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.IsRequired === "Y").length}
             </div>
-            <p className="text-xs text-white/70">Required</p>
+            <p className="text-xs text-muted-foreground">Required</p>
           </CardContent>
         </Card>
         <Card>
@@ -166,19 +166,19 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.RiskScope === "EDD" || a.RiskScope === "Both").length}
             </div>
-            <p className="text-xs text-white/70">EDD Attributes</p>
+            <p className="text-xs text-muted-foreground">EDD Attributes</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{categories.length}</div>
-            <p className="text-xs text-white/70">Categories</p>
+            <p className="text-xs text-muted-foreground">Categories</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{jurisdictions.length}</div>
-            <p className="text-xs text-white/70">Jurisdictions</p>
+            <p className="text-xs text-muted-foreground">Jurisdictions</p>
           </CardContent>
         </Card>
       </div>
@@ -196,7 +196,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search attributes..."
                   value={searchTerm}
@@ -295,7 +295,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
               <TableBody>
                 {filteredAttributes.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center py-8 text-white/70">
+                    <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
                       No attributes found matching your filters
                     </TableCell>
                   </TableRow>
@@ -305,7 +305,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                       <TableCell className="px-4 py-2 font-mono text-sm">{attr.Attribute_ID}</TableCell>
                       <TableCell className="px-4 py-2 font-medium text-sm">{attr.Attribute_Name}</TableCell>
                       <TableCell className="px-4 py-2 text-sm">
-                        <Badge className={CATEGORY_COLORS[attr.Category] || "bg-white/10 text-white/70"}>
+                        <Badge className={CATEGORY_COLORS[attr.Category] || "bg-muted text-muted-foreground"}>
                           {attr.Category}
                         </Badge>
                       </TableCell>
@@ -332,7 +332,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                         {attr.IsRequired === "Y" ? (
                           <CheckCircle className="h-4 w-4 text-green-400" />
                         ) : (
-                          <span className="text-white/70">-</span>
+                          <span className="text-muted-foreground">-</span>
                         )}
                       </TableCell>
                       <TableCell className="px-4 py-2 text-center text-sm">
@@ -374,30 +374,30 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                             <div className="space-y-4 mt-4">
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Testing Question</h4>
-                                <p className="text-sm bg-white/10 p-3 rounded">{attr.Question_Text}</p>
+                                <p className="text-sm bg-muted p-3 rounded">{attr.Question_Text}</p>
                               </div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source</h4>
-                                  <p className="text-sm text-white/70">{attr.Source}</p>
+                                  <p className="text-sm text-muted-foreground">{attr.Source}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source Page</h4>
-                                  <p className="text-sm text-white/70">{attr.Source_Page || "-"}</p>
+                                  <p className="text-sm text-muted-foreground">{attr.Source_Page || "-"}</p>
                                 </div>
                               </div>
                               <div className="grid grid-cols-3 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Risk Scope</h4>
-                                  <p className="text-sm text-white/70">{attr.RiskScope}</p>
+                                  <p className="text-sm text-muted-foreground">{attr.RiskScope}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source File</h4>
-                                  <p className="text-sm text-white/70">{attr.Source_File}</p>
+                                  <p className="text-sm text-muted-foreground">{attr.Source_File}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Doc Age Rule</h4>
-                                  <p className="text-sm text-white/70">
+                                  <p className="text-sm text-muted-foreground">
                                     {attr.DocumentationAgeRule ? `${attr.DocumentationAgeRule} days` : "-"}
                                   </p>
                                 </div>
@@ -405,7 +405,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                               {attr.Notes && (
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Notes</h4>
-                                  <p className="text-sm text-white/70">{attr.Notes}</p>
+                                  <p className="text-sm text-muted-foreground">{attr.Notes}</p>
                                 </div>
                               )}
 
@@ -417,21 +417,21 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                                 </h4>
                                 <div className="space-y-2">
                                   {getDocsForAttribute(attr.Attribute_ID).length === 0 ? (
-                                    <p className="text-sm text-white/70">No documents specified</p>
+                                    <p className="text-sm text-muted-foreground">No documents specified</p>
                                   ) : (
                                     getDocsForAttribute(attr.Attribute_ID).map((doc, idx) => (
                                       <div
                                         key={idx}
-                                        className="flex items-start gap-3 p-2 bg-white/10 rounded text-sm"
+                                        className="flex items-start gap-3 p-2 bg-muted rounded text-sm"
                                       >
-                                        <FileText className="h-4 w-4 mt-0.5 text-white/70" />
+                                        <FileText className="h-4 w-4 mt-0.5 text-muted-foreground" />
                                         <div>
                                           <p className="font-medium">{doc.Document_Name}</p>
-                                          <p className="text-xs text-white/70">
+                                          <p className="text-xs text-muted-foreground">
                                             Source: {doc.Evidence_Source_Document}
                                           </p>
                                           {doc.Notes && (
-                                            <p className="text-xs text-white/70 mt-1">{doc.Notes}</p>
+                                            <p className="text-xs text-muted-foreground mt-1">{doc.Notes}</p>
                                           )}
                                         </div>
                                       </div>

@@ -48,7 +48,7 @@ export function AuditorBarChart({
   if (data.length === 0) {
     return (
       <div
-        className="flex items-center justify-center text-white/70"
+        className="flex items-center justify-center text-white/80"
         style={{ height }}
       >
         No auditor data available

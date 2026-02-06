@@ -113,7 +113,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{attributes.length}</div>
-            <p className="text-xs text-white/70">Total Attributes</p>
+            <p className="text-xs text-white/80">Total Attributes</p>
           </CardContent>
         </Card>
         <Card>
@@ -121,19 +121,19 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.IsRequired === "Y").length}
             </div>
-            <p className="text-xs text-white/70">Required</p>
+            <p className="text-xs text-white/80">Required</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{acceptableDocs.length}</div>
-            <p className="text-xs text-white/70">Acceptable Documents</p>
+            <p className="text-xs text-white/80">Acceptable Documents</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{categories.length}</div>
-            <p className="text-xs text-white/70">Categories</p>
+            <p className="text-xs text-white/80">Categories</p>
           </CardContent>
         </Card>
       </div>
@@ -150,7 +150,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/80" />
                 <Input
                   placeholder="Search attributes..."
                   value={searchTerm}
@@ -206,7 +206,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
               <TableBody>
                 {filteredAttributes.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-white/70">
+                    <TableCell colSpan={7} className="text-center py-8 text-white/80">
                       No attributes found matching your filters
                     </TableCell>
                   </TableRow>
@@ -216,7 +216,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                       <TableCell className="px-4 py-2 font-mono text-sm">{attr.Attribute_ID}</TableCell>
                       <TableCell className="px-4 py-2 font-medium">{attr.Attribute_Name}</TableCell>
                       <TableCell className="px-4 py-2">
-                        <Badge className={`px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[attr.Category] || "bg-white/10 text-white/70"}`}>
+                        <Badge className={`px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[attr.Category] || "bg-white/10 text-white/80"}`}>
                           {attr.Category}
                         </Badge>
                       </TableCell>
@@ -232,7 +232,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                         {attr.IsRequired === "Y" ? (
                           <CheckCircle className="h-4 w-4 text-crowe-teal-bright" />
                         ) : (
-                          <span className="text-white/70">-</span>
+                          <span className="text-white/80">-</span>
                         )}
                       </TableCell>
                       <TableCell className="px-4 py-2">
@@ -271,25 +271,25 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source</h4>
-                                  <p className="text-sm text-white/70">{attr.Source}</p>
+                                  <p className="text-sm text-white/80">{attr.Source}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source Page</h4>
-                                  <p className="text-sm text-white/70">{attr.Source_Page}</p>
+                                  <p className="text-sm text-white/80">{attr.Source_Page}</p>
                                 </div>
                               </div>
                               <div className="grid grid-cols-3 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Risk Scope</h4>
-                                  <p className="text-sm text-white/70">{attr.RiskScope}</p>
+                                  <p className="text-sm text-white/80">{attr.RiskScope}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Jurisdiction</h4>
-                                  <p className="text-sm text-white/70">{attr.Jurisdiction_ID}</p>
+                                  <p className="text-sm text-white/80">{attr.Jurisdiction_ID}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Doc Age Rule</h4>
-                                  <p className="text-sm text-white/70">
+                                  <p className="text-sm text-white/80">
                                     {attr.DocumentationAgeRule ? `${attr.DocumentationAgeRule} days` : "-"}
                                   </p>
                                 </div>
@@ -297,7 +297,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                               {attr.Notes && (
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Notes</h4>
-                                  <p className="text-sm text-white/70">{attr.Notes}</p>
+                                  <p className="text-sm text-white/80">{attr.Notes}</p>
                                 </div>
                               )}
 
@@ -309,18 +309,18 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                                 </h4>
                                 <div className="space-y-2">
                                   {getDocsForAttribute(attr.Attribute_ID).length === 0 ? (
-                                    <p className="text-sm text-white/70">No documents specified</p>
+                                    <p className="text-sm text-white/80">No documents specified</p>
                                   ) : (
                                     getDocsForAttribute(attr.Attribute_ID).map((doc, idx) => (
                                       <div
                                         key={idx}
                                         className="flex items-start gap-3 p-2 bg-white/10 rounded text-sm"
                                       >
-                                        <FileText className="h-4 w-4 mt-0.5 text-white/70" />
+                                        <FileText className="h-4 w-4 mt-0.5 text-white/80" />
                                         <div>
                                           <p className="font-medium">{doc.Document_Name}</p>
                                           {doc.Notes && (
-                                            <p className="text-xs text-white/70">{doc.Notes}</p>
+                                            <p className="text-xs text-white/80">{doc.Notes}</p>
                                           )}
                                         </div>
                                       </div>

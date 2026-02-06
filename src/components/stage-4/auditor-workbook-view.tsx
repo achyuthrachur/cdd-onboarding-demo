@@ -48,8 +48,8 @@ const RESULT_OPTIONS = [
   { value: "Fail 1 - Regulatory", label: "Fail 1 - Regulatory", icon: XCircle, color: "text-crowe-coral-bright" },
   { value: "Fail 2 - Procedure", label: "Fail 2 - Procedure", icon: AlertTriangle, color: "text-crowe-amber" },
   { value: "Question to LOB", label: "Question to LOB", icon: HelpCircle, color: "text-crowe-blue-light" },
-  { value: "N/A", label: "N/A", icon: MinusCircle, color: "text-white/70" },
-  { value: "not-tested", label: "Not Tested", icon: MinusCircle, color: "text-white/70" },
+  { value: "N/A", label: "N/A", icon: MinusCircle, color: "text-white/80" },
+  { value: "not-tested", label: "Not Tested", icon: MinusCircle, color: "text-white/80" },
 ];
 
 export function AuditorWorkbookView({
@@ -121,9 +121,9 @@ export function AuditorWorkbookView({
     return (
       <Card className="h-full flex items-center justify-center">
         <div className="text-center">
-          <User className="h-16 w-16 mx-auto mb-4 text-white/70 opacity-30" />
+          <User className="h-16 w-16 mx-auto mb-4 text-white/80 opacity-30" />
           <h3 className="font-medium mb-2">No Workbook Selected</h3>
-          <p className="text-sm text-white/70">
+          <p className="text-sm text-white/80">
             Generate workbooks to view auditor assignments
           </p>
         </div>
@@ -169,38 +169,38 @@ export function AuditorWorkbookView({
         <div className="grid grid-cols-6 gap-4">
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-teal/10">
             <div className="text-lg font-bold text-crowe-teal-bright">{summary.passCount}</div>
-            <div className="text-xs text-white/70">Pass</div>
+            <div className="text-xs text-white/80">Pass</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-amber/10">
             <div className="text-lg font-bold text-crowe-amber-bright">{summary.passWithObsCount}</div>
-            <div className="text-xs text-white/70">Pass w/Obs</div>
+            <div className="text-xs text-white/80">Pass w/Obs</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-coral/10">
             <div className="text-lg font-bold text-crowe-coral-bright">{summary.fail1RegulatoryCount}</div>
-            <div className="text-xs text-white/70">Fail 1</div>
+            <div className="text-xs text-white/80">Fail 1</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-amber-dark/10">
             <div className="text-lg font-bold text-crowe-amber">{summary.fail2ProcedureCount}</div>
-            <div className="text-xs text-white/70">Fail 2</div>
+            <div className="text-xs text-white/80">Fail 2</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-blue/10">
             <div className="text-lg font-bold text-crowe-blue-light">{summary.questionToLOBCount}</div>
-            <div className="text-xs text-white/70">Questions</div>
+            <div className="text-xs text-white/80">Questions</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-white/10">
-            <div className="text-lg font-bold text-white/70">{summary.naCount}</div>
-            <div className="text-xs text-white/70">N/A</div>
+            <div className="text-lg font-bold text-white/80">{summary.naCount}</div>
+            <div className="text-xs text-white/80">N/A</div>
           </div>
         </div>
 
         {/* Progress */}
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm mb-1">
-            <span className="text-white/70">Completion Progress</span>
+            <span className="text-white/80">Completion Progress</span>
             <span className="font-medium">{summary.completionPercentage}%</span>
           </div>
           <Progress value={summary.completionPercentage} className="h-2 [&>div]:h-2" />
-          <div className="text-xs text-white/70 mt-1">
+          <div className="text-xs text-white/80 mt-1">
             {summary.completedRows} of {summary.totalRows} rows completed
           </div>
         </div>
@@ -208,7 +208,7 @@ export function AuditorWorkbookView({
         {/* Filters */}
         <div className="flex gap-3 mt-4">
           <div className="flex items-center gap-2">
-            <Filter className="h-4 w-4 text-white/70" />
+            <Filter className="h-4 w-4 text-white/80" />
             <Select value={resultFilter} onValueChange={setResultFilter}>
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Filter by result" />
@@ -270,14 +270,14 @@ export function AuditorWorkbookView({
                 <TableCell className="px-4 py-2 text-xs truncate max-w-[160px]" title={row.acceptableDocUsed}>
                   {row.acceptableDocUsed || "-"}
                 </TableCell>
-                <TableCell className="px-4 py-2 text-xs text-white/70 truncate max-w-[200px]" title={row.observation}>
+                <TableCell className="px-4 py-2 text-xs text-white/80 truncate max-w-[200px]" title={row.observation}>
                   {row.observation || "-"}
                 </TableCell>
               </TableRow>
             ))}
             {filteredRows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-8 text-white/70">
+                <TableCell colSpan={7} className="text-center py-8 text-white/80">
                   No rows match your filter criteria
                 </TableCell>
               </TableRow>

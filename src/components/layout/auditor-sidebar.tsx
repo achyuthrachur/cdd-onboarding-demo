@@ -56,7 +56,7 @@ export function AuditorSidebar() {
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
                 isActive
                   ? "bg-gray-200 dark:bg-white/15 text-gray-900 dark:text-white border border-gray-300 dark:border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
-                  : "text-gray-600 dark:text-white/70 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
+                  : "text-gray-600 dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
               )}
             >
               <item.icon className="h-5 w-5" />
@@ -68,7 +68,7 @@ export function AuditorSidebar() {
 
       {/* Theme Toggle */}
       <div className="flex items-center justify-between px-4 py-2 border-t border-gray-200 dark:border-white/10">
-        <span className="text-sm text-gray-500 dark:text-white/70">Theme</span>
+        <span className="text-sm text-gray-500 dark:text-white/80">Theme</span>
         <ThemeToggle />
       </div>
 
@@ -76,7 +76,7 @@ export function AuditorSidebar() {
       <div className="border-t border-gray-200 dark:border-white/10 p-4">
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
+          className="w-full justify-start text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
           onClick={handleSwitchRole}
         >
           <LogOut className="mr-2 h-4 w-4" />

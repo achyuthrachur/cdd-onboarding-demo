@@ -92,7 +92,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
       <div className="mb-8">
         <Link
           href="/audit-runs"
-          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Runs
@@ -100,7 +100,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-white">{auditRun.name}</h1>
-            <p className="text-white/70 mt-2">
+            <p className="text-white/80 mt-2">
               {auditRun.scope?.description || "CDD Onboarding Audit"}
             </p>
           </div>
@@ -145,7 +145,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
                         ? "bg-crowe-amber text-crowe-indigo-dark"
                         : isActive
                         ? "bg-green-500/20 text-green-400"
-                        : "bg-white/10 text-white/70"
+                        : "bg-white/10 text-white/80"
                     }`}
                   >
                     <stage.icon className="h-6 w-6" />
@@ -159,7 +159,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
                         </Badge>
                       )}
                     </CardTitle>
-                    <CardDescription className="text-white/70">{stage.description}</CardDescription>
+                    <CardDescription className="text-white/80">{stage.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -183,7 +183,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
       <Card className="mt-8 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
           <CardTitle className="text-white">Workflow Summary</CardTitle>
-          <CardDescription className="text-white/70">
+          <CardDescription className="text-white/80">
             Overview of the 6-stage audit workflow
           </CardDescription>
         </CardHeader>
@@ -191,37 +191,37 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 1</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 Gap Assessment: Compare standards and procedures to identify gaps
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 2</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 Sampling: Upload population and generate statistical sample
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 3</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 Attribute Extraction: Extract testing attributes from gap analysis
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 4</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 Workbook Generation: Create testing workbooks from attributes and sample
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 5</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 Testing: Execute tests and record pass/fail results
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 6</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 Consolidation: Aggregate results and generate final report
               </div>
             </div>

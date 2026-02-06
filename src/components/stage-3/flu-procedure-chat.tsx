@@ -500,11 +500,11 @@ Click the "Results" tab to view and export the extracted attributes.`,
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  <Upload className="h-8 w-8 mx-auto mb-2 text-white/70" />
-                  <p className="text-sm text-white/70">
+                  <Upload className="h-8 w-8 mx-auto mb-2 text-white/80" />
+                  <p className="text-sm text-white/80">
                     Drag & drop FLU Procedures document here, or click to browse
                   </p>
-                  <p className="text-xs text-white/70 mt-1">
+                  <p className="text-xs text-white/80 mt-1">
                     Supports PDF, Word (.docx), and text files
                   </p>
                 </motion.div>
@@ -515,7 +515,7 @@ Click the "Results" tab to view and export the extracted attributes.`,
 
         {/* Action Button */}
         <div className="flex items-center justify-between">
-          <p className="text-xs text-white/70">
+          <p className="text-xs text-white/80">
             {selectedDoc ? "Ready to extract attributes" : "No document selected"}
           </p>
           <motion.div

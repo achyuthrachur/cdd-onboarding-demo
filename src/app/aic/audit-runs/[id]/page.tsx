@@ -95,7 +95,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       <div className="mb-8">
         <Link
           href="/aic/audit-runs"
-          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Runs
@@ -103,7 +103,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-white">{auditRun.name}</h1>
-            <p className="text-white/70 mt-2">
+            <p className="text-white/80 mt-2">
               {auditRun.scope?.description || "CDD Onboarding Audit"}
             </p>
           </div>
@@ -159,7 +159,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                         ? "bg-crowe-teal/15 text-crowe-teal"
                         : isActive
                         ? "bg-green-500/20 text-green-400"
-                        : "bg-white/10 text-white/70"
+                        : "bg-white/10 text-white/80"
                     }`}
                   >
                     <stage.icon className="h-5 w-5" />
@@ -178,7 +178,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                         </Badge>
                       )}
                     </CardTitle>
-                    <CardDescription className="text-white/70">{stage.description}</CardDescription>
+                    <CardDescription className="text-white/80">{stage.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -207,7 +207,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       <Card className="mt-6 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
           <CardTitle className="text-white">AIC Workflow Summary</CardTitle>
-          <CardDescription className="text-white/70">
+          <CardDescription className="text-white/80">
             Your responsibilities in the audit lifecycle
           </CardDescription>
         </CardHeader>
@@ -215,25 +215,25 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-white">Stages 1-4</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 Setup: Gap analysis, sampling, attribute extraction, workbook generation
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-white">Stage 4</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 <span className="font-medium text-crowe-amber">Publish</span> workbooks to assigned auditors
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-white">Monitor</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 <span className="font-medium text-crowe-teal">Live tracking</span> of auditor completion (5-second refresh)
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-32 font-medium text-white">Consolidation</div>
-              <div className="flex-1 text-sm text-white/70">
+              <div className="flex-1 text-sm text-white/80">
                 Aggregate submitted results and generate final report
               </div>
             </div>
