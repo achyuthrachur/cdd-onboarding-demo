@@ -122,6 +122,78 @@ export interface RiskTierMetrics {
   entityCount: number;
 }
 
+// ============================================================================
+// CONSOLIDATED CUSTOMER DATA STRUCTURES
+// ============================================================================
+
+/**
+ * Observation detail for a customer
+ */
+export interface CustomerObservation {
+  attributeId: string;
+  attributeName: string;
+  attributeCategory: string;
+  observationText: string;
+  auditorId: string;
+  auditorName: string;
+  timestamp: Date;
+}
+
+/**
+ * Question to LOB detail for a customer
+ */
+export interface CustomerQuestion {
+  attributeId: string;
+  attributeName: string;
+  attributeCategory: string;
+  questionText: string;
+  auditorId: string;
+  auditorName: string;
+  timestamp: Date;
+}
+
+/**
+ * Failure detail for a customer
+ */
+export interface CustomerFailure {
+  attributeId: string;
+  attributeName: string;
+  attributeCategory: string;
+  failureType: 'Regulatory' | 'Procedure';
+  failureReason: string;
+  auditorId: string;
+  auditorName: string;
+  timestamp: Date;
+}
+
+/**
+ * Consolidated customer with all observations, questions, and failures
+ * This interface groups ALL findings for a single customer/entity
+ */
+export interface ConsolidatedCustomer {
+  customerId: string;
+  customerName: string;
+  jurisdictionId: string;
+  partyType: string;
+  riskTier: string;
+  totalTests: number;
+  passCount: number;
+  passWithObservationCount: number;
+  failCount: number;
+  questionCount: number;
+  naCount: number;
+  overallResult: 'Pass' | 'Pass w/Observation' | 'Fail' | 'Question';
+
+  // All observations for this customer (can be multiple per customer)
+  observations: CustomerObservation[];
+
+  // All questions to LOB for this customer
+  questionsToLOB: CustomerQuestion[];
+
+  // All failures for this customer
+  failures: CustomerFailure[];
+}
+
 export interface ConsolidationResult {
   id: string;
   auditRunId: string;
@@ -133,6 +205,8 @@ export interface ConsolidationResult {
   findingsByAuditor: AuditorMetrics[];
   findingsByRiskTier: RiskTierMetrics[];
   exceptions: ExceptionDetail[];
+  // NEW: Customer-level findings with all observations grouped by customer
+  customerFindings: ConsolidatedCustomer[];
   rawData: {
     workbookIds: string[];
     totalRows: number;
@@ -178,6 +252,7 @@ export function consolidateWorkbooks(
     findingsByAuditor: [],
     findingsByRiskTier: [],
     exceptions,
+    customerFindings: [], // Legacy format doesn't have customer-level consolidation
     rawData: {
       workbookIds: submittedWorkbooks.map((wb) => wb.id),
       totalRows: allRows.length,
@@ -338,6 +413,7 @@ function createEmptyConsolidation(auditRunId: string): ConsolidationResult {
     findingsByAuditor: [],
     findingsByRiskTier: [],
     exceptions: [],
+    customerFindings: [],
     rawData: {
       workbookIds: [],
       totalRows: 0,
@@ -404,6 +480,168 @@ export function getMockConsolidation(auditRunId: string): ConsolidationResult {
       { id: "EXC004", sampleItemId: "REC-00023", entityName: "Entity 23", attributeId: "ATTR007", attributeName: "Sanctions Screening", category: "AML", observation: "Documentation dated outside acceptable period. Updated records needed.", evidenceReference: "DOC-023", auditorNotes: "Screening from 2022", resultType: "Fail 2 - Procedure", jurisdictionId: "US", auditorId: "AUD001", auditorName: "John Smith" },
       { id: "EXC005", sampleItemId: "REC-00007", entityName: "Entity 7", attributeId: "ATTR009", attributeName: "Source of Funds", category: "EDD", observation: "Additional clarification required from entity management.", evidenceReference: "DOC-007", auditorNotes: "Vague description", resultType: "Question to LOB", jurisdictionId: "UK", auditorId: "AUD002", auditorName: "Sarah Johnson" },
     ],
+    // NEW: Customer-level findings with multiple observations per customer
+    customerFindings: [
+      {
+        customerId: "REC-00005",
+        customerName: "Acme Global Holdings Ltd",
+        jurisdictionId: "US",
+        partyType: "Corporate",
+        riskTier: "High",
+        totalTests: 10,
+        passCount: 6,
+        passWithObservationCount: 2,
+        failCount: 1,
+        questionCount: 1,
+        naCount: 0,
+        overallResult: 'Fail',
+        observations: [
+          { attributeId: "ATTR001", attributeName: "Legal Name Verification", attributeCategory: "Entity Profile", observationText: "Legal name matches incorporation documents but DBA not registered.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+          { attributeId: "ATTR002", attributeName: "Address Verification", attributeCategory: "Entity Profile", observationText: "PO Box used as primary address; physical location confirmed separately.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+        ],
+        questionsToLOB: [
+          { attributeId: "ATTR009", attributeName: "Source of Funds", attributeCategory: "EDD", questionText: "Please confirm the nature of intercompany transfers from subsidiary.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+        ],
+        failures: [
+          { attributeId: "ATTR004", attributeName: "Beneficial Owner Identification", attributeCategory: "Ownership", failureType: 'Regulatory', failureReason: "BO certification expired; current ownership structure not documented.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+        ],
+      },
+      {
+        customerId: "REC-00012",
+        customerName: "Oceanic Trade Partners Inc",
+        jurisdictionId: "UK",
+        partyType: "Corporate",
+        riskTier: "Medium",
+        totalTests: 10,
+        passCount: 5,
+        passWithObservationCount: 3,
+        failCount: 2,
+        questionCount: 0,
+        naCount: 0,
+        overallResult: 'Fail',
+        observations: [
+          { attributeId: "ATTR003", attributeName: "Tax Identification", attributeCategory: "Registration", observationText: "Tax ID valid but renewal pending within 30 days.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+          { attributeId: "ATTR006", attributeName: "PEP Screening", attributeCategory: "AML", observationText: "No PEP matches found; enhanced screening completed due to jurisdiction.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+          { attributeId: "ATTR008", attributeName: "Adverse Media Screening", attributeCategory: "AML", observationText: "Historical media mention from 2019 reviewed and deemed immaterial.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+        ],
+        questionsToLOB: [],
+        failures: [
+          { attributeId: "ATTR005", attributeName: "Beneficial Owner Verification", attributeCategory: "Ownership", failureType: 'Regulatory', failureReason: "ID documentation for 25% owner expired.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+          { attributeId: "ATTR010", attributeName: "Expected Activity", attributeCategory: "EDD", failureType: 'Procedure', failureReason: "Transaction volume significantly exceeds documented expected activity.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+        ],
+      },
+      {
+        customerId: "REC-00018",
+        customerName: "Pacific Rim Investments Group",
+        jurisdictionId: "HK",
+        partyType: "Investment Fund",
+        riskTier: "High",
+        totalTests: 10,
+        passCount: 6,
+        passWithObservationCount: 2,
+        failCount: 1,
+        questionCount: 1,
+        naCount: 0,
+        overallResult: 'Fail',
+        observations: [
+          { attributeId: "ATTR001", attributeName: "Legal Name Verification", attributeCategory: "Entity Profile", observationText: "Name verified against HK registry; Chinese characters transliteration noted.", auditorId: "AUD003", auditorName: "Michael Chen", timestamp: new Date() },
+          { attributeId: "ATTR007", attributeName: "Sanctions Screening", attributeCategory: "AML", observationText: "No direct matches; affiliated entity in mainland China screened separately.", auditorId: "AUD003", auditorName: "Michael Chen", timestamp: new Date() },
+        ],
+        questionsToLOB: [
+          { attributeId: "ATTR011", attributeName: "Fund Structure", attributeCategory: "EDD", questionText: "Please clarify the relationship with feeder funds domiciled in Cayman Islands.", auditorId: "AUD003", auditorName: "Michael Chen", timestamp: new Date() },
+        ],
+        failures: [
+          { attributeId: "ATTR006", attributeName: "PEP Screening", attributeCategory: "AML", failureType: 'Procedure', failureReason: "PEP screening not completed within required timeframe per procedure.", auditorId: "AUD003", auditorName: "Michael Chen", timestamp: new Date() },
+        ],
+      },
+      {
+        customerId: "REC-00007",
+        customerName: "Nordic Shipping Solutions AS",
+        jurisdictionId: "UK",
+        partyType: "Corporate",
+        riskTier: "Medium",
+        totalTests: 10,
+        passCount: 7,
+        passWithObservationCount: 2,
+        failCount: 0,
+        questionCount: 1,
+        naCount: 0,
+        overallResult: 'Question',
+        observations: [
+          { attributeId: "ATTR002", attributeName: "Address Verification", attributeCategory: "Entity Profile", observationText: "Registered office different from operational headquarters; both verified.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+          { attributeId: "ATTR004", attributeName: "Beneficial Owner Identification", attributeCategory: "Ownership", observationText: "Complex ownership through Norwegian holding company; full chain documented.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+        ],
+        questionsToLOB: [
+          { attributeId: "ATTR009", attributeName: "Source of Funds", attributeCategory: "EDD", questionText: "Please confirm whether charter revenue from sanctioned vessel routes is excluded.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+        ],
+        failures: [],
+      },
+      {
+        customerId: "REC-00023",
+        customerName: "Midwest Agricultural Cooperative",
+        jurisdictionId: "US",
+        partyType: "Cooperative",
+        riskTier: "Low",
+        totalTests: 10,
+        passCount: 8,
+        passWithObservationCount: 1,
+        failCount: 1,
+        questionCount: 0,
+        naCount: 0,
+        overallResult: 'Fail',
+        observations: [
+          { attributeId: "ATTR003", attributeName: "Tax Identification", attributeCategory: "Registration", observationText: "501(c)(3) status verified; annual renewal documentation on file.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+        ],
+        questionsToLOB: [],
+        failures: [
+          { attributeId: "ATTR007", attributeName: "Sanctions Screening", attributeCategory: "AML", failureType: 'Procedure', failureReason: "Sanctions screening dated December 2022; exceeds 12-month refresh requirement.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+        ],
+      },
+      {
+        customerId: "REC-00015",
+        customerName: "Mediterranean Hospitality Group",
+        jurisdictionId: "UK",
+        partyType: "Corporate",
+        riskTier: "Medium",
+        totalTests: 10,
+        passCount: 7,
+        passWithObservationCount: 3,
+        failCount: 0,
+        questionCount: 0,
+        naCount: 0,
+        overallResult: 'Pass w/Observation',
+        observations: [
+          { attributeId: "ATTR001", attributeName: "Legal Name Verification", attributeCategory: "Entity Profile", observationText: "Trading names in multiple EU countries verified against local registries.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+          { attributeId: "ATTR005", attributeName: "Beneficial Owner Verification", attributeCategory: "Ownership", observationText: "Family trust structure documented; beneficial ownership traced to individuals.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+          { attributeId: "ATTR008", attributeName: "Adverse Media Screening", attributeCategory: "AML", observationText: "COVID-19 related media coverage reviewed; no compliance concerns identified.", auditorId: "AUD002", auditorName: "Sarah Johnson", timestamp: new Date() },
+        ],
+        questionsToLOB: [],
+        failures: [],
+      },
+      {
+        customerId: "REC-00021",
+        customerName: "Digital Assets Trading LLC",
+        jurisdictionId: "US",
+        partyType: "FinTech",
+        riskTier: "High",
+        totalTests: 10,
+        passCount: 6,
+        passWithObservationCount: 2,
+        failCount: 0,
+        questionCount: 2,
+        naCount: 0,
+        overallResult: 'Question',
+        observations: [
+          { attributeId: "ATTR003", attributeName: "Tax Identification", attributeCategory: "Registration", observationText: "State money transmitter licenses verified for 48 states; 2 pending.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+          { attributeId: "ATTR006", attributeName: "PEP Screening", attributeCategory: "AML", observationText: "Board member formerly employed by CFTC; no active PEP status.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+        ],
+        questionsToLOB: [
+          { attributeId: "ATTR009", attributeName: "Source of Funds", attributeCategory: "EDD", questionText: "Please clarify wallet custody arrangements for customer digital assets.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+          { attributeId: "ATTR012", attributeName: "Business Model", attributeCategory: "EDD", questionText: "Confirm whether DeFi protocol interactions are within approved product scope.", auditorId: "AUD001", auditorName: "John Smith", timestamp: new Date() },
+        ],
+        failures: [],
+      },
+    ],
     rawData: {
       workbookIds: ["mock-wb-001", "mock-wb-002", "mock-wb-003"],
       totalRows: 250,
@@ -450,6 +688,9 @@ export function consolidateTestGridWorkbooks(
   // Extract exceptions (all failure types)
   const exceptions = extractTestGridExceptions(allRows);
 
+  // NEW: Consolidate findings by customer (multiple observations per customer)
+  const customerFindings = consolidateByCustomer(allRows);
+
   return {
     id: `CONSOL-${Date.now()}`,
     auditRunId: workbooks[0]?.auditorId ? `BATCH-${Date.now()}` : "",
@@ -461,6 +702,7 @@ export function consolidateTestGridWorkbooks(
     findingsByAuditor,
     findingsByRiskTier,
     exceptions,
+    customerFindings,
     rawData: {
       workbookIds: workbooks.map((wb) => wb.auditorId),
       totalRows: allRows.length,
@@ -855,6 +1097,146 @@ function extractTestGridExceptions(rows: TestGridRow[]): ExceptionDetail[] {
       auditorName: r.auditorName,
       partyType: r.partyType,
     }));
+}
+
+/**
+ * Consolidate findings by customer
+ * Groups ALL observations, questions, and failures by customer/entity
+ */
+export function consolidateByCustomer(rows: TestGridRow[]): ConsolidatedCustomer[] {
+  const customerMap = new Map<string, ConsolidatedCustomer>();
+
+  for (const row of rows) {
+    const customerId = row.caseId;
+
+    if (!customerMap.has(customerId)) {
+      // Determine risk tier based on IRR
+      let riskTier: string;
+      if (row.irr >= 4) {
+        riskTier = "Critical";
+      } else if (row.irr >= 3) {
+        riskTier = "High";
+      } else if (row.irr >= 2) {
+        riskTier = "Medium";
+      } else {
+        riskTier = "Low";
+      }
+
+      customerMap.set(customerId, {
+        customerId,
+        customerName: row.legalName,
+        jurisdictionId: row.jurisdictionId || "Unknown",
+        partyType: row.partyType || "Unknown",
+        riskTier,
+        totalTests: 0,
+        passCount: 0,
+        passWithObservationCount: 0,
+        failCount: 0,
+        questionCount: 0,
+        naCount: 0,
+        overallResult: 'Pass',
+        observations: [],
+        questionsToLOB: [],
+        failures: [],
+      });
+    }
+
+    const customer = customerMap.get(customerId)!;
+    customer.totalTests++;
+
+    // Count result types
+    switch (row.result) {
+      case "Pass":
+        customer.passCount++;
+        break;
+      case "Pass w/Observation":
+        customer.passWithObservationCount++;
+        // Collect observation
+        if (row.comments) {
+          customer.observations.push({
+            attributeId: row.attributeId,
+            attributeName: row.attributeName,
+            attributeCategory: row.category,
+            observationText: row.comments,
+            auditorId: row.auditor || "Unknown",
+            auditorName: row.auditorName || "Unknown Auditor",
+            timestamp: new Date(),
+          });
+        }
+        break;
+      case "Fail 1 - Regulatory":
+        customer.failCount++;
+        if (row.comments) {
+          customer.failures.push({
+            attributeId: row.attributeId,
+            attributeName: row.attributeName,
+            attributeCategory: row.category,
+            failureType: 'Regulatory',
+            failureReason: row.comments,
+            auditorId: row.auditor || "Unknown",
+            auditorName: row.auditorName || "Unknown Auditor",
+            timestamp: new Date(),
+          });
+        }
+        break;
+      case "Fail 2 - Procedure":
+        customer.failCount++;
+        if (row.comments) {
+          customer.failures.push({
+            attributeId: row.attributeId,
+            attributeName: row.attributeName,
+            attributeCategory: row.category,
+            failureType: 'Procedure',
+            failureReason: row.comments,
+            auditorId: row.auditor || "Unknown",
+            auditorName: row.auditorName || "Unknown Auditor",
+            timestamp: new Date(),
+          });
+        }
+        break;
+      case "Question to LOB":
+        customer.questionCount++;
+        if (row.comments) {
+          customer.questionsToLOB.push({
+            attributeId: row.attributeId,
+            attributeName: row.attributeName,
+            attributeCategory: row.category,
+            questionText: row.comments,
+            auditorId: row.auditor || "Unknown",
+            auditorName: row.auditorName || "Unknown Auditor",
+            timestamp: new Date(),
+          });
+        }
+        break;
+      case "N/A":
+        customer.naCount++;
+        break;
+    }
+  }
+
+  // Determine overall result for each customer based on worst outcome
+  for (const customer of customerMap.values()) {
+    if (customer.failCount > 0) {
+      customer.overallResult = 'Fail';
+    } else if (customer.questionCount > 0) {
+      customer.overallResult = 'Question';
+    } else if (customer.passWithObservationCount > 0 || customer.observations.length > 0) {
+      customer.overallResult = 'Pass w/Observation';
+    } else {
+      customer.overallResult = 'Pass';
+    }
+  }
+
+  // Sort by overall result (Fail first, then Question, then Pass w/Observation, then Pass)
+  const resultOrder = { 'Fail': 0, 'Question': 1, 'Pass w/Observation': 2, 'Pass': 3 };
+  return Array.from(customerMap.values()).sort((a, b) => {
+    const orderDiff = resultOrder[a.overallResult] - resultOrder[b.overallResult];
+    if (orderDiff !== 0) return orderDiff;
+    // Secondary sort by total findings count
+    const aFindingsCount = a.failures.length + a.questionsToLOB.length + a.observations.length;
+    const bFindingsCount = b.failures.length + b.questionsToLOB.length + b.observations.length;
+    return bFindingsCount - aFindingsCount;
+  });
 }
 
 // ============================================================================

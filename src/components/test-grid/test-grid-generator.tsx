@@ -109,9 +109,9 @@ export function TestGridGenerator({
   };
 
   // Export single workbook
-  const handleExportSingle = (workbook: GeneratedWorkbook) => {
+  const handleExportSingle = async (workbook: GeneratedWorkbook) => {
     try {
-      downloadTestGrid(workbook);
+      await downloadTestGrid(workbook);
       toast.success(`Exported workbook for ${workbook.auditorName}`);
     } catch (error) {
       console.error("Export error:", error);
@@ -120,11 +120,11 @@ export function TestGridGenerator({
   };
 
   // Export all workbooks
-  const handleExportAll = () => {
+  const handleExportAll = async () => {
     if (generatedWorkbooks.length === 0) return;
 
     try {
-      downloadAllTestGrids(generatedWorkbooks);
+      await downloadAllTestGrids(generatedWorkbooks);
       toast.success(`Exported ${generatedWorkbooks.length} workbooks`);
     } catch (error) {
       console.error("Export error:", error);

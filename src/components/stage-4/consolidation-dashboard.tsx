@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AnimatedProgress } from "@/components/ui/progress";
@@ -18,10 +19,20 @@ import {
   AlertTriangle,
   Download,
   FileSpreadsheet,
+  Building2,
+  PieChart,
+  Sparkles,
+  Copy,
+  FileText,
+  Loader2,
+  Bot,
 } from "lucide-react";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
 import { ConsolidationResult } from "@/lib/consolidation/engine";
 import { downloadConsolidationExcel } from "@/lib/consolidation/export";
+import { buildTestingSummaryInput } from "@/lib/ai/testing-summary";
+import { CustomerFindingsView } from "./customer-findings-view";
 import {
   motion,
   AnimatePresence,
@@ -32,6 +43,12 @@ import {
   staggerContainer,
   staggerItem,
 } from "@/lib/animations";
+import {
+  ResultPieChart,
+  FailureAnalysisChart,
+  CategoryBreakdown,
+  CHART_COLORS,
+} from "@/components/charts";
 
 interface ConsolidationDashboardProps {
   consolidation: ConsolidationResult | null;
@@ -58,11 +75,88 @@ export function ConsolidationDashboard({
   const animatedQLOB = useCountUp(consolidation?.metrics.questionToLOBCount || 0, { duration: 0.8, delay: 1.0 });
   const animatedNA = useCountUp(consolidation?.metrics.naCount || 0, { duration: 0.8, delay: 1.1 });
 
-  const handleExportExcel = () => {
+  // AI Testing Summary state
+  const [testingSummary, setTestingSummary] = useState<string | null>(null);
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const [summaryDemoMode, setSummaryDemoMode] = useState(false);
+
+  // Generate AI Testing Summary
+  const handleGenerateSummary = useCallback(async () => {
+    if (!consolidation) return;
+
+    setIsGeneratingSummary(true);
+    try {
+      const input = buildTestingSummaryInput(
+        consolidation,
+        `CDD Testing - ${consolidation.auditRunId}`
+      );
+
+      const response = await fetch("/api/ai/testing-summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate summary");
+      }
+
+      const data = await response.json();
+      setTestingSummary(data.summary);
+      setSummaryDemoMode(data.demoMode || false);
+
+      if (data.demoMode) {
+        toast.info("Generated demo summary (AI not configured)");
+      } else {
+        toast.success("Testing summary generated successfully");
+      }
+    } catch (error) {
+      console.error("Summary generation error:", error);
+      toast.error("Failed to generate testing summary");
+    } finally {
+      setIsGeneratingSummary(false);
+    }
+  }, [consolidation]);
+
+  // Copy summary to clipboard
+  const handleCopyToClipboard = useCallback(async () => {
+    if (!testingSummary) return;
+
+    try {
+      await navigator.clipboard.writeText(testingSummary);
+      toast.success("Summary copied to clipboard");
+    } catch (error) {
+      console.error("Copy error:", error);
+      toast.error("Failed to copy to clipboard");
+    }
+  }, [testingSummary]);
+
+  // Export summary to Word-compatible format (downloads as .txt for simplicity)
+  const handleExportToWord = useCallback(() => {
+    if (!testingSummary) return;
+
+    try {
+      const blob = new Blob([testingSummary], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `testing-summary-${consolidation?.auditRunId || "audit"}-${new Date().toISOString().split("T")[0]}.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success("Summary exported successfully");
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error("Failed to export summary");
+    }
+  }, [testingSummary, consolidation?.auditRunId]);
+
+  const handleExportExcel = async () => {
     if (!consolidation) return;
     try {
       const filename = `consolidation-report-${consolidation.auditRunId || 'audit'}-${new Date().toISOString().split("T")[0]}.xlsx`;
-      downloadConsolidationExcel(consolidation, filename);
+      await downloadConsolidationExcel(consolidation, filename);
       toast.success("Excel report exported successfully");
     } catch (error) {
       console.error("Export error:", error);
@@ -122,6 +216,27 @@ export function ConsolidationDashboard({
   }
 
   const { metrics, findingsByCategory, findingsByJurisdiction, findingsByAuditor, findingsByRiskTier } = consolidation;
+
+  // Prepare chart data
+  const resultPieData = useMemo(() => [
+    { name: 'Pass', value: metrics.passCount, color: CHART_COLORS.pass },
+    { name: 'Pass w/Obs', value: metrics.passWithObservationCount, color: CHART_COLORS.passObs },
+    { name: 'Fail 1 - Reg', value: metrics.fail1RegulatoryCount, color: CHART_COLORS.fail1 },
+    { name: 'Fail 2 - Proc', value: metrics.fail2ProcedureCount, color: CHART_COLORS.fail2 },
+    { name: 'Questions', value: metrics.questionToLOBCount, color: CHART_COLORS.questions },
+    { name: 'N/A', value: metrics.naCount, color: CHART_COLORS.na },
+  ].filter(item => item.value > 0), [metrics]);
+
+  const categoryChartData = useMemo(() =>
+    findingsByCategory.map(cat => ({
+      category: cat.category,
+      passCount: cat.passCount,
+      failCount: cat.failCount,
+      naCount: cat.naCount,
+      totalTests: cat.totalTests,
+      failRate: cat.failRate,
+    }))
+  , [findingsByCategory]);
 
   return (
     <div className="space-y-6">
@@ -318,6 +433,82 @@ export function ConsolidationDashboard({
         </Card>
       </motion.div>
 
+      {/* Visual Analytics Section */}
+      <motion.div
+        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.45 }}
+      >
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {/* Result Distribution Pie Chart */}
+          <Card className="lg:col-span-1">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <PieChart className="h-4 w-4" />
+                Result Distribution
+              </CardTitle>
+              <CardDescription>
+                Overall breakdown of test results
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResultPieChart
+                data={resultPieData}
+                height={280}
+                innerRadius={50}
+                outerRadius={90}
+                showLegend={true}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Failure Analysis Chart */}
+          <Card className="lg:col-span-1">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <AlertTriangle className="h-4 w-4 text-crowe-coral-bright" />
+                Exception Breakdown
+              </CardTitle>
+              <CardDescription>
+                Analysis of failures and questions by type
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FailureAnalysisChart
+                fail1Count={metrics.fail1RegulatoryCount}
+                fail2Count={metrics.fail2ProcedureCount}
+                questionCount={metrics.questionToLOBCount}
+                height={280}
+                variant="bar"
+                showLegend={false}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Category Performance Chart */}
+          <Card className="lg:col-span-1">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <BarChart3 className="h-4 w-4" />
+                Category Fail Rates
+              </CardTitle>
+              <CardDescription>
+                Failure rate by attribute category
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CategoryBreakdown
+                data={categoryChartData}
+                height={280}
+                variant="failRate"
+                layout="vertical"
+                showLegend={false}
+              />
+            </CardContent>
+          </Card>
+        </div>
+      </motion.div>
+
       {/* Tabbed Breakdown View */}
       <motion.div
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
@@ -325,7 +516,7 @@ export function ConsolidationDashboard({
         transition={{ delay: 0.5 }}
       >
         <Tabs defaultValue="category" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="category" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             By Category
@@ -341,6 +532,10 @@ export function ConsolidationDashboard({
           <TabsTrigger value="risk" className="flex items-center gap-2">
             <AlertTriangle className="h-4 w-4" />
             By Risk Tier
+          </TabsTrigger>
+          <TabsTrigger value="customer" className="flex items-center gap-2">
+            <Building2 className="h-4 w-4" />
+            By Customer
           </TabsTrigger>
         </TabsList>
 
@@ -629,7 +824,174 @@ export function ConsolidationDashboard({
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* Results by Customer */}
+        <TabsContent value="customer">
+          <CustomerFindingsView
+            customerFindings={consolidation.customerFindings || []}
+          />
+        </TabsContent>
         </Tabs>
+      </motion.div>
+
+      {/* AI-Generated Testing Summary */}
+      <motion.div
+        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+      >
+        <Card className="border-crowe-indigo/30 bg-gradient-to-br from-crowe-indigo-dark/20 to-crowe-indigo/10">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+            <div className="space-y-1">
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Bot className="h-5 w-5 text-crowe-amber" />
+                AI-Generated Testing Summary
+              </CardTitle>
+              <CardDescription className="text-white/60">
+                Comprehensive audit documentation generated from testing results
+              </CardDescription>
+            </div>
+            <Button
+              onClick={handleGenerateSummary}
+              disabled={isGeneratingSummary}
+              className="bg-crowe-amber hover:bg-crowe-amber-dark text-crowe-indigo-dark font-medium"
+            >
+              {isGeneratingSummary ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Generate Summary
+                </>
+              )}
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <AnimatePresence mode="wait">
+              {testingSummary ? (
+                <motion.div
+                  key="summary"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {/* Demo Mode Badge */}
+                  {summaryDemoMode && (
+                    <div className="mb-4 flex items-center gap-2">
+                      <Badge variant="outline" className="bg-crowe-amber/10 text-crowe-amber-bright border-crowe-amber/30">
+                        <Bot className="h-3 w-3 mr-1" />
+                        Demo Mode
+                      </Badge>
+                      <span className="text-xs text-white/50">
+                        AI API not configured - showing sample summary
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Summary Content */}
+                  <div className="prose prose-invert prose-sm max-w-none rounded-lg bg-white/5 p-6 border border-white/10">
+                    <ReactMarkdown
+                      components={{
+                        h1: ({ children }) => (
+                          <h1 className="text-xl font-bold text-white mb-4 mt-0">{children}</h1>
+                        ),
+                        h2: ({ children }) => (
+                          <h2 className="text-lg font-semibold text-crowe-amber-bright mb-3 mt-6 border-b border-white/10 pb-2">{children}</h2>
+                        ),
+                        h3: ({ children }) => (
+                          <h3 className="text-base font-medium text-white/90 mb-2 mt-4">{children}</h3>
+                        ),
+                        p: ({ children }) => (
+                          <p className="text-white/80 mb-3 leading-relaxed">{children}</p>
+                        ),
+                        ul: ({ children }) => (
+                          <ul className="text-white/80 mb-4 ml-4 list-disc space-y-1">{children}</ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol className="text-white/80 mb-4 ml-4 list-decimal space-y-1">{children}</ol>
+                        ),
+                        li: ({ children }) => (
+                          <li className="text-white/80">{children}</li>
+                        ),
+                        strong: ({ children }) => (
+                          <strong className="text-white font-semibold">{children}</strong>
+                        ),
+                        em: ({ children }) => (
+                          <em className="text-white/70 italic">{children}</em>
+                        ),
+                        table: ({ children }) => (
+                          <div className="overflow-x-auto my-4">
+                            <table className="w-full border-collapse border border-white/20 text-sm">{children}</table>
+                          </div>
+                        ),
+                        thead: ({ children }) => (
+                          <thead className="bg-white/10">{children}</thead>
+                        ),
+                        th: ({ children }) => (
+                          <th className="border border-white/20 px-3 py-2 text-left text-white font-semibold">{children}</th>
+                        ),
+                        td: ({ children }) => (
+                          <td className="border border-white/20 px-3 py-2 text-white/80">{children}</td>
+                        ),
+                        blockquote: ({ children }) => (
+                          <blockquote className="border-l-4 border-crowe-amber/50 pl-4 my-4 text-white/70 italic">{children}</blockquote>
+                        ),
+                        hr: () => (
+                          <hr className="border-white/20 my-6" />
+                        ),
+                        code: ({ children }) => (
+                          <code className="bg-white/10 px-1.5 py-0.5 rounded text-crowe-cyan-light text-sm">{children}</code>
+                        ),
+                      }}
+                    >
+                      {testingSummary}
+                    </ReactMarkdown>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 mt-4">
+                    <Button
+                      variant="outline"
+                      onClick={handleCopyToClipboard}
+                      className="border-white/20 hover:bg-white/10"
+                    >
+                      <Copy className="h-4 w-4 mr-2" />
+                      Copy to Clipboard
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleExportToWord}
+                      className="border-white/20 hover:bg-white/10"
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      Export as Markdown
+                    </Button>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-center py-12"
+                >
+                  <Bot className="h-12 w-12 mx-auto mb-4 text-white/30" />
+                  <p className="text-white/50 mb-2">
+                    No summary generated yet
+                  </p>
+                  <p className="text-sm text-white/40">
+                    Click &quot;Generate Summary&quot; to create comprehensive audit documentation
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </CardContent>
+        </Card>
       </motion.div>
     </div>
   );

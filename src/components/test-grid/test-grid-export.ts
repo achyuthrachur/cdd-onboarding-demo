@@ -1,7 +1,8 @@
 // Test Grid Export Utility
-// Exports generated workbooks to Excel format using xlsx library
+// Exports generated workbooks to Excel format using ExcelJS library
+// Provides proper Excel table formatting with filters, frozen headers, and alternating rows
 
-import * as XLSX from 'xlsx';
+import * as ExcelJS from 'exceljs';
 import type { GeneratedWorkbook, TestGridRow } from '@/lib/attribute-library/generation-engine';
 
 /**
@@ -41,6 +42,42 @@ const EXCEL_HEADERS = [
 ];
 
 /**
+ * Column widths for test grid sheets
+ */
+const COLUMN_WIDTHS = [
+  10,  // Auditor
+  25,  // Legal Name
+  6,   // IRR
+  6,   // DRR
+  15,  // Case ID
+  12,  // Primary FLU
+  18,  // Party Type
+  12,  // Attribute ID
+  25,  // Attribute Name
+  15,  // Category
+  20,  // Source File
+  15,  // Source
+  10,  // Source Page
+  10,  // Pass Count
+  12,  // Sampling Index
+  15,  // Auditor Name
+  10,  // Empty Count
+  12,  // Percent Complete
+  12,  // KYC Date
+  12,  // Pass w/Obs Count
+  12,  // Fail 1 Count
+  12,  // Fail 2 Count
+  12,  // Q to LOB Count
+  15,  // GCI #s
+  15,  // Group
+  10,  // N/A Count
+  12,  // Attribute Count
+  50,  // Attribute Text
+  20,  // Result
+  30,  // Comments
+];
+
+/**
  * Convert a TestGridRow to an array for Excel export
  */
 function rowToArray(row: TestGridRow): (string | number)[] {
@@ -62,7 +99,7 @@ function rowToArray(row: TestGridRow): (string | number)[] {
     row.samplingIndex,
     row.auditorName,
     row.emptyCount,
-    Math.round(row.percentComplete * 100) / 100,
+    row.percentComplete / 100, // As decimal for percentage
     row.kycDate,
     row.passWithObservationCount,
     row.fail1RegulatoryCount,
@@ -79,119 +116,145 @@ function rowToArray(row: TestGridRow): (string | number)[] {
 }
 
 /**
- * Create column widths for the Excel sheet
- */
-function getColumnWidths(): XLSX.ColInfo[] {
-  return [
-    { wch: 10 },  // Auditor
-    { wch: 25 },  // Legal Name
-    { wch: 6 },   // IRR
-    { wch: 6 },   // DRR
-    { wch: 15 },  // Case ID
-    { wch: 12 },  // Primary FLU
-    { wch: 18 },  // Party Type
-    { wch: 12 },  // Attribute ID
-    { wch: 25 },  // Attribute Name
-    { wch: 15 },  // Category
-    { wch: 20 },  // Source File
-    { wch: 15 },  // Source
-    { wch: 10 },  // Source Page
-    { wch: 10 },  // Pass Count
-    { wch: 12 },  // Sampling Index
-    { wch: 15 },  // Auditor Name
-    { wch: 10 },  // Empty Count
-    { wch: 12 },  // Percent Complete
-    { wch: 12 },  // KYC Date
-    { wch: 12 },  // Pass w/Obs Count
-    { wch: 12 },  // Fail 1 Count
-    { wch: 12 },  // Fail 2 Count
-    { wch: 12 },  // Q to LOB Count
-    { wch: 15 },  // GCI #s
-    { wch: 15 },  // Group
-    { wch: 10 },  // N/A Count
-    { wch: 12 },  // Attribute Count
-    { wch: 50 },  // Attribute Text
-    { wch: 20 },  // Result
-    { wch: 30 },  // Comments
-  ];
-}
-
-/**
  * Create a summary sheet with workbook statistics
  */
-function createSummarySheet(workbook: GeneratedWorkbook): XLSX.WorkSheet {
+function createSummarySheet(workbook: ExcelJS.Workbook, data: GeneratedWorkbook): void {
+  const sheet = workbook.addWorksheet('Summary', {
+    properties: { tabColor: { argb: 'FF002E62' } }, // Crowe Indigo
+  });
+
+  // Title
+  sheet.mergeCells('A1:B1');
+  const titleCell = sheet.getCell('A1');
+  titleCell.value = 'Test Grid Workbook Summary';
+  titleCell.font = { size: 16, bold: true, color: { argb: 'FF002E62' } };
+  titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  sheet.getRow(1).height = 25;
+
+  // Summary data
   const summaryData = [
-    ['Test Grid Workbook Summary'],
-    [],
-    ['Auditor ID', workbook.auditorId],
-    ['Auditor Name', workbook.auditorName],
-    ['Generated At', new Date(workbook.generatedAt).toLocaleString()],
-    [],
-    ['Statistics'],
-    ['Total Entities', workbook.entityCount],
-    ['Total Test Rows', workbook.summary.totalRows],
-    ['Completed Rows', workbook.summary.completedRows],
-    ['Completion %', `${workbook.summary.completionPercentage.toFixed(1)}%`],
-    [],
-    ['Results Breakdown'],
-    ['Pass', workbook.summary.passCount],
-    ['Pass w/Observation', workbook.summary.passWithObservationCount],
-    ['Fail 1 - Regulatory', workbook.summary.fail1Count],
-    ['Fail 2 - Procedure', workbook.summary.fail2Count],
-    ['Question to LOB', workbook.summary.questionToLOBCount],
-    ['N/A', workbook.summary.naCount],
-    ['Empty', workbook.summary.emptyCount],
+    ['Auditor ID', data.auditorId],
+    ['Auditor Name', data.auditorName],
+    ['Generated At', new Date(data.generatedAt).toLocaleString()],
+    ['', ''],
+    ['Statistics', ''],
+    ['Total Entities', data.entityCount],
+    ['Total Test Rows', data.summary.totalRows],
+    ['Completed Rows', data.summary.completedRows],
+    ['Completion %', `${data.summary.completionPercentage.toFixed(1)}%`],
+    ['', ''],
+    ['Results Breakdown', ''],
+    ['Pass', data.summary.passCount],
+    ['Pass w/Observation', data.summary.passWithObservationCount],
+    ['Fail 1 - Regulatory', data.summary.fail1Count],
+    ['Fail 2 - Procedure', data.summary.fail2Count],
+    ['Question to LOB', data.summary.questionToLOBCount],
+    ['N/A', data.summary.naCount],
+    ['Empty', data.summary.emptyCount],
   ];
 
-  const ws = XLSX.utils.aoa_to_sheet(summaryData);
+  let rowNum = 3;
+  for (const [label, value] of summaryData) {
+    const labelCell = sheet.getCell(`A${rowNum}`);
+    const valueCell = sheet.getCell(`B${rowNum}`);
+
+    labelCell.value = label;
+    valueCell.value = value;
+
+    // Style section headers
+    if (label === 'Statistics' || label === 'Results Breakdown') {
+      labelCell.font = { bold: true, size: 14, color: { argb: 'FF002E62' } };
+    } else if (label) {
+      labelCell.font = { bold: true };
+    }
+
+    rowNum++;
+  }
 
   // Set column widths
-  ws['!cols'] = [{ wch: 20 }, { wch: 30 }];
+  sheet.getColumn('A').width = 22;
+  sheet.getColumn('B').width = 30;
 
-  return ws;
+  // Freeze first row
+  sheet.views = [{ state: 'frozen', ySplit: 1, xSplit: 0 }];
 }
 
 /**
- * Export a single workbook to Excel format
- * @param workbook - The generated workbook to export
- * @returns Blob containing the Excel file
+ * Create the main test grid sheet with Excel Table formatting
  */
-export function exportTestGridToExcel(workbook: GeneratedWorkbook): Blob {
-  // Create workbook
-  const wb = XLSX.utils.book_new();
+function createTestGridSheet(workbook: ExcelJS.Workbook, data: GeneratedWorkbook): void {
+  const sheet = workbook.addWorksheet('Test Grid', {
+    properties: { tabColor: { argb: 'FFF5A800' } }, // Crowe Amber
+  });
 
-  // Create summary sheet
-  const summarySheet = createSummarySheet(workbook);
-  XLSX.utils.book_append_sheet(wb, summarySheet, 'Summary');
+  // Prepare data rows
+  const dataRows = data.rows.map(rowToArray);
 
-  // Create test grid sheet
-  const gridData = [EXCEL_HEADERS, ...workbook.rows.map(rowToArray)];
-  const gridSheet = XLSX.utils.aoa_to_sheet(gridData);
+  // Add table
+  sheet.addTable({
+    name: 'TestGridTable',
+    ref: 'A1',
+    headerRow: true,
+    totalsRow: true,
+    style: {
+      theme: 'TableStyleMedium2',
+      showRowStripes: true,
+    },
+    columns: [
+      { name: 'Auditor', totalsRowLabel: 'Totals:', filterButton: true },
+      { name: 'Legal Name', filterButton: true },
+      { name: 'IRR', totalsRowFunction: 'average', filterButton: true },
+      { name: 'DRR', totalsRowFunction: 'average', filterButton: true },
+      { name: 'Case ID (Aware)', filterButton: true },
+      { name: 'Primary FLU', filterButton: true },
+      { name: 'Party Type', filterButton: true },
+      { name: 'Attribute ID', filterButton: true },
+      { name: 'Attribute Name', filterButton: true },
+      { name: 'Category', filterButton: true },
+      { name: 'Source File', filterButton: true },
+      { name: 'Source', filterButton: true },
+      { name: 'Source Page', filterButton: true },
+      { name: 'Pass Count', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Sampling Index', filterButton: true },
+      { name: 'Auditor Name', filterButton: true },
+      { name: 'Empty Count', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Percent Complete', totalsRowFunction: 'average', filterButton: true },
+      { name: 'KYC Date', filterButton: true },
+      { name: 'Pass w/Observation Count', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Fail 1 - Regulatory Count', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Fail 2 - Procedure Count', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Question to LOB Count', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'GCI #s', filterButton: true },
+      { name: 'Group', filterButton: true },
+      { name: 'N/A Count', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Attribute Count', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Attribute Text', filterButton: false },
+      { name: 'Result', filterButton: true },
+      { name: 'Comments', filterButton: false },
+    ],
+    rows: dataRows,
+  });
+
+  // Format percent complete column
+  sheet.getColumn(18).numFmt = '0.00%';
 
   // Set column widths
-  gridSheet['!cols'] = getColumnWidths();
-
-  // Freeze first row (header)
-  gridSheet['!freeze'] = { xSplit: 0, ySplit: 1 };
-
-  XLSX.utils.book_append_sheet(wb, gridSheet, 'Test Grid');
-
-  // Create entity breakdown sheet
-  const entityBreakdown = createEntityBreakdownSheet(workbook.rows);
-  XLSX.utils.book_append_sheet(wb, entityBreakdown, 'Entity Breakdown');
-
-  // Generate Excel file
-  const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-
-  return new Blob([excelBuffer], {
-    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  COLUMN_WIDTHS.forEach((width, index) => {
+    sheet.getColumn(index + 1).width = width;
   });
+
+  // Freeze header row
+  sheet.views = [{ state: 'frozen', ySplit: 1, xSplit: 0 }];
 }
 
 /**
  * Create entity breakdown sheet showing completion by entity
  */
-function createEntityBreakdownSheet(rows: TestGridRow[]): XLSX.WorkSheet {
+function createEntityBreakdownSheet(workbook: ExcelJS.Workbook, rows: TestGridRow[]): void {
+  const sheet = workbook.addWorksheet('Entity Breakdown', {
+    properties: { tabColor: { argb: 'FF05AB8C' } }, // Crowe Teal
+  });
+
   // Group by entity
   const entityMap = new Map<string, {
     legalName: string;
@@ -247,27 +310,13 @@ function createEntityBreakdownSheet(rows: TestGridRow[]): XLSX.WorkSheet {
     entityMap.set(row.caseId, entity);
   }
 
-  // Build data array
-  const headers = [
-    'Case ID',
-    'Legal Name',
-    'Total Attributes',
-    'Completed',
-    '% Complete',
-    'Pass',
-    'Pass w/Obs',
-    'Fail 1',
-    'Fail 2',
-    'Q to LOB',
-    'N/A',
-  ];
-
+  // Prepare data rows
   const dataRows = Array.from(entityMap.entries()).map(([caseId, data]) => [
     caseId,
     data.legalName,
     data.totalAttributes,
     data.completed,
-    `${((data.completed / data.totalAttributes) * 100).toFixed(1)}%`,
+    data.totalAttributes > 0 ? data.completed / data.totalAttributes : 0, // As decimal for percentage
     data.pass,
     data.passObs,
     data.fail1,
@@ -276,55 +325,70 @@ function createEntityBreakdownSheet(rows: TestGridRow[]): XLSX.WorkSheet {
     data.na,
   ]);
 
-  const sheetData = [headers, ...dataRows];
-  const ws = XLSX.utils.aoa_to_sheet(sheetData);
+  // Add table
+  sheet.addTable({
+    name: 'EntityBreakdownTable',
+    ref: 'A1',
+    headerRow: true,
+    totalsRow: true,
+    style: {
+      theme: 'TableStyleMedium9',
+      showRowStripes: true,
+    },
+    columns: [
+      { name: 'Case ID', totalsRowLabel: 'Totals:', filterButton: true },
+      { name: 'Legal Name', filterButton: true },
+      { name: 'Total Attributes', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Completed', totalsRowFunction: 'sum', filterButton: true },
+      { name: '% Complete', totalsRowFunction: 'average', filterButton: true },
+      { name: 'Pass', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Pass w/Obs', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Fail 1', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Fail 2', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Q to LOB', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'N/A', totalsRowFunction: 'sum', filterButton: true },
+    ],
+    rows: dataRows,
+  });
 
-  ws['!cols'] = [
-    { wch: 15 },
-    { wch: 25 },
-    { wch: 15 },
-    { wch: 10 },
-    { wch: 12 },
-    { wch: 8 },
-    { wch: 10 },
-    { wch: 8 },
-    { wch: 8 },
-    { wch: 10 },
-    { wch: 8 },
-  ];
+  // Format percentage column
+  sheet.getColumn(5).numFmt = '0.0%';
 
-  return ws;
+  // Set column widths
+  const widths = [15, 25, 15, 10, 12, 8, 10, 8, 8, 10, 8];
+  widths.forEach((width, index) => {
+    sheet.getColumn(index + 1).width = width;
+  });
+
+  // Freeze header row
+  sheet.views = [{ state: 'frozen', ySplit: 1, xSplit: 0 }];
 }
 
 /**
- * Export all workbooks to a single Excel file with multiple sheets
- * @param workbooks - Array of generated workbooks
- * @returns Blob containing the Excel file
+ * Export a single workbook to Excel format
+ * @param workbookData - The generated workbook to export
+ * @returns Promise<Blob> containing the Excel file
  */
-export function exportAllTestGrids(workbooks: GeneratedWorkbook[]): Blob {
-  const wb = XLSX.utils.book_new();
+export async function exportTestGridToExcel(workbookData: GeneratedWorkbook): Promise<Blob> {
+  // Create workbook
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = 'CDD Onboarding Demo';
+  workbook.created = new Date();
+  workbook.modified = new Date();
 
-  // Create master summary sheet
-  const masterSummary = createMasterSummarySheet(workbooks);
-  XLSX.utils.book_append_sheet(wb, masterSummary, 'Master Summary');
+  // Create summary sheet
+  createSummarySheet(workbook, workbookData);
 
-  // Add each auditor's workbook as separate sheets
-  for (const workbook of workbooks) {
-    // Truncate sheet name to 31 chars (Excel limit)
-    const sheetName = workbook.auditorName.substring(0, 28);
+  // Create test grid sheet
+  createTestGridSheet(workbook, workbookData);
 
-    // Create grid sheet for this auditor
-    const gridData = [EXCEL_HEADERS, ...workbook.rows.map(rowToArray)];
-    const gridSheet = XLSX.utils.aoa_to_sheet(gridData);
-    gridSheet['!cols'] = getColumnWidths();
-
-    XLSX.utils.book_append_sheet(wb, gridSheet, sheetName);
-  }
+  // Create entity breakdown sheet
+  createEntityBreakdownSheet(workbook, workbookData.rows);
 
   // Generate Excel file
-  const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const buffer = await workbook.xlsx.writeBuffer();
 
-  return new Blob([excelBuffer], {
+  return new Blob([buffer], {
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   });
 }
@@ -332,30 +396,31 @@ export function exportAllTestGrids(workbooks: GeneratedWorkbook[]): Blob {
 /**
  * Create master summary sheet for all workbooks
  */
-function createMasterSummarySheet(workbooks: GeneratedWorkbook[]): XLSX.WorkSheet {
-  const headers = [
-    'Auditor ID',
-    'Auditor Name',
-    'Entities',
-    'Total Rows',
-    'Completed',
-    '% Complete',
-    'Pass',
-    'Pass w/Obs',
-    'Fail 1',
-    'Fail 2',
-    'Q to LOB',
-    'N/A',
-    'Empty',
-  ];
+function createMasterSummarySheet(workbook: ExcelJS.Workbook, workbooks: GeneratedWorkbook[]): void {
+  const sheet = workbook.addWorksheet('Master Summary', {
+    properties: { tabColor: { argb: 'FF002E62' } }, // Crowe Indigo
+  });
 
+  // Title
+  sheet.mergeCells('A1:M1');
+  const titleCell = sheet.getCell('A1');
+  titleCell.value = 'Test Grid Generation - Master Summary';
+  titleCell.font = { size: 16, bold: true, color: { argb: 'FF002E62' } };
+  titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  sheet.getRow(1).height = 25;
+
+  // Generated timestamp
+  sheet.getCell('A2').value = `Generated: ${new Date().toLocaleString()}`;
+  sheet.getCell('A2').font = { italic: true, color: { argb: 'FF828282' } };
+
+  // Prepare data rows
   const dataRows = workbooks.map(wb => [
     wb.auditorId,
     wb.auditorName,
     wb.entityCount,
     wb.summary.totalRows,
     wb.summary.completedRows,
-    `${wb.summary.completionPercentage.toFixed(1)}%`,
+    wb.summary.totalRows > 0 ? wb.summary.completedRows / wb.summary.totalRows : 0, // As decimal for percentage
     wb.summary.passCount,
     wb.summary.passWithObservationCount,
     wb.summary.fail1Count,
@@ -365,79 +430,108 @@ function createMasterSummarySheet(workbooks: GeneratedWorkbook[]): XLSX.WorkShee
     wb.summary.emptyCount,
   ]);
 
-  // Add totals row
-  const totals = workbooks.reduce(
-    (acc, wb) => ({
-      entities: acc.entities + wb.entityCount,
-      totalRows: acc.totalRows + wb.summary.totalRows,
-      completed: acc.completed + wb.summary.completedRows,
-      pass: acc.pass + wb.summary.passCount,
-      passObs: acc.passObs + wb.summary.passWithObservationCount,
-      fail1: acc.fail1 + wb.summary.fail1Count,
-      fail2: acc.fail2 + wb.summary.fail2Count,
-      qLob: acc.qLob + wb.summary.questionToLOBCount,
-      na: acc.na + wb.summary.naCount,
-      empty: acc.empty + wb.summary.emptyCount,
-    }),
-    {
-      entities: 0,
-      totalRows: 0,
-      completed: 0,
-      pass: 0,
-      passObs: 0,
-      fail1: 0,
-      fail2: 0,
-      qLob: 0,
-      na: 0,
-      empty: 0,
-    }
-  );
+  // Add table starting at row 4
+  sheet.addTable({
+    name: 'MasterSummaryTable',
+    ref: 'A4',
+    headerRow: true,
+    totalsRow: true,
+    style: {
+      theme: 'TableStyleMedium6',
+      showRowStripes: true,
+    },
+    columns: [
+      { name: 'Auditor ID', totalsRowLabel: 'Totals:', filterButton: true },
+      { name: 'Auditor Name', filterButton: true },
+      { name: 'Entities', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Total Rows', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Completed', totalsRowFunction: 'sum', filterButton: true },
+      { name: '% Complete', totalsRowFunction: 'average', filterButton: true },
+      { name: 'Pass', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Pass w/Obs', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Fail 1', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Fail 2', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Q to LOB', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'N/A', totalsRowFunction: 'sum', filterButton: true },
+      { name: 'Empty', totalsRowFunction: 'sum', filterButton: true },
+    ],
+    rows: dataRows,
+  });
 
-  const totalsRow = [
-    'TOTAL',
-    '',
-    totals.entities,
-    totals.totalRows,
-    totals.completed,
-    `${((totals.completed / totals.totalRows) * 100).toFixed(1)}%`,
-    totals.pass,
-    totals.passObs,
-    totals.fail1,
-    totals.fail2,
-    totals.qLob,
-    totals.na,
-    totals.empty,
-  ];
+  // Format percentage column
+  sheet.getColumn(6).numFmt = '0.0%';
 
-  const sheetData = [
-    ['Test Grid Generation - Master Summary'],
-    [`Generated: ${new Date().toLocaleString()}`],
-    [],
-    headers,
-    ...dataRows,
-    [],
-    totalsRow,
-  ];
+  // Set column widths
+  const widths = [12, 18, 10, 10, 10, 12, 8, 10, 8, 8, 10, 8, 8];
+  widths.forEach((width, index) => {
+    sheet.getColumn(index + 1).width = width;
+  });
 
-  const ws = XLSX.utils.aoa_to_sheet(sheetData);
+  // Freeze first 4 rows (title, timestamp, blank, headers)
+  sheet.views = [{ state: 'frozen', ySplit: 4, xSplit: 0 }];
+}
 
-  ws['!cols'] = [
-    { wch: 12 },
-    { wch: 18 },
-    { wch: 10 },
-    { wch: 10 },
-    { wch: 10 },
-    { wch: 12 },
-    { wch: 8 },
-    { wch: 10 },
-    { wch: 8 },
-    { wch: 8 },
-    { wch: 10 },
-    { wch: 8 },
-    { wch: 8 },
-  ];
+/**
+ * Export all workbooks to a single Excel file with multiple sheets
+ * @param workbooks - Array of generated workbooks
+ * @returns Promise<Blob> containing the Excel file
+ */
+export async function exportAllTestGrids(workbooks: GeneratedWorkbook[]): Promise<Blob> {
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = 'CDD Onboarding Demo';
+  workbook.created = new Date();
+  workbook.modified = new Date();
 
-  return ws;
+  // Create master summary sheet
+  createMasterSummarySheet(workbook, workbooks);
+
+  // Add each auditor's workbook as separate sheets
+  for (const wb of workbooks) {
+    // Truncate sheet name to 31 chars (Excel limit)
+    const sheetName = wb.auditorName.substring(0, 28);
+
+    const sheet = workbook.addWorksheet(sheetName, {
+      properties: { tabColor: { argb: 'FFF5A800' } }, // Crowe Amber
+    });
+
+    // Prepare data rows
+    const dataRows = wb.rows.map(rowToArray);
+
+    // Add table
+    sheet.addTable({
+      name: `TestGrid_${wb.auditorId.replace(/[^a-zA-Z0-9]/g, '_')}`,
+      ref: 'A1',
+      headerRow: true,
+      totalsRow: false,
+      style: {
+        theme: 'TableStyleMedium2',
+        showRowStripes: true,
+      },
+      columns: EXCEL_HEADERS.map((name, index) => ({
+        name,
+        filterButton: !['Attribute Text', 'Comments'].includes(name),
+      })),
+      rows: dataRows,
+    });
+
+    // Format percent complete column
+    sheet.getColumn(18).numFmt = '0.00%';
+
+    // Set column widths
+    COLUMN_WIDTHS.forEach((width, index) => {
+      sheet.getColumn(index + 1).width = width;
+    });
+
+    // Freeze header row
+    sheet.views = [{ state: 'frozen', ySplit: 1, xSplit: 0 }];
+  }
+
+  // Generate Excel file
+  const buffer = await workbook.xlsx.writeBuffer();
+
+  return new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  });
 }
 
 /**
@@ -457,9 +551,9 @@ export function downloadBlob(blob: Blob, filename: string): void {
 /**
  * Export and download a single workbook
  */
-export function downloadTestGrid(workbook: GeneratedWorkbook): void {
-  const blob = exportTestGridToExcel(workbook);
-  const filename = `TestGrid_${workbook.auditorName.replace(/\s+/g, '_')}_${
+export async function downloadTestGrid(workbookData: GeneratedWorkbook): Promise<void> {
+  const blob = await exportTestGridToExcel(workbookData);
+  const filename = `TestGrid_${workbookData.auditorName.replace(/\s+/g, '_')}_${
     new Date().toISOString().split('T')[0]
   }.xlsx`;
   downloadBlob(blob, filename);
@@ -468,8 +562,8 @@ export function downloadTestGrid(workbook: GeneratedWorkbook): void {
 /**
  * Export and download all workbooks
  */
-export function downloadAllTestGrids(workbooks: GeneratedWorkbook[]): void {
-  const blob = exportAllTestGrids(workbooks);
+export async function downloadAllTestGrids(workbooks: GeneratedWorkbook[]): Promise<void> {
+  const blob = await exportAllTestGrids(workbooks);
   const filename = `TestGrids_All_Auditors_${
     new Date().toISOString().split('T')[0]
   }.xlsx`;

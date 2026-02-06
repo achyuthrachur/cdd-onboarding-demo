@@ -30,7 +30,11 @@ import {
   FileText,
   ShieldCheck,
   AlertTriangle,
+  Info,
+  Sparkles,
+  Bot,
 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import type { FLUExtractionResult } from "@/lib/stage-data/store";
@@ -47,11 +51,13 @@ import {
 interface ExtractionResultsViewProps {
   result: FLUExtractionResult;
   onExportExcel: () => void;
+  demoMode?: boolean;
 }
 
 export function ExtractionResultsView({
   result,
   onExportExcel,
+  demoMode = false,
 }: ExtractionResultsViewProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -156,16 +162,61 @@ export function ExtractionResultsView({
               {attributes.length} attributes extracted with {acceptableDocs.length} acceptable documents
             </CardDescription>
           </div>
-          <motion.div
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-          >
-            <Button onClick={onExportExcel} className="gap-2">
-              <Download className="h-4 w-4" />
-              Export to Excel
-            </Button>
-          </motion.div>
+          <div className="flex items-center gap-3">
+            {/* AI/Demo Mode Indicator */}
+            <Badge
+              variant={demoMode ? "outline" : "default"}
+              className={cn(
+                "gap-1.5 px-2.5 py-1",
+                demoMode
+                  ? "border-crowe-amber text-crowe-amber"
+                  : "bg-crowe-teal text-white"
+              )}
+            >
+              {demoMode ? (
+                <>
+                  <Info className="h-3 w-3" />
+                  Demo Data
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-3 w-3" />
+                  AI Extracted
+                </>
+              )}
+            </Badge>
+            <motion.div
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+            >
+              <Button onClick={onExportExcel} className="gap-2">
+                <Download className="h-4 w-4" />
+                Export to Excel
+              </Button>
+            </motion.div>
+          </div>
         </div>
+
+        {/* Demo Mode Alert */}
+        {demoMode && (
+          <motion.div
+            initial={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-3"
+          >
+            <Alert variant="default" className="border-crowe-amber/30 bg-crowe-amber/5">
+              <Bot className="h-4 w-4 text-crowe-amber" />
+              <AlertTitle className="text-sm text-crowe-amber">Demo Mode Active</AlertTitle>
+              <AlertDescription className="text-xs text-white/70">
+                These results are demonstration data. To enable AI-powered extraction, configure your{" "}
+                <code className="px-1 py-0.5 bg-white/10 rounded text-crowe-amber-bright">
+                  OPENAI_API_KEY
+                </code>{" "}
+                environment variable.
+              </AlertDescription>
+            </Alert>
+          </motion.div>
+        )}
 
         {/* Summary Badges - Staggered entrance */}
         <motion.div

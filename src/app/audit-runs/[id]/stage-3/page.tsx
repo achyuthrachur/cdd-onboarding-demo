@@ -476,6 +476,7 @@ export default function Stage3Page() {
                   <ExtractionResultsView
                     result={extractionResult}
                     onExportExcel={handleExportExcel}
+                    demoMode={extractionResult.demoMode}
                   />
                 ) : (
                   <Card className="h-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">

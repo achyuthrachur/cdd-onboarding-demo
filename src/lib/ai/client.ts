@@ -1,23 +1,64 @@
 import OpenAI from "openai";
 
+// ============================================================================
+// AI Client Configuration and Logging
+// ============================================================================
+
 // Lazy-initialized OpenAI client (only created when needed)
 let openaiClient: OpenAI | null = null;
 
+/**
+ * Check if any AI API key is configured
+ * Currently supports OpenAI. Anthropic can be added in the future.
+ */
+export function isAIConfigured(): { configured: boolean; provider: string | null } {
+  const openaiKey = process.env.OPENAI_API_KEY;
+  const anthropicKey = process.env.ANTHROPIC_API_KEY;
+
+  if (openaiKey) {
+    return { configured: true, provider: "openai" };
+  }
+  if (anthropicKey) {
+    // Note: Anthropic integration not yet implemented, but we recognize the key
+    console.log("[AI] Anthropic key detected but not yet implemented, falling back to demo mode");
+    return { configured: false, provider: null };
+  }
+
+  return { configured: false, provider: null };
+}
+
+/**
+ * Get or create OpenAI client
+ */
 function getOpenAIClient(): OpenAI {
+  console.log("[AI] Initializing OpenAI client...");
+
   if (!openaiClient) {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
+      console.error("[AI] OPENAI_API_KEY environment variable is not set");
       throw new Error("OPENAI_API_KEY environment variable is not set");
     }
+
+    // Log partial key for debugging (first 8 chars only)
+    const maskedKey = apiKey.substring(0, 8) + "..." + apiKey.substring(apiKey.length - 4);
+    console.log(`[AI] Creating OpenAI client with key: ${maskedKey}`);
+
     openaiClient = new OpenAI({ apiKey });
+    console.log("[AI] OpenAI client created successfully");
   }
   return openaiClient;
 }
+
+// ============================================================================
+// Types
+// ============================================================================
 
 export interface AIAnalysisResult {
   success: boolean;
   data?: unknown;
   error?: string;
+  demoMode?: boolean;
   usage?: {
     promptTokens: number;
     completionTokens: number;
@@ -25,6 +66,18 @@ export interface AIAnalysisResult {
   };
 }
 
+export interface AIExtractionResult<T = unknown> extends AIAnalysisResult {
+  data?: T;
+}
+
+// ============================================================================
+// Main AI Analysis Function
+// ============================================================================
+
+/**
+ * Run AI analysis with comprehensive logging and error handling.
+ * Does NOT fall back silently - always indicates whether demo mode is used.
+ */
 export async function runAIAnalysis(
   systemPrompt: string,
   userPrompt: string,
@@ -38,7 +91,32 @@ export async function runAIAnalysis(
   const temperature = options?.temperature ?? 0.1;
   const maxTokens = options?.maxTokens || 4096;
 
+  console.log("[AI] ========================================");
+  console.log("[AI] Starting AI analysis...");
+  console.log(`[AI] Model: ${model}`);
+  console.log(`[AI] Temperature: ${temperature}`);
+  console.log(`[AI] Max tokens: ${maxTokens}`);
+  console.log(`[AI] System prompt length: ${systemPrompt.length} chars`);
+  console.log(`[AI] User prompt length: ${userPrompt.length} chars`);
+
+  // Check API configuration
+  const aiConfig = isAIConfigured();
+  if (!aiConfig.configured) {
+    console.warn("[AI] No API key configured - cannot perform real AI analysis");
+    console.warn("[AI] Set OPENAI_API_KEY environment variable to enable AI features");
+    return {
+      success: false,
+      demoMode: true,
+      error: "No AI API key configured. Using demo mode.",
+    };
+  }
+
+  console.log(`[AI] Using provider: ${aiConfig.provider}`);
+
   try {
+    console.log("[AI] Calling OpenAI API...");
+    const startTime = Date.now();
+
     const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
       model,
@@ -51,46 +129,106 @@ export async function runAIAnalysis(
       response_format: { type: "json_object" },
     });
 
+    const duration = Date.now() - startTime;
+    console.log(`[AI] API call completed in ${duration}ms`);
+    console.log(`[AI] Response ID: ${response.id}`);
+    console.log(`[AI] Model used: ${response.model}`);
+    console.log(`[AI] Finish reason: ${response.choices[0]?.finish_reason}`);
+
     const content = response.choices[0]?.message?.content;
 
     if (!content) {
+      console.error("[AI] No content in response");
       return {
         success: false,
+        demoMode: false,
         error: "No response content from AI",
       };
     }
 
+    console.log(`[AI] Response content length: ${content.length} chars`);
+
     // Parse the JSON response
-    const data = JSON.parse(content);
-
-    return {
-      success: true,
-      data,
-      usage: {
-        promptTokens: response.usage?.prompt_tokens || 0,
-        completionTokens: response.usage?.completion_tokens || 0,
-        totalTokens: response.usage?.total_tokens || 0,
-      },
-    };
-  } catch (error) {
-    console.error("AI analysis error:", error);
-
-    if (error instanceof SyntaxError) {
+    let data;
+    try {
+      data = JSON.parse(content);
+      console.log("[AI] JSON parsed successfully");
+    } catch (parseError) {
+      console.error("[AI] Failed to parse JSON response:", parseError);
+      console.error("[AI] Raw content preview:", content.substring(0, 500));
       return {
         success: false,
+        demoMode: false,
         error: "Failed to parse AI response as JSON",
       };
     }
 
+    const usage = {
+      promptTokens: response.usage?.prompt_tokens || 0,
+      completionTokens: response.usage?.completion_tokens || 0,
+      totalTokens: response.usage?.total_tokens || 0,
+    };
+
+    console.log(`[AI] Token usage - Prompt: ${usage.promptTokens}, Completion: ${usage.completionTokens}, Total: ${usage.totalTokens}`);
+    console.log("[AI] Analysis completed successfully");
+    console.log("[AI] ========================================");
+
+    return {
+      success: true,
+      demoMode: false,
+      data,
+      usage,
+    };
+  } catch (error) {
+    console.error("[AI] ========================================");
+    console.error("[AI] AI analysis failed with error:");
+    console.error("[AI] Error type:", error?.constructor?.name);
+    console.error("[AI] Error message:", error instanceof Error ? error.message : String(error));
+
     if (error instanceof OpenAI.APIError) {
+      console.error("[AI] OpenAI API Error Details:");
+      console.error(`[AI]   Status: ${error.status}`);
+      console.error(`[AI]   Code: ${error.code}`);
+      console.error(`[AI]   Type: ${error.type}`);
+
+      // Specific error handling for common issues
+      if (error.status === 401) {
+        console.error("[AI] Authentication failed - check your API key");
+        return {
+          success: false,
+          demoMode: true,
+          error: "API authentication failed. Check your OPENAI_API_KEY.",
+        };
+      }
+      if (error.status === 429) {
+        console.error("[AI] Rate limit exceeded or quota exhausted");
+        return {
+          success: false,
+          demoMode: true,
+          error: "API rate limit exceeded. Please try again later.",
+        };
+      }
+      if (error.status === 500 || error.status === 503) {
+        console.error("[AI] OpenAI service unavailable");
+        return {
+          success: false,
+          demoMode: true,
+          error: "OpenAI service temporarily unavailable.",
+        };
+      }
+
       return {
         success: false,
+        demoMode: false,
         error: `OpenAI API error: ${error.message}`,
       };
     }
 
+    console.error("[AI] ========================================");
+
     return {
       success: false,
+      demoMode: false,
       error: error instanceof Error ? error.message : "Unknown error",
     };
   }

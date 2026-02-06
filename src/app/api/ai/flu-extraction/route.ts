@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   runAIAnalysis,
   getMockFLUExtractionResult,
+  isAIConfigured,
 } from "@/lib/ai/client";
 import {
   FLU_PROCEDURE_EXTRACTION_SYSTEM_PROMPT,
@@ -16,6 +17,7 @@ const fluExtractionStore: Map<string, {
   sourceFileName: string;
   result: unknown;
   tokensUsed: number;
+  demoMode: boolean;
   createdAt: string;
 }> = new Map();
 
@@ -29,40 +31,57 @@ export async function POST(request: NextRequest) {
       useMock = false,
     } = body;
 
+    console.log("[FLU-API] ========================================");
+    console.log("[FLU-API] POST request received");
+    console.log(`[FLU-API] Audit Run ID: ${auditRunId}`);
+    console.log(`[FLU-API] Source file: ${sourceFileName}`);
+    console.log(`[FLU-API] useMock flag: ${useMock}`);
+    console.log(`[FLU-API] Content provided: ${!!proceduresContent}`);
+    console.log(`[FLU-API] Content length: ${proceduresContent?.length || 0} chars`);
+
     if (!auditRunId) {
+      console.error("[FLU-API] Missing audit run ID");
       return NextResponse.json(
         { error: "Audit run ID is required" },
         { status: 400 }
       );
     }
 
+    // Check AI configuration
+    const aiConfig = isAIConfigured();
+    console.log(`[FLU-API] AI configured: ${aiConfig.configured}`);
+    console.log(`[FLU-API] AI provider: ${aiConfig.provider || 'none'}`);
+
     let result;
     let tokensUsed = 0;
+    let demoMode = false;
 
-    // Debug: Log whether API key is present (not the actual key!)
-    console.log("OPENAI_API_KEY present:", !!process.env.OPENAI_API_KEY);
-    console.log("useMock flag:", useMock);
-    console.log("sourceFileName:", sourceFileName);
+    // Determine if we should use mock data
+    const shouldUseMock = useMock || !aiConfig.configured || !proceduresContent;
 
-    if (useMock || !process.env.OPENAI_API_KEY) {
-      // Use mock data for demo
-      console.log("Using MOCK data - either useMock=true or no API key");
+    if (shouldUseMock) {
+      demoMode = true;
+      const reason = useMock
+        ? "useMock flag set to true"
+        : !aiConfig.configured
+          ? "No AI API key configured"
+          : "No procedures content provided";
+
+      console.log(`[FLU-API] Using DEMO MODE - Reason: ${reason}`);
+
       result = {
         success: true,
+        demoMode: true,
         data: getMockFLUExtractionResult(),
       };
-    } else {
-      console.log("Using REAL OpenAI API for FLU extraction");
 
-      if (!proceduresContent) {
-        return NextResponse.json(
-          { error: "FLU procedures content is required" },
-          { status: 400 }
-        );
-      }
+      console.log("[FLU-API] Mock data loaded successfully");
+    } else {
+      console.log("[FLU-API] Using REAL AI for FLU extraction");
 
       // Run AI analysis with FLU extraction prompt
       const userPrompt = buildFLUExtractionPrompt(proceduresContent, sourceFileName);
+      console.log(`[FLU-API] Built user prompt: ${userPrompt.length} chars`);
 
       result = await runAIAnalysis(
         FLU_PROCEDURE_EXTRACTION_SYSTEM_PROMPT,
@@ -74,16 +93,38 @@ export async function POST(request: NextRequest) {
         }
       );
 
-      if (result.usage) {
+      // Check if AI returned demo mode flag (e.g., due to auth failure)
+      if (result.demoMode) {
+        console.log("[FLU-API] AI analysis returned demoMode flag, falling back to mock data");
+        demoMode = true;
+        result = {
+          success: true,
+          demoMode: true,
+          data: getMockFLUExtractionResult(),
+        };
+      } else if (result.usage) {
         tokensUsed = result.usage.totalTokens;
       }
     }
 
     if (!result.success) {
-      return NextResponse.json(
-        { error: result.error || "FLU extraction failed" },
-        { status: 500 }
-      );
+      console.error(`[FLU-API] Extraction failed: ${result.error}`);
+
+      // Even on failure, provide demo data if client-side error handling requests it
+      if (result.demoMode) {
+        console.log("[FLU-API] Falling back to demo data after failure");
+        result = {
+          success: true,
+          demoMode: true,
+          data: getMockFLUExtractionResult(),
+        };
+        demoMode = true;
+      } else {
+        return NextResponse.json(
+          { error: result.error || "FLU extraction failed", demoMode: false },
+          { status: 500 }
+        );
+      }
     }
 
     // Store the result
@@ -94,20 +135,30 @@ export async function POST(request: NextRequest) {
       sourceFileName,
       result: result.data,
       tokensUsed,
+      demoMode,
       createdAt: new Date().toISOString(),
     };
 
     fluExtractionStore.set(id, extractionResult);
 
+    console.log(`[FLU-API] Extraction result stored with ID: ${id}`);
+    console.log(`[FLU-API] Demo mode: ${demoMode}`);
+    console.log(`[FLU-API] Tokens used: ${tokensUsed}`);
+    console.log("[FLU-API] ========================================");
+
     return NextResponse.json({
       id,
       result: result.data,
       tokensUsed,
+      demoMode,
     });
   } catch (error) {
-    console.error("FLU extraction error:", error);
+    console.error("[FLU-API] ========================================");
+    console.error("[FLU-API] Unhandled error:", error);
+    console.error("[FLU-API] ========================================");
+
     return NextResponse.json(
-      { error: "Failed to run FLU extraction" },
+      { error: "Failed to run FLU extraction", demoMode: false },
       { status: 500 }
     );
   }

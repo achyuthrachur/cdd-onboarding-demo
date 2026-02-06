@@ -182,11 +182,13 @@ export default function AicStage4Page() {
       );
 
       // Generate pivoted workbooks (NEW format: rows=attributes, columns=customers)
+      // Includes acceptable docs for each attribute to enable document-based testing dropdown
       const pivoted = generatePivotedAuditorWorkbooks(
         samples,
         extractedAttributes,
         selectedAuditors,
-        { strategy: "round-robin" }
+        { strategy: "round-robin" },
+        acceptableDocs  // Pass acceptable docs for dropdown options
       );
 
       // Store in state and persist

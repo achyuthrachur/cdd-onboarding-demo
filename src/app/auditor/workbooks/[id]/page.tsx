@@ -1,12 +1,38 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AnimatedProgress } from "@/components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectSeparator,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -16,6 +42,14 @@ import {
   Send,
   AlertCircle,
   Loader2,
+  FileText,
+  Search,
+  Filter,
+  XCircle,
+  MinusCircle,
+  HelpCircle,
+  AlertTriangle,
+  Eye,
 } from "lucide-react";
 import {
   motion,
@@ -26,10 +60,6 @@ import {
   staggerContainer,
   staggerItem,
 } from "@/lib/animations";
-import { HotTable, HotTableClass } from "@handsontable/react";
-import { registerAllModules } from "handsontable/registry";
-import Handsontable from "handsontable";
-import "handsontable/dist/handsontable.full.min.css";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import {
@@ -37,29 +67,199 @@ import {
   setStageData,
   PivotedAuditorWorkbook,
   PivotedWorkbookRow,
+  AcceptableDocOption,
+  CustomerTestResult,
 } from "@/lib/stage-data";
 import { STANDARD_OBSERVATIONS } from "@/lib/workbook/builder";
 import { getCurrentAuditorId } from "@/lib/auth/session";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
-// Register Handsontable modules
-registerAllModules();
+// Helper to get result from selected document
+function getResultFromSelection(
+  selectedValue: string,
+  acceptableDocs: AcceptableDocOption[]
+): CustomerTestResult['result'] {
+  if (!selectedValue) return '';
+  const option = acceptableDocs.find(doc => doc.value === selectedValue);
+  return option?.resultMapping || '';
+}
 
-// Result options for dropdown
-const RESULT_DROPDOWN_OPTIONS = ['', 'Pass', 'Pass w/Observation', 'Fail 1 - Regulatory', 'Fail 2 - Procedure', 'Question to LOB', 'N/A'];
+// Helper to check if selection requires observation modal
+function selectionRequiresObservation(selectedValue: string): boolean {
+  return selectedValue === 'other-issue';
+}
+
+// Get badge color based on result
+function getResultBadgeClass(result: string): string {
+  switch (result) {
+    case 'Pass':
+      return 'bg-crowe-teal/20 text-crowe-teal-bright border-crowe-teal/40';
+    case 'Pass w/Observation':
+      return 'bg-crowe-amber/20 text-crowe-amber-bright border-crowe-amber/40';
+    case 'Fail 1 - Regulatory':
+      return 'bg-crowe-coral/20 text-crowe-coral-bright border-crowe-coral/40';
+    case 'Fail 2 - Procedure':
+      return 'bg-crowe-amber-dark/20 text-crowe-amber border-crowe-amber-dark/40';
+    case 'Question to LOB':
+      return 'bg-crowe-blue/20 text-crowe-blue-light border-crowe-blue/40';
+    case 'N/A':
+      return 'bg-white/10 text-white/60 border-white/20';
+    default:
+      return 'bg-white/5 text-white/40 border-white/10';
+  }
+}
+
+// Get result icon
+function getResultIcon(result: string) {
+  switch (result) {
+    case 'Pass':
+      return <CheckCircle2 className="h-3 w-3" />;
+    case 'Pass w/Observation':
+      return <CheckCircle2 className="h-3 w-3" />;
+    case 'Fail 1 - Regulatory':
+      return <XCircle className="h-3 w-3" />;
+    case 'Fail 2 - Procedure':
+      return <AlertTriangle className="h-3 w-3" />;
+    case 'Question to LOB':
+      return <HelpCircle className="h-3 w-3" />;
+    case 'N/A':
+      return <MinusCircle className="h-3 w-3" />;
+    default:
+      return null;
+  }
+}
+
+// Document Selection Cell Component
+interface DocumentSelectionCellProps {
+  row: PivotedWorkbookRow;
+  customerId: string;
+  customerResult: CustomerTestResult | undefined;
+  isSubmitted: boolean;
+  onSelectionChange: (rowId: string, customerId: string, selectedDoc: string, result: CustomerTestResult['result']) => void;
+  onObservationRequired: (rowId: string, customerId: string, selectedDoc: string) => void;
+}
+
+function DocumentSelectionCell({
+  row,
+  customerId,
+  customerResult,
+  isSubmitted,
+  onSelectionChange,
+  onObservationRequired,
+}: DocumentSelectionCellProps) {
+  const selectedDoc = customerResult?.selectedDocument || '';
+  const result = customerResult?.result || '';
+  const acceptableDocs = row.acceptableDocs || [];
+
+  // Separate document options from system options
+  const documentOptions = acceptableDocs.filter(doc => !doc.isSystemOption);
+  const systemOptions = acceptableDocs.filter(doc => doc.isSystemOption);
+
+  const handleChange = (value: string) => {
+    if (selectionRequiresObservation(value)) {
+      // Open observation modal
+      onObservationRequired(row.id, customerId, value);
+    } else {
+      // Direct selection - derive result from doc
+      const newResult = getResultFromSelection(value, acceptableDocs);
+      onSelectionChange(row.id, customerId, value, newResult);
+    }
+  };
+
+  // Get display label for current selection
+  const getDisplayLabel = () => {
+    if (!selectedDoc) return 'Select...';
+    const option = acceptableDocs.find(doc => doc.value === selectedDoc);
+    return option?.label || selectedDoc;
+  };
+
+  return (
+    <div className="flex flex-col gap-1">
+      <Select
+        value={selectedDoc}
+        onValueChange={handleChange}
+        disabled={isSubmitted}
+      >
+        <SelectTrigger className={cn(
+          "w-full h-8 text-xs bg-white/10 border-white/20 text-white",
+          result && getResultBadgeClass(result)
+        )}>
+          <div className="flex items-center gap-1.5 truncate">
+            {result && getResultIcon(result)}
+            <SelectValue placeholder="Select document...">
+              <span className="truncate">{getDisplayLabel()}</span>
+            </SelectValue>
+          </div>
+        </SelectTrigger>
+        <SelectContent className="max-h-[300px] bg-crowe-indigo-dark/95 backdrop-blur-xl border-white/20">
+          {/* Empty option */}
+          <SelectItem value="" className="text-white/50 text-xs">
+            Select...
+          </SelectItem>
+
+          {/* Acceptable Documents Section */}
+          {documentOptions.length > 0 && (
+            <>
+              <div className="px-2 py-1.5 text-xs font-semibold text-crowe-amber-bright bg-crowe-amber/10 sticky top-0">
+                <FileText className="h-3 w-3 inline mr-1.5" />
+                Acceptable Documents (Pass)
+              </div>
+              {documentOptions.map((doc) => (
+                <SelectItem
+                  key={doc.value}
+                  value={doc.value}
+                  className="text-xs text-white hover:bg-crowe-teal/20"
+                >
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3 w-3 text-crowe-teal-bright" />
+                    <span>{doc.label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </>
+          )}
+
+          <SelectSeparator className="bg-white/20" />
+
+          {/* System Options Section */}
+          <div className="px-2 py-1.5 text-xs font-semibold text-white/60 bg-white/5 sticky top-0">
+            Other Options
+          </div>
+          {systemOptions.map((doc) => (
+            <SelectItem
+              key={doc.value}
+              value={doc.value}
+              className={cn(
+                "text-xs hover:bg-white/10",
+                doc.resultMapping.includes('Fail') && "text-crowe-coral-bright",
+                doc.resultMapping === 'Question to LOB' && "text-crowe-blue-light",
+                doc.resultMapping === 'N/A' && "text-white/60",
+                doc.resultMapping === 'Pass w/Observation' && "text-crowe-amber-bright"
+              )}
+            >
+              <div className="flex items-center gap-2">
+                {getResultIcon(doc.resultMapping)}
+                <span>{doc.label}</span>
+              </div>
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {/* Show observation if exists */}
+      {customerResult?.observation && (
+        <div className="text-[10px] text-white/50 truncate" title={customerResult.observation}>
+          Obs: {customerResult.observation.substring(0, 30)}...
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AuditorWorkbookPage() {
   const params = useParams();
   const router = useRouter();
   const workbookId = params.id as string;
-  const hotRef = useRef<HotTableClass>(null);
 
   const [workbook, setWorkbook] = useState<PivotedAuditorWorkbook | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -67,6 +267,24 @@ export default function AuditorWorkbookPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+
+  // Observation modal state
+  const [observationModal, setObservationModal] = useState<{
+    isOpen: boolean;
+    rowId: string;
+    customerId: string;
+    selectedDoc: string;
+    observation: string;
+  }>({
+    isOpen: false,
+    rowId: '',
+    customerId: '',
+    selectedDoc: '',
+    observation: '',
+  });
+
   const [testingProgress, setTestingProgress] = useState({
     totalTests: 0,
     completedTests: 0,
@@ -116,66 +334,25 @@ export default function AuditorWorkbookPage() {
     setIsLoading(false);
   }, [workbookId, router]);
 
-  // Build Handsontable columns dynamically
-  const { columns, colHeaders } = useMemo(() => {
-    if (!workbook) {
-      return { columns: [], colHeaders: [] };
-    }
-
-    const cols: Handsontable.ColumnSettings[] = [
-      { data: 0, readOnly: true, width: 80 },
-      { data: 1, readOnly: true, width: 60 },
-      { data: 2, readOnly: true, width: 300 },
-    ];
-
-    const headers: string[] = ['Attr ID', 'Category', 'Question Text'];
-
-    // Add columns for each customer
-    workbook.assignedCustomers.forEach((customer, idx) => {
-      const baseCol = 3 + (idx * 2);
-
-      cols.push({
-        data: baseCol,
-        type: 'dropdown',
-        source: RESULT_DROPDOWN_OPTIONS,
-        width: 120,
-        readOnly: isSubmitted,
-      });
-      headers.push(`${customer.customerName.substring(0, 15)}... Result`);
-
-      cols.push({
-        data: baseCol + 1,
-        type: 'dropdown',
-        source: ['', ...STANDARD_OBSERVATIONS.map(o => o.text)],
-        width: 150,
-        readOnly: isSubmitted,
-      });
-      headers.push(`Observation`);
-    });
-
-    return { columns: cols, colHeaders: headers };
-  }, [workbook, isSubmitted]);
-
-  // Convert rows to table format
-  const tableData = useMemo(() => {
+  // Get unique categories
+  const categories = useMemo(() => {
     if (!workbook) return [];
-
-    return workbook.rows.map(row => {
-      const rowData: (string | number)[] = [
-        row.attributeId,
-        row.attributeCategory,
-        row.questionText,
-      ];
-
-      workbook.assignedCustomers.forEach(customer => {
-        const result = row.customerResults[customer.customerId];
-        rowData.push(result?.result || '');
-        rowData.push(result?.observation || '');
-      });
-
-      return rowData;
-    });
+    const cats = new Set(workbook.rows.map(r => r.attributeCategory));
+    return Array.from(cats);
   }, [workbook]);
+
+  // Filter rows
+  const filteredRows = useMemo(() => {
+    if (!workbook) return [];
+    return workbook.rows.filter(row => {
+      const matchesSearch =
+        row.attributeId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.questionText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (row.attributeName?.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchesCategory = categoryFilter === 'all' || row.attributeCategory === categoryFilter;
+      return matchesSearch && matchesCategory;
+    });
+  }, [workbook, searchTerm, categoryFilter]);
 
   // Calculate progress
   const updateProgressFromWorkbook = (wb: PivotedAuditorWorkbook) => {
@@ -228,47 +405,41 @@ export default function AuditorWorkbookPage() {
     });
   };
 
-  // Handle cell changes
-  const handleDataChange = useCallback((changes: Handsontable.CellChange[] | null) => {
-    if (!changes || !workbook || isSubmitted) return;
+  // Handle document selection change
+  const handleSelectionChange = useCallback((
+    rowId: string,
+    customerId: string,
+    selectedDoc: string,
+    result: CustomerTestResult['result']
+  ) => {
+    if (!workbook || isSubmitted) return;
 
     const updatedWorkbook = { ...workbook };
     const updatedRows = [...updatedWorkbook.rows];
+    const rowIndex = updatedRows.findIndex(r => r.id === rowId);
 
-    changes.forEach(([rowIndex, colIndex, , newValue]) => {
-      if (typeof colIndex !== 'number' || colIndex < 3) return;
+    if (rowIndex === -1) return;
 
-      const customerIndex = Math.floor((colIndex - 3) / 2);
-      const isResultField = (colIndex - 3) % 2 === 0;
-      const customer = workbook.assignedCustomers[customerIndex];
+    const row = { ...updatedRows[rowIndex] };
+    const customerResults = { ...row.customerResults };
+    const existingResult = customerResults[customerId];
 
-      if (!customer) return;
+    customerResults[customerId] = {
+      customerId: existingResult?.customerId || customerId,
+      customerName: existingResult?.customerName || '',
+      selectedDocument: selectedDoc,
+      result: result,
+      observation: existingResult?.observation || '',
+    };
 
-      const row = { ...updatedRows[rowIndex] };
-      const customerResults = { ...row.customerResults };
-      const customerResult = { ...(customerResults[customer.customerId] || {
-        customerId: customer.customerId,
-        customerName: customer.customerName,
-        result: '',
-        observation: '',
-      }) };
-
-      if (isResultField) {
-        customerResult.result = newValue as PivotedWorkbookRow['customerResults'][string]['result'];
-      } else {
-        customerResult.observation = String(newValue || '');
-      }
-
-      customerResults[customer.customerId] = customerResult;
-      row.customerResults = customerResults;
-      updatedRows[rowIndex] = row;
-    });
-
+    row.customerResults = customerResults;
+    updatedRows[rowIndex] = row;
     updatedWorkbook.rows = updatedRows;
+
     setWorkbook(updatedWorkbook);
     updateProgressFromWorkbook(updatedWorkbook);
 
-    // Update in storage (auto-save)
+    // Auto-save to storage
     const pivotedWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
     if (pivotedWorkbooks) {
       const idx = pivotedWorkbooks.findIndex(wb => wb.auditorId === workbook.auditorId);
@@ -278,6 +449,65 @@ export default function AuditorWorkbookPage() {
       }
     }
   }, [workbook, isSubmitted]);
+
+  // Handle observation required (opens modal)
+  const handleObservationRequired = useCallback((rowId: string, customerId: string, selectedDoc: string) => {
+    setObservationModal({
+      isOpen: true,
+      rowId,
+      customerId,
+      selectedDoc,
+      observation: '',
+    });
+  }, []);
+
+  // Handle observation submit
+  const handleObservationSubmit = useCallback(() => {
+    const { rowId, customerId, selectedDoc, observation } = observationModal;
+    if (!workbook || isSubmitted) return;
+
+    const row = workbook.rows.find(r => r.id === rowId);
+    if (!row) return;
+
+    const result = getResultFromSelection(selectedDoc, row.acceptableDocs || []);
+
+    const updatedWorkbook = { ...workbook };
+    const updatedRows = [...updatedWorkbook.rows];
+    const rowIndex = updatedRows.findIndex(r => r.id === rowId);
+
+    if (rowIndex === -1) return;
+
+    const updatedRow = { ...updatedRows[rowIndex] };
+    const customerResults = { ...updatedRow.customerResults };
+    const existingResult = customerResults[customerId];
+
+    customerResults[customerId] = {
+      customerId: existingResult?.customerId || customerId,
+      customerName: existingResult?.customerName || '',
+      selectedDocument: selectedDoc,
+      result: result,
+      observation: observation,
+    };
+
+    updatedRow.customerResults = customerResults;
+    updatedRows[rowIndex] = updatedRow;
+    updatedWorkbook.rows = updatedRows;
+
+    setWorkbook(updatedWorkbook);
+    updateProgressFromWorkbook(updatedWorkbook);
+
+    // Auto-save to storage
+    const pivotedWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
+    if (pivotedWorkbooks) {
+      const idx = pivotedWorkbooks.findIndex(wb => wb.auditorId === workbook.auditorId);
+      if (idx !== -1) {
+        pivotedWorkbooks[idx] = updatedWorkbook;
+        setStageData("pivotedWorkbooks", pivotedWorkbooks);
+      }
+    }
+
+    setObservationModal({ isOpen: false, rowId: '', customerId: '', selectedDoc: '', observation: '' });
+  }, [workbook, isSubmitted, observationModal]);
 
   // Save progress
   const handleSave = async () => {
@@ -351,11 +581,23 @@ export default function AuditorWorkbookPage() {
 
     const headers = ['Attribute ID', 'Category', 'Question Text'];
     workbook.assignedCustomers.forEach(customer => {
+      headers.push(`${customer.customerName} - Document`);
       headers.push(`${customer.customerName} - Result`);
       headers.push(`${customer.customerName} - Observation`);
     });
 
-    const data = [headers, ...tableData];
+    const data = [headers];
+    workbook.rows.forEach(row => {
+      const rowData: string[] = [row.attributeId, row.attributeCategory, row.questionText];
+      workbook.assignedCustomers.forEach(customer => {
+        const result = row.customerResults[customer.customerId];
+        const selectedDocLabel = row.acceptableDocs?.find(d => d.value === result?.selectedDocument)?.label || '';
+        rowData.push(selectedDocLabel);
+        rowData.push(result?.result || '');
+        rowData.push(result?.observation || '');
+      });
+      data.push(rowData);
+    });
 
     const ws = XLSX.utils.aoa_to_sheet(data);
     XLSX.utils.book_append_sheet(wb, ws, 'Testing Workbook');
@@ -422,7 +664,7 @@ export default function AuditorWorkbookPage() {
               )}
             </div>
             <p className="text-white/50 mt-2">
-              {workbook.assignedCustomers.length} customers • {workbook.attributes.length} attributes
+              {workbook.assignedCustomers.length} customers | {workbook.attributes.length} attributes
             </p>
           </div>
           <motion.div
@@ -569,7 +811,7 @@ export default function AuditorWorkbookPage() {
                   Testing Grid
                 </CardTitle>
                 <CardDescription className="text-white/60">
-                  Rows: Attributes | Columns: Customer Results
+                  Select the acceptable document found for each test
                 </CardDescription>
               </div>
               <AnimatePresence>
@@ -589,6 +831,31 @@ export default function AuditorWorkbookPage() {
             </div>
           </CardHeader>
           <CardContent>
+            {/* Filters */}
+            <div className="flex gap-3 mb-4">
+              <div className="relative flex-1 max-w-xs">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+                <Input
+                  placeholder="Search attributes..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9 bg-white/10 border-white/20 text-white placeholder:text-white/40"
+                />
+              </div>
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="w-40 bg-white/10 border-white/20 text-white">
+                  <Filter className="h-4 w-4 mr-2 text-white/40" />
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent className="bg-crowe-indigo-dark/95 backdrop-blur-xl border-white/20">
+                  <SelectItem value="all" className="text-white">All Categories</SelectItem>
+                  {categories.map(cat => (
+                    <SelectItem key={cat} value={cat} className="text-white">{cat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Customer Legend */}
             <div className="mb-4 p-3 bg-white/5 rounded-lg border border-white/10">
               <div className="text-xs font-medium text-white/50 mb-2">Assigned Customers:</div>
@@ -601,45 +868,78 @@ export default function AuditorWorkbookPage() {
               </div>
             </div>
 
-            {/* Handsontable */}
-            {tableData.length > 0 && (
-              <div className="border border-white/20 rounded-lg overflow-hidden bg-white/5">
-                <HotTable
-                  ref={hotRef}
-                  data={tableData}
-                  colHeaders={colHeaders}
-                  rowHeaders={true}
-                  width="100%"
-                  height={500}
-                  licenseKey="non-commercial-and-evaluation"
-                  stretchH="all"
-                  autoRowSize={true}
-                  columnSorting={true}
-                  filters={true}
-                  dropdownMenu={true}
-                  manualColumnResize={true}
-                  fixedColumnsStart={3}
-                  afterChange={handleDataChange}
-                  columns={columns}
-                  cells={(row, col) => {
-                    const cellProperties: { className?: string } = {};
-                    if (col >= 3 && (col - 3) % 2 === 0 && tableData[row]) {
-                      const value = String(tableData[row][col] || '').toLowerCase();
-                      if (value.startsWith('pass')) {
-                        cellProperties.className = 'bg-green-50 dark:bg-green-950';
-                      } else if (value.startsWith('fail')) {
-                        cellProperties.className = 'bg-red-50 dark:bg-red-950';
-                      } else if (value === 'n/a') {
-                        cellProperties.className = 'bg-gray-50 dark:bg-gray-950';
-                      } else if (value === 'question to lob') {
-                        cellProperties.className = 'bg-blue-50 dark:bg-blue-950';
-                      }
-                    }
-                    return cellProperties;
-                  }}
-                />
+            {/* Testing Table */}
+            <div className="border border-white/20 rounded-lg overflow-hidden bg-white/5">
+              <div className="overflow-x-auto max-h-[500px]">
+                <Table>
+                  <TableHeader className="sticky top-0 bg-crowe-indigo-dark z-10">
+                    <TableRow className="border-white/20 hover:bg-transparent">
+                      <TableHead className="w-24 text-white/70 bg-crowe-indigo-dark">Attr ID</TableHead>
+                      <TableHead className="w-20 text-white/70 bg-crowe-indigo-dark">Category</TableHead>
+                      <TableHead className="min-w-[200px] text-white/70 bg-crowe-indigo-dark">Question</TableHead>
+                      {workbook.assignedCustomers.map((customer, idx) => (
+                        <TableHead
+                          key={customer.customerId}
+                          className="min-w-[180px] text-white/70 bg-crowe-indigo-dark"
+                        >
+                          <div className="flex flex-col">
+                            <span className="truncate" title={customer.customerName}>
+                              {idx + 1}. {customer.customerName.substring(0, 12)}...
+                            </span>
+                            <span className="text-[10px] text-white/40 font-normal">
+                              {customer.customerId}
+                            </span>
+                          </div>
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredRows.map((row) => (
+                      <TableRow key={row.id} className="border-white/10 hover:bg-white/5">
+                        <TableCell className="font-mono text-xs text-white/70">
+                          {row.attributeId}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-[10px] border-white/20 text-white/60">
+                            {row.attributeCategory}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-xs text-white/80" title={row.questionText}>
+                          <div className="line-clamp-2">{row.questionText}</div>
+                        </TableCell>
+                        {workbook.assignedCustomers.map((customer) => (
+                          <TableCell key={`${row.id}-${customer.customerId}`} className="p-2">
+                            <DocumentSelectionCell
+                              row={row}
+                              customerId={customer.customerId}
+                              customerResult={row.customerResults[customer.customerId]}
+                              isSubmitted={isSubmitted}
+                              onSelectionChange={handleSelectionChange}
+                              onObservationRequired={handleObservationRequired}
+                            />
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                    {filteredRows.length === 0 && (
+                      <TableRow>
+                        <TableCell
+                          colSpan={3 + workbook.assignedCustomers.length}
+                          className="text-center py-8 text-white/50"
+                        >
+                          No rows match your filter criteria
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
               </div>
-            )}
+            </div>
+
+            <div className="mt-3 text-xs text-white/40">
+              Showing {filteredRows.length} of {workbook.rows.length} attributes
+            </div>
           </CardContent>
         </Card>
       </motion.div>
@@ -669,6 +969,74 @@ export default function AuditorWorkbookPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Observation Modal */}
+      <Dialog open={observationModal.isOpen} onOpenChange={(open) => {
+        if (!open) {
+          setObservationModal({ isOpen: false, rowId: '', customerId: '', selectedDoc: '', observation: '' });
+        }
+      }}>
+        <DialogContent className="bg-crowe-indigo-dark/95 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+          <DialogHeader>
+            <DialogTitle className="text-white">Add Observation</DialogTitle>
+            <DialogDescription className="text-white/60">
+              Please provide an observation for this test result.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-white/70 mb-2 block">
+                  Select Observation Type
+                </label>
+                <Select
+                  value={observationModal.observation}
+                  onValueChange={(value) => setObservationModal(prev => ({ ...prev, observation: value }))}
+                >
+                  <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                    <SelectValue placeholder="Select a standard observation..." />
+                  </SelectTrigger>
+                  <SelectContent className="bg-crowe-indigo-dark/95 backdrop-blur-xl border-white/20 max-h-[300px]">
+                    {STANDARD_OBSERVATIONS.map((obs) => (
+                      <SelectItem key={obs.id} value={obs.text} className="text-white text-xs">
+                        {obs.text}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-white/70 mb-2 block">
+                  Or enter custom observation
+                </label>
+                <Textarea
+                  value={observationModal.observation}
+                  onChange={(e) => setObservationModal(prev => ({ ...prev, observation: e.target.value }))}
+                  placeholder="Enter custom observation..."
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
+                  rows={3}
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setObservationModal({ isOpen: false, rowId: '', customerId: '', selectedDoc: '', observation: '' })}
+              className="border-white/20 text-white hover:bg-white/10"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleObservationSubmit}
+              disabled={!observationModal.observation}
+              className="bg-crowe-amber text-crowe-indigo-dark hover:bg-crowe-amber-bright"
+            >
+              Save Observation
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Submit Confirmation Dialog */}
       <Dialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>

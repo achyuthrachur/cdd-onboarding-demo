@@ -75,12 +75,57 @@ const PROCEDURAL_FAILURES = [
   "Control person certification form missing signature",
 ];
 
-// Question to LOB reasons
-const LOB_QUESTIONS = [
-  "Unclear if customer is considered high-risk under procedures - awaiting clarification",
-  "Conflicting information between formation docs and ownership certification",
-  "Unable to locate supporting documentation referenced in case notes",
-  "System shows different risk rating than documented in file",
+/**
+ * LOB Question structure for realistic "Questions to Line of Business" content
+ */
+interface LOBQuestion {
+  attributeName: string;
+  question: string;
+  context: string;
+}
+
+// Sample LOB Questions - realistic questions that auditors might escalate to LOB
+const SAMPLE_LOB_QUESTIONS: LOBQuestion[] = [
+  {
+    attributeName: "Beneficial Owner Identification",
+    question: "Customer file shows 3 beneficial owners but only 2 have been verified. Can LOB confirm if the third owner (John Doe, 15% ownership) was verified through an alternative process?",
+    context: "CIP requirements mandate verification of all beneficial owners with 25%+ ownership, but bank policy requires verification of all listed owners.",
+  },
+  {
+    attributeName: "Source of Funds Documentation",
+    question: "The source of funds declaration indicates 'investment income' but no supporting documentation is on file. Has the relationship manager obtained verbal confirmation or alternative verification?",
+    context: "Enhanced due diligence requirement for high-risk customers.",
+  },
+  {
+    attributeName: "Tax ID Verification",
+    question: "TIN validation returned a name mismatch (file shows 'ABC Corp' but IRS records show 'ABC Corporation Inc.'). Has this discrepancy been reviewed and documented?",
+    context: "Minor name variations may be acceptable with documented explanation.",
+  },
+  {
+    attributeName: "Address Verification",
+    question: "Customer's registered address is a UPS Store location. Has LOB verified this is the actual business operating address or obtained the physical business location?",
+    context: "Virtual addresses require additional verification per procedure.",
+  },
+  {
+    attributeName: "Purpose of Account",
+    question: "Account opening documentation shows 'general business use' but transaction history shows primarily international wire activity. Has the account purpose been re-confirmed?",
+    context: "Activity inconsistent with stated purpose requires review.",
+  },
+  {
+    attributeName: "Business License Verification",
+    question: "Business license on file expired 6 months ago. Has LOB obtained updated licensing documentation or verified exemption status?",
+    context: "Current business licensing required for certain industries.",
+  },
+  {
+    attributeName: "Authorized Signer Documentation",
+    question: "Corporate resolution authorizing account signers is dated 2019. Has LOB confirmed these individuals are still authorized representatives?",
+    context: "Best practice to refresh corporate authorizations periodically.",
+  },
+  {
+    attributeName: "Customer Due Diligence Refresh",
+    question: "CDD profile indicates last refresh was 38 months ago. High-risk customers require 12-month refresh cycle. Has an updated CDD been completed?",
+    context: "Regulatory requirement for periodic CDD refresh based on risk rating.",
+  },
 ];
 
 /**
@@ -124,6 +169,13 @@ function determineResultType(config: PopulationConfig): ResultType {
 }
 
 /**
+ * Format LOB question with full context for display
+ */
+function formatLOBQuestion(lobQuestion: LOBQuestion): string {
+  return `[${lobQuestion.attributeName}] ${lobQuestion.question}\n\nContext: ${lobQuestion.context}`;
+}
+
+/**
  * Generate appropriate observation text based on result type
  */
 function generateObservation(result: ResultType, attributeId: string): string {
@@ -137,7 +189,8 @@ function generateObservation(result: ResultType, attributeId: string): string {
     case "Fail 2 - Procedure":
       return getRandomItem(PROCEDURAL_FAILURES);
     case "Question to LOB":
-      return getRandomItem(LOB_QUESTIONS);
+      const lobQuestion = getRandomItem(SAMPLE_LOB_QUESTIONS);
+      return formatLOBQuestion(lobQuestion);
     case "N/A":
       return "Not applicable to this customer type";
     default:

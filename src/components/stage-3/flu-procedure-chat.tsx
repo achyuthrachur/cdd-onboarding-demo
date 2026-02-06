@@ -283,10 +283,12 @@ export function FLUProcedureChat({
       }
 
       const data = await response.json();
+      const isDemoMode = data.demoMode === true;
       const result: FLUExtractionResult = {
         id: data.id,
         workbook: data.result.workbook,
         tokensUsed: data.tokensUsed || 0,
+        demoMode: isDemoMode,
       };
 
       // Count attributes by category
@@ -296,16 +298,24 @@ export function FLUProcedureChat({
       const eddCount = attributes.filter(a => (a as unknown as Record<string, unknown>).Category === "EDD").length;
       const docsCount = result.workbook.sheets.find(s => s.name === "Acceptable_Docs")?.rows.length || 0;
 
+      // Build message based on whether this is demo mode or real AI
+      const modeIndicator = isDemoMode
+        ? "**[Demo Mode]** Using sample data. Configure OPENAI_API_KEY for AI extraction."
+        : "**[AI Powered]** Extraction completed using OpenAI GPT-4.";
+
       // Add success message
       addMessage({
         type: "assistant",
         content: `Extraction completed successfully!
+
+${modeIndicator}
 
 **Attributes Extracted:**
 - CIP (Customer Identification Program): ${cipCount} attributes
 - CDD (Customer Due Diligence): ${cddCount} attributes
 - EDD (Enhanced Due Diligence): ${eddCount} attributes
 - Acceptable Documents: ${docsCount} total
+${isDemoMode ? "" : `- Tokens Used: ${data.tokensUsed || 0}`}
 
 Click the "Results" tab to view and export the extracted attributes.`,
       });
@@ -333,6 +343,7 @@ Click the "Results" tab to view and export the extracted attributes.`,
           id: `flu-fallback-${Date.now()}`,
           workbook: mockData.workbook as FLUExtractionResult['workbook'],
           tokensUsed: 0,
+          demoMode: true,
         };
 
         // Count attributes by category
@@ -344,7 +355,9 @@ Click the "Results" tab to view and export the extracted attributes.`,
 
         addMessage({
           type: "assistant",
-          content: `Extraction completed using demo data!
+          content: `**[Demo Mode - Fallback]** Extraction completed using sample data!
+
+To enable AI-powered extraction, configure your OPENAI_API_KEY environment variable.
 
 **Attributes Extracted:**
 - CIP (Customer Identification Program): ${cipCount} attributes

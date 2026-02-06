@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   ArrowLeft,
   ArrowRight,
@@ -18,6 +19,9 @@ import {
   Database,
   AlertCircle,
   Loader2,
+  PieChart,
+  BarChart3,
+  LineChart,
 } from "lucide-react";
 import {
   motion,
@@ -30,6 +34,14 @@ import {
 import { toast } from "sonner";
 import { loadFallbackDataForStage, getStageData, setStageData } from "@/lib/stage-data";
 import type { PivotedAuditorWorkbook } from "@/lib/stage-data/store";
+import {
+  ResultPieChart,
+  AuditorBarChart,
+  ProgressTimeline,
+  CategoryBreakdown,
+  generateMockTimelineData,
+  CHART_COLORS,
+} from "@/components/charts";
 
 interface AuditorProgress {
   auditorId: string;
@@ -197,10 +209,44 @@ export default function AicMonitorPage() {
   // Calculate aggregate stats
   const totalAuditors = progress.length;
   const submittedCount = progress.filter(p => p.status === 'submitted').length;
+  const inProgressCount = progress.filter(p => p.status === 'in_progress').length;
+  const draftCount = progress.filter(p => p.status === 'draft').length;
   const averageCompletion = progress.length > 0
     ? Math.round(progress.reduce((sum, p) => sum + p.completionPercentage, 0) / progress.length)
     : 0;
   const allSubmitted = totalAuditors > 0 && submittedCount === totalAuditors;
+
+  // Prepare chart data
+  const statusPieData = useMemo(() => [
+    { name: 'Submitted', value: submittedCount, color: CHART_COLORS.completed },
+    { name: 'In Progress', value: inProgressCount, color: CHART_COLORS.inProgress },
+    { name: 'Draft', value: draftCount, color: CHART_COLORS.draft },
+  ].filter(item => item.value > 0), [submittedCount, inProgressCount, draftCount]);
+
+  const auditorChartData = useMemo(() =>
+    progress.map(p => ({
+      name: p.auditorName.split(' ')[0], // First name only for brevity
+      completed: p.completionPercentage,
+      total: 100,
+    }))
+  , [progress]);
+
+  // Mock timeline data based on average completion
+  const timelineData = useMemo(() =>
+    generateMockTimelineData(10, averageCompletion)
+  , [averageCompletion]);
+
+  // Category data (mock for demo - would come from actual workbook data)
+  const categoryData = useMemo(() => {
+    if (progress.length === 0) return [];
+    // Generate mock category breakdown based on progress
+    return [
+      { category: 'Ownership', passCount: Math.round(averageCompletion * 0.8), failCount: Math.round((100 - averageCompletion) * 0.3), totalTests: 25 },
+      { category: 'AML', passCount: Math.round(averageCompletion * 0.9), failCount: Math.round((100 - averageCompletion) * 0.2), totalTests: 25 },
+      { category: 'Entity Profile', passCount: Math.round(averageCompletion * 0.85), failCount: Math.round((100 - averageCompletion) * 0.25), totalTests: 30 },
+      { category: 'EDD', passCount: Math.round(averageCompletion * 0.75), failCount: Math.round((100 - averageCompletion) * 0.35), totalTests: 20 },
+    ];
+  }, [progress, averageCompletion]);
 
   return (
     <div className="p-8">
@@ -343,6 +389,152 @@ export default function AicMonitorPage() {
           </Card>
         </motion.div>
       </motion.div>
+
+      {/* Charts Section */}
+      {isPublished && progress.length > 0 && (
+        <motion.div
+          className="mb-6"
+          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+        >
+          <Tabs defaultValue="overview" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-4 bg-white/5">
+              <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-white/10">
+                <PieChart className="h-4 w-4" />
+                Status Overview
+              </TabsTrigger>
+              <TabsTrigger value="auditors" className="flex items-center gap-2 data-[state=active]:bg-white/10">
+                <BarChart3 className="h-4 w-4" />
+                Auditor Performance
+              </TabsTrigger>
+              <TabsTrigger value="timeline" className="flex items-center gap-2 data-[state=active]:bg-white/10">
+                <LineChart className="h-4 w-4" />
+                Timeline
+              </TabsTrigger>
+              <TabsTrigger value="categories" className="flex items-center gap-2 data-[state=active]:bg-white/10">
+                <BarChart3 className="h-4 w-4" />
+                By Category
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Status Overview Tab */}
+            <TabsContent value="overview">
+              <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <PieChart className="h-5 w-5" />
+                    Completion Status Distribution
+                  </CardTitle>
+                  <CardDescription className="text-white/60">
+                    Overview of workbook submission status across all auditors
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <ResultPieChart
+                        data={statusPieData}
+                        height={280}
+                        innerRadius={50}
+                        outerRadius={90}
+                      />
+                    </div>
+                    <div className="flex flex-col justify-center space-y-4">
+                      <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+                        <div className="text-sm text-white/60 mb-1">Total Auditors</div>
+                        <div className="text-3xl font-bold text-white">{totalAuditors}</div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="p-3 rounded-lg bg-crowe-teal/10 border border-crowe-teal/30 text-center">
+                          <div className="text-xl font-bold text-crowe-teal-bright">{submittedCount}</div>
+                          <div className="text-xs text-white/60">Submitted</div>
+                        </div>
+                        <div className="p-3 rounded-lg bg-crowe-cyan/10 border border-crowe-cyan/30 text-center">
+                          <div className="text-xl font-bold text-crowe-cyan">{inProgressCount}</div>
+                          <div className="text-xs text-white/60">In Progress</div>
+                        </div>
+                        <div className="p-3 rounded-lg bg-white/5 border border-white/10 text-center">
+                          <div className="text-xl font-bold text-white/70">{draftCount}</div>
+                          <div className="text-xs text-white/60">Draft</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Auditor Performance Tab */}
+            <TabsContent value="auditors">
+              <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5" />
+                    Auditor Completion Progress
+                  </CardTitle>
+                  <CardDescription className="text-white/60">
+                    Individual completion percentage for each assigned auditor
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <AuditorBarChart
+                    data={auditorChartData}
+                    height={Math.max(200, progress.length * 50)}
+                    variant="completion"
+                    barSize={30}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Timeline Tab */}
+            <TabsContent value="timeline">
+              <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <LineChart className="h-5 w-5" />
+                    Completion Progress Over Time
+                  </CardTitle>
+                  <CardDescription className="text-white/60">
+                    Tracking average completion rate throughout the audit period
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ProgressTimeline
+                    data={timelineData}
+                    height={300}
+                    showArea={true}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Category Breakdown Tab */}
+            <TabsContent value="categories">
+              <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5" />
+                    Results by Attribute Category
+                  </CardTitle>
+                  <CardDescription className="text-white/60">
+                    Pass/Fail breakdown by testing category (preliminary data)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <CategoryBreakdown
+                    data={categoryData}
+                    height={250}
+                    variant="stacked"
+                    layout="vertical"
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </motion.div>
+      )}
 
       {/* Auditor Progress Cards */}
       <motion.div

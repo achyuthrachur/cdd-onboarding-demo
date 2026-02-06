@@ -362,6 +362,7 @@ export default function AicStage2Page() {
               summary={summary}
               sampleId={sampleId}
               isLocked={isLocked}
+              fileName={population?.fileName}
               onSampleGenerated={handleSampleGenerated}
               onSampleLocked={handleSampleLocked}
               onPlanUpdated={handlePlanUpdated}

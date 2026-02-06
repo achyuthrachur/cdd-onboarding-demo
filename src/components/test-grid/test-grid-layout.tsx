@@ -235,12 +235,12 @@ export function TestGridLayout({
   };
 
   // Handle export
-  const handleExport = () => {
+  const handleExport = async () => {
     const exportWorkbook: GeneratedWorkbook = {
       ...workbook,
       rows,
     };
-    downloadTestGrid(exportWorkbook);
+    await downloadTestGrid(exportWorkbook);
     toast.success("Workbook exported successfully");
   };
 

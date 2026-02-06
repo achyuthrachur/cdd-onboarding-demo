@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { SamplingConfig, SamplingPlan, SamplingSummary } from "@/lib/sampling/original-engine";
+import { SamplingRationale } from "./sampling-rationale";
 
 interface SamplePreviewProps {
   auditRunId: string;
@@ -35,6 +36,7 @@ interface SamplePreviewProps {
   summary: SamplingSummary | null;
   sampleId: string | null;
   isLocked: boolean;
+  fileName?: string;
   onSampleGenerated: (
     sample: Record<string, unknown>[],
     summary: SamplingSummary,
@@ -53,6 +55,7 @@ export function SamplePreview({
   summary,
   sampleId,
   isLocked,
+  fileName,
   onSampleGenerated,
   onSampleLocked,
   onPlanUpdated,
@@ -543,6 +546,17 @@ export function SamplePreview({
             )}
           </CardContent>
         </Card>
+      )}
+
+      {/* AI-Generated Sampling Rationale */}
+      {sample && summary && (
+        <SamplingRationale
+          plan={plan}
+          config={config}
+          summary={summary}
+          fileName={fileName}
+          isLocked={isLocked}
+        />
       )}
     </div>
   );

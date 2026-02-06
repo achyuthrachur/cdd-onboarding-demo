@@ -14,8 +14,10 @@ import type {
   PivotedWorkbookRow,
   AssignedCustomer,
   CustomerTestResult,
+  AcceptableDocOption,
 } from "@/lib/stage-data/store";
-import { getAcceptableDocsForAttribute } from "@/lib/stage-data/store";
+import { getAcceptableDocsForAttribute, getStageData } from "@/lib/stage-data/store";
+import type { AcceptableDoc } from "@/lib/attribute-library/types";
 
 export interface AssignmentConfig {
   strategy: "round-robin" | "random" | "balanced";
@@ -283,14 +285,49 @@ function sampleToAssignedCustomer(sample: Record<string, unknown>, index: number
 }
 
 /**
+ * System options that appear in all testing dropdowns
+ */
+const SYSTEM_DROPDOWN_OPTIONS: AcceptableDocOption[] = [
+  { value: "doc-not-found", label: "Document Not Found", resultMapping: "Fail 1 - Regulatory", isSystemOption: true },
+  { value: "doc-expired", label: "Document Expired", resultMapping: "Fail 2 - Procedure", isSystemOption: true },
+  { value: "other-issue", label: "Other Issue (Add Observation)", resultMapping: "Pass w/Observation", isSystemOption: true },
+  { value: "question-lob", label: "Question to LOB", resultMapping: "Question to LOB", isSystemOption: true },
+  { value: "na", label: "N/A", resultMapping: "N/A", isSystemOption: true },
+];
+
+/**
+ * Convert acceptable docs to dropdown options
+ * Each acceptable doc maps to a "Pass" result
+ */
+function buildAcceptableDocOptions(attributeId: string, allAcceptableDocs: AcceptableDoc[]): AcceptableDocOption[] {
+  // Get acceptable docs for this attribute
+  const attributeDocs = allAcceptableDocs.filter(doc => doc.Attribute_ID === attributeId);
+
+  // Convert to dropdown options (selecting any acceptable doc = Pass)
+  const docOptions: AcceptableDocOption[] = attributeDocs.map((doc, index) => ({
+    value: `doc-${attributeId}-${index}`, // Unique value
+    label: doc.Document_Name,
+    resultMapping: "Pass" as const,
+    isSystemOption: false,
+  }));
+
+  // Combine doc options with system options
+  return [...docOptions, ...SYSTEM_DROPDOWN_OPTIONS];
+}
+
+/**
  * Generate pivoted workbook rows for a single auditor
  * Each row = one attribute, with customer results as columns
  */
 export function generatePivotedWorkbookRows(
   assignedCustomers: AssignedCustomer[],
-  attributes: ExtractedAttribute[]
+  attributes: ExtractedAttribute[],
+  allAcceptableDocs?: AcceptableDoc[]
 ): PivotedWorkbookRow[] {
   const rows: PivotedWorkbookRow[] = [];
+
+  // Get acceptable docs from store if not provided
+  const acceptableDocs = allAcceptableDocs || getStageData("acceptableDocs") || [];
 
   // For each attribute, create one row with results for all assigned customers
   attributes.forEach((attr) => {
@@ -312,6 +349,7 @@ export function generatePivotedWorkbookRows(
         customerResults[customer.customerId] = {
           customerId: customer.customerId,
           customerName: customer.customerName,
+          selectedDocument: undefined,
           result: "",
           observation: "",
         };
@@ -320,6 +358,9 @@ export function generatePivotedWorkbookRows(
 
     // Only add row if at least one customer needs this test
     if (Object.keys(customerResults).length > 0) {
+      // Build acceptable docs dropdown options for this attribute
+      const acceptableDocOptions = buildAcceptableDocOptions(attr.Attribute_ID, acceptableDocs);
+
       const row: PivotedWorkbookRow = {
         id: uuidv4(),
         attributeId: attr.Attribute_ID,
@@ -330,6 +371,7 @@ export function generatePivotedWorkbookRows(
         source: attr.Source,
         sourcePage: attr.Source_Page,
         group: attr.Group,
+        acceptableDocs: acceptableDocOptions,
         customerResults,
       };
 
@@ -406,10 +448,14 @@ export function generatePivotedAuditorWorkbooks(
   samples: Record<string, unknown>[],
   attributes: ExtractedAttribute[],
   auditors: Auditor[],
-  config: AssignmentConfig = { strategy: "round-robin" }
+  config: AssignmentConfig = { strategy: "round-robin" },
+  acceptableDocs?: AcceptableDoc[]
 ): PivotedAuditorWorkbook[] {
   // Assign samples to auditors (same logic as before)
   const assignments = assignSamplesToAuditors(samples, auditors, config);
+
+  // Get acceptable docs from store if not provided
+  const allAcceptableDocs = acceptableDocs || getStageData("acceptableDocs") || [];
 
   // Generate pivoted workbooks for each auditor
   const workbooks: PivotedAuditorWorkbook[] = auditors.map((auditor) => {
@@ -420,8 +466,8 @@ export function generatePivotedAuditorWorkbooks(
       sampleToAssignedCustomer(sample, index)
     );
 
-    // Generate pivoted rows (one per attribute)
-    const rows = generatePivotedWorkbookRows(assignedCustomers, attributes);
+    // Generate pivoted rows (one per attribute) with acceptable docs
+    const rows = generatePivotedWorkbookRows(assignedCustomers, attributes, allAcceptableDocs);
     const summary = calculatePivotedWorkbookSummary(rows);
 
     // Build attribute list for reference

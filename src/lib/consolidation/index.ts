@@ -7,6 +7,7 @@
 export {
   consolidateWorkbooks,
   consolidateTestGridWorkbooks,
+  consolidateByCustomer,
   getMockConsolidation,
   getMetricsByJurisdiction,
   getMetricsByAuditor,
@@ -25,6 +26,11 @@ export type {
   CategoryMetrics,
   RiskTierMetrics,
   ConsolidationResult,
+  // Customer-level consolidation types
+  ConsolidatedCustomer,
+  CustomerObservation,
+  CustomerQuestion,
+  CustomerFailure,
 } from "./engine";
 
 // Re-export export functions

@@ -175,7 +175,7 @@ export function ReportGenerator({
 
     try {
       const filename = `consolidation-report-${auditRunId}-${new Date().toISOString().split("T")[0]}.xlsx`;
-      downloadConsolidationExcel(consolidation, filename);
+      await downloadConsolidationExcel(consolidation, filename);
       toast.success("Excel report exported successfully");
       showExportSuccess("excel");
     } catch {

@@ -73,6 +73,7 @@ export interface FLUExtractionResult {
     }>;
   };
   tokensUsed?: number;
+  demoMode?: boolean;
 }
 
 // Auditor Workbook Row (Stage 4) - matches VBA structure
@@ -153,6 +154,7 @@ export interface AuditorWorkbook {
 export interface CustomerTestResult {
   customerId: string;       // GCI/Case ID
   customerName: string;     // Legal Name
+  selectedDocument?: string; // The specific doc the auditor selected (e.g., "driver-license", "passport")
   result: 'Pass' | 'Pass w/Observation' | 'Fail 1 - Regulatory' | 'Fail 2 - Procedure' | 'Question to LOB' | 'N/A' | '';
   observation: string;
 }
@@ -170,6 +172,14 @@ export interface AssignedCustomer {
   samplingIndex: number;
 }
 
+// Acceptable document option for dropdown
+export interface AcceptableDocOption {
+  value: string;        // Unique identifier (e.g., "driver-license", "passport")
+  label: string;        // Display name (e.g., "Driver's License", "Passport")
+  resultMapping: 'Pass' | 'Pass w/Observation' | 'Fail 1 - Regulatory' | 'Fail 2 - Procedure' | 'Question to LOB' | 'N/A';
+  isSystemOption?: boolean; // True for system options like "Document Not Found", "N/A"
+}
+
 // A single row in the pivoted workbook (one per attribute)
 export interface PivotedWorkbookRow {
   id: string;
@@ -185,8 +195,11 @@ export interface PivotedWorkbookRow {
   sourcePage?: string;
   group?: string;
 
+  // Acceptable documents for this attribute (for dropdown)
+  acceptableDocs: AcceptableDocOption[];
+
   // Customer results (keyed by customerId)
-  // Each entry has: result, observation
+  // Each entry has: result, observation, selectedDocument
   customerResults: Record<string, CustomerTestResult>;
 }
 
