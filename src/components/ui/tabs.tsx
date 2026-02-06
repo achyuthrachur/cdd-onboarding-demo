@@ -28,12 +28,12 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  "rounded-lg p-1 group-data-[orientation=horizontal]/tabs:h-10 data-[variant=line]:rounded-none group/tabs-list text-gray-500 dark:text-white/80 inline-flex w-fit items-center justify-center group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col",
+  "rounded-lg p-1 group-data-[orientation=horizontal]/tabs:h-10 data-[variant=line]:rounded-none group/tabs-list inline-flex w-fit items-center justify-center group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col",
   {
     variants: {
       variant: {
-        default: "bg-gray-100 dark:bg-white/5",
-        line: "gap-1 bg-transparent",
+        default: "bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300",
+        line: "gap-1 bg-transparent text-gray-600 dark:text-gray-300",
       },
     },
     defaultVariants: {
@@ -66,10 +66,31 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "focus-visible:border-gray-300 dark:focus-visible:border-white/30 focus-visible:ring-gray-300 dark:focus-visible:ring-white/20 focus-visible:outline-none text-gray-500 dark:text-white/80 hover:text-gray-900 dark:hover:text-white relative inline-flex h-8 flex-1 items-center justify-center gap-2 rounded-md border border-transparent px-4 py-2 text-sm font-medium whitespace-nowrap transition-all group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-sm group-data-[variant=line]/tabs-list:data-[state=active]:shadow-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        // Base styles
+        "relative inline-flex h-8 flex-1 items-center justify-center gap-2 rounded-md border border-transparent px-4 py-2 text-sm font-medium whitespace-nowrap transition-all",
+        // Layout variants
+        "group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start",
+        // Focus styles
+        "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:border-gray-300 focus-visible:ring-gray-300 dark:focus-visible:border-white/30 dark:focus-visible:ring-white/20",
+        // Disabled styles
+        "disabled:pointer-events-none disabled:opacity-50",
+        // Icon styles
+        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        // Inactive state - visible text with hover
+        "text-gray-600 dark:text-gray-300",
+        "hover:text-gray-900 dark:hover:text-white",
+        "hover:bg-white/50 dark:hover:bg-white/10",
+        // Active state - clear visual distinction
+        "data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm",
+        "dark:data-[state=active]:bg-white/20 dark:data-[state=active]:text-white",
+        // Line variant overrides
         "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent",
-        "data-[state=active]:bg-white dark:data-[state=active]:bg-white/15 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white",
-        "after:bg-crowe-amber after:absolute after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-[state=active]:after:opacity-100",
+        "group-data-[variant=line]/tabs-list:data-[state=active]:shadow-none",
+        // Amber underline for line variant
+        "after:bg-crowe-amber after:absolute after:opacity-0 after:transition-opacity",
+        "group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5",
+        "group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5",
+        "group-data-[variant=line]/tabs-list:data-[state=active]:after:opacity-100",
         className
       )}
       {...props}

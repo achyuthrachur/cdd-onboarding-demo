@@ -46,3 +46,4 @@ next-env.d.ts
 
 # windows artifacts
 nul
+.env*.local

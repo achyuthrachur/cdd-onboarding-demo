@@ -23,13 +23,13 @@ const buttonVariants = cva(
           "hover:bg-red-700 dark:hover:bg-red-500 " +
           "border border-red-700 " +
           "focus-visible:ring-red-500/20 dark:focus-visible:ring-red-500/40",
-        // Outline - visible border with transparent background
+        // Outline - visible border with solid background in light mode
         outline:
-          "bg-transparent " +
-          "text-gray-900 dark:text-white " +
-          "border-2 border-gray-300 dark:border-white/30 " +
-          "hover:bg-gray-100 dark:hover:bg-white/10 " +
-          "hover:border-gray-400 dark:hover:border-white/50 " +
+          "bg-white text-gray-900 " +
+          "border-2 border-gray-300 " +
+          "hover:bg-gray-50 hover:border-gray-400 " +
+          "dark:bg-transparent dark:text-white dark:border-gray-500 " +
+          "dark:hover:bg-white/10 dark:hover:border-gray-400 " +
           "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30",
         // Secondary - Crowe Amber accent
         secondary:
@@ -38,12 +38,12 @@ const buttonVariants = cva(
           "hover:bg-crowe-amber-dark dark:hover:bg-crowe-amber-bright " +
           "border border-crowe-amber-dark " +
           "focus-visible:ring-crowe-amber/30",
-        // Ghost - minimal styling, subtle hover
+        // Ghost - subtle background, not invisible
         ghost:
-          "bg-transparent " +
-          "text-gray-700 dark:text-gray-200 " +
-          "hover:bg-gray-100 dark:hover:bg-white/10 " +
-          "hover:text-gray-900 dark:hover:text-white " +
+          "bg-gray-100 text-gray-700 " +
+          "hover:bg-gray-200 hover:text-gray-900 " +
+          "dark:bg-white/10 dark:text-gray-200 " +
+          "dark:hover:bg-white/20 dark:hover:text-white " +
           "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30",
         // Link style
         link:

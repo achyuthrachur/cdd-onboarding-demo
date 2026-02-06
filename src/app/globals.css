@@ -248,25 +248,39 @@
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ============================================
-     Semantic Tokens - Light Mode (Warm, Premium Design)
-     Crowe brand philosophy: warm, soft, premium — not cold corporate
+     Z-Index Scale - Consistent Stacking Context
      ============================================ */
-  /* Text - Warm dark slate with indigo undertone, NEVER pure black */
-  --text-primary: #2d3142;              /* Warm dark slate - NOT #333 */
-  --text-secondary: #545968;            /* Muted with blue undertone */
-  --text-muted: #8b90a0;                /* Placeholder/muted text */
+  --z-dropdown: 50;
+  --z-sticky: 100;
+  --z-fixed: 200;
+  --z-modal-backdrop: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-tooltip: 600;
 
-  /* Surfaces - Layered warm backgrounds, NEVER pure white page bg */
+  /* ============================================
+     Semantic Tokens - Light Mode (High Contrast)
+     Updated for WCAG AA compliance
+     ============================================ */
+  /* Text - High contrast for accessibility */
+  --text-primary: #111827;              /* gray-900 - highest contrast */
+  --text-secondary: #374151;            /* gray-700 - strong secondary */
+  --text-muted: #4b5563;                /* gray-600 - readable muted */
+  --text-disabled: #9ca3af;             /* gray-400 - disabled state */
+
+  /* Surfaces - Clean, layered backgrounds */
   --surface-page: #f8f9fc;              /* Page background - warm off-white */
-  --surface-primary: #fafbfd;           /* Card/content - barely visible lift */
-  --surface-secondary: #f6f7fa;         /* Alternating sections */
-  --surface-elevated: #FFFFFF;          /* Modals, popovers ONLY - pure white reserved here */
+  --surface-primary: #ffffff;           /* Primary surface - pure white */
+  --surface-secondary: #f9fafb;         /* Secondary surface - gray-50 */
+  --surface-elevated: #ffffff;          /* Modals, popovers - pure white */
+  --surface-sunken: #f3f4f6;            /* Sunken areas - gray-100 */
   --surface-brand-soft: #f0f2f8;        /* Light indigo wash for feature sections */
   --surface-amber-soft: #fff8eb;        /* Very light amber wash */
 
-  /* Borders - Very soft, prefer shadows over borders */
-  --border-default: #dfe1e8;            /* Very soft warm border */
-  --border-strong: #c8cbd6;             /* Only when needed */
+  /* Borders - Clear, defined edges */
+  --border-default: #e5e7eb;            /* gray-200 - default border */
+  --border-strong: #d1d5db;             /* gray-300 - strong border */
+  --border-focus: #002E62;              /* Crowe Indigo - focus ring */
 
   /* Indigo-tinted shadows - NEVER use pure black rgba(0,0,0,...) */
   --shadow-xs: 0 1px 2px rgba(1, 30, 65, 0.04);
@@ -327,19 +341,21 @@
      HIGH CONTRAST text colors tested against Crowe Indigo backgrounds
      ============================================ */
   /* Text - High Contrast for Dark Mode */
-  --text-primary: #ffffff;            /* Pure white - 15.3:1 on #011E41 */
-  --text-secondary: #e2e8f0;          /* slate-200 - 11.2:1 contrast */
-  --text-muted: #cbd5e1;              /* slate-300 - 8.1:1 contrast */
-  --text-disabled: #64748b;           /* slate-500 - 4.6:1 (AA for large text) */
+  --text-primary: #ffffff;              /* Pure white - maximum contrast */
+  --text-secondary: #e2e8f0;            /* slate-200 - 11.2:1 contrast */
+  --text-muted: #cbd5e1;                /* slate-300 - 8.1:1 contrast */
+  --text-disabled: #64748b;             /* slate-500 - 4.6:1 (AA for large text) */
 
   /* Surfaces - Using Crowe Indigo Dark instead of pure black */
-  --surface-primary: #011E41;           /* Crowe Indigo Dark */
-  --surface-secondary: #002E62;         /* Crowe Indigo Core */
-  --surface-elevated: #003F9F;          /* Crowe Indigo Bright */
+  --surface-primary: #020c1a;           /* Deep navy - darker than indigo */
+  --surface-secondary: #011E41;         /* Crowe Indigo Dark */
+  --surface-elevated: #0c2d5a;          /* Elevated surface - lighter */
+  --surface-sunken: #010814;            /* Sunken areas - deepest navy */
 
   /* Borders */
-  --border-default: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.12);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.20);
+  --border-focus: #F5A800;              /* Crowe Amber - focus ring */
 
   /* ============================================
      shadcn/ui Theme - Crowe Brand Dark Mode
@@ -702,6 +718,46 @@
    Standardized sizing for consistent UI
    ============================================ */
 
+/* Standard page container */
+.page-container {
+  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Card grid layouts - responsive columns */
+.card-grid {
+  @apply grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+}
+
+/* Stat card grid - 2 columns on mobile, 4 on desktop */
+.stat-grid {
+  @apply grid gap-4 grid-cols-2 lg:grid-cols-4;
+}
+
+/* Scrollable container with thin scrollbar */
+.scroll-container {
+  @apply overflow-x-auto overflow-y-auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.dark .scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 /* Responsive container with max-width constraints */
 .container-narrow {
   @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
@@ -884,4 +940,49 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ============================================
+   Custom Scrollbar Styles
+   Thin, elegant scrollbars for modern UI
+   ============================================ */
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

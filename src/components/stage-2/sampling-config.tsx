@@ -199,7 +199,7 @@ export function SamplingConfig({
               <SelectItem value="percentage">Percentage-based</SelectItem>
             </SelectContent>
           </Select>
-          <p className="text-xs text-white/80">
+          <p className="text-xs text-gray-600 dark:text-gray-300">
             {method === "statistical" &&
               "Uses confidence level, tolerable error rate, and expected error rate to calculate sample size (Wald CI + FPC)"}
             {method === "simple_random" &&
@@ -225,7 +225,7 @@ export function SamplingConfig({
                 value={confidence}
                 onChange={(e) => setConfidence(parseFloat(e.target.value) || 95)}
               />
-              <p className="text-xs text-white/80">50-99.9%</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300">50-99.9%</p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="margin">Tolerable Error Rate (%)</Label>
@@ -238,7 +238,7 @@ export function SamplingConfig({
                 value={margin}
                 onChange={(e) => setMargin(parseFloat(e.target.value) || 5)}
               />
-              <p className="text-xs text-white/80">Must exceed Expected Error Rate</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300">Must exceed Expected Error Rate</p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="expectedError">Expected Error Rate (%)</Label>
@@ -251,7 +251,7 @@ export function SamplingConfig({
                 value={expectedError}
                 onChange={(e) => setExpectedError(parseFloat(e.target.value) || 1)}
               />
-              <p className="text-xs text-white/80">Based on historical performance</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300">Based on historical performance</p>
             </div>
           </div>
         )}
@@ -270,7 +270,7 @@ export function SamplingConfig({
               onChange={(e) => setSamplePercentage(e.target.value)}
               placeholder="e.g., 10"
             />
-            <p className="text-xs text-white/80">Required for percentage-based sampling</p>
+            <p className="text-xs text-gray-600 dark:text-gray-300">Required for percentage-based sampling</p>
           </div>
         )}
 
@@ -288,7 +288,7 @@ export function SamplingConfig({
                 onChange={(e) => setSampleSizeOverride(e.target.value)}
                 placeholder="e.g., 100"
               />
-              <p className="text-xs text-white/80">Number of records to sample</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300">Number of records to sample</p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="simpleRandomPercentage">Or Sample Percentage (%)</Label>
@@ -302,7 +302,7 @@ export function SamplingConfig({
                 onChange={(e) => setSamplePercentage(e.target.value)}
                 placeholder="e.g., 10"
               />
-              <p className="text-xs text-white/80">Alternative to fixed sample size</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300">Alternative to fixed sample size</p>
             </div>
             <p className="col-span-2 text-xs text-crowe-blue-light">
               Simple Random sampling requires either a sample size or percentage.
@@ -323,7 +323,7 @@ export function SamplingConfig({
                 onChange={(e) => setPopulationOverride(e.target.value)}
                 placeholder={`Actual: ${populationSize.toLocaleString()}`}
               />
-              <p className="text-xs text-white/80">
+              <p className="text-xs text-gray-600 dark:text-gray-300">
                 Test sample calculations with different population assumptions
               </p>
             </div>
@@ -339,7 +339,7 @@ export function SamplingConfig({
                   onChange={(e) => setSampleSizeOverride(e.target.value)}
                   placeholder="Leave empty to use calculated size"
                 />
-                <p className="text-xs text-white/80">
+                <p className="text-xs text-gray-600 dark:text-gray-300">
                   Override the calculated sample size with a specific number
                 </p>
               </div>
@@ -359,7 +359,7 @@ export function SamplingConfig({
               onChange={(e) => setPopulationOverride(e.target.value)}
               placeholder={`Actual: ${populationSize.toLocaleString()}`}
             />
-            <p className="text-xs text-white/80">
+            <p className="text-xs text-gray-600 dark:text-gray-300">
               Test sample calculations with different population assumptions
             </p>
           </div>
@@ -377,7 +377,7 @@ export function SamplingConfig({
                 onChange={(e) => setSystematicStep(e.target.value)}
                 placeholder="Leave empty to calculate automatically"
               />
-              <p className="text-xs text-white/80">
+              <p className="text-xs text-gray-600 dark:text-gray-300">
                 Explicit interval for systematic sampling
               </p>
             </div>
@@ -390,7 +390,7 @@ export function SamplingConfig({
               value={seed}
               onChange={(e) => setSeed(parseInt(e.target.value) || 42)}
             />
-            <p className="text-xs text-white/80">
+            <p className="text-xs text-gray-600 dark:text-gray-300">
               Ensures reproducible sampling results (Mulberry32 PRNG)
             </p>
           </div>
@@ -454,7 +454,7 @@ export function SamplingConfig({
               ))}
             </div>
           )}
-          <p className="text-xs text-white/80">
+          <p className="text-xs text-gray-600 dark:text-gray-300">
             Stratification ensures proportional representation across categories
           </p>
         </div>
@@ -483,14 +483,14 @@ export function SamplingConfig({
             <Calculator className="h-5 w-5 text-primary" />
             <div>
               <p className="text-sm font-medium">Estimated Sample Size</p>
-              <p className="text-xs text-white/80">
+              <p className="text-xs text-gray-600 dark:text-gray-300">
                 Based on current configuration
               </p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold">{estimatedSize.toLocaleString()}</p>
-            <p className="text-xs text-white/80">
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{estimatedSize.toLocaleString()}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-300">
               of {populationSize.toLocaleString()} ({((estimatedSize / populationSize) * 100).toFixed(1)}%)
             </p>
           </div>
