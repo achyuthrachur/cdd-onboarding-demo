@@ -1027,6 +1027,15 @@
   background-color: #6b7280;
 }
 
+/* Always show scrollbar when content overflows */
+.scroll-always {
+  overflow: auto !important;
+}
+
+.scroll-always::-webkit-scrollbar {
+  display: block !important;
+}
+
 /* Hide scrollbar but keep functionality */
 .scrollbar-hide {
   -ms-overflow-style: none;

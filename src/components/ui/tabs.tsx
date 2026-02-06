@@ -28,12 +28,12 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  "rounded-lg p-1 group-data-[orientation=horizontal]/tabs:h-10 data-[variant=line]:rounded-none group/tabs-list inline-flex w-fit items-center justify-center group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col",
+  "rounded-lg p-1 group-data-[orientation=horizontal]/tabs:h-11 data-[variant=line]:rounded-none group/tabs-list inline-flex w-fit items-center justify-center group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col border",
   {
     variants: {
       variant: {
-        default: "bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300",
-        line: "gap-1 bg-transparent text-gray-600 dark:text-gray-300",
+        default: "bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-200 border-gray-200 dark:border-white/20",
+        line: "gap-1 bg-transparent text-gray-700 dark:text-gray-200 border-transparent",
       },
     },
     defaultVariants: {
@@ -67,7 +67,7 @@ function TabsTrigger({
       data-slot="tabs-trigger"
       className={cn(
         // Base styles
-        "relative inline-flex h-8 flex-1 items-center justify-center gap-2 rounded-md border border-transparent px-4 py-2 text-sm font-medium whitespace-nowrap transition-all",
+        "relative inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-md border border-transparent px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all",
         // Layout variants
         "group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start",
         // Focus styles
@@ -77,12 +77,12 @@ function TabsTrigger({
         // Icon styles
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         // Inactive state - visible text with hover
-        "text-gray-600 dark:text-gray-300",
+        "text-gray-700 dark:text-gray-200",
         "hover:text-gray-900 dark:hover:text-white",
-        "hover:bg-white/50 dark:hover:bg-white/10",
-        // Active state - clear visual distinction
-        "data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm",
-        "dark:data-[state=active]:bg-white/20 dark:data-[state=active]:text-white",
+        "hover:bg-white/60 dark:hover:bg-white/15",
+        // Active state - clear visual distinction with border
+        "data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-md data-[state=active]:border-gray-300",
+        "dark:data-[state=active]:bg-white/20 dark:data-[state=active]:text-white dark:data-[state=active]:border-white/30",
         // Line variant overrides
         "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent",
         "group-data-[variant=line]/tabs-list:data-[state=active]:shadow-none",
