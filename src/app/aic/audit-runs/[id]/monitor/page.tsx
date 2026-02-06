@@ -138,6 +138,7 @@ export default function AicMonitorPage() {
       publishedAt: new Date().toISOString(),
       publishedBy: 'AIC',
       workbookCount: 4,
+      auditorCount: 4,
     });
 
     // Simulate varying progress for each auditor

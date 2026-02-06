@@ -304,6 +304,7 @@ export interface StageDataStore {
     publishedAt: string;
     publishedBy: string;
     workbookCount: number;
+    auditorCount: number;
   };
   auditorProgress?: Record<string, {
     completionPercentage: number;
@@ -311,6 +312,90 @@ export interface StageDataStore {
     lastActivityAt: string;
     submittedAt: string | null;
   }>;
+}
+
+// ============================================
+// Portal Types and Data Ownership
+// Separates AIC and Auditor data scopes
+// ============================================
+
+export type PortalType = 'aic' | 'auditor';
+
+/**
+ * Data ownership mapping - determines which portal owns each data key
+ * 'aic' = AIC-only data (Stages 1-4 setup)
+ * 'auditor' = Auditor-only data (testing progress)
+ * 'shared' = Published by AIC, consumed by Auditor
+ */
+export const DATA_OWNERSHIP: Record<keyof StageDataStore, PortalType | 'shared'> = {
+  // Stage 1: Gap Assessment (AIC-owned)
+  gapAssessment1: 'aic',
+  gapAssessment2: 'aic',
+  combinedGaps: 'aic',
+
+  // Stage 2: Sampling (AIC-owned)
+  population: 'aic',
+  populationMetadata: 'aic',
+  samplingConfig: 'aic',
+  samplingResult: 'aic',
+
+  // Stage 3: Attribute Extraction (AIC-owned)
+  fluProcedures: 'aic',
+  fluExtractionResult: 'aic',
+  extractedAttributes: 'aic',
+  acceptableDocs: 'aic',
+  attributeExtractionComplete: 'aic',
+
+  // Stage 4: Workbook Generation (AIC-owned until published)
+  selectedAuditors: 'aic',
+  auditorWorkbooks: 'shared',        // Published to auditors
+  pivotedWorkbooks: 'shared',        // Published to auditors
+  activeAuditorId: 'aic',
+  workbookGenerationComplete: 'aic',
+  workbookState: 'aic',
+  generatedWorkbooks: 'aic',
+
+  // Publication tracking (shared)
+  workbooksPublished: 'shared',
+  auditorProgress: 'shared',
+
+  // Stage 5: Testing (Auditor-owned)
+  testResults: 'auditor',
+  testingProgress: 'auditor',
+
+  // Stage 6: Consolidation (AIC-owned)
+  consolidatedReport: 'aic',
+};
+
+/**
+ * Get storage key with optional portal prefix
+ */
+function getStorageKey(key: string, portal?: PortalType): string {
+  // Shared data doesn't get a portal prefix
+  const ownership = DATA_OWNERSHIP[key as keyof StageDataStore];
+  if (ownership === 'shared' || !portal) {
+    return `stageData_${key}`;
+  }
+  return `stageData_${portal}_${key}`;
+}
+
+/**
+ * Check if current portal can access a data key
+ */
+export function canPortalAccessKey(portal: PortalType, key: keyof StageDataStore): boolean {
+  const ownership = DATA_OWNERSHIP[key];
+  if (ownership === 'shared') return true;
+  if (ownership === portal) return true;
+  return false;
+}
+
+/**
+ * Get data keys accessible by a portal
+ */
+export function getPortalAccessibleKeys(portal: PortalType): (keyof StageDataStore)[] {
+  return (Object.keys(DATA_OWNERSHIP) as (keyof StageDataStore)[]).filter(
+    key => canPortalAccessKey(portal, key)
+  );
 }
 
 // In-memory store (singleton pattern)
@@ -813,3 +898,217 @@ export function hasStageOutputs(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): boolean {
 // Now: Apps should call loadStageInputsFromStorage() explicitly
 // or loadStageOutputsFromStorage() when restoring previous session
 // ============================================
+
+// ============================================
+// Cross-Portal Publication Flow
+// AIC publishes workbooks -> Auditors can access
+// ============================================
+
+export interface WorkbookPublication {
+  publishedAt: string;
+  publishedBy: string;
+  workbookCount: number;
+  auditorCount: number;
+}
+
+/**
+ * Publish workbooks from AIC to Auditor portal
+ * This makes workbooks visible to auditors
+ */
+export function publishWorkbooksToAuditor(publishedBy: string = 'AIC User'): WorkbookPublication {
+  const workbooks = stageDataStore.pivotedWorkbooks;
+  const auditors = stageDataStore.selectedAuditors;
+
+  if (!workbooks || workbooks.length === 0) {
+    throw new Error('Cannot publish: no workbooks generated');
+  }
+  if (!auditors || auditors.length === 0) {
+    throw new Error('Cannot publish: no auditors selected');
+  }
+
+  // Mark as published
+  const publication: WorkbookPublication = {
+    publishedAt: new Date().toISOString(),
+    publishedBy,
+    workbookCount: workbooks.length,
+    auditorCount: auditors.length,
+  };
+
+  setStageData('workbooksPublished', publication);
+
+  // Initialize auditor progress for each auditor
+  const initialProgress: Record<string, {
+    completionPercentage: number;
+    status: 'draft' | 'in_progress' | 'submitted';
+    lastActivityAt: string;
+    submittedAt: string | null;
+  }> = {};
+
+  auditors.forEach(auditor => {
+    const auditorWorkbook = workbooks.find(wb => wb.auditorId === auditor.id);
+    const totalTests = auditorWorkbook
+      ? auditorWorkbook.rows.length * auditorWorkbook.assignedCustomers.length
+      : 0;
+
+    initialProgress[auditor.id] = {
+      completionPercentage: 0,
+      status: 'draft',
+      lastActivityAt: new Date().toISOString(),
+      submittedAt: null,
+    };
+  });
+
+  setStageData('auditorProgress', initialProgress);
+
+  stageDataLogger.info(`Published ${workbooks.length} workbooks to ${auditors.length} auditors`);
+
+  return publication;
+}
+
+/**
+ * Check if workbooks have been published
+ */
+export function areWorkbooksPublished(): boolean {
+  return !!stageDataStore.workbooksPublished;
+}
+
+/**
+ * Get publication info
+ */
+export function getPublicationInfo(): WorkbookPublication | null {
+  return stageDataStore.workbooksPublished || null;
+}
+
+/**
+ * Get auditor-visible data (only what they should see)
+ * This enforces data visibility rules for the Auditor portal
+ */
+export function getAuditorVisibleData(auditorId: string) {
+  // Check if workbooks are published
+  if (!areWorkbooksPublished()) {
+    return {
+      workbook: null,
+      progress: null,
+      canEdit: false,
+      error: 'Workbooks not yet published by AIC',
+    };
+  }
+
+  const workbooks = stageDataStore.pivotedWorkbooks || [];
+  const auditorWorkbook = workbooks.find(wb => wb.auditorId === auditorId);
+  const progress = stageDataStore.auditorProgress?.[auditorId];
+
+  if (!auditorWorkbook) {
+    return {
+      workbook: null,
+      progress: null,
+      canEdit: false,
+      error: 'No workbook assigned to this auditor',
+    };
+  }
+
+  return {
+    workbook: auditorWorkbook,
+    progress,
+    canEdit: progress?.status !== 'submitted',
+    error: null,
+  };
+}
+
+/**
+ * Update auditor progress (called from Auditor portal)
+ */
+export function updateAuditorProgress(
+  auditorId: string,
+  updates: Partial<{
+    completionPercentage: number;
+    status: 'draft' | 'in_progress' | 'submitted';
+  }>
+): void {
+  const currentProgress = stageDataStore.auditorProgress || {};
+  const auditorProgress = currentProgress[auditorId] || {
+    completionPercentage: 0,
+    status: 'draft' as const,
+    lastActivityAt: new Date().toISOString(),
+    submittedAt: null,
+  };
+
+  const updatedProgress = {
+    ...auditorProgress,
+    ...updates,
+    lastActivityAt: new Date().toISOString(),
+  };
+
+  // If submitting, record submission time
+  if (updates.status === 'submitted' && auditorProgress.status !== 'submitted') {
+    updatedProgress.submittedAt = new Date().toISOString();
+  }
+
+  setStageData('auditorProgress', {
+    ...currentProgress,
+    [auditorId]: updatedProgress,
+  });
+
+  stageDataLogger.info(`Updated progress for auditor ${auditorId}:`, updates);
+}
+
+/**
+ * Get all auditor progress (for AIC monitoring)
+ */
+export function getAllAuditorProgress(): Record<string, {
+  completionPercentage: number;
+  status: 'draft' | 'in_progress' | 'submitted';
+  lastActivityAt: string;
+  submittedAt: string | null;
+}> {
+  return stageDataStore.auditorProgress || {};
+}
+
+/**
+ * Clear portal-specific data
+ */
+export function clearPortalData(portal: PortalType): void {
+  const keysToRemove = getPortalAccessibleKeys(portal).filter(
+    key => DATA_OWNERSHIP[key] === portal // Only clear data owned by this portal
+  );
+
+  keysToRemove.forEach(key => {
+    delete stageDataStore[key];
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(`stageData_${key}`);
+      }
+    } catch (error) {
+      stageDataLogger.warn(`Failed to clear portal data key ${key}:`, error);
+    }
+  });
+
+  stageDataLogger.info(`Cleared ${portal} portal data`);
+}
+
+/**
+ * Load data for a specific portal
+ * Only loads data that portal has access to
+ */
+export function loadPortalData(portal: PortalType): void {
+  if (typeof window === 'undefined') return;
+
+  const accessibleKeys = getPortalAccessibleKeys(portal);
+
+  try {
+    accessibleKeys.forEach(key => {
+      const storageKey = `stageData_${key}`;
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        try {
+          stageDataStore[key] = JSON.parse(stored);
+        } catch {
+          stageDataLogger.warn(`Failed to parse stored data for ${key}`);
+        }
+      }
+    });
+    stageDataLogger.info(`Loaded ${portal} portal data`);
+  } catch (error) {
+    stageDataLogger.warn(`Failed to load ${portal} portal data:`, error);
+  }
+}

@@ -96,6 +96,7 @@ export default function AuditorWorkbooksPage() {
       publishedAt: new Date().toISOString(),
       publishedBy: 'AIC',
       workbookCount: 4,
+      auditorCount: 4,
     });
 
     // Add some progress for the current auditor

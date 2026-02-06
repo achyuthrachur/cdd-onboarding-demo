@@ -261,6 +261,7 @@ export default function AicStage4Page() {
         publishedAt: new Date().toISOString(),
         publishedBy: 'AIC',
         workbookCount: pivotedWorkbooks.length,
+        auditorCount: selectedAuditors.length,
       });
 
       setIsPublished(true);
