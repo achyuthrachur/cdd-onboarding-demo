@@ -36,9 +36,9 @@ export function AicSidebar() {
   };
 
   return (
-    <div className="flex h-full w-64 flex-col bg-gray-50 dark:bg-white/5 backdrop-blur-xl border-r border-gray-200 dark:border-white/10">
+    <div className="flex h-full w-64 flex-col bg-white/80 dark:bg-white/5 backdrop-blur-xl border-r border-gray-200/60 dark:border-white/10 shadow-[1px_0_8px_rgba(0,0,0,0.03)]">
       {/* Logo */}
-      <div className="flex h-16 items-center gap-2 px-6 border-b border-gray-200 dark:border-white/10">
+      <div className="flex h-16 items-center gap-2 px-6 border-b border-gray-200/60 dark:border-white/10">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-crowe-amber text-crowe-indigo-dark shadow-[0_4px_16px_rgba(245,168,0,0.3)]">
           <Crown className="h-4 w-4" />
         </div>
@@ -74,13 +74,13 @@ export function AicSidebar() {
       </nav>
 
       {/* Theme Toggle */}
-      <div className="flex items-center justify-between px-3 py-2 border-t border-gray-200 dark:border-white/10">
+      <div className="flex items-center justify-between px-3 py-2 border-t border-gray-200/60 dark:border-white/10">
         <span className="text-sm text-gray-500 dark:text-white/80">Theme</span>
         <ThemeToggle />
       </div>
 
       {/* Logout / Switch Role */}
-      <div className="border-t border-gray-200 dark:border-white/10 px-3 py-4 space-y-2">
+      <div className="border-t border-gray-200/60 dark:border-white/10 px-3 py-4 space-y-2">
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"

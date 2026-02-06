@@ -44,7 +44,7 @@ export function RoleSelector() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-crowe-indigo-dark">
+    <div className="min-h-screen flex flex-col bg-cool-gradient dark:bg-crowe-indigo-dark">
       {/* Top accent bar - Crowe Amber */}
       <div className="h-1 bg-gradient-to-r from-crowe-amber via-crowe-amber-bright to-crowe-amber" />
 
