@@ -335,7 +335,7 @@ export default function Stage4Page() {
       title: "Step 4: Populate",
       description: "Fill demo data",
       isComplete: stepComplete.view,
-      activeColor: "bg-white/10 text-white/40",
+      activeColor: "bg-white/10 text-white/60",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: ListChecks,
       badgeText: stepComplete.view ? "Ready" : "Pending",
@@ -353,7 +353,7 @@ export default function Stage4Page() {
       >
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -366,7 +366,7 @@ export default function Stage4Page() {
                 Auditor Workbook Generation
               </h1>
             </div>
-            <p className="text-white/50 mt-2">
+            <p className="text-white/70 mt-2">
               Assign samples to auditors and generate per-auditor testing workbooks
             </p>
           </div>
@@ -502,17 +502,17 @@ export default function Stage4Page() {
                         {samples.length > 0 ? (
                           <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                              <span className="text-white/50">Total Samples:</span>
+                              <span className="text-white/70">Total Samples:</span>
                               <Badge variant="default">{samples.length}</Badge>
                             </div>
                             {samplingResult?.config && (
                               <>
                                 <div className="flex items-center justify-between">
-                                  <span className="text-white/50">Sample Method:</span>
+                                  <span className="text-white/70">Sample Method:</span>
                                   <span className="capitalize text-white">{samplingResult.config.method}</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                  <span className="text-white/50">Confidence Level:</span>
+                                  <span className="text-white/70">Confidence Level:</span>
                                   <span className="text-white">{Math.round((samplingResult.config.confidence || 0.95) * 100)}%</span>
                                 </div>
                               </>
@@ -530,7 +530,7 @@ export default function Stage4Page() {
                             </motion.div>
                           </div>
                         ) : (
-                          <div className="text-center py-8 text-white/50">
+                          <div className="text-center py-8 text-white/70">
                             <Database className="h-12 w-12 mx-auto mb-3 opacity-30" />
                             <p>No sampling data available</p>
                             <p className="text-sm">Complete Stage 2 or load demo data</p>
@@ -553,11 +553,11 @@ export default function Stage4Page() {
                         {extractedAttributes.length > 0 ? (
                           <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                              <span className="text-white/50">Total Attributes:</span>
+                              <span className="text-white/70">Total Attributes:</span>
                               <Badge variant="default">{extractedAttributes.length}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-white/50">Acceptable Docs:</span>
+                              <span className="text-white/70">Acceptable Docs:</span>
                               <Badge variant="secondary">{acceptableDocs.length}</Badge>
                             </div>
                             <div className="flex gap-2 flex-wrap">
@@ -584,7 +584,7 @@ export default function Stage4Page() {
                             </motion.div>
                           </div>
                         ) : (
-                          <div className="text-center py-8 text-white/50">
+                          <div className="text-center py-8 text-white/70">
                             <FileSpreadsheet className="h-12 w-12 mx-auto mb-3 opacity-30" />
                             <p>No attributes available</p>
                             <p className="text-sm">Complete Stage 3 or load demo data</p>
@@ -649,15 +649,15 @@ export default function Stage4Page() {
                     >
                       <motion.div variants={staggerItem} className="p-4 bg-white/10 rounded-lg text-center">
                         <div className="text-2xl font-bold text-white">{samples.length}</div>
-                        <div className="text-sm text-white/50">Samples</div>
+                        <div className="text-sm text-white/70">Samples</div>
                       </motion.div>
                       <motion.div variants={staggerItem} className="p-4 bg-white/10 rounded-lg text-center">
                         <div className="text-2xl font-bold text-white">{selectedAuditors.length}</div>
-                        <div className="text-sm text-white/50">Auditors</div>
+                        <div className="text-sm text-white/70">Auditors</div>
                       </motion.div>
                       <motion.div variants={staggerItem} className="p-4 bg-white/10 rounded-lg text-center">
                         <div className="text-2xl font-bold text-white">{extractedAttributes.length}</div>
-                        <div className="text-sm text-white/50">Attributes</div>
+                        <div className="text-sm text-white/70">Attributes</div>
                       </motion.div>
                     </motion.div>
 
@@ -671,15 +671,15 @@ export default function Stage4Page() {
                       <h4 className="font-medium mb-2 text-white">Estimated Output</h4>
                       <div className="text-sm space-y-1 text-white">
                         <p>
-                          <span className="text-white/50">Samples per auditor: </span>
+                          <span className="text-white/70">Samples per auditor: </span>
                           {Math.floor(samples.length / selectedAuditors.length)} (round-robin)
                         </p>
                         <p>
-                          <span className="text-white/50">Rows per workbook: </span>
+                          <span className="text-white/70">Rows per workbook: </span>
                           ~{Math.floor(samples.length / selectedAuditors.length) * extractedAttributes.length}
                         </p>
                         <p>
-                          <span className="text-white/50">Total test rows: </span>
+                          <span className="text-white/70">Total test rows: </span>
                           {samples.length * extractedAttributes.length}
                         </p>
                       </div>

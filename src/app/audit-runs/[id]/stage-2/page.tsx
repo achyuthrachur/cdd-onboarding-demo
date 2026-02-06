@@ -234,7 +234,7 @@ export default function Stage2Page() {
       title: "Step 3",
       description: "Lock Sample",
       isComplete: isLocked,
-      activeColor: "bg-white/10 text-white/40",
+      activeColor: "bg-white/10 text-white/60",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: Lock,
       badgeText: isLocked ? "Locked" : "Pending",
@@ -253,7 +253,7 @@ export default function Stage2Page() {
       >
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -266,7 +266,7 @@ export default function Stage2Page() {
                 Statistical Sampling
               </h1>
             </div>
-            <p className="text-white/50 mt-2">
+            <p className="text-white/70 mt-2">
               Upload population data, configure sampling parameters, and generate
               your sample set
             </p>
@@ -310,7 +310,7 @@ export default function Stage2Page() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-white/50 mb-4">
+                <p className="text-sm text-white/70 mb-4">
                   {step.helpText}
                 </p>
                 <AnimatePresence mode="wait">

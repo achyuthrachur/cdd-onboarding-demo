@@ -15,14 +15,15 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        // Liquid glass effect - frosted glass on dark background
-        "bg-white/10 backdrop-blur-xl text-white flex flex-col gap-6 rounded-2xl py-6",
-        // Subtle border for glass edge definition
-        "border border-white/20",
-        // Soft glow shadow
-        "shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]",
-        // Hover: enhanced glow
-        "transition-all duration-300 hover:bg-white/15 hover:border-white/30 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.15)] hover:-translate-y-0.5",
+        // Light mode: clean white card with subtle shadow
+        // Dark mode: Liquid glass effect - frosted glass on dark background
+        "bg-white dark:bg-white/10 backdrop-blur-xl text-gray-900 dark:text-white flex flex-col gap-6 rounded-2xl py-6",
+        // Subtle border for definition
+        "border border-gray-200 dark:border-white/20",
+        // Shadow: lighter in light mode, soft glow in dark mode
+        "shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]",
+        // Hover: enhanced effect
+        "transition-all duration-300 hover:bg-gray-50 dark:hover:bg-white/15 hover:border-gray-300 dark:hover:border-white/30 hover:shadow-lg dark:hover:shadow-[0_8px_40px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.15)] hover:-translate-y-0.5",
         className
       )}
       {...props}
@@ -57,7 +58,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-white/60 text-sm", className)}
+      className={cn("text-gray-500 dark:text-white/60 text-sm", className)}
       {...props}
     />
   )
@@ -158,14 +159,15 @@ const AnimatedCard = React.forwardRef<HTMLDivElement, AnimatedCardProps>(
         ref={ref}
         data-slot="animated-card"
         className={cn(
-          // Liquid glass effect - frosted glass on dark background
-          "bg-white/10 backdrop-blur-xl text-white flex flex-col gap-6 rounded-2xl py-6",
-          // Subtle border for glass edge definition
-          "border border-white/20",
-          // Soft glow shadow
-          "shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]",
+          // Light mode: clean white card with subtle shadow
+          // Dark mode: Liquid glass effect - frosted glass on dark background
+          "bg-white dark:bg-white/10 backdrop-blur-xl text-gray-900 dark:text-white flex flex-col gap-6 rounded-2xl py-6",
+          // Subtle border for definition
+          "border border-gray-200 dark:border-white/20",
+          // Shadow: lighter in light mode, soft glow in dark mode
+          "shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]",
           "transition-all duration-300",
-          enableHover && !shouldReduceMotion && "hover:bg-white/15 hover:border-white/30 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.15)]",
+          enableHover && !shouldReduceMotion && "hover:bg-gray-50 dark:hover:bg-white/15 hover:border-gray-300 dark:hover:border-white/30 hover:shadow-lg dark:hover:shadow-[0_8px_40px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.15)]",
           className
         )}
         {...animationProps}

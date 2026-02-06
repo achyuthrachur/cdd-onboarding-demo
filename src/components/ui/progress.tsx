@@ -16,7 +16,7 @@ function Progress({
     <ProgressPrimitive.Root
       data-slot="progress"
       className={cn(
-        "bg-white/10 relative h-2 w-full overflow-hidden rounded-full",
+        "bg-gray-200 dark:bg-white/10 relative h-2 w-full overflow-hidden rounded-full",
         className
       )}
       {...props}
@@ -68,7 +68,7 @@ const AnimatedProgress = React.forwardRef<
         ref={ref}
         data-slot="progress"
         className={cn(
-          "bg-white/10 relative h-2 w-full overflow-hidden rounded-full",
+          "bg-gray-200 dark:bg-white/10 relative h-2 w-full overflow-hidden rounded-full",
           className
         )}
         value={value}
@@ -138,9 +138,9 @@ const LabeledProgress = React.forwardRef<
     <div className="space-y-1.5">
       {(label || showPercentage) && (
         <div className="flex justify-between text-sm">
-          {label && <span className="text-white/60">{label}</span>}
+          {label && <span className="text-gray-500 dark:text-white/60">{label}</span>}
           {showPercentage && (
-            <span className="font-medium tabular-nums text-white">{displayNum}%</span>
+            <span className="font-medium tabular-nums text-gray-900 dark:text-white">{displayNum}%</span>
           )}
         </div>
       )}

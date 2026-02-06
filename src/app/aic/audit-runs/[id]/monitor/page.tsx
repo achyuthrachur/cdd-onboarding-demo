@@ -259,7 +259,7 @@ export default function AicMonitorPage() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -283,7 +283,7 @@ export default function AicMonitorPage() {
                 </motion.div>
               )}
             </div>
-            <p className="text-white/50 mt-2">
+            <p className="text-white/70 mt-2">
               Real-time tracking of auditor workbook completion (5-second refresh)
             </p>
           </div>
@@ -337,7 +337,7 @@ export default function AicMonitorPage() {
               <CardTitle className="text-3xl text-white">{totalAuditors}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-white/50">
+              <div className="flex items-center gap-2 text-sm text-white/70">
                 <User className="h-4 w-4" />
                 Assigned to workbooks
               </div>
@@ -381,7 +381,7 @@ export default function AicMonitorPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-white/50">
+              <div className="flex items-center gap-2 text-sm text-white/70">
                 <Clock className="h-4 w-4" />
                 {isPolling ? 'Auto-refresh every 5s' : 'Paused'}
               </div>
@@ -575,10 +575,10 @@ export default function AicMonitorPage() {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-white/50" />
+                <Loader2 className="h-8 w-8 animate-spin text-white/70" />
               </div>
             ) : progress.length === 0 ? (
-              <div className="text-center py-12 text-white/50">
+              <div className="text-center py-12 text-white/70">
                 <User className="h-12 w-12 mx-auto mb-4 opacity-30" />
                 <p>No auditor workbooks found</p>
                 <p className="text-sm">Generate and publish workbooks in Stage 4</p>
@@ -629,7 +629,7 @@ export default function AicMonitorPage() {
                           {/* Progress Bar */}
                           <div>
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-white/50">Completion</span>
+                              <span className="text-white/70">Completion</span>
                               <span className="font-medium text-white">{auditor.completionPercentage}%</span>
                             </div>
                             <Progress
@@ -645,12 +645,12 @@ export default function AicMonitorPage() {
                           </div>
 
                           {/* Stats */}
-                          <div className="flex items-center justify-between text-sm text-white/50">
+                          <div className="flex items-center justify-between text-sm text-white/70">
                             <span>{auditor.totalAttributes} attributes × {auditor.totalCustomers} customers</span>
                           </div>
 
                           {/* Last Activity */}
-                          <div className="flex items-center gap-2 text-xs text-white/40">
+                          <div className="flex items-center gap-2 text-xs text-white/60">
                             <Clock className="h-3 w-3" />
                             {auditor.submittedAt ? (
                               <span>Submitted {new Date(auditor.submittedAt).toLocaleString()}</span>

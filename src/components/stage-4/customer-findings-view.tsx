@@ -406,7 +406,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                           <p className="text-white/80 text-sm">
                                             {obs.observationText}
                                           </p>
-                                          <p className="text-white/50 text-xs mt-2">
+                                          <p className="text-white/70 text-xs mt-2">
                                             Auditor: {obs.auditorName}
                                           </p>
                                         </motion.li>
@@ -442,7 +442,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                           <p className="text-white/80 text-sm">
                                             {q.questionText}
                                           </p>
-                                          <p className="text-white/50 text-xs mt-2">
+                                          <p className="text-white/70 text-xs mt-2">
                                             Auditor: {q.auditorName}
                                           </p>
                                         </motion.li>
@@ -490,7 +490,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                           <p className="text-white/80 text-sm">
                                             {fail.failureReason}
                                           </p>
-                                          <p className="text-white/50 text-xs mt-2">
+                                          <p className="text-white/70 text-xs mt-2">
                                             Auditor: {fail.auditorName}
                                           </p>
                                         </motion.li>

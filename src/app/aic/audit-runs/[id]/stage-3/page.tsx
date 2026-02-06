@@ -262,7 +262,7 @@ export default function AicStage3Page() {
       title: "Step 3: Review",
       description: "Confirm & Export",
       isComplete: canProceed,
-      activeColor: "bg-white/10 text-white/40",
+      activeColor: "bg-white/10 text-white/60",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: FileSpreadsheet,
       badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
@@ -280,7 +280,7 @@ export default function AicStage3Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -293,7 +293,7 @@ export default function AicStage3Page() {
                 FLU Procedure Extraction
               </h1>
             </div>
-            <p className="text-white/50 mt-2">
+            <p className="text-white/70 mt-2">
               Extract CIP, CDD, and EDD testing attributes from Front Line Unit procedures
             </p>
           </div>
@@ -403,7 +403,7 @@ export default function AicStage3Page() {
                     <div className="text-center">
                       <Sparkles className="h-16 w-16 mx-auto mb-4 text-white/30" />
                       <h3 className="font-medium mb-2 text-white">No Extraction Results</h3>
-                      <p className="text-sm text-white/50">
+                      <p className="text-sm text-white/70">
                         Upload FLU procedures and run extraction to view results
                       </p>
                     </div>

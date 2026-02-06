@@ -196,7 +196,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
                 <Input
                   placeholder="Search attributes..."
                   value={searchTerm}
@@ -332,7 +332,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                         {attr.IsRequired === "Y" ? (
                           <CheckCircle className="h-4 w-4 text-green-400" />
                         ) : (
-                          <span className="text-white/50">-</span>
+                          <span className="text-white/70">-</span>
                         )}
                       </TableCell>
                       <TableCell className="px-4 py-2 text-center text-sm">
@@ -424,7 +424,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                                         key={idx}
                                         className="flex items-start gap-3 p-2 bg-white/10 rounded text-sm"
                                       >
-                                        <FileText className="h-4 w-4 mt-0.5 text-white/50" />
+                                        <FileText className="h-4 w-4 mt-0.5 text-white/70" />
                                         <div>
                                           <p className="font-medium">{doc.Document_Name}</p>
                                           <p className="text-xs text-white/60">

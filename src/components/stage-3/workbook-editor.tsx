@@ -210,7 +210,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
       case "Fail":
         return <XCircle className="h-4 w-4 text-crowe-coral-bright" />;
       case "N/A":
-        return <MinusCircle className="h-4 w-4 text-white/50" />;
+        return <MinusCircle className="h-4 w-4 text-white/70" />;
       default:
         return null;
     }
@@ -337,7 +337,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
                 <Input
                   placeholder="Search by ID, entity, or attribute..."
                   value={searchTerm}
@@ -407,7 +407,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                     </TableCell>
                     <TableCell className="px-4 py-2">
                       <Select
-                        value={row.result || ""}
+                        value={row.result || undefined}
                         onValueChange={(v) => updateRow(row.id, "result", v)}
                         disabled={isSubmitted}
                       >
@@ -419,10 +419,10 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                         </SelectTrigger>
                         <SelectContent>
                           {RESULT_OPTIONS.map((opt) => (
-                            <SelectItem key={opt || "empty"} value={opt || ""}>
+                            <SelectItem key={opt} value={opt}>
                               <div className="flex items-center gap-2">
                                 {getResultIcon(opt)}
-                                {opt || "-"}
+                                {opt}
                               </div>
                             </SelectItem>
                           ))}

@@ -176,7 +176,7 @@ export function DemoModeBanner({
               })}
             </div>
 
-            <p className="text-xs text-white/50 mt-3">
+            <p className="text-xs text-white/70 mt-3">
               The demo will generate sample documents, population data, testing
               workbooks, and consolidation results using mock data.
             </p>

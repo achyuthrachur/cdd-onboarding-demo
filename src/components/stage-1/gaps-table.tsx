@@ -135,7 +135,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
                 <Input
                   placeholder="Search gaps..."
                   value={searchTerm}

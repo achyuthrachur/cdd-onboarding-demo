@@ -92,7 +92,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
       <div className="mb-8">
         <Link
           href="/audit-runs"
-          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Runs
@@ -100,7 +100,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-white">{auditRun.name}</h1>
-            <p className="text-white/50 mt-2">
+            <p className="text-white/70 mt-2">
               {auditRun.scope?.description || "CDD Onboarding Audit"}
             </p>
           </div>
@@ -145,7 +145,7 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
                         ? "bg-crowe-amber text-crowe-indigo-dark"
                         : isActive
                         ? "bg-green-500/20 text-green-400"
-                        : "bg-white/10 text-white/50"
+                        : "bg-white/10 text-white/70"
                     }`}
                   >
                     <stage.icon className="h-6 w-6" />
@@ -191,37 +191,37 @@ export default async function AuditRunDetailPage({ params }: PageProps) {
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 1</div>
-              <div className="flex-1 text-sm text-white/50">
+              <div className="flex-1 text-sm text-white/70">
                 Gap Assessment: Compare standards and procedures to identify gaps
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 2</div>
-              <div className="flex-1 text-sm text-white/50">
+              <div className="flex-1 text-sm text-white/70">
                 Sampling: Upload population and generate statistical sample
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 3</div>
-              <div className="flex-1 text-sm text-white/50">
+              <div className="flex-1 text-sm text-white/70">
                 Attribute Extraction: Extract testing attributes from gap analysis
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 4</div>
-              <div className="flex-1 text-sm text-white/50">
+              <div className="flex-1 text-sm text-white/70">
                 Workbook Generation: Create testing workbooks from attributes and sample
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 5</div>
-              <div className="flex-1 text-sm text-white/50">
+              <div className="flex-1 text-sm text-white/70">
                 Testing: Execute tests and record pass/fail results
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 font-medium text-white">Stage 6</div>
-              <div className="flex-1 text-sm text-white/50">
+              <div className="flex-1 text-sm text-white/70">
                 Consolidation: Aggregate results and generate final report
               </div>
             </div>

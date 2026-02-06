@@ -49,7 +49,7 @@ const RESULT_OPTIONS = [
   { value: "Fail 2 - Procedure", label: "Fail 2 - Procedure", icon: AlertTriangle, color: "text-crowe-amber" },
   { value: "Question to LOB", label: "Question to LOB", icon: HelpCircle, color: "text-crowe-blue-light" },
   { value: "N/A", label: "N/A", icon: MinusCircle, color: "text-white/60" },
-  { value: "not-tested", label: "Not Tested", icon: MinusCircle, color: "text-white/40" },
+  { value: "not-tested", label: "Not Tested", icon: MinusCircle, color: "text-white/60" },
 ];
 
 export function AuditorWorkbookView({

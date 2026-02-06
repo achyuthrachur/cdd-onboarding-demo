@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "CDD Onboarding Demo",
@@ -13,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Google Fonts - loaded at runtime for better build resilience */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,8 +25,15 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        {children}
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

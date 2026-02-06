@@ -68,7 +68,7 @@ export function StatCard({
     >
       <div className="flex items-start justify-between mb-2">
         <span className="text-sm text-white/60">{title}</span>
-        {Icon && <Icon className="h-4 w-4 text-white/40" />}
+        {Icon && <Icon className="h-4 w-4 text-white/60" />}
       </div>
       <div className={cn("text-2xl font-bold tabular-nums", variantStyles[variant])}>
         {prefix}
@@ -77,14 +77,14 @@ export function StatCard({
       </div>
       {(subtitle || trendValue) && (
         <div className="flex items-center gap-2 mt-1">
-          {subtitle && <span className="text-xs text-white/50">{subtitle}</span>}
+          {subtitle && <span className="text-xs text-white/70">{subtitle}</span>}
           {trendValue && (
             <span
               className={cn(
                 "text-xs",
                 trend === "up" && "text-crowe-teal-bright",
                 trend === "down" && "text-crowe-coral-bright",
-                trend === "neutral" && "text-white/50"
+                trend === "neutral" && "text-white/70"
               )}
             >
               {trend === "up" && "+"}

@@ -886,7 +886,7 @@ export function ConsolidationDashboard({
                         <Bot className="h-3 w-3 mr-1" />
                         Demo Mode
                       </Badge>
-                      <span className="text-xs text-white/50">
+                      <span className="text-xs text-white/70">
                         AI API not configured - showing sample summary
                       </span>
                     </div>
@@ -981,10 +981,10 @@ export function ConsolidationDashboard({
                   className="text-center py-12"
                 >
                   <Bot className="h-12 w-12 mx-auto mb-4 text-white/30" />
-                  <p className="text-white/50 mb-2">
+                  <p className="text-white/70 mb-2">
                     No summary generated yet
                   </p>
-                  <p className="text-sm text-white/40">
+                  <p className="text-sm text-white/60">
                     Click &quot;Generate Summary&quot; to create comprehensive audit documentation
                   </p>
                 </motion.div>

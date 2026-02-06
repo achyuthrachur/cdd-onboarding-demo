@@ -151,7 +151,7 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
                 <Input
                   placeholder="Search documents..."
                   value={searchTerm}
@@ -226,7 +226,7 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
                       <TableCell className="px-4 py-2 font-mono text-sm">{doc.Attribute_ID}</TableCell>
                       <TableCell className="px-4 py-2">
                         <div className="flex items-center gap-2">
-                          <FileText className="h-4 w-4 text-white/50" />
+                          <FileText className="h-4 w-4 text-white/70" />
                           <span className="font-medium text-sm">{doc.Document_Name}</span>
                         </div>
                       </TableCell>

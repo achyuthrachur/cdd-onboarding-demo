@@ -87,7 +87,7 @@ export function Sidebar() {
 
       {/* User/Version Info */}
       <div className="border-t border-white/10 px-6 py-4">
-        <p className="text-xs text-white/50">
+        <p className="text-xs text-white/70">
           CDD Onboarding Demo v1.0
         </p>
       </div>

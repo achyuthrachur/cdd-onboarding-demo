@@ -50,7 +50,7 @@ export function CategoryBreakdown({
   if (data.length === 0) {
     return (
       <div
-        className="flex items-center justify-center text-white/50"
+        className="flex items-center justify-center text-white/70"
         style={{ height }}
       >
         No category data available

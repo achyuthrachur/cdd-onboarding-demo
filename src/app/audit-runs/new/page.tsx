@@ -69,13 +69,13 @@ export default function NewAuditRunPage() {
       <div className="mb-8">
         <Link
           href="/audit-runs"
-          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Runs
         </Link>
         <h1 className="text-3xl font-bold tracking-tight text-white">Create Audit Run</h1>
-        <p className="text-white/50 mt-2">
+        <p className="text-white/70 mt-2">
           Start a new CDD onboarding audit workflow
         </p>
       </div>
@@ -99,7 +99,7 @@ export default function NewAuditRunPage() {
                   setFormData({ ...formData, name: e.target.value })
                 }
                 disabled={isLoading}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
               />
             </div>
 
@@ -113,7 +113,7 @@ export default function NewAuditRunPage() {
                   setFormData({ ...formData, description: e.target.value })
                 }
                 disabled={isLoading}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
               />
             </div>
 
@@ -136,7 +136,7 @@ export default function NewAuditRunPage() {
                   </SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-xs text-white/50">
+              <p className="text-xs text-white/70">
                 Demo packages include pre-loaded documents and sample data
               </p>
             </div>

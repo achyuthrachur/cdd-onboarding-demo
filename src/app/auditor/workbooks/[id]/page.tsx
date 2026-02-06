@@ -105,7 +105,7 @@ function getResultBadgeClass(result: string): string {
     case 'N/A':
       return 'bg-white/10 text-white/60 border-white/20';
     default:
-      return 'bg-white/5 text-white/40 border-white/10';
+      return 'bg-white/5 text-white/60 border-white/10';
   }
 }
 
@@ -176,7 +176,7 @@ function DocumentSelectionCell({
   return (
     <div className="flex flex-col gap-1">
       <Select
-        value={selectedDoc}
+        value={selectedDoc || undefined}
         onValueChange={handleChange}
         disabled={isSubmitted}
       >
@@ -192,11 +192,6 @@ function DocumentSelectionCell({
           </div>
         </SelectTrigger>
         <SelectContent className="max-h-[300px] bg-crowe-indigo-dark/95 backdrop-blur-xl border-white/20">
-          {/* Empty option */}
-          <SelectItem value="" className="text-white/50 text-xs">
-            Select...
-          </SelectItem>
-
           {/* Acceptable Documents Section */}
           {documentOptions.length > 0 && (
             <>
@@ -248,7 +243,7 @@ function DocumentSelectionCell({
 
       {/* Show observation if exists */}
       {customerResult?.observation && (
-        <div className="text-[10px] text-white/50 truncate" title={customerResult.observation}>
+        <div className="text-[10px] text-white/70 truncate" title={customerResult.observation}>
           Obs: {customerResult.observation.substring(0, 30)}...
         </div>
       )}
@@ -619,7 +614,7 @@ export default function AuditorWorkbookPage() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-white/50" />
+        <Loader2 className="h-8 w-8 animate-spin text-white/70" />
       </div>
     );
   }
@@ -630,7 +625,7 @@ export default function AuditorWorkbookPage() {
         <div className="text-center py-12">
           <AlertCircle className="h-12 w-12 mx-auto mb-4 text-white/30" />
           <h2 className="text-lg font-medium mb-2 text-white">Workbook Not Found</h2>
-          <p className="text-white/50 mb-4">
+          <p className="text-white/70 mb-4">
             This workbook doesn&apos;t exist or you don&apos;t have access to it.
           </p>
           <Link href="/auditor/workbooks">
@@ -647,7 +642,7 @@ export default function AuditorWorkbookPage() {
       <FadeInUp className="mb-8">
         <Link
           href="/auditor/workbooks"
-          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Workbooks
@@ -663,7 +658,7 @@ export default function AuditorWorkbookPage() {
                 </Badge>
               )}
             </div>
-            <p className="text-white/50 mt-2">
+            <p className="text-white/70 mt-2">
               {workbook.assignedCustomers.length} customers | {workbook.attributes.length} attributes
             </p>
           </div>
@@ -732,7 +727,7 @@ export default function AuditorWorkbookPage() {
         <motion.div variants={staggerItem}>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/50">
+              <CardTitle className="text-sm font-medium text-white/70">
                 Progress
               </CardTitle>
             </CardHeader>
@@ -742,7 +737,7 @@ export default function AuditorWorkbookPage() {
                 value={completionPercentage}
                 className={`mt-2 ${completionPercentage >= 95 ? '[&>div]:bg-crowe-teal' : ''}`}
               />
-              <p className="text-xs text-white/50 mt-1">
+              <p className="text-xs text-white/70 mt-1">
                 {testingProgress.completedTests} / {testingProgress.totalTests} tests
               </p>
             </CardContent>
@@ -758,7 +753,7 @@ export default function AuditorWorkbookPage() {
               <div className="text-2xl font-bold text-crowe-teal-bright tabular-nums">
                 {animatedPassCount}
               </div>
-              <p className="text-xs text-white/50 mt-1">
+              <p className="text-xs text-white/70 mt-1">
                 {testingProgress.totalTests > 0
                   ? (((testingProgress.passCount + testingProgress.passWithObsCount) / testingProgress.totalTests) * 100).toFixed(1)
                   : 0}% pass rate
@@ -776,7 +771,7 @@ export default function AuditorWorkbookPage() {
               <div className="text-2xl font-bold text-crowe-coral-bright tabular-nums">
                 {animatedFailCount}
               </div>
-              <p className="text-xs text-white/50 mt-1">
+              <p className="text-xs text-white/70 mt-1">
                 {testingProgress.fail1RegulatoryCount + testingProgress.fail2ProcedureCount} exception(s)
               </p>
             </CardContent>
@@ -786,11 +781,11 @@ export default function AuditorWorkbookPage() {
         <motion.div variants={staggerItem}>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/50">N/A</CardTitle>
+              <CardTitle className="text-sm font-medium text-white/70">N/A</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold tabular-nums text-white">{testingProgress.naCount}</div>
-              <p className="text-xs text-white/50 mt-1">Not applicable</p>
+              <p className="text-xs text-white/70 mt-1">Not applicable</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -834,17 +829,17 @@ export default function AuditorWorkbookPage() {
             {/* Filters */}
             <div className="flex gap-3 mb-4">
               <div className="relative flex-1 max-w-xs">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
                 <Input
                   placeholder="Search attributes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 bg-white/10 border-white/20 text-white placeholder:text-white/40"
+                  className="pl-9 bg-white/10 border-white/20 text-white placeholder:text-white/60"
                 />
               </div>
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="w-40 bg-white/10 border-white/20 text-white">
-                  <Filter className="h-4 w-4 mr-2 text-white/40" />
+                  <Filter className="h-4 w-4 mr-2 text-white/60" />
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent className="bg-crowe-indigo-dark/95 backdrop-blur-xl border-white/20">
@@ -858,7 +853,7 @@ export default function AuditorWorkbookPage() {
 
             {/* Customer Legend */}
             <div className="mb-4 p-3 bg-white/5 rounded-lg border border-white/10">
-              <div className="text-xs font-medium text-white/50 mb-2">Assigned Customers:</div>
+              <div className="text-xs font-medium text-white/70 mb-2">Assigned Customers:</div>
               <div className="flex flex-wrap gap-2">
                 {workbook.assignedCustomers.map((customer, idx) => (
                   <Badge key={customer.customerId} variant="outline" className="text-xs border-white/20 text-white/70">
@@ -886,7 +881,7 @@ export default function AuditorWorkbookPage() {
                             <span className="truncate" title={customer.customerName}>
                               {idx + 1}. {customer.customerName.substring(0, 12)}...
                             </span>
-                            <span className="text-[10px] text-white/40 font-normal">
+                            <span className="text-[10px] text-white/60 font-normal">
                               {customer.customerId}
                             </span>
                           </div>
@@ -926,7 +921,7 @@ export default function AuditorWorkbookPage() {
                       <TableRow>
                         <TableCell
                           colSpan={3 + workbook.assignedCustomers.length}
-                          className="text-center py-8 text-white/50"
+                          className="text-center py-8 text-white/70"
                         >
                           No rows match your filter criteria
                         </TableCell>
@@ -937,7 +932,7 @@ export default function AuditorWorkbookPage() {
               </div>
             </div>
 
-            <div className="mt-3 text-xs text-white/40">
+            <div className="mt-3 text-xs text-white/60">
               Showing {filteredRows.length} of {workbook.rows.length} attributes
             </div>
           </CardContent>
@@ -1013,7 +1008,7 @@ export default function AuditorWorkbookPage() {
                   value={observationModal.observation}
                   onChange={(e) => setObservationModal(prev => ({ ...prev, observation: e.target.value }))}
                   placeholder="Enter custom observation..."
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
                   rows={3}
                 />
               </div>

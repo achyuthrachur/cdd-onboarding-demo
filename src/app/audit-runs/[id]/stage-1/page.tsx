@@ -123,7 +123,7 @@ export default function Stage1Page() {
       >
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -140,7 +140,7 @@ export default function Stage1Page() {
               </motion.div>
               <h1 className="text-3xl font-bold tracking-tight text-white">Gap Assessment</h1>
             </div>
-            <p className="text-white/50 mt-2">
+            <p className="text-white/70 mt-2">
               Run sequential gap assessments using the AI assistant
             </p>
           </div>
@@ -227,7 +227,7 @@ export default function Stage1Page() {
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    canProceed ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/40"
+                    canProceed ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/60"
                   }`}
                   animate={canProceed && !shouldReduceMotion ? {
                     scale: [1, 1.15, 1],

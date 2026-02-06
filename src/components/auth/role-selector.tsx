@@ -44,7 +44,7 @@ export function RoleSelector() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-crowe-indigo-dark">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-crowe-indigo-dark">
       {/* Top accent bar - Crowe Amber */}
       <div className="h-1 bg-gradient-to-r from-crowe-amber via-crowe-amber-bright to-crowe-amber" />
 
@@ -57,10 +57,10 @@ export function RoleSelector() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl font-bold tracking-tight text-[#f6f7fa] mb-2">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-[#f6f7fa] mb-2">
               CDD Onboarding Demo
             </h1>
-            <p className="text-lg text-[#c8cbd6] max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-[#c8cbd6] max-w-2xl mx-auto">
               Audit testing workflow for CIP/CDD/EDD compliance. Select your role to continue.
             </p>
           </motion.div>
@@ -97,19 +97,19 @@ export function RoleSelector() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
-                    <FileSpreadsheet className="h-4 w-4 text-white/50" />
+                    <FileSpreadsheet className="h-4 w-4 text-gray-400 dark:text-white/70" />
                     <span>Gap analysis & attribute extraction</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <BarChart3 className="h-4 w-4 text-white/50" />
+                    <BarChart3 className="h-4 w-4 text-gray-400 dark:text-white/70" />
                     <span>Sampling configuration</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <Users className="h-4 w-4 text-white/50" />
+                    <Users className="h-4 w-4 text-gray-400 dark:text-white/70" />
                     <span>Workbook generation & assignment</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <Eye className="h-4 w-4 text-white/50" />
+                    <Eye className="h-4 w-4 text-gray-400 dark:text-white/70" />
                     <span>Live progress monitoring</span>
                   </div>
                 </div>
@@ -157,22 +157,22 @@ export function RoleSelector() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
-                    <FileSpreadsheet className="h-4 w-4 text-white/50" />
+                    <FileSpreadsheet className="h-4 w-4 text-gray-400 dark:text-white/70" />
                     <span>View assigned workbooks</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <ClipboardCheck className="h-4 w-4 text-white/50" />
+                    <ClipboardCheck className="h-4 w-4 text-gray-400 dark:text-white/70" />
                     <span>Complete CDD testing</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <ArrowRight className="h-4 w-4 text-white/50" />
+                    <ArrowRight className="h-4 w-4 text-gray-400 dark:text-white/70" />
                     <span>Submit completed workbooks</span>
                   </div>
                 </div>
 
                 {/* Auditor Selection */}
-                <div className="pt-2 border-t border-white/10">
-                  <label className="text-sm font-medium mb-2 block text-white/80">
+                <div className="pt-2 border-t border-gray-200 dark:border-white/10">
+                  <label className="text-sm font-medium mb-2 block text-gray-600 dark:text-white/80">
                     Select your identity:
                   </label>
                   <Select value={selectedAuditor} onValueChange={setSelectedAuditor}>
@@ -207,7 +207,7 @@ export function RoleSelector() {
 
           {/* Footer */}
           <motion.div
-            className="text-center mt-12 text-sm text-[#8b90a0]"
+            className="text-center mt-12 text-sm text-gray-500 dark:text-[#8b90a0]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}

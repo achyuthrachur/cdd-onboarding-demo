@@ -76,7 +76,7 @@ export function DocumentCard({
       >
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 mt-0.5">
-            <GripVertical className="h-4 w-4 text-white/50" />
+            <GripVertical className="h-4 w-4 text-white/70" />
           </div>
           <div className="flex-shrink-0">
             <motion.div

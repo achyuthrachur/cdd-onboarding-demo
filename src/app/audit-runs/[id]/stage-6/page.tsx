@@ -152,7 +152,7 @@ export default function Stage6Page() {
       <FadeInUp className="mb-8">
         <Link
           href={`/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/50 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-white/70 hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -171,7 +171,7 @@ export default function Stage6Page() {
                 Consolidation & Reporting
               </h1>
             </div>
-            <p className="text-white/50 mt-2">
+            <p className="text-white/70 mt-2">
               Consolidate all results, view dashboards, and generate final report
             </p>
           </div>
@@ -392,7 +392,7 @@ export default function Stage6Page() {
                     </motion.div>
                   ))}
                 </motion.div>
-                <p className="text-sm text-white/50 mt-4">
+                <p className="text-sm text-white/70 mt-4">
                   Demo mode: Click &quot;Load Demo Data&quot; to populate all stages with sample data.
                 </p>
               </CardContent>

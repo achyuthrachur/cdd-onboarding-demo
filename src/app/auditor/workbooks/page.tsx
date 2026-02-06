@@ -135,7 +135,7 @@ export default function AuditorWorkbooksPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-white">My Workbooks</h1>
-            <p className="text-white/50 mt-2">
+            <p className="text-white/70 mt-2">
               View and complete your assigned testing workbooks
             </p>
           </div>
@@ -157,13 +157,13 @@ export default function AuditorWorkbooksPage() {
         <CardContent>
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="text-white/50">Loading workbooks...</div>
+              <div className="text-white/70">Loading workbooks...</div>
             </div>
           ) : workbooks.length === 0 ? (
             <div className="text-center py-12">
               <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-white/30" />
               <h3 className="font-medium mb-2 text-white">No Workbooks Available</h3>
-              <p className="text-sm text-white/50 mb-4">
+              <p className="text-sm text-white/70 mb-4">
                 You don&apos;t have any published workbooks assigned to you yet.
               </p>
               <div className="p-4 bg-crowe-amber/20 border border-crowe-amber/40 rounded-lg inline-block">
@@ -215,7 +215,7 @@ export default function AuditorWorkbooksPage() {
                                 )}
                               </Badge>
                             </div>
-                            <div className="flex items-center gap-3 text-sm text-white/50 mb-3">
+                            <div className="flex items-center gap-3 text-sm text-white/70 mb-3">
                               <span>{workbook.totalAttributes} attributes to test</span>
                               <span>|</span>
                               <span>{workbook.totalCustomers} customers assigned</span>
@@ -245,7 +245,7 @@ export default function AuditorWorkbooksPage() {
                                 )}
                               </div>
                               {workbook.lastActivityAt && (
-                                <div className="flex items-center gap-2 text-sm text-white/50">
+                                <div className="flex items-center gap-2 text-sm text-white/70">
                                   <Clock className="h-4 w-4" />
                                   Last activity: {new Date(workbook.lastActivityAt).toLocaleString()}
                                 </div>

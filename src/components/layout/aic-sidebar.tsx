@@ -11,6 +11,7 @@ import {
   Crown,
 } from "lucide-react";
 import { clearSession } from "@/lib/auth/session";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navigation = [
   {
@@ -35,15 +36,15 @@ export function AicSidebar() {
   };
 
   return (
-    <div className="flex h-full w-64 flex-col bg-white/5 backdrop-blur-xl border-r border-white/10">
+    <div className="flex h-full w-64 flex-col bg-gray-50 dark:bg-white/5 backdrop-blur-xl border-r border-gray-200 dark:border-white/10">
       {/* Logo */}
-      <div className="flex h-16 items-center gap-2 px-6 border-b border-white/10">
+      <div className="flex h-16 items-center gap-2 px-6 border-b border-gray-200 dark:border-white/10">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-crowe-amber text-crowe-indigo-dark shadow-[0_4px_16px_rgba(245,168,0,0.3)]">
           <Crown className="h-4 w-4" />
         </div>
         <div>
-          <span className="font-semibold text-lg text-white">CDD Demo</span>
-          <span className="ml-2 text-xs text-crowe-amber font-medium">AIC</span>
+          <span className="font-semibold text-lg text-gray-900 dark:text-white">CDD Demo</span>
+          <span className="ml-2 text-xs text-crowe-amber-dark dark:text-crowe-amber font-medium">AIC</span>
         </div>
       </div>
 
@@ -60,8 +61,8 @@ export function AicSidebar() {
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-white/15 text-white border border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
-                    : "text-white/70 hover:bg-white/10 hover:text-white"
+                    ? "bg-gray-200 dark:bg-white/15 text-gray-900 dark:text-white border border-gray-300 dark:border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
+                    : "text-gray-600 dark:text-white/70 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -72,17 +73,23 @@ export function AicSidebar() {
         </div>
       </nav>
 
+      {/* Theme Toggle */}
+      <div className="flex items-center justify-between px-3 py-2 border-t border-gray-200 dark:border-white/10">
+        <span className="text-sm text-gray-500 dark:text-white/70">Theme</span>
+        <ThemeToggle />
+      </div>
+
       {/* Logout / Switch Role */}
-      <div className="border-t border-white/10 px-3 py-4 space-y-2">
+      <div className="border-t border-gray-200 dark:border-white/10 px-3 py-4 space-y-2">
         <Button
           variant="ghost"
-          className="w-full justify-start text-white/60 hover:text-white hover:bg-white/10"
+          className="w-full justify-start text-gray-600 dark:text-white/60 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
           onClick={handleLogout}
         >
           <LogOut className="h-4 w-4 mr-3" />
           Switch Role
         </Button>
-        <p className="text-xs text-white/40 px-3">
+        <p className="text-xs text-gray-400 dark:text-white/60 px-3">
           CDD Demo v1.0 | AIC Portal
         </p>
       </div>

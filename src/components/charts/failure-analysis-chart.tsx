@@ -61,7 +61,7 @@ export function FailureAnalysisChart({
   if (total === 0) {
     return (
       <div
-        className="flex items-center justify-center text-white/50"
+        className="flex items-center justify-center text-white/70"
         style={{ height }}
       >
         <div className="text-center">

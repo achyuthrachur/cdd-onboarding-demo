@@ -196,7 +196,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
                           <span className="text-sm">Yes</span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1 text-white/50">
+                        <div className="flex items-center gap-1 text-white/70">
                           <XCircle className="h-4 w-4" />
                           <span className="text-sm">No</span>
                         </div>
