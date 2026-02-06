@@ -400,7 +400,7 @@ export function clearStageDataForStage(stageNumber: 1 | 2 | 3 | 4 | 5 | 6): void
       keysToRemove.push('fluProcedures', 'fluExtractionResult', 'extractedAttributes', 'acceptableDocs', 'attributeExtractionComplete');
       break;
     case 4:
-      keysToRemove.push('selectedAuditors', 'auditorWorkbooks', 'activeAuditorId', 'workbookGenerationComplete', 'workbookState', 'generatedWorkbooks');
+      keysToRemove.push('selectedAuditors', 'auditorWorkbooks', 'activeAuditorId', 'workbookGenerationComplete', 'workbookState', 'generatedWorkbooks', 'pivotedWorkbooks', 'workbooksPublished', 'auditorProgress');
       break;
     case 5:
       keysToRemove.push('testResults', 'testingProgress');

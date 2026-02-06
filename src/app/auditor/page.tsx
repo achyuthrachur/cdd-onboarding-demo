@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   FileSpreadsheet,
@@ -24,22 +23,18 @@ import { getSession, getCurrentAuditorId } from "@/lib/auth/session";
 import { getStageData } from "@/lib/stage-data";
 import type { PivotedAuditorWorkbook } from "@/lib/stage-data/store";
 
-interface WorkbookSummary {
-  id: string;
-  auditorId: string;
-  auditorName: string;
-  status: 'draft' | 'in_progress' | 'submitted';
-  completionPercentage: number;
-  totalAttributes: number;
-  totalCustomers: number;
-  lastActivityAt: string | null;
-  submittedAt: string | null;
+interface WorkbookStats {
+  total: number;
+  inProgress: number;
+  submitted: number;
+  averageCompletion: number;
 }
 
 export default function AuditorDashboardPage() {
   const shouldReduceMotion = useReducedMotion();
-  const [workbooks, setWorkbooks] = useState<WorkbookSummary[]>([]);
   const [auditorName, setAuditorName] = useState<string>("");
+  const [stats, setStats] = useState<WorkbookStats>({ total: 0, inProgress: 0, submitted: 0, averageCompletion: 0 });
+  const [hasWorkbooks, setHasWorkbooks] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -48,49 +43,42 @@ export default function AuditorDashboardPage() {
       setAuditorName(session.auditorName);
     }
 
-    // Load workbooks for current auditor
+    // Load workbook stats for current auditor
     const currentAuditorId = getCurrentAuditorId();
     const published = getStageData("workbooksPublished");
     const pivotedWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
     const auditorProgress = getStageData("auditorProgress") as Record<string, {
       completionPercentage: number;
       status: 'draft' | 'in_progress' | 'submitted';
-      lastActivityAt: string;
-      submittedAt: string | null;
     }> | null;
 
     if (published && pivotedWorkbooks && currentAuditorId) {
-      // Filter to only this auditor's workbooks
-      const myWorkbooks = pivotedWorkbooks
-        .filter(wb => wb.auditorId === currentAuditorId)
-        .map(wb => {
+      const myWorkbooks = pivotedWorkbooks.filter(wb => wb.auditorId === currentAuditorId);
+
+      if (myWorkbooks.length > 0) {
+        setHasWorkbooks(true);
+
+        const workbookStats = myWorkbooks.map(wb => {
           const progress = auditorProgress?.[wb.auditorId];
           return {
-            id: wb.auditorId,
-            auditorId: wb.auditorId,
-            auditorName: wb.auditorName,
             status: progress?.status || 'in_progress',
             completionPercentage: progress?.completionPercentage || 0,
-            totalAttributes: wb.attributes.length,
-            totalCustomers: wb.assignedCustomers.length,
-            lastActivityAt: progress?.lastActivityAt || null,
-            submittedAt: progress?.submittedAt || null,
-          } as WorkbookSummary;
+          };
         });
 
-      setWorkbooks(myWorkbooks);
+        const total = workbookStats.length;
+        const submitted = workbookStats.filter(w => w.status === 'submitted').length;
+        const inProgress = workbookStats.filter(w => w.status === 'in_progress').length;
+        const averageCompletion = total > 0
+          ? Math.round(workbookStats.reduce((sum, w) => sum + w.completionPercentage, 0) / total)
+          : 0;
+
+        setStats({ total, inProgress, submitted, averageCompletion });
+      }
     }
 
     setIsLoading(false);
   }, []);
-
-  // Calculate stats
-  const totalWorkbooks = workbooks.length;
-  const submittedCount = workbooks.filter(w => w.status === 'submitted').length;
-  const inProgressCount = workbooks.filter(w => w.status === 'in_progress').length;
-  const averageCompletion = workbooks.length > 0
-    ? Math.round(workbooks.reduce((sum, w) => sum + w.completionPercentage, 0) / workbooks.length)
-    : 0;
 
   return (
     <div className="p-8 min-h-full">
@@ -120,7 +108,7 @@ export default function AuditorDashboardPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardDescription>Total Workbooks</CardDescription>
-              <CardTitle className="text-3xl">{totalWorkbooks}</CardTitle>
+              <CardTitle className="text-3xl">{stats.total}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/80">
@@ -135,7 +123,7 @@ export default function AuditorDashboardPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardDescription>In Progress</CardDescription>
-              <CardTitle className="text-3xl text-crowe-amber-dark dark:text-crowe-amber">{inProgressCount}</CardTitle>
+              <CardTitle className="text-3xl text-crowe-amber-dark dark:text-crowe-amber">{stats.inProgress}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/80">
@@ -150,7 +138,7 @@ export default function AuditorDashboardPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardDescription>Submitted</CardDescription>
-              <CardTitle className="text-3xl text-crowe-teal-dark dark:text-crowe-teal-bright">{submittedCount}</CardTitle>
+              <CardTitle className="text-3xl text-crowe-teal-dark dark:text-crowe-teal-bright">{stats.submitted}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/80">
@@ -165,16 +153,16 @@ export default function AuditorDashboardPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardDescription>Avg. Completion</CardDescription>
-              <CardTitle className="text-3xl">{averageCompletion}%</CardTitle>
+              <CardTitle className="text-3xl">{stats.averageCompletion}%</CardTitle>
             </CardHeader>
             <CardContent>
-              <Progress value={averageCompletion} className="h-2" />
+              <Progress value={stats.averageCompletion} className="h-2" />
             </CardContent>
           </Card>
         </motion.div>
       </motion.div>
 
-      {/* Workbooks List */}
+      {/* Quick Actions */}
       <motion.div
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -182,18 +170,40 @@ export default function AuditorDashboardPage() {
       >
         <Card>
           <CardHeader>
-            <CardTitle>My Workbooks</CardTitle>
+            <CardTitle>Quick Actions</CardTitle>
             <CardDescription>
-              Click on a workbook to continue testing
+              Access your testing workbooks
             </CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="text-gray-500 dark:text-white/80">Loading workbooks...</div>
+              <div className="flex items-center justify-center py-8">
+                <div className="text-gray-500 dark:text-white/80">Loading...</div>
               </div>
-            ) : workbooks.length === 0 ? (
-              <div className="text-center py-12">
+            ) : hasWorkbooks ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
+                  <div className="flex items-center gap-3">
+                    <FileSpreadsheet className="h-8 w-8 text-crowe-amber" />
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">
+                        {stats.inProgress > 0 ? `${stats.inProgress} workbook${stats.inProgress > 1 ? 's' : ''} in progress` : 'All workbooks submitted'}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-white/80">
+                        {stats.averageCompletion}% average completion
+                      </p>
+                    </div>
+                  </div>
+                  <Link href="/auditor/workbooks">
+                    <Button>
+                      View Workbooks
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
                 <FileSpreadsheet className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-white/50" />
                 <h3 className="font-medium mb-2 text-gray-900 dark:text-white">No Workbooks Assigned</h3>
                 <p className="text-sm text-gray-500 dark:text-white/80 mb-4">
@@ -204,83 +214,11 @@ export default function AuditorDashboardPage() {
                     <AlertCircle className="h-4 w-4 text-crowe-amber-dark dark:text-crowe-amber mt-0.5" />
                     <p className="text-sm text-crowe-amber-dark dark:text-crowe-amber text-left">
                       The AIC needs to publish workbooks in Stage 4 before you can see them here.
-                      Please check back later or contact your AIC.
+                      Go to <Link href="/auditor/workbooks" className="underline font-medium">My Workbooks</Link> to load demo data.
                     </p>
                   </div>
                 </div>
               </div>
-            ) : (
-              <motion.div
-                className="space-y-3"
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-              >
-                {workbooks.map((workbook) => (
-                  <motion.div key={workbook.id} variants={staggerItem}>
-                    <Link href={`/auditor/workbooks/${workbook.id}`}>
-                      <Card className={`transition-all cursor-pointer ${
-                        workbook.status === 'submitted'
-                          ? 'border-crowe-teal/50 bg-crowe-teal/10'
-                          : 'hover:bg-gray-100 dark:hover:bg-white/15 hover:border-crowe-amber/50'
-                      }`}>
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <h3 className="font-medium text-gray-900 dark:text-white">Testing Workbook</h3>
-                                <Badge
-                                  variant={workbook.status === 'submitted' ? 'default' : 'outline'}
-                                  className={workbook.status === 'submitted' ? 'bg-crowe-teal' : ''}
-                                >
-                                  {workbook.status === 'submitted' ? (
-                                    <>
-                                      <CheckCircle2 className="h-3 w-3 mr-1" />
-                                      Submitted
-                                    </>
-                                  ) : (
-                                    'In Progress'
-                                  )}
-                                </Badge>
-                              </div>
-                              <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-white/80 mb-3">
-                                <span>{workbook.totalAttributes} attributes</span>
-                                <span>|</span>
-                                <span>{workbook.totalCustomers} customers</span>
-                              </div>
-                              <div className="flex items-center gap-3">
-                                <div className="flex-1 max-w-xs">
-                                  <div className="flex justify-between text-sm mb-1">
-                                    <span>Completion</span>
-                                    <span className="font-medium">{workbook.completionPercentage}%</span>
-                                  </div>
-                                  <Progress
-                                    value={workbook.completionPercentage}
-                                    className={`h-2 ${
-                                      workbook.completionPercentage >= 95
-                                        ? '[&>div]:bg-crowe-teal'
-                                        : ''
-                                    }`}
-                                  />
-                                </div>
-                                {workbook.lastActivityAt && (
-                                  <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-white/80">
-                                    <Clock className="h-3 w-3" />
-                                    Last activity: {new Date(workbook.lastActivityAt).toLocaleDateString()}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                            <Button variant="ghost" size="icon">
-                              <ArrowRight className="h-5 w-5" />
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
             )}
           </CardContent>
         </Card>

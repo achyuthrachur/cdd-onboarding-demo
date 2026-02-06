@@ -15,6 +15,7 @@ import {
   Users,
 } from "lucide-react";
 import { motion, staggerContainer, staggerItem } from "@/lib/animations";
+import { mockAuditors } from "@/lib/attribute-library/mock-data";
 
 export default function AicDashboardPage() {
   return (
@@ -79,7 +80,7 @@ export default function AicDashboardPage() {
               <Users className="h-4 w-4 text-gray-500 dark:text-white/80" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">4</div>
+              <div className="text-2xl font-bold">{mockAuditors.length}</div>
               <p className="text-xs text-gray-500 dark:text-white/80">
                 Available for assignment
               </p>
