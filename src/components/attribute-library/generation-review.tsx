@@ -83,21 +83,21 @@ interface GenerationReviewProps {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  Ready: "bg-green-100 text-green-700",
-  "In Progress": "bg-blue-100 text-blue-700",
-  Completed: "bg-purple-100 text-purple-700",
-  Error: "bg-red-100 text-red-700",
+  Ready: "bg-green-500/20 text-green-300",
+  "In Progress": "bg-blue-500/20 text-blue-300",
+  Completed: "bg-purple-500/20 text-purple-300",
+  Error: "bg-red-500/20 text-red-300",
 };
 
 const PARTY_TYPE_COLORS: Record<string, string> = {
-  "Individual - Domestic": "bg-blue-100 text-blue-700",
-  "Individual - Foreign": "bg-indigo-100 text-indigo-700",
-  "Corporate - Domestic": "bg-green-100 text-green-700",
-  "Corporate - Foreign": "bg-emerald-100 text-emerald-700",
-  PEP: "bg-red-100 text-red-700",
-  Trust: "bg-purple-100 text-purple-700",
-  Fund: "bg-orange-100 text-orange-700",
-  "Correspondent Bank": "bg-pink-100 text-pink-700",
+  "Individual - Domestic": "bg-blue-500/20 text-blue-300",
+  "Individual - Foreign": "bg-indigo-500/20 text-indigo-300",
+  "Corporate - Domestic": "bg-green-500/20 text-green-300",
+  "Corporate - Foreign": "bg-emerald-500/20 text-emerald-300",
+  PEP: "bg-red-500/20 text-red-300",
+  Trust: "bg-purple-500/20 text-purple-300",
+  Fund: "bg-orange-500/20 text-orange-300",
+  "Correspondent Bank": "bg-pink-500/20 text-pink-300",
 };
 
 export function GenerationReview({
@@ -567,7 +567,7 @@ export function GenerationReview({
             <div>
               <CardTitle className="flex items-center gap-2">
                 Batch Configuration
-                <Badge className={STATUS_COLORS[batchConfig.Status] || "bg-gray-100"}>
+                <Badge className={STATUS_COLORS[batchConfig.Status] || "bg-white/10 text-white/70"}>
                   {batchConfig.Status === "Ready" && <CheckCircle2 className="mr-1 h-3 w-3" />}
                   {batchConfig.Status === "In Progress" && <Clock className="mr-1 h-3 w-3" />}
                   {batchConfig.Status === "Error" && <AlertCircle className="mr-1 h-3 w-3" />}
@@ -601,21 +601,21 @@ export function GenerationReview({
         <CardContent>
           <div className="grid gap-4 md:grid-cols-4">
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Last Refresh</p>
+              <p className="text-sm text-white/60">Last Refresh</p>
               <p className="font-medium">{formatDate(batchConfig.LastRefresh)}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Output Folder</p>
+              <p className="text-sm text-white/60">Output Folder</p>
               <p className="font-medium text-sm truncate" title={batchConfig.OutputFolder}>
                 {batchConfig.OutputFolder}
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Total Samples</p>
+              <p className="text-sm text-white/60">Total Samples</p>
               <p className="font-medium">{batchConfig.TotalSamples}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Assignment Status</p>
+              <p className="text-sm text-white/60">Assignment Status</p>
               <p className="font-medium">
                 {batchConfig.AssignedCount}/{batchConfig.TotalSamples} Assigned
               </p>
@@ -624,7 +624,7 @@ export function GenerationReview({
 
           {/* Primary Action Buttons - 6 Main Actions */}
           <div className="mt-4 pt-4 border-t">
-            <p className="text-sm font-medium text-muted-foreground mb-3">Primary Actions</p>
+            <p className="text-sm font-medium text-white/60 mb-3">Primary Actions</p>
             <div className="flex flex-wrap gap-2">
               {/* Button 1: Import Attributes and Acceptable Docs */}
               <Button
@@ -739,25 +739,25 @@ export function GenerationReview({
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{displayRows.length}</div>
-            <p className="text-xs text-muted-foreground">Total Samples</p>
+            <p className="text-xs text-white/60">Total Samples</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{Object.keys(stats.byJurisdiction).length}</div>
-            <p className="text-xs text-muted-foreground">Jurisdictions</p>
+            <p className="text-xs text-white/60">Jurisdictions</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{stats.avgIRR.toFixed(1)}</div>
-            <p className="text-xs text-muted-foreground">Avg IRR</p>
+            <p className="text-xs text-white/60">Avg IRR</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{stats.avgDRR.toFixed(1)}</div>
-            <p className="text-xs text-muted-foreground">Avg DRR</p>
+            <p className="text-xs text-white/60">Avg DRR</p>
           </CardContent>
         </Card>
       </div>
@@ -775,7 +775,7 @@ export function GenerationReview({
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
                 <Input
                   placeholder="Search by GCI or Legal Name..."
                   value={searchTerm}
@@ -848,7 +848,7 @@ export function GenerationReview({
               <TableBody>
                 {filteredRows.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={10} className="text-center py-8 text-white/60">
                       {displayRows.length === 0
                         ? "No samples loaded. Import sampling data or populate from existing records."
                         : "No samples found matching your filters"}

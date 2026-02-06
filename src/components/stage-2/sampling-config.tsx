@@ -199,7 +199,7 @@ export function SamplingConfig({
               <SelectItem value="percentage">Percentage-based</SelectItem>
             </SelectContent>
           </Select>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-white/60">
             {method === "statistical" &&
               "Uses confidence level, tolerable error rate, and expected error rate to calculate sample size (Wald CI + FPC)"}
             {method === "simple_random" &&
@@ -225,7 +225,7 @@ export function SamplingConfig({
                 value={confidence}
                 onChange={(e) => setConfidence(parseFloat(e.target.value) || 95)}
               />
-              <p className="text-xs text-muted-foreground">50-99.9%</p>
+              <p className="text-xs text-white/60">50-99.9%</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="margin">Tolerable Error Rate (%)</Label>
@@ -238,7 +238,7 @@ export function SamplingConfig({
                 value={margin}
                 onChange={(e) => setMargin(parseFloat(e.target.value) || 5)}
               />
-              <p className="text-xs text-muted-foreground">Must exceed Expected Error Rate</p>
+              <p className="text-xs text-white/60">Must exceed Expected Error Rate</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="expectedError">Expected Error Rate (%)</Label>
@@ -251,7 +251,7 @@ export function SamplingConfig({
                 value={expectedError}
                 onChange={(e) => setExpectedError(parseFloat(e.target.value) || 1)}
               />
-              <p className="text-xs text-muted-foreground">Based on historical performance</p>
+              <p className="text-xs text-white/60">Based on historical performance</p>
             </div>
           </div>
         )}
@@ -270,13 +270,13 @@ export function SamplingConfig({
               onChange={(e) => setSamplePercentage(e.target.value)}
               placeholder="e.g., 10"
             />
-            <p className="text-xs text-muted-foreground">Required for percentage-based sampling</p>
+            <p className="text-xs text-white/60">Required for percentage-based sampling</p>
           </div>
         )}
 
         {/* Simple Random Method - requires sample size or percentage */}
         {method === "simple_random" && (
-          <div className="grid gap-4 md:grid-cols-2 p-4 border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950 rounded-lg">
+          <div className="grid gap-4 md:grid-cols-2 p-4 border border-crowe-blue/30 bg-crowe-blue/10 rounded-lg">
             <div className="space-y-2">
               <Label htmlFor="simpleRandomSize">Sample Size <span className="text-red-500">*</span></Label>
               <Input
@@ -288,7 +288,7 @@ export function SamplingConfig({
                 onChange={(e) => setSampleSizeOverride(e.target.value)}
                 placeholder="e.g., 100"
               />
-              <p className="text-xs text-muted-foreground">Number of records to sample</p>
+              <p className="text-xs text-white/60">Number of records to sample</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="simpleRandomPercentage">Or Sample Percentage (%)</Label>
@@ -302,9 +302,9 @@ export function SamplingConfig({
                 onChange={(e) => setSamplePercentage(e.target.value)}
                 placeholder="e.g., 10"
               />
-              <p className="text-xs text-muted-foreground">Alternative to fixed sample size</p>
+              <p className="text-xs text-white/60">Alternative to fixed sample size</p>
             </div>
-            <p className="col-span-2 text-xs text-blue-600 dark:text-blue-400">
+            <p className="col-span-2 text-xs text-crowe-blue-light">
               Simple Random sampling requires either a sample size or percentage.
             </p>
           </div>
@@ -323,7 +323,7 @@ export function SamplingConfig({
                 onChange={(e) => setPopulationOverride(e.target.value)}
                 placeholder={`Actual: ${populationSize.toLocaleString()}`}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-white/60">
                 Test sample calculations with different population assumptions
               </p>
             </div>
@@ -339,7 +339,7 @@ export function SamplingConfig({
                   onChange={(e) => setSampleSizeOverride(e.target.value)}
                   placeholder="Leave empty to use calculated size"
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-white/60">
                   Override the calculated sample size with a specific number
                 </p>
               </div>
@@ -359,7 +359,7 @@ export function SamplingConfig({
               onChange={(e) => setPopulationOverride(e.target.value)}
               placeholder={`Actual: ${populationSize.toLocaleString()}`}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-white/60">
               Test sample calculations with different population assumptions
             </p>
           </div>
@@ -377,7 +377,7 @@ export function SamplingConfig({
                 onChange={(e) => setSystematicStep(e.target.value)}
                 placeholder="Leave empty to calculate automatically"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-white/60">
                 Explicit interval for systematic sampling
               </p>
             </div>
@@ -390,7 +390,7 @@ export function SamplingConfig({
               value={seed}
               onChange={(e) => setSeed(parseInt(e.target.value) || 42)}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-white/60">
               Ensures reproducible sampling results (Mulberry32 PRNG)
             </p>
           </div>
@@ -398,8 +398,8 @@ export function SamplingConfig({
 
         {/* Override Justification - Required when overrides are active */}
         {configHasOverrides && (
-          <div className="space-y-2 p-4 border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950 rounded-lg">
-            <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300">
+          <div className="space-y-2 p-4 border border-crowe-amber/30 bg-crowe-amber/10 rounded-lg">
+            <div className="flex items-center gap-2 text-crowe-amber-bright">
               <AlertTriangle className="h-4 w-4" />
               <Label htmlFor="overrideJustification" className="font-medium">
                 Override Justification (Required)
@@ -412,7 +412,7 @@ export function SamplingConfig({
               placeholder="Provide justification for using overrides..."
               className="min-h-[80px]"
             />
-            <p className="text-xs text-amber-600 dark:text-amber-400">
+            <p className="text-xs text-crowe-amber">
               Overrides detected. A justification is required for audit documentation.
             </p>
           </div>
@@ -454,7 +454,7 @@ export function SamplingConfig({
               ))}
             </div>
           )}
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-white/60">
             Stratification ensures proportional representation across categories
           </p>
         </div>
@@ -478,19 +478,19 @@ export function SamplingConfig({
         </div>
 
         {/* Estimated Sample Size */}
-        <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+        <div className="flex items-center justify-between p-4 bg-white/10 rounded-lg">
           <div className="flex items-center gap-3">
             <Calculator className="h-5 w-5 text-primary" />
             <div>
               <p className="text-sm font-medium">Estimated Sample Size</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-white/60">
                 Based on current configuration
               </p>
             </div>
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold">{estimatedSize.toLocaleString()}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-white/60">
               of {populationSize.toLocaleString()} ({((estimatedSize / populationSize) * 100).toFixed(1)}%)
             </p>
           </div>

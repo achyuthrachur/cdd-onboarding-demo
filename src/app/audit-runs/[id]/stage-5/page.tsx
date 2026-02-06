@@ -369,7 +369,7 @@ export default function Stage5Page() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.1 }}
               >
-                <Badge className="bg-teal-100 text-teal-700">Stage 5</Badge>
+                <Badge className="bg-teal-500/20 text-teal-400">Stage 5</Badge>
               </motion.div>
               <h1 className="text-3xl font-bold tracking-tight text-white">Testing</h1>
             </div>
@@ -383,11 +383,11 @@ export default function Stage5Page() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Button variant="outline" onClick={handleLoadDemoData}>
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
-            <Button variant="outline" onClick={handleExportToExcel} disabled={!activeWorkbook}>
+            <Button variant="outline" onClick={handleExportToExcel} disabled={!activeWorkbook} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
@@ -524,7 +524,7 @@ export default function Stage5Page() {
                       animate={{ opacity: 1, scale: 1, x: 0 }}
                       exit={{ opacity: 0, scale: 0.8, x: 20 }}
                     >
-                      <Badge className="bg-green-100 text-green-700">
+                      <Badge className="bg-green-500/20 text-green-400">
                         <CheckCircle2 className="h-4 w-4 mr-1" />
                         Ready for Consolidation
                       </Badge>
@@ -559,7 +559,7 @@ export default function Stage5Page() {
                   <div className="text-xs font-medium text-white/50 mb-2">Assigned Customers:</div>
                   <div className="flex flex-wrap gap-2">
                     {activeWorkbook.assignedCustomers.map((customer, idx) => (
-                      <Badge key={customer.customerId} variant="outline" className="text-xs">
+                      <Badge key={customer.customerId} variant="outline" className="text-xs border-white/30 text-white/70">
                         {idx + 1}. {customer.customerName} ({customer.customerId})
                       </Badge>
                     ))}
@@ -657,7 +657,7 @@ export default function Stage5Page() {
         transition={{ delay: 0.5 }}
       >
         <Link href={`/audit-runs/${id}/stage-4`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 4
           </Button>

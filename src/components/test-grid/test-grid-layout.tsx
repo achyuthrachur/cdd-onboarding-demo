@@ -309,41 +309,41 @@ export function TestGridLayout({
         <CardContent>
           {/* Summary Stats */}
           <div className="grid grid-cols-9 gap-2 mb-4">
-            <div className="text-center p-2 rounded bg-muted">
-              <p className="text-lg font-bold">{summary.total}</p>
-              <p className="text-xs text-muted-foreground">Total</p>
+            <div className="text-center p-2 rounded bg-white/10">
+              <p className="text-lg font-bold text-white">{summary.total}</p>
+              <p className="text-xs text-white/60">Total</p>
             </div>
-            <div className="text-center p-2 rounded bg-green-50">
-              <p className="text-lg font-bold text-green-600">{summary.pass}</p>
-              <p className="text-xs text-muted-foreground">Pass</p>
+            <div className="text-center p-2 rounded bg-green-500/20">
+              <p className="text-lg font-bold text-green-300">{summary.pass}</p>
+              <p className="text-xs text-white/60">Pass</p>
             </div>
-            <div className="text-center p-2 rounded bg-yellow-50">
-              <p className="text-lg font-bold text-yellow-600">{summary.passObs}</p>
-              <p className="text-xs text-muted-foreground">Pass Obs</p>
+            <div className="text-center p-2 rounded bg-yellow-500/20">
+              <p className="text-lg font-bold text-yellow-300">{summary.passObs}</p>
+              <p className="text-xs text-white/60">Pass Obs</p>
             </div>
-            <div className="text-center p-2 rounded bg-red-50">
-              <p className="text-lg font-bold text-red-600">{summary.fail1}</p>
-              <p className="text-xs text-muted-foreground">Fail 1</p>
+            <div className="text-center p-2 rounded bg-red-500/20">
+              <p className="text-lg font-bold text-red-300">{summary.fail1}</p>
+              <p className="text-xs text-white/60">Fail 1</p>
             </div>
-            <div className="text-center p-2 rounded bg-red-50">
-              <p className="text-lg font-bold text-red-600">{summary.fail2}</p>
-              <p className="text-xs text-muted-foreground">Fail 2</p>
+            <div className="text-center p-2 rounded bg-red-500/20">
+              <p className="text-lg font-bold text-red-300">{summary.fail2}</p>
+              <p className="text-xs text-white/60">Fail 2</p>
             </div>
-            <div className="text-center p-2 rounded bg-blue-50">
-              <p className="text-lg font-bold text-blue-600">{summary.qLob}</p>
-              <p className="text-xs text-muted-foreground">Q to LOB</p>
+            <div className="text-center p-2 rounded bg-blue-500/20">
+              <p className="text-lg font-bold text-blue-300">{summary.qLob}</p>
+              <p className="text-xs text-white/60">Q to LOB</p>
             </div>
-            <div className="text-center p-2 rounded bg-gray-50">
-              <p className="text-lg font-bold text-gray-600">{summary.na}</p>
-              <p className="text-xs text-muted-foreground">N/A</p>
+            <div className="text-center p-2 rounded bg-white/5">
+              <p className="text-lg font-bold text-white/70">{summary.na}</p>
+              <p className="text-xs text-white/60">N/A</p>
             </div>
-            <div className="text-center p-2 rounded bg-muted">
-              <p className="text-lg font-bold">{summary.empty}</p>
-              <p className="text-xs text-muted-foreground">Empty</p>
+            <div className="text-center p-2 rounded bg-white/10">
+              <p className="text-lg font-bold text-white">{summary.empty}</p>
+              <p className="text-xs text-white/60">Empty</p>
             </div>
-            <div className="text-center p-2 rounded bg-primary/10">
-              <p className="text-lg font-bold">{summary.percentage.toFixed(0)}%</p>
-              <p className="text-xs text-muted-foreground">Complete</p>
+            <div className="text-center p-2 rounded bg-crowe-amber/20">
+              <p className="text-lg font-bold text-crowe-amber">{summary.percentage.toFixed(0)}%</p>
+              <p className="text-xs text-white/60">Complete</p>
             </div>
           </div>
 
@@ -351,7 +351,7 @@ export function TestGridLayout({
           <div className="flex flex-wrap gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
                 <Input
                   placeholder="Search attributes..."
                   value={searchTerm}
@@ -409,7 +409,7 @@ export function TestGridLayout({
           </div>
 
           {/* Row count */}
-          <p className="text-sm text-muted-foreground mb-2">
+          <p className="text-sm text-white/60 mb-2">
             Showing {filteredRows.length} of {rows.length} rows
           </p>
         </CardContent>
@@ -450,15 +450,15 @@ export function TestGridLayout({
                 if (visibleColumns[col]?.key === "result") {
                   const result = filteredRows[row]?.result;
                   if (result === "Pass") {
-                    cellProperties.className = "htCenter bg-green-50";
+                    cellProperties.className = "htCenter bg-green-500/20 text-green-300";
                   } else if (result === "Pass w/Observation") {
-                    cellProperties.className = "htCenter bg-yellow-50";
+                    cellProperties.className = "htCenter bg-yellow-500/20 text-yellow-300";
                   } else if (result?.startsWith("Fail")) {
-                    cellProperties.className = "htCenter bg-red-50";
+                    cellProperties.className = "htCenter bg-red-500/20 text-red-300";
                   } else if (result === "Question to LOB") {
-                    cellProperties.className = "htCenter bg-blue-50";
+                    cellProperties.className = "htCenter bg-blue-500/20 text-blue-300";
                   } else if (result === "N/A") {
-                    cellProperties.className = "htCenter bg-gray-50";
+                    cellProperties.className = "htCenter bg-white/5 text-white/70";
                   }
                 }
 
@@ -466,9 +466,9 @@ export function TestGridLayout({
                 if (visibleColumns[col]?.key === "percentComplete") {
                   const pct = filteredRows[row]?.percentComplete || 0;
                   if (pct >= 100) {
-                    cellProperties.className = "htCenter bg-green-100 font-bold";
+                    cellProperties.className = "htCenter bg-green-500/30 text-green-300 font-bold";
                   } else if (pct >= 50) {
-                    cellProperties.className = "htCenter bg-yellow-50";
+                    cellProperties.className = "htCenter bg-yellow-500/20 text-yellow-300";
                   }
                 }
 
@@ -502,10 +502,10 @@ export function TestGridLayout({
                   variant="secondary"
                   className={`ml-2 ${
                     entity.percentComplete >= 100
-                      ? "bg-green-100 text-green-700"
+                      ? "bg-green-500/20 text-green-300"
                       : entity.percentComplete > 0
-                      ? "bg-yellow-100 text-yellow-700"
-                      : ""
+                      ? "bg-yellow-500/20 text-yellow-300"
+                      : "bg-white/10 text-white/70"
                   }`}
                 >
                   {entity.percentComplete.toFixed(0)}%

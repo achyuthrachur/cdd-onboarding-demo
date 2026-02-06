@@ -374,8 +374,8 @@ Click the "Results" tab to view and export the extracted attributes.`,
       <CardHeader className="border-b flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-              <Bot className="h-5 w-5 text-green-600 dark:text-green-300" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-crowe-teal/20">
+              <Bot className="h-5 w-5 text-crowe-teal-bright" />
             </div>
             <div>
               <CardTitle className="text-lg">FLU Procedure Extraction</CardTitle>
@@ -439,7 +439,7 @@ Click the "Results" tab to view and export the extracted attributes.`,
             "border-2 border-dashed rounded-lg p-4 mb-4 transition-colors cursor-pointer",
             isDragOver
               ? "border-primary bg-primary/5"
-              : "border-muted-foreground/25 hover:border-muted-foreground/50",
+              : "border-white/25 hover:border-white/50",
             selectedDoc && "cursor-default"
           )}
           animate={isDragOver ? { scale: 1.02 } : { scale: 1 }}
@@ -487,11 +487,11 @@ Click the "Results" tab to view and export the extracted attributes.`,
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">
+                  <Upload className="h-8 w-8 mx-auto mb-2 text-white/60" />
+                  <p className="text-sm text-white/60">
                     Drag & drop FLU Procedures document here, or click to browse
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-white/60 mt-1">
                     Supports PDF, Word (.docx), and text files
                   </p>
                 </motion.div>
@@ -502,7 +502,7 @@ Click the "Results" tab to view and export the extracted attributes.`,
 
         {/* Action Button */}
         <div className="flex items-center justify-between">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-white/60">
             {selectedDoc ? "Ready to extract attributes" : "No document selected"}
           </p>
           <motion.div

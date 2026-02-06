@@ -86,7 +86,7 @@ export function WorkbookGenerator({
           <div className="flex flex-wrap gap-2">
             <Badge
               variant={hasStage1Results ? "default" : "outline"}
-              className={hasStage1Results ? "bg-green-100 text-green-700" : ""}
+              className={hasStage1Results ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
             >
               {hasStage1Results ? (
                 <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -95,7 +95,7 @@ export function WorkbookGenerator({
             </Badge>
             <Badge
               variant={hasLockedSample ? "default" : "outline"}
-              className={hasLockedSample ? "bg-green-100 text-green-700" : ""}
+              className={hasLockedSample ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
             >
               {hasLockedSample ? (
                 <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -113,15 +113,15 @@ export function WorkbookGenerator({
               {workbooks.map((wb) => (
                 <div
                   key={wb.id}
-                  className="flex items-center justify-between p-3 bg-muted rounded-lg"
+                  className="flex items-center justify-between p-3 bg-white/10 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <Database className="h-5 w-5 text-muted-foreground" />
+                    <Database className="h-5 w-5 text-white/60" />
                     <div>
                       <p className="text-sm font-medium">
                         Workbook - {new Date(wb.createdAt).toLocaleDateString()}
                       </p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2 text-xs text-white/60">
                         <span>{wb.rowCount} rows</span>
                         <span>•</span>
                         <span>{wb.summary.completionPercentage.toFixed(0)}% complete</span>
@@ -165,12 +165,12 @@ export function WorkbookGenerator({
         </Button>
 
         {!canGenerate && (
-          <p className="text-xs text-muted-foreground text-center">
+          <p className="text-xs text-white/60 text-center">
             Complete Stages 1 and 2 (with locked sample) to generate a workbook.
           </p>
         )}
 
-        <p className="text-xs text-muted-foreground text-center">
+        <p className="text-xs text-white/60 text-center">
           Demo mode: Uses mock attributes and sample data.
         </p>
       </CardContent>

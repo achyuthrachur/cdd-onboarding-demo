@@ -74,28 +74,28 @@ export function DemoModeBanner({
   };
 
   return (
-    <Card className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-800">
+    <Card className="bg-gradient-to-r from-crowe-violet-dark/30 to-crowe-indigo/30 border-crowe-violet/30">
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-900">
-              <Sparkles className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-crowe-violet/20">
+              <Sparkles className="h-5 w-5 text-crowe-violet-bright" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold">Demo Mode</h3>
-                <Badge variant="secondary" className="bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300">
+                <h3 className="font-semibold text-white">Demo Mode</h3>
+                <Badge variant="secondary" className="bg-crowe-violet/20 text-crowe-violet-bright border-0">
                   Quick Start
                 </Badge>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-sm text-white/70">
                 Populate all stages with sample data in one click
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             {completedStages.length === 4 ? (
-              <Badge className="bg-green-500">
+              <Badge className="bg-crowe-teal text-white">
                 <CheckCircle2 className="mr-1 h-3 w-3" />
                 Complete
               </Badge>
@@ -103,7 +103,7 @@ export function DemoModeBanner({
               <Button
                 onClick={handleRunDemo}
                 disabled={isRunning}
-                className="bg-indigo-600 hover:bg-indigo-700"
+                className="bg-crowe-violet hover:bg-crowe-violet-dark text-white"
               >
                 {isRunning ? (
                   <>
@@ -122,6 +122,7 @@ export function DemoModeBanner({
               variant="ghost"
               size="icon"
               onClick={() => setIsExpanded(!isExpanded)}
+              className="text-white/70 hover:text-white hover:bg-white/10"
             >
               {isExpanded ? (
                 <ChevronUp className="h-4 w-4" />
@@ -133,11 +134,11 @@ export function DemoModeBanner({
         </div>
 
         {isExpanded && (
-          <div className="mt-4 pt-4 border-t border-indigo-200 dark:border-indigo-800">
+          <div className="mt-4 pt-4 border-t border-white/10">
             {isRunning && (
               <div className="mb-4">
                 <Progress value={progress} className="h-2" />
-                <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                <p className="text-sm text-white/70 mt-2">
                   {currentStage
                     ? `Running Stage ${currentStage}: ${stages[currentStage - 1].name}...`
                     : "Initializing..."}
@@ -155,10 +156,10 @@ export function DemoModeBanner({
                     key={stage.num}
                     className={`p-2 rounded-lg text-center text-sm transition-colors ${
                       isComplete
-                        ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300"
+                        ? "bg-crowe-teal/20 text-crowe-teal-bright"
                         : isCurrent
-                        ? "bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300"
-                        : "bg-white/50 dark:bg-white/10 text-gray-600 dark:text-gray-300"
+                        ? "bg-crowe-violet/20 text-crowe-violet-bright"
+                        : "bg-white/10 text-white/70"
                     }`}
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -175,7 +176,7 @@ export function DemoModeBanner({
               })}
             </div>
 
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-3">
+            <p className="text-xs text-white/50 mt-3">
               The demo will generate sample documents, population data, testing
               workbooks, and consolidation results using mock data.
             </p>

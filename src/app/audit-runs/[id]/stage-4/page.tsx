@@ -308,8 +308,8 @@ export default function Stage4Page() {
       title: "Step 1: Load Data",
       description: "Sample & Attributes",
       isComplete: stepComplete.load,
-      activeColor: "bg-blue-100 text-blue-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-blue-500/20 text-blue-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Database,
       badgeText: `${samples.length} samples, ${extractedAttributes.length} attrs`,
     },
@@ -317,8 +317,8 @@ export default function Stage4Page() {
       title: "Step 2: Auditors",
       description: "Select team",
       isComplete: stepComplete.auditors,
-      activeColor: "bg-purple-100 text-purple-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-purple-500/20 text-purple-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Users,
       badgeText: `${selectedAuditors.length} selected`,
     },
@@ -326,8 +326,8 @@ export default function Stage4Page() {
       title: "Step 3: Generate",
       description: "Create workbooks",
       isComplete: stepComplete.generate,
-      activeColor: "bg-amber-100 text-amber-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-amber-500/20 text-amber-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: FileSpreadsheet,
       badgeText: `${auditorWorkbooks.length} workbooks`,
     },
@@ -335,8 +335,8 @@ export default function Stage4Page() {
       title: "Step 4: Populate",
       description: "Fill demo data",
       isComplete: stepComplete.view,
-      activeColor: "bg-gray-100 text-gray-400",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-white/10 text-white/40",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: ListChecks,
       badgeText: stepComplete.view ? "Ready" : "Pending",
     },
@@ -361,7 +361,7 @@ export default function Stage4Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-purple-100 text-purple-700">Stage 4</Badge>
+              <Badge className="bg-purple-500/20 text-purple-400">Stage 4</Badge>
               <h1 className="text-3xl font-bold tracking-tight text-white">
                 Auditor Workbook Generation
               </h1>
@@ -370,7 +370,7 @@ export default function Stage4Page() {
               Assign samples to auditors and generate per-auditor testing workbooks
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData}>
+          <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <Database className="h-4 w-4 mr-2" />
             Load Demo Data
           </Button>
@@ -417,7 +417,7 @@ export default function Stage4Page() {
                     exit={{ scale: 0.8, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Badge variant={step.isComplete ? "default" : "outline"}>
+                    <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/70" : ""}>
                       {step.badgeText}
                     </Badge>
                   </motion.div>
@@ -518,13 +518,13 @@ export default function Stage4Page() {
                               </>
                             )}
                             <motion.div
-                              className="p-3 bg-green-50 dark:bg-green-950 rounded-lg"
+                              className="p-3 bg-green-500/10 rounded-lg"
                               initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ delay: 0.2 }}
                             >
-                              <CheckCircle2 className="h-5 w-5 text-green-600 mb-2" />
-                              <p className="text-sm text-green-700 dark:text-green-300">
+                              <CheckCircle2 className="h-5 w-5 text-green-400 mb-2" />
+                              <p className="text-sm text-green-400">
                                 Sampling data loaded and ready
                               </p>
                             </motion.div>
@@ -561,24 +561,24 @@ export default function Stage4Page() {
                               <Badge variant="secondary">{acceptableDocs.length}</Badge>
                             </div>
                             <div className="flex gap-2 flex-wrap">
-                              <Badge variant="outline">
+                              <Badge variant="outline" className="border-white/30 text-white/70">
                                 CIP: {extractedAttributes.filter((a) => a.Category === "CIP").length}
                               </Badge>
-                              <Badge variant="outline">
+                              <Badge variant="outline" className="border-white/30 text-white/70">
                                 CDD: {extractedAttributes.filter((a) => a.Category === "CDD").length}
                               </Badge>
-                              <Badge variant="outline">
+                              <Badge variant="outline" className="border-white/30 text-white/70">
                                 EDD: {extractedAttributes.filter((a) => a.Category === "EDD").length}
                               </Badge>
                             </div>
                             <motion.div
-                              className="p-3 bg-green-50 dark:bg-green-950 rounded-lg"
+                              className="p-3 bg-green-500/10 rounded-lg"
                               initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ delay: 0.3 }}
                             >
-                              <CheckCircle2 className="h-5 w-5 text-green-600 mb-2" />
-                              <p className="text-sm text-green-700 dark:text-green-300">
+                              <CheckCircle2 className="h-5 w-5 text-green-400 mb-2" />
+                              <p className="text-sm text-green-400">
                                 Attributes loaded and ready
                               </p>
                             </motion.div>
@@ -715,7 +715,7 @@ export default function Stage4Page() {
                         )}
                       </Button>
                       {auditorWorkbooks.length > 0 && (
-                        <Button variant="outline" onClick={handleClearWorkbooks}>
+                        <Button variant="outline" onClick={handleClearWorkbooks} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
                           Clear & Regenerate
                         </Button>
                       )}
@@ -745,10 +745,10 @@ export default function Stage4Page() {
                   animate={{ opacity: 1, y: 0 }}
                 >
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline">
+                    <Badge variant="outline" className="border-white/30 text-white/70">
                       {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.totalRows, 0)} total rows
                     </Badge>
-                    <Badge variant="outline">
+                    <Badge variant="outline" className="border-white/30 text-white/70">
                       {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.completedRows, 0)} completed
                     </Badge>
                   </div>
@@ -788,13 +788,13 @@ export default function Stage4Page() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between pt-4 flex-shrink-0 border-t mt-4"
+        className="flex justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-4"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
         <Link href={`/audit-runs/${id}/stage-3`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 3
           </Button>

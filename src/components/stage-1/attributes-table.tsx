@@ -61,21 +61,21 @@ interface AttributesTableProps {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Entity Profile": "bg-blue-100 text-blue-700",
-  "Individual Profile": "bg-purple-100 text-purple-700",
-  "Ownership": "bg-green-100 text-green-700",
-  "Documentation": "bg-yellow-100 text-yellow-700",
-  "AML": "bg-red-100 text-red-700",
-  "EDD": "bg-orange-100 text-orange-700",
-  "Compliance": "bg-indigo-100 text-indigo-700",
-  "Registration": "bg-pink-100 text-pink-700",
+  "Entity Profile": "bg-crowe-blue/20 text-crowe-blue-light",
+  "Individual Profile": "bg-crowe-violet/20 text-crowe-violet-bright",
+  "Ownership": "bg-crowe-teal/20 text-crowe-teal-bright",
+  "Documentation": "bg-crowe-amber/20 text-crowe-amber-bright",
+  "AML": "bg-crowe-coral/20 text-crowe-coral-bright",
+  "EDD": "bg-crowe-amber-dark/20 text-crowe-amber",
+  "Compliance": "bg-crowe-indigo-bright/20 text-crowe-cyan-light",
+  "Registration": "bg-crowe-coral/20 text-crowe-coral-bright",
 };
 
 const GROUP_COLORS: Record<string, string> = {
-  "Individuals": "bg-cyan-100 text-cyan-700",
-  "Entity": "bg-emerald-100 text-emerald-700",
-  "Beneficial Owner": "bg-violet-100 text-violet-700",
-  "Screening": "bg-amber-100 text-amber-700",
+  "Individuals": "bg-crowe-cyan/20 text-crowe-cyan-light",
+  "Entity": "bg-crowe-teal/20 text-crowe-teal-bright",
+  "Beneficial Owner": "bg-crowe-violet/20 text-crowe-violet-bright",
+  "Screening": "bg-crowe-amber/20 text-crowe-amber-bright",
 };
 
 export function AttributesTable({ attributes, acceptableDocs }: AttributesTableProps) {
@@ -113,7 +113,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{attributes.length}</div>
-            <p className="text-xs text-muted-foreground">Total Attributes</p>
+            <p className="text-xs text-white/60">Total Attributes</p>
           </CardContent>
         </Card>
         <Card>
@@ -121,19 +121,19 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
             <div className="text-2xl font-bold">
               {attributes.filter((a) => a.IsRequired === "Y").length}
             </div>
-            <p className="text-xs text-muted-foreground">Required</p>
+            <p className="text-xs text-white/60">Required</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{acceptableDocs.length}</div>
-            <p className="text-xs text-muted-foreground">Acceptable Documents</p>
+            <p className="text-xs text-white/60">Acceptable Documents</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{categories.length}</div>
-            <p className="text-xs text-muted-foreground">Categories</p>
+            <p className="text-xs text-white/60">Categories</p>
           </CardContent>
         </Card>
       </div>
@@ -150,7 +150,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
                 <Input
                   placeholder="Search attributes..."
                   value={searchTerm}
@@ -206,7 +206,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
               <TableBody>
                 {filteredAttributes.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={7} className="text-center py-8 text-white/60">
                       No attributes found matching your filters
                     </TableCell>
                   </TableRow>
@@ -216,7 +216,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                       <TableCell className="font-mono text-sm">{attr.Attribute_ID}</TableCell>
                       <TableCell className="font-medium">{attr.Attribute_Name}</TableCell>
                       <TableCell>
-                        <Badge className={CATEGORY_COLORS[attr.Category] || "bg-gray-100"}>
+                        <Badge className={CATEGORY_COLORS[attr.Category] || "bg-white/10 text-white/70"}>
                           {attr.Category}
                         </Badge>
                       </TableCell>
@@ -230,9 +230,9 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                       </TableCell>
                       <TableCell>
                         {attr.IsRequired === "Y" ? (
-                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <CheckCircle className="h-4 w-4 text-crowe-teal-bright" />
                         ) : (
-                          <span className="text-muted-foreground">-</span>
+                          <span className="text-white/50">-</span>
                         )}
                       </TableCell>
                       <TableCell>
@@ -259,37 +259,37 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                                   {attr.Group}
                                 </Badge>
                                 {attr.IsRequired === "Y" && (
-                                  <Badge className="bg-green-100 text-green-700">Required</Badge>
+                                  <Badge className="bg-crowe-teal/20 text-crowe-teal-bright">Required</Badge>
                                 )}
                               </DialogDescription>
                             </DialogHeader>
                             <div className="space-y-4 mt-4">
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Testing Question</h4>
-                                <p className="text-sm bg-muted p-3 rounded">{attr.Question_Text}</p>
+                                <p className="text-sm bg-white/10 p-3 rounded">{attr.Question_Text}</p>
                               </div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source</h4>
-                                  <p className="text-sm text-muted-foreground">{attr.Source}</p>
+                                  <p className="text-sm text-white/70">{attr.Source}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Source Page</h4>
-                                  <p className="text-sm text-muted-foreground">{attr.Source_Page}</p>
+                                  <p className="text-sm text-white/70">{attr.Source_Page}</p>
                                 </div>
                               </div>
                               <div className="grid grid-cols-3 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Risk Scope</h4>
-                                  <p className="text-sm text-muted-foreground">{attr.RiskScope}</p>
+                                  <p className="text-sm text-white/70">{attr.RiskScope}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Jurisdiction</h4>
-                                  <p className="text-sm text-muted-foreground">{attr.Jurisdiction_ID}</p>
+                                  <p className="text-sm text-white/70">{attr.Jurisdiction_ID}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Doc Age Rule</h4>
-                                  <p className="text-sm text-muted-foreground">
+                                  <p className="text-sm text-white/70">
                                     {attr.DocumentationAgeRule ? `${attr.DocumentationAgeRule} days` : "-"}
                                   </p>
                                 </div>
@@ -297,7 +297,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                               {attr.Notes && (
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Notes</h4>
-                                  <p className="text-sm text-muted-foreground">{attr.Notes}</p>
+                                  <p className="text-sm text-white/70">{attr.Notes}</p>
                                 </div>
                               )}
 
@@ -309,18 +309,18 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                                 </h4>
                                 <div className="space-y-2">
                                   {getDocsForAttribute(attr.Attribute_ID).length === 0 ? (
-                                    <p className="text-sm text-muted-foreground">No documents specified</p>
+                                    <p className="text-sm text-white/60">No documents specified</p>
                                   ) : (
                                     getDocsForAttribute(attr.Attribute_ID).map((doc, idx) => (
                                       <div
                                         key={idx}
-                                        className="flex items-start gap-3 p-2 bg-muted rounded text-sm"
+                                        className="flex items-start gap-3 p-2 bg-white/10 rounded text-sm"
                                       >
-                                        <FileText className="h-4 w-4 mt-0.5 text-muted-foreground" />
+                                        <FileText className="h-4 w-4 mt-0.5 text-white/50" />
                                         <div>
                                           <p className="font-medium">{doc.Document_Name}</p>
                                           {doc.Notes && (
-                                            <p className="text-xs text-muted-foreground">{doc.Notes}</p>
+                                            <p className="text-xs text-white/60">{doc.Notes}</p>
                                           )}
                                         </div>
                                       </div>

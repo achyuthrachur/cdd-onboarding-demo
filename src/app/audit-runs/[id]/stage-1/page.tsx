@@ -136,7 +136,7 @@ export default function Stage1Page() {
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
               >
-                <Badge className="bg-blue-100 text-blue-700">Stage 1</Badge>
+                <Badge className="bg-blue-500/20 text-blue-400">Stage 1</Badge>
               </motion.div>
               <h1 className="text-3xl font-bold tracking-tight text-white">Gap Assessment</h1>
             </div>
@@ -148,7 +148,7 @@ export default function Stage1Page() {
             whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
             whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
           >
-            <Button variant="outline" onClick={handleLoadDemoData}>
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
@@ -169,7 +169,7 @@ export default function Stage1Page() {
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    assessment1Result ? "bg-green-100 text-green-600" : "bg-amber-100 text-amber-600"
+                    assessment1Result ? "bg-green-500/20 text-green-400" : "bg-amber-500/20 text-amber-400"
                   }`}
                   animate={assessment1Result && !shouldReduceMotion ? {
                     scale: [1, 1.1, 1],
@@ -185,7 +185,7 @@ export default function Stage1Page() {
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={assessment1Result ? "default" : "outline"}>
+              <Badge variant={assessment1Result ? "default" : "outline"} className={!assessment1Result ? "border-white/30 text-white/70" : ""}>
                 {assessment1Result ? "Completed" : "Pending"}
               </Badge>
             </CardContent>
@@ -198,7 +198,7 @@ export default function Stage1Page() {
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    assessment2Result ? "bg-green-100 text-green-600" : "bg-blue-100 text-blue-600"
+                    assessment2Result ? "bg-green-500/20 text-green-400" : "bg-blue-500/20 text-blue-400"
                   }`}
                   animate={assessment2Result && !shouldReduceMotion ? {
                     scale: [1, 1.1, 1],
@@ -214,7 +214,7 @@ export default function Stage1Page() {
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={assessment2Result ? "default" : "outline"}>
+              <Badge variant={assessment2Result ? "default" : "outline"} className={!assessment2Result ? "border-white/30 text-white/70" : ""}>
                 {assessment2Result ? "Completed" : "Pending"}
               </Badge>
             </CardContent>
@@ -227,7 +227,7 @@ export default function Stage1Page() {
               <div className="flex items-center gap-3">
                 <motion.div
                   className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    canProceed ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"
+                    canProceed ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/40"
                   }`}
                   animate={canProceed && !shouldReduceMotion ? {
                     scale: [1, 1.15, 1],
@@ -243,7 +243,7 @@ export default function Stage1Page() {
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant={canProceed ? "default" : "outline"}>
+              <Badge variant={canProceed ? "default" : "outline"} className={!canProceed ? "border-white/30 text-white/70" : ""}>
                 {canProceed ? "Ready" : "Pending"}
               </Badge>
             </CardContent>
@@ -311,7 +311,7 @@ export default function Stage1Page() {
             whileHover={shouldReduceMotion ? {} : { x: -4 }}
             whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
           >
-            <Button variant="outline">
+            <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Overview
             </Button>

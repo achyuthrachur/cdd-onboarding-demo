@@ -242,8 +242,8 @@ export default function AicStage3Page() {
       title: "Step 1: Upload",
       description: "FLU Procedures",
       isComplete: true,
-      activeColor: "bg-green-100 text-green-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-green-500/20 text-green-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: FileText,
       badgeText: "Ready",
     },
@@ -251,8 +251,8 @@ export default function AicStage3Page() {
       title: "Step 2: Extract",
       description: "AI Attribute Extraction",
       isComplete: attributeCount > 0,
-      activeColor: "bg-amber-100 text-amber-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-amber-500/20 text-amber-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Bot,
       badgeText: attributeCount > 0
         ? `${attributeCount} attributes`
@@ -262,8 +262,8 @@ export default function AicStage3Page() {
       title: "Step 3: Review",
       description: "Confirm & Export",
       isComplete: canProceed,
-      activeColor: "bg-gray-100 text-gray-400",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-white/10 text-white/40",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: FileSpreadsheet,
       badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
     },
@@ -318,7 +318,7 @@ export default function AicStage3Page() {
                 <div className="flex items-center gap-3">
                   <motion.div
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor.replace('bg-green-100 text-green-600', 'bg-green-500/20 text-green-400').replace('bg-amber-100 text-amber-600', 'bg-amber-500/20 text-amber-400').replace('bg-gray-100 text-gray-400', 'bg-white/10 text-white/40')
+                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor
                     }`}
                   >
                     {step.isComplete ? (

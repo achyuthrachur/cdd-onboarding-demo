@@ -27,13 +27,13 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full w-64 flex-col bg-card border-r">
+    <div className="flex h-full w-64 flex-col bg-crowe-indigo-dark/50 border-r border-white/10">
       {/* Logo */}
-      <div className="flex h-16 items-center gap-2 px-6 border-b">
+      <div className="flex h-16 items-center gap-2 px-6 border-b border-white/10">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
           C
         </div>
-        <span className="font-semibold text-lg">CDD Demo</span>
+        <span className="font-semibold text-lg text-white">CDD Demo</span>
       </div>
 
       {/* Main Navigation */}
@@ -50,7 +50,7 @@ export function Sidebar() {
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -62,7 +62,7 @@ export function Sidebar() {
       </nav>
 
       {/* Secondary Navigation */}
-      <div className="border-t px-3 py-4">
+      <div className="border-t border-white/10 px-3 py-4">
         <div className="space-y-1">
           {secondaryNavigation.map((item) => {
             const isActive = pathname === item.href;
@@ -74,7 +74,7 @@ export function Sidebar() {
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -86,8 +86,8 @@ export function Sidebar() {
       </div>
 
       {/* User/Version Info */}
-      <div className="border-t px-6 py-4">
-        <p className="text-xs text-muted-foreground">
+      <div className="border-t border-white/10 px-6 py-4">
+        <p className="text-xs text-white/50">
           CDD Onboarding Demo v1.0
         </p>
       </div>

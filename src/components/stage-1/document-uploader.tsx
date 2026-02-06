@@ -176,7 +176,7 @@ export function DocumentUploader({
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               dragActive
                 ? "border-primary bg-primary/5"
-                : "border-muted-foreground/25"
+                : "border-white/25"
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -188,7 +188,7 @@ export function DocumentUploader({
                 <FileText className="h-8 w-8 text-primary" />
                 <div className="text-left">
                   <p className="font-medium">{selectedFile.name}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-white/60">
                     {(selectedFile.size / 1024).toFixed(1)} KB
                   </p>
                 </div>
@@ -202,11 +202,11 @@ export function DocumentUploader({
               </div>
             ) : (
               <>
-                <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <Upload className="h-12 w-12 text-white/60 mx-auto mb-4" />
                 <p className="font-medium mb-2">
                   Drag and drop a file here, or click to browse
                 </p>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-white/60 mb-4">
                   Supported formats: PDF, DOCX, DOC, TXT
                 </p>
                 <Input
@@ -290,10 +290,10 @@ export function DocumentUploader({
               {documents.map((doc) => (
                 <div
                   key={doc.id}
-                  className="flex items-center justify-between p-3 bg-muted rounded-lg"
+                  className="flex items-center justify-between p-3 bg-white/10 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-muted-foreground" />
+                    <FileText className="h-5 w-5 text-white/60" />
                     <div>
                       <p className="font-medium text-sm">{doc.fileName}</p>
                       <div className="flex items-center gap-2 mt-1">

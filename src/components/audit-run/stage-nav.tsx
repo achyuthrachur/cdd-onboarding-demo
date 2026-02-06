@@ -41,7 +41,7 @@ export function StageNav({ stages, currentStage }: StageNavProps) {
                   <div
                     className={cn(
                       "h-full",
-                      isCompleted ? "bg-primary" : "bg-muted"
+                      isCompleted ? "bg-primary" : "bg-white/20"
                     )}
                   />
                 </div>
@@ -60,8 +60,8 @@ export function StageNav({ stages, currentStage }: StageNavProps) {
                       "relative z-10 flex h-8 w-8 items-center justify-center rounded-full",
                       isCompleted && "bg-primary text-primary-foreground",
                       isCurrent &&
-                        "border-2 border-primary bg-background text-primary",
-                      isPending && "border-2 border-muted bg-background text-muted-foreground"
+                        "border-2 border-primary bg-crowe-indigo-dark text-primary",
+                      isPending && "border-2 border-white/30 bg-crowe-indigo-dark text-white/50"
                     )}
                   >
                     {isCompleted ? (
@@ -75,7 +75,7 @@ export function StageNav({ stages, currentStage }: StageNavProps) {
                   <span
                     className={cn(
                       "text-sm font-medium",
-                      isCurrent ? "text-primary" : "text-muted-foreground"
+                      isCurrent ? "text-primary" : "text-white/60"
                     )}
                   >
                     {stage.name}

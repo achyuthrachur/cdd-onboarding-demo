@@ -75,7 +75,7 @@ export function SheetTabs({ activeSheet, onSheetChange, children }: SheetTabsPro
       onValueChange={(value) => onSheetChange(value as AttributeLibrarySheet)}
       className="w-full"
     >
-      <div className="border-b bg-muted/30 px-4">
+      <div className="border-b border-white/10 bg-white/5 px-4">
         <TabsList variant="line" className="h-auto flex-wrap gap-0">
           {SHEET_CONFIG.map((sheet) => (
             <TabsTrigger

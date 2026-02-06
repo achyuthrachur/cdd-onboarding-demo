@@ -212,7 +212,7 @@ export function ExtractionResultsView({
             {/* Filters */}
             <div className="flex gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
                 <Input
                   placeholder="Search attributes or documents..."
                   value={searchTerm}
@@ -285,7 +285,7 @@ export function ExtractionResultsView({
                               <TableCell className="font-medium">
                                 {attr.Attribute_Name}
                               </TableCell>
-                              <TableCell className="text-sm text-muted-foreground">
+                              <TableCell className="text-sm text-white/60">
                                 {attr.Question_Text}
                               </TableCell>
                               <TableCell>
@@ -303,7 +303,7 @@ export function ExtractionResultsView({
                         })}
                         {filteredAttributes.length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                            <TableCell colSpan={6} className="text-center py-8 text-white/60">
                               No attributes match your search criteria
                             </TableCell>
                           </TableRow>
@@ -363,7 +363,7 @@ export function ExtractionResultsView({
                               <TableCell className="font-medium">
                                 {doc.Document_Name}
                               </TableCell>
-                              <TableCell className="text-sm text-muted-foreground">
+                              <TableCell className="text-sm text-white/60">
                                 {doc.Evidence_Source_Document}
                               </TableCell>
                               <TableCell>
@@ -371,7 +371,7 @@ export function ExtractionResultsView({
                                   {doc.Jurisdiction_ID}
                                 </Badge>
                               </TableCell>
-                              <TableCell className="text-xs text-muted-foreground">
+                              <TableCell className="text-xs text-white/60">
                                 {doc.Notes}
                               </TableCell>
                             </motion.tr>
@@ -379,7 +379,7 @@ export function ExtractionResultsView({
                         })}
                         {filteredDocs.length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                            <TableCell colSpan={5} className="text-center py-8 text-white/60">
                               No documents match your search criteria
                             </TableCell>
                           </TableRow>

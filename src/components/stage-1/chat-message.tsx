@@ -143,7 +143,7 @@ export function ChatMessage({
       {...messageProps}
       className={cn(
         "flex gap-3 p-4",
-        type === "user" && "bg-muted/30",
+        type === "user" && "bg-white/5",
         type === "error" && "bg-red-50 dark:bg-red-950/20"
       )}
     >
@@ -152,7 +152,7 @@ export function ChatMessage({
         <div className="flex items-center gap-2 mb-1">
           <span className="font-medium text-sm">{getLabel()}</span>
           {timestamp && (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-white/60">
               {timestamp.toLocaleTimeString()}
             </span>
           )}
@@ -165,14 +165,14 @@ export function ChatMessage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
           >
-            <Card className="bg-grey-50 dark:bg-grey-900 border-grey-200 dark:border-grey-800 p-4 mt-2">
+            <Card className="bg-white/5 border-white/10 p-4 mt-2">
               <div className="flex items-center gap-2 mb-3">
                 <Badge variant="outline" className="text-xs">
                   System Prompt
                 </Badge>
-                <span className="text-xs text-muted-foreground">Read-only</span>
+                <span className="text-xs text-white/60">Read-only</span>
               </div>
-              <pre className="text-sm whitespace-pre-wrap font-mono text-grey-700 dark:text-grey-300 leading-relaxed">
+              <pre className="text-sm whitespace-pre-wrap font-mono text-white/70 leading-relaxed">
                 {content}
               </pre>
             </Card>
@@ -212,7 +212,7 @@ export function ChatMessage({
             className="flex items-center gap-2 mt-2"
           >
             <TypingIndicator />
-            <span className="text-xs text-muted-foreground">Processing...</span>
+            <span className="text-xs text-white/60">Processing...</span>
           </motion.div>
         )}
 

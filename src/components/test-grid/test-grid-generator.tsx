@@ -161,7 +161,7 @@ export function TestGridGenerator({
             <div className="flex flex-wrap gap-2">
               <Badge
                 variant={hasAssignments ? "default" : "outline"}
-                className={hasAssignments ? "bg-green-100 text-green-700" : ""}
+                className={hasAssignments ? "bg-green-500/20 text-green-300" : ""}
               >
                 {hasAssignments ? (
                   <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -172,7 +172,7 @@ export function TestGridGenerator({
               </Badge>
               <Badge
                 variant={hasAttributes ? "default" : "outline"}
-                className={hasAttributes ? "bg-green-100 text-green-700" : ""}
+                className={hasAttributes ? "bg-green-500/20 text-green-300" : ""}
               >
                 {hasAttributes ? (
                   <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -183,7 +183,7 @@ export function TestGridGenerator({
               </Badge>
               <Badge
                 variant={!hasUnassigned ? "default" : "destructive"}
-                className={!hasUnassigned ? "bg-green-100 text-green-700" : ""}
+                className={!hasUnassigned ? "bg-green-500/20 text-green-300" : ""}
               >
                 {!hasUnassigned ? (
                   <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -200,19 +200,19 @@ export function TestGridGenerator({
           </div>
 
           {/* Generation Summary */}
-          <div className="rounded-md bg-muted p-4">
+          <div className="rounded-md bg-white/10 p-4">
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <p className="text-2xl font-bold">{assignments.length}</p>
-                <p className="text-xs text-muted-foreground">Entities</p>
+                <p className="text-2xl font-bold text-white">{assignments.length}</p>
+                <p className="text-xs text-white/60">Entities</p>
               </div>
               <div>
-                <p className="text-2xl font-bold">{attributes.length}</p>
-                <p className="text-xs text-muted-foreground">Attributes</p>
+                <p className="text-2xl font-bold text-white">{attributes.length}</p>
+                <p className="text-xs text-white/60">Attributes</p>
               </div>
               <div>
-                <p className="text-2xl font-bold">{uniqueAuditors}</p>
-                <p className="text-xs text-muted-foreground">Workbooks</p>
+                <p className="text-2xl font-bold text-white">{uniqueAuditors}</p>
+                <p className="text-xs text-white/60">Workbooks</p>
               </div>
             </div>
           </div>
@@ -229,7 +229,7 @@ export function TestGridGenerator({
           </Button>
 
           {!canGenerate && (
-            <p className="text-xs text-muted-foreground text-center">
+            <p className="text-xs text-white/60 text-center">
               {!hasAssignments && "No assignments available. "}
               {!hasAttributes && "No attributes available. "}
               {hasUnassigned && "Some entities are unassigned. "}
@@ -266,7 +266,7 @@ export function TestGridGenerator({
                   <div className="text-2xl font-bold">
                     {generatedWorkbooks.reduce((sum, wb) => sum + wb.entityCount, 0)}
                   </div>
-                  <p className="text-xs text-muted-foreground">Total Entities</p>
+                  <p className="text-xs text-white/60">Total Entities</p>
                 </CardContent>
               </Card>
               <Card>
@@ -274,7 +274,7 @@ export function TestGridGenerator({
                   <div className="text-2xl font-bold">
                     {generatedWorkbooks.reduce((sum, wb) => sum + wb.summary.totalRows, 0)}
                   </div>
-                  <p className="text-xs text-muted-foreground">Total Test Rows</p>
+                  <p className="text-xs text-white/60">Total Test Rows</p>
                 </CardContent>
               </Card>
               <Card>
@@ -282,7 +282,7 @@ export function TestGridGenerator({
                   <div className="text-2xl font-bold text-green-600">
                     {generatedWorkbooks.reduce((sum, wb) => sum + wb.summary.passCount, 0)}
                   </div>
-                  <p className="text-xs text-muted-foreground">Pass</p>
+                  <p className="text-xs text-white/60">Pass</p>
                 </CardContent>
               </Card>
               <Card>
@@ -293,7 +293,7 @@ export function TestGridGenerator({
                       0
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground">Fail</p>
+                  <p className="text-xs text-white/60">Fail</p>
                 </CardContent>
               </Card>
               <Card>
@@ -301,7 +301,7 @@ export function TestGridGenerator({
                   <div className="text-2xl font-bold">
                     {generatedWorkbooks.reduce((sum, wb) => sum + wb.summary.emptyCount, 0)}
                   </div>
-                  <p className="text-xs text-muted-foreground">Pending</p>
+                  <p className="text-xs text-white/60">Pending</p>
                 </CardContent>
               </Card>
             </div>
@@ -327,7 +327,7 @@ export function TestGridGenerator({
                       <TableCell>
                         <div>
                           <p className="font-medium">{workbook.auditorName}</p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-white/60">
                             {workbook.auditorId}
                           </p>
                         </div>
@@ -362,7 +362,7 @@ export function TestGridGenerator({
                           }
                           className={
                             workbook.summary.completionPercentage >= 100
-                              ? "bg-green-100 text-green-700"
+                              ? "bg-green-500/20 text-green-300"
                               : ""
                           }
                         >

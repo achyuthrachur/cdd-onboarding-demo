@@ -114,7 +114,7 @@ export function AuditorSelector({
         <AnimatePresence>
           {selectedAuditors.length > 0 && (
             <motion.div
-              className="p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg"
+              className="p-3 bg-crowe-blue/10 border border-crowe-blue/30 rounded-lg"
               initial={shouldReduceMotion ? undefined : { opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -122,7 +122,7 @@ export function AuditorSelector({
             >
               <div className="text-sm">
                 <span className="font-medium">Sample Distribution (Round-Robin): </span>
-                <span className="text-muted-foreground">
+                <span className="text-white/60">
                   {samplesPerAuditor} samples per auditor
                   {remainder > 0 && ` (+1 for first ${remainder} auditors)`}
                 </span>
@@ -154,7 +154,7 @@ export function AuditorSelector({
                   "flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors",
                   isSelected
                     ? "border-primary bg-primary/5"
-                    : "border-border hover:bg-muted/50"
+                    : "border-border hover:bg-white/10"
                 )}
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.01 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.99 }}
@@ -163,7 +163,7 @@ export function AuditorSelector({
                   <Checkbox checked={isSelected} />
                   <div>
                     <div className="font-medium">{auditor.name}</div>
-                    <div className="text-sm text-muted-foreground flex items-center gap-1">
+                    <div className="text-sm text-white/60 flex items-center gap-1">
                       <Mail className="h-3 w-3" />
                       {auditor.email}
                     </div>
@@ -259,7 +259,7 @@ export function AuditorSelector({
         {/* Summary - Animated badge */}
         <div className="pt-3 border-t">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Selected Auditors:</span>
+            <span className="text-white/60">Selected Auditors:</span>
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedAuditors.length}

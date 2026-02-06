@@ -309,8 +309,8 @@ export default function Stage3Page() {
       title: "Step 1: Upload",
       description: "FLU Procedures",
       isComplete: true,
-      activeColor: "bg-green-100 text-green-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-green-500/20 text-green-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: FileText,
       badgeText: "Ready",
     },
@@ -318,8 +318,8 @@ export default function Stage3Page() {
       title: "Step 2: Extract",
       description: "AI Attribute Extraction",
       isComplete: attributeCount > 0,
-      activeColor: "bg-amber-100 text-amber-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-amber-500/20 text-amber-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Bot,
       badgeText: attributeCount > 0
         ? `${attributeCount} attributes`
@@ -329,8 +329,8 @@ export default function Stage3Page() {
       title: "Step 3: Review",
       description: "Confirm & Export",
       isComplete: canProceed,
-      activeColor: "bg-gray-100 text-gray-400",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-white/10 text-white/40",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: FileSpreadsheet,
       badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
     },
@@ -355,7 +355,7 @@ export default function Stage3Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-amber-100 text-amber-700">Stage 3</Badge>
+              <Badge className="bg-amber-500/20 text-amber-400">Stage 3</Badge>
               <h1 className="text-3xl font-bold tracking-tight text-white">
                 FLU Procedure Extraction
               </h1>
@@ -364,7 +364,7 @@ export default function Stage3Page() {
               Extract CIP, CDD, and EDD testing attributes from Front Line Unit procedures
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData}>
+          <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <Database className="h-4 w-4 mr-2" />
             Load Demo Data
           </Button>
@@ -411,7 +411,7 @@ export default function Stage3Page() {
                     exit={{ scale: 0.8, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Badge variant={step.isComplete ? "default" : "outline"}>
+                    <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/70" : ""}>
                       {step.badgeText}
                     </Badge>
                   </motion.div>
@@ -496,13 +496,13 @@ export default function Stage3Page() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between pt-4 flex-shrink-0 border-t mt-4"
+        className="flex justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-4"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
         <Link href={`/audit-runs/${id}/stage-2`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 2
           </Button>

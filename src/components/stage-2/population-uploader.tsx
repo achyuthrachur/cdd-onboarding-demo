@@ -149,9 +149,9 @@ export function PopulationUploader({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-white/10 rounded-lg">
             <div className="flex items-center gap-3">
-              <FileSpreadsheet className="h-8 w-8 text-green-500" />
+              <FileSpreadsheet className="h-8 w-8 text-crowe-teal-bright" />
               <div>
                 <p className="font-medium">{population.fileName}</p>
                 <div className="flex items-center gap-2 mt-1">
@@ -206,7 +206,7 @@ export function PopulationUploader({
           className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
             dragActive
               ? "border-primary bg-primary/5"
-              : "border-muted-foreground/25"
+              : "border-white/25"
           }`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -216,15 +216,15 @@ export function PopulationUploader({
           {isLoading ? (
             <div className="flex flex-col items-center gap-3">
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              <p className="text-sm text-muted-foreground">Loading population data...</p>
+              <p className="text-sm text-white/60">Loading population data...</p>
             </div>
           ) : (
             <>
-              <FileSpreadsheet className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <FileSpreadsheet className="h-12 w-12 text-white/60 mx-auto mb-4" />
               <p className="font-medium mb-2">
                 Drag and drop an Excel or CSV file here
               </p>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-white/60 mb-4">
                 Or click below to browse files
               </p>
               <input
@@ -249,7 +249,7 @@ export function PopulationUploader({
 
         {/* Demo Data Option */}
         <div className="text-center">
-          <p className="text-sm text-muted-foreground mb-3">
+          <p className="text-sm text-white/60 mb-3">
             Or use demo data to try the sampling tool
           </p>
           <Button

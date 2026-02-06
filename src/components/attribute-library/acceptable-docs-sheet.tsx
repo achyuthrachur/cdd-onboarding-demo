@@ -112,25 +112,25 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{acceptableDocs.length}</div>
-            <p className="text-xs text-muted-foreground">Total Documents</p>
+            <p className="text-xs text-white/60">Total Documents</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{docsByAttribute.size}</div>
-            <p className="text-xs text-muted-foreground">Attributes Covered</p>
+            <p className="text-xs text-white/60">Attributes Covered</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{sources.length}</div>
-            <p className="text-xs text-muted-foreground">Evidence Sources</p>
+            <p className="text-xs text-white/60">Evidence Sources</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{jurisdictions.length}</div>
-            <p className="text-xs text-muted-foreground">Jurisdictions</p>
+            <p className="text-xs text-white/60">Jurisdictions</p>
           </CardContent>
         </Card>
       </div>
@@ -151,7 +151,7 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
                 <Input
                   placeholder="Search documents..."
                   value={searchTerm}
@@ -214,7 +214,7 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
               <TableBody>
                 {filteredDocs.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={6} className="text-center py-8 text-white/60">
                       No documents found matching your filters
                     </TableCell>
                   </TableRow>
@@ -224,7 +224,7 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
                       <TableCell className="font-mono text-sm">{doc.Attribute_ID}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <FileText className="h-4 w-4 text-muted-foreground" />
+                          <FileText className="h-4 w-4 text-white/50" />
                           <span className="font-medium">{doc.Document_Name}</span>
                         </div>
                       </TableCell>
@@ -234,10 +234,10 @@ export function AcceptableDocsSheet({ acceptableDocs }: AcceptableDocsSheetProps
                       <TableCell>
                         <Badge variant="outline">{doc.Jurisdiction_ID}</Badge>
                       </TableCell>
-                      <TableCell className="text-sm text-muted-foreground truncate max-w-[150px]" title={doc.Source_File}>
+                      <TableCell className="text-sm text-white/60 truncate max-w-[150px]" title={doc.Source_File}>
                         {doc.Source_File}
                       </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
+                      <TableCell className="text-sm text-white/60">
                         {doc.Notes || "-"}
                       </TableCell>
                     </TableRow>

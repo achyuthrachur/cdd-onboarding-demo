@@ -272,9 +272,9 @@ export function SamplePreview({
                         key={idx}
                         className={
                           isOverridden
-                            ? "bg-amber-50 dark:bg-amber-950"
+                            ? "bg-crowe-amber/10"
                             : isZero
-                            ? "bg-red-50 dark:bg-red-950"
+                            ? "bg-crowe-coral/10"
                             : ""
                         }
                       >
@@ -284,7 +284,7 @@ export function SamplePreview({
                             .map(([k, v]) => `${k}: ${v ?? "NULL"}`)
                             .join(", ") || "(All)"}
                           {isOverridden && (
-                            <span className="ml-2 text-xs text-amber-600 dark:text-amber-400">
+                            <span className="ml-2 text-xs text-crowe-amber">
                               (+1 override)
                             </span>
                           )}
@@ -295,7 +295,7 @@ export function SamplePreview({
                         <TableCell className="text-right font-medium">
                           {alloc.sample_count.toLocaleString()}
                         </TableCell>
-                        <TableCell className="text-right text-muted-foreground">
+                        <TableCell className="text-right text-white/60">
                           {(((alloc.population_count || 0) / (plan.populationSize || 1)) * 100).toFixed(1)}%
                         </TableCell>
                       </TableRow>
@@ -323,7 +323,7 @@ export function SamplePreview({
               onClick={addCoverageOverrides}
               disabled={isAddingCoverage}
               variant="outline"
-              className="w-full mb-4 border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-950"
+              className="w-full mb-4 border-crowe-amber/50 text-crowe-amber-bright hover:bg-crowe-amber/10"
             >
               {isAddingCoverage ? (
                 <>
@@ -410,7 +410,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold">
                     {summary.sample_selection_method.final_sample_size.toLocaleString()}
                   </div>
-                  <p className="text-xs text-muted-foreground">Sample Size</p>
+                  <p className="text-xs text-white/60">Sample Size</p>
                 </CardContent>
               </Card>
               <Card>
@@ -418,7 +418,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold">
                     {(summary.sampling_rationale.confidence_level * 100).toFixed(0)}%
                   </div>
-                  <p className="text-xs text-muted-foreground">Confidence Level</p>
+                  <p className="text-xs text-white/60">Confidence Level</p>
                 </CardContent>
               </Card>
               <Card>
@@ -426,7 +426,7 @@ export function SamplePreview({
                   <div className="text-2xl font-bold">
                     {(summary.sampling_rationale.tolerable_error_rate * 100).toFixed(1)}%
                   </div>
-                  <p className="text-xs text-muted-foreground">Tolerable Error Rate</p>
+                  <p className="text-xs text-white/60">Tolerable Error Rate</p>
                 </CardContent>
               </Card>
               <Card>
@@ -434,19 +434,19 @@ export function SamplePreview({
                   <div className="text-2xl font-bold">
                     {summary.sample_selection_method.seed}
                   </div>
-                  <p className="text-xs text-muted-foreground">Random Seed</p>
+                  <p className="text-xs text-white/60">Random Seed</p>
                 </CardContent>
               </Card>
             </div>
 
             {/* Overrides Summary */}
             {summary.overrides?.has_overrides && (
-              <div className="p-4 mb-6 border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950 rounded-lg">
-                <h4 className="font-medium text-amber-700 dark:text-amber-300 mb-2">
+              <div className="p-4 mb-6 border border-crowe-amber/30 bg-crowe-amber/10 rounded-lg">
+                <h4 className="font-medium text-crowe-amber-bright mb-2">
                   Overrides Applied
                 </h4>
                 {summary.overrides.justification && (
-                  <p className="text-sm text-amber-600 dark:text-amber-400 mb-2">
+                  <p className="text-sm text-crowe-amber mb-2">
                     Justification: {summary.overrides.justification}
                   </p>
                 )}
@@ -479,7 +479,7 @@ export function SamplePreview({
                         <TableHead key={col}>{col}</TableHead>
                       ))}
                     {Object.keys(sample[0] || {}).length > 5 && (
-                      <TableHead className="text-muted-foreground">
+                      <TableHead className="text-white/60">
                         +{Object.keys(sample[0]).length - 5} more
                       </TableHead>
                     )}
@@ -497,7 +497,7 @@ export function SamplePreview({
                           </TableCell>
                         ))}
                       {Object.keys(row).length > 5 && (
-                        <TableCell className="text-muted-foreground">...</TableCell>
+                        <TableCell className="text-white/60">...</TableCell>
                       )}
                     </TableRow>
                   ))}
@@ -505,7 +505,7 @@ export function SamplePreview({
                     <TableRow>
                       <TableCell
                         colSpan={Math.min(7, Object.keys(sample[0] || {}).length + 1)}
-                        className="text-center text-muted-foreground"
+                        className="text-center text-white/60"
                       >
                         ... and {sample.length - 10} more rows
                       </TableCell>
@@ -536,7 +536,7 @@ export function SamplePreview({
                     </>
                   )}
                 </Button>
-                <p className="text-xs text-muted-foreground text-center mt-2">
+                <p className="text-xs text-white/60 text-center mt-2">
                   Locking the sample will finalize it for testing. This action cannot be undone.
                 </p>
               </div>

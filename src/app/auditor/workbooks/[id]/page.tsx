@@ -579,7 +579,7 @@ export default function AuditorWorkbookPage() {
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 0.8, x: 20 }}
                   >
-                    <Badge className="bg-green-100 text-green-700">
+                    <Badge className="bg-green-500/20 text-green-400">
                       <CheckCircle2 className="h-4 w-4 mr-1" />
                       Ready to Submit
                     </Badge>

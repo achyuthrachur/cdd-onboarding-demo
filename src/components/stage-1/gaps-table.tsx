@@ -57,12 +57,12 @@ interface GapsTableProps {
 }
 
 const DISPOSITION_COLORS: Record<string, string> = {
-  "Meets": "bg-green-100 text-green-700",
-  "Partially Meets": "bg-yellow-100 text-yellow-700",
-  "Does Not Meet": "bg-red-100 text-red-700",
-  "Conflict": "bg-purple-100 text-purple-700",
-  "Exceeds": "bg-blue-100 text-blue-700",
-  "N/A": "bg-gray-100 text-gray-700",
+  "Meets": "bg-crowe-teal/20 text-crowe-teal-bright",
+  "Partially Meets": "bg-crowe-amber/20 text-crowe-amber-bright",
+  "Does Not Meet": "bg-crowe-coral/20 text-crowe-coral-bright",
+  "Conflict": "bg-crowe-violet/20 text-crowe-violet-bright",
+  "Exceeds": "bg-crowe-blue/20 text-crowe-blue-light",
+  "N/A": "bg-white/10 text-white/70",
 };
 
 const SEVERITY_COLORS: Record<string, string> = {
@@ -116,7 +116,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
             <Card key={item.Metric}>
               <CardContent className="pt-4">
                 <div className="text-2xl font-bold">{item.Value}</div>
-                <p className="text-xs text-muted-foreground">{item.Metric}</p>
+                <p className="text-xs text-white/60">{item.Metric}</p>
               </CardContent>
             </Card>
           ))}
@@ -135,7 +135,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
                 <Input
                   placeholder="Search gaps..."
                   value={searchTerm}
@@ -189,7 +189,7 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
               <TableBody>
                 {filteredGaps.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={5} className="text-center py-8 text-white/60">
                       No gaps found matching your filters
                     </TableCell>
                   </TableRow>
@@ -240,11 +240,11 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
                             <div className="space-y-4 mt-4">
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Standard Requirement</h4>
-                                <p className="text-sm text-muted-foreground">{gap.Standard_Requirement_Text}</p>
+                                <p className="text-sm text-white/70">{gap.Standard_Requirement_Text}</p>
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Procedure Reference</h4>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-sm text-white/70">
                                   {gap.Procedure_Reference_ID}: {gap.Procedure_Text_Summary}
                                 </p>
                               </div>
@@ -254,11 +254,11 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Impact Rationale</h4>
-                                <p className="text-sm text-muted-foreground">{gap.Impact_Rationale}</p>
+                                <p className="text-sm text-white/70">{gap.Impact_Rationale}</p>
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Testing Implication</h4>
-                                <p className="text-sm text-muted-foreground">{gap.Testing_Implication}</p>
+                                <p className="text-sm text-white/70">{gap.Testing_Implication}</p>
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Recommended Remediation</h4>
@@ -266,22 +266,22 @@ export function GapsTable({ gaps, summary }: GapsTableProps) {
                               </div>
                               <div>
                                 <h4 className="font-semibold text-sm mb-1">Evidence Expected</h4>
-                                <p className="text-sm text-muted-foreground">{gap.Evidence_Expected}</p>
+                                <p className="text-sm text-white/70">{gap.Evidence_Expected}</p>
                               </div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Standard Citation</h4>
-                                  <p className="text-xs text-muted-foreground">{gap.Standard_Citation}</p>
+                                  <p className="text-xs text-white/60">{gap.Standard_Citation}</p>
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Procedure Citation</h4>
-                                  <p className="text-xs text-muted-foreground">{gap.Procedure_Citation}</p>
+                                  <p className="text-xs text-white/60">{gap.Procedure_Citation}</p>
                                 </div>
                               </div>
                               {gap.Notes && (
                                 <div>
                                   <h4 className="font-semibold text-sm mb-1">Notes</h4>
-                                  <p className="text-sm text-muted-foreground">{gap.Notes}</p>
+                                  <p className="text-sm text-white/70">{gap.Notes}</p>
                                 </div>
                               )}
                             </div>

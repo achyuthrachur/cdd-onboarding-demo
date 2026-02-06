@@ -43,13 +43,13 @@ interface AuditorWorkbookViewProps {
 
 const RESULT_OPTIONS = [
   { value: "all", label: "All Results" },
-  { value: "Pass", label: "Pass", icon: CheckCircle2, color: "text-green-600" },
-  { value: "Pass w/Observation", label: "Pass w/Observation", icon: CheckCircle2, color: "text-yellow-600" },
-  { value: "Fail 1 - Regulatory", label: "Fail 1 - Regulatory", icon: XCircle, color: "text-red-600" },
-  { value: "Fail 2 - Procedure", label: "Fail 2 - Procedure", icon: AlertTriangle, color: "text-orange-600" },
-  { value: "Question to LOB", label: "Question to LOB", icon: HelpCircle, color: "text-blue-600" },
-  { value: "N/A", label: "N/A", icon: MinusCircle, color: "text-gray-600" },
-  { value: "not-tested", label: "Not Tested", icon: MinusCircle, color: "text-gray-400" },
+  { value: "Pass", label: "Pass", icon: CheckCircle2, color: "text-crowe-teal-bright" },
+  { value: "Pass w/Observation", label: "Pass w/Observation", icon: CheckCircle2, color: "text-crowe-amber-bright" },
+  { value: "Fail 1 - Regulatory", label: "Fail 1 - Regulatory", icon: XCircle, color: "text-crowe-coral-bright" },
+  { value: "Fail 2 - Procedure", label: "Fail 2 - Procedure", icon: AlertTriangle, color: "text-crowe-amber" },
+  { value: "Question to LOB", label: "Question to LOB", icon: HelpCircle, color: "text-crowe-blue-light" },
+  { value: "N/A", label: "N/A", icon: MinusCircle, color: "text-white/60" },
+  { value: "not-tested", label: "Not Tested", icon: MinusCircle, color: "text-white/40" },
 ];
 
 export function AuditorWorkbookView({
@@ -121,9 +121,9 @@ export function AuditorWorkbookView({
     return (
       <Card className="h-full flex items-center justify-center">
         <div className="text-center">
-          <User className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-30" />
+          <User className="h-16 w-16 mx-auto mb-4 text-white/60 opacity-30" />
           <h3 className="font-medium mb-2">No Workbook Selected</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-white/60">
             Generate workbooks to view auditor assignments
           </p>
         </div>
@@ -167,40 +167,40 @@ export function AuditorWorkbookView({
 
         {/* Summary Stats */}
         <div className="grid grid-cols-6 gap-4">
-          <div className="text-center p-2 bg-green-50 dark:bg-green-950 rounded">
-            <div className="text-lg font-bold text-green-600">{summary.passCount}</div>
-            <div className="text-xs text-muted-foreground">Pass</div>
+          <div className="text-center p-2 bg-crowe-teal/10 rounded">
+            <div className="text-lg font-bold text-crowe-teal-bright">{summary.passCount}</div>
+            <div className="text-xs text-white/60">Pass</div>
           </div>
-          <div className="text-center p-2 bg-yellow-50 dark:bg-yellow-950 rounded">
-            <div className="text-lg font-bold text-yellow-600">{summary.passWithObsCount}</div>
-            <div className="text-xs text-muted-foreground">Pass w/Obs</div>
+          <div className="text-center p-2 bg-crowe-amber/10 rounded">
+            <div className="text-lg font-bold text-crowe-amber-bright">{summary.passWithObsCount}</div>
+            <div className="text-xs text-white/60">Pass w/Obs</div>
           </div>
-          <div className="text-center p-2 bg-red-50 dark:bg-red-950 rounded">
-            <div className="text-lg font-bold text-red-600">{summary.fail1RegulatoryCount}</div>
-            <div className="text-xs text-muted-foreground">Fail 1</div>
+          <div className="text-center p-2 bg-crowe-coral/10 rounded">
+            <div className="text-lg font-bold text-crowe-coral-bright">{summary.fail1RegulatoryCount}</div>
+            <div className="text-xs text-white/60">Fail 1</div>
           </div>
-          <div className="text-center p-2 bg-orange-50 dark:bg-orange-950 rounded">
-            <div className="text-lg font-bold text-orange-600">{summary.fail2ProcedureCount}</div>
-            <div className="text-xs text-muted-foreground">Fail 2</div>
+          <div className="text-center p-2 bg-crowe-amber-dark/10 rounded">
+            <div className="text-lg font-bold text-crowe-amber">{summary.fail2ProcedureCount}</div>
+            <div className="text-xs text-white/60">Fail 2</div>
           </div>
-          <div className="text-center p-2 bg-blue-50 dark:bg-blue-950 rounded">
-            <div className="text-lg font-bold text-blue-600">{summary.questionToLOBCount}</div>
-            <div className="text-xs text-muted-foreground">Questions</div>
+          <div className="text-center p-2 bg-crowe-blue/10 rounded">
+            <div className="text-lg font-bold text-crowe-blue-light">{summary.questionToLOBCount}</div>
+            <div className="text-xs text-white/60">Questions</div>
           </div>
-          <div className="text-center p-2 bg-gray-50 dark:bg-gray-950 rounded">
-            <div className="text-lg font-bold text-gray-600">{summary.naCount}</div>
-            <div className="text-xs text-muted-foreground">N/A</div>
+          <div className="text-center p-2 bg-white/10 rounded">
+            <div className="text-lg font-bold text-white/70">{summary.naCount}</div>
+            <div className="text-xs text-white/60">N/A</div>
           </div>
         </div>
 
         {/* Progress */}
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm mb-1">
-            <span className="text-muted-foreground">Completion Progress</span>
+            <span className="text-white/60">Completion Progress</span>
             <span className="font-medium">{summary.completionPercentage}%</span>
           </div>
           <Progress value={summary.completionPercentage} className="h-2" />
-          <div className="text-xs text-muted-foreground mt-1">
+          <div className="text-xs text-white/60 mt-1">
             {summary.completedRows} of {summary.totalRows} rows completed
           </div>
         </div>
@@ -208,7 +208,7 @@ export function AuditorWorkbookView({
         {/* Filters */}
         <div className="flex gap-3 mt-4">
           <div className="flex items-center gap-2">
-            <Filter className="h-4 w-4 text-muted-foreground" />
+            <Filter className="h-4 w-4 text-white/60" />
             <Select value={resultFilter} onValueChange={setResultFilter}>
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Filter by result" />
@@ -270,14 +270,14 @@ export function AuditorWorkbookView({
                 <TableCell className="text-xs truncate max-w-[160px]" title={row.acceptableDocUsed}>
                   {row.acceptableDocUsed || "-"}
                 </TableCell>
-                <TableCell className="text-xs text-muted-foreground truncate max-w-[200px]" title={row.observation}>
+                <TableCell className="text-xs text-white/60 truncate max-w-[200px]" title={row.observation}>
                   {row.observation || "-"}
                 </TableCell>
               </TableRow>
             ))}
             {filteredRows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={7} className="text-center py-8 text-white/60">
                   No rows match your filter criteria
                 </TableCell>
               </TableRow>

@@ -208,8 +208,8 @@ export default function Stage2Page() {
       title: "Step 1",
       description: "Upload Population",
       isComplete: !!population,
-      activeColor: "bg-blue-100 text-blue-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-blue-500/20 text-blue-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Upload,
       badgeText: population
         ? `${population.rowCount.toLocaleString()} records`
@@ -220,8 +220,8 @@ export default function Stage2Page() {
       title: "Step 2",
       description: "Configure & Sample",
       isComplete: !!plan,
-      activeColor: "bg-purple-100 text-purple-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-purple-500/20 text-purple-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Settings,
       badgeText: sample
         ? `${sample.length.toLocaleString()} sampled`
@@ -234,8 +234,8 @@ export default function Stage2Page() {
       title: "Step 3",
       description: "Lock Sample",
       isComplete: isLocked,
-      activeColor: "bg-gray-100 text-gray-400",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-white/10 text-white/40",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Lock,
       badgeText: isLocked ? "Locked" : "Pending",
       helpText: "Review and lock the sample to proceed to workbooks.",
@@ -261,7 +261,7 @@ export default function Stage2Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-green-100 text-green-700">Stage 2</Badge>
+              <Badge className="bg-green-500/20 text-green-400">Stage 2</Badge>
               <h1 className="text-3xl font-bold tracking-tight text-white">
                 Statistical Sampling
               </h1>
@@ -271,7 +271,7 @@ export default function Stage2Page() {
               your sample set
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData}>
+          <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <Database className="h-4 w-4 mr-2" />
             Load Demo Data
           </Button>
@@ -321,7 +321,7 @@ export default function Stage2Page() {
                     exit={{ scale: 0.8, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Badge variant={step.isComplete ? "default" : "outline"}>
+                    <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-white/30 text-white/70" : ""}>
                       {step.badgeText}
                     </Badge>
                   </motion.div>
@@ -404,7 +404,7 @@ export default function Stage2Page() {
         transition={{ delay: 0.4 }}
       >
         <Link href={`/audit-runs/${id}/stage-1`}>
-          <Button variant="outline">
+          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 1
           </Button>

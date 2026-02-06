@@ -26,9 +26,9 @@ const DOC_TYPE_LABELS: Record<string, string> = {
 };
 
 const DOC_TYPE_COLORS: Record<string, string> = {
-  global_std_old: "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300",
-  global_std_new: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
-  flu_jurisdiction: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+  global_std_old: "bg-crowe-amber/20 text-crowe-amber-bright",
+  global_std_new: "bg-crowe-blue/20 text-crowe-blue-light",
+  flu_jurisdiction: "bg-crowe-teal/20 text-crowe-teal-bright",
 };
 
 export function DocumentCard({
@@ -76,17 +76,17 @@ export function DocumentCard({
       >
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 mt-0.5">
-            <GripVertical className="h-4 w-4 text-muted-foreground" />
+            <GripVertical className="h-4 w-4 text-white/50" />
           </div>
           <div className="flex-shrink-0">
             <motion.div
-              className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted"
+              className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10"
               animate={isSelected && !shouldReduceMotion ? {
                 scale: [1, 1.1, 1],
                 transition: { duration: 0.3 }
               } : {}}
             >
-              <FileText className="h-5 w-5 text-muted-foreground" />
+              <FileText className="h-5 w-5 text-white/70" />
             </motion.div>
           </div>
           <div className="flex-1 min-w-0">

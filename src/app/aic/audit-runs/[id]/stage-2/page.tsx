@@ -196,8 +196,8 @@ export default function AicStage2Page() {
       title: "Step 1",
       description: "Upload Population",
       isComplete: !!population,
-      activeColor: "bg-blue-100 text-blue-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-blue-500/20 text-blue-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Upload,
       badgeText: population
         ? `${population.rowCount.toLocaleString()} records`
@@ -208,8 +208,8 @@ export default function AicStage2Page() {
       title: "Step 2",
       description: "Configure & Sample",
       isComplete: !!plan,
-      activeColor: "bg-purple-100 text-purple-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-purple-500/20 text-purple-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Settings,
       badgeText: sample
         ? `${sample.length.toLocaleString()} sampled`
@@ -222,8 +222,8 @@ export default function AicStage2Page() {
       title: "Step 3",
       description: "Lock Sample",
       isComplete: isLocked,
-      activeColor: "bg-gray-100 text-gray-400",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-white/10 text-white/40",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Lock,
       badgeText: isLocked ? "Locked" : "Pending",
       helpText: "Review and lock the sample to proceed to workbooks.",
@@ -280,7 +280,7 @@ export default function AicStage2Page() {
                 <div className="flex items-center gap-3">
                   <motion.div
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor.replace('bg-blue-100 text-blue-600', 'bg-blue-500/20 text-blue-400').replace('bg-purple-100 text-purple-600', 'bg-purple-500/20 text-purple-400').replace('bg-gray-100 text-gray-400', 'bg-white/10 text-white/40')
+                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor
                     }`}
                   >
                     {step.isComplete ? (

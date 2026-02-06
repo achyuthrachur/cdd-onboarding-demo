@@ -85,7 +85,7 @@ export function NarrativePrompt({
 
           <Label
             className={`text-sm ${
-              statusColor === "success" ? "text-green-600" : "text-muted-foreground"
+              statusColor === "success" ? "text-emerald-400" : "text-white/60"
             }`}
           >
             {statusMessage}

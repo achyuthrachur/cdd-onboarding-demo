@@ -369,8 +369,8 @@ export default function AicStage4Page() {
       title: "Step 1: Load Data",
       description: "Sample & Attributes",
       isComplete: stepComplete.load,
-      activeColor: "bg-crowe-indigo/10 text-crowe-indigo-dark",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-crowe-indigo/20 text-crowe-indigo-bright",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Database,
       badgeText: `${samples.length} samples, ${extractedAttributes.length} attrs`,
     },
@@ -378,8 +378,8 @@ export default function AicStage4Page() {
       title: "Step 2: Auditors",
       description: "Select team",
       isComplete: stepComplete.auditors,
-      activeColor: "bg-purple-100 text-purple-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-purple-500/20 text-purple-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Users,
       badgeText: `${selectedAuditors.length} selected`,
     },
@@ -387,8 +387,8 @@ export default function AicStage4Page() {
       title: "Step 3: Generate",
       description: "Create workbooks",
       isComplete: stepComplete.generate,
-      activeColor: "bg-amber-100 text-amber-600",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-amber-500/20 text-amber-400",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: FileSpreadsheet,
       badgeText: `${auditorWorkbooks.length} workbooks`,
     },
@@ -396,8 +396,8 @@ export default function AicStage4Page() {
       title: "Step 4: Publish",
       description: "Send to auditors",
       isComplete: isPublished,
-      activeColor: "bg-teal-100 text-crowe-teal",
-      completeColor: "bg-green-100 text-green-600",
+      activeColor: "bg-crowe-teal/20 text-crowe-teal-bright",
+      completeColor: "bg-green-500/20 text-green-400",
       Icon: Send,
       badgeText: isPublished ? "Published" : "Pending",
     },
@@ -452,7 +452,7 @@ export default function AicStage4Page() {
                 <div className="flex items-center gap-3">
                   <motion.div
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor.replace('bg-crowe-indigo/10 text-crowe-indigo-dark', 'bg-crowe-indigo/20 text-crowe-indigo-bright').replace('bg-purple-100 text-purple-600', 'bg-purple-500/20 text-purple-400').replace('bg-amber-100 text-amber-600', 'bg-amber-500/20 text-amber-400').replace('bg-teal-100 text-crowe-teal', 'bg-crowe-teal/20 text-crowe-teal')
+                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor
                     }`}
                     animate={step.isComplete ? { scale: [1, 1.1, 1] } : undefined}
                     transition={{ duration: 0.3 }}
@@ -774,7 +774,7 @@ export default function AicStage4Page() {
                         )}
                       </Button>
                       {auditorWorkbooks.length > 0 && (
-                        <Button variant="outline" onClick={handleClearWorkbooks}>
+                        <Button variant="outline" onClick={handleClearWorkbooks} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
                           Clear & Regenerate
                         </Button>
                       )}
