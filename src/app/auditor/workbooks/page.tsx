@@ -86,42 +86,50 @@ export default function AuditorWorkbooksPage() {
   }, []);
 
   const handleLoadDemoData = () => {
-    // Load prerequisite stages data
-    loadFallbackDataForStage(2);
-    loadFallbackDataForStage(3);
-    loadFallbackDataForStage(4);
+    try {
+      // Load prerequisite stages data
+      loadFallbackDataForStage(2);
+      loadFallbackDataForStage(3);
+      loadFallbackDataForStage(4);
 
-    // Mark as published
-    setStageData("workbooksPublished", {
-      publishedAt: new Date().toISOString(),
-      publishedBy: 'AIC',
-      workbookCount: 4,
-      auditorCount: 4,
-    });
+      // Mark as published
+      setStageData("workbooksPublished", {
+        publishedAt: new Date().toISOString(),
+        publishedBy: 'AIC',
+        workbookCount: 4,
+        auditorCount: 4,
+      });
 
-    // Add some progress for the current auditor
-    const currentAuditorId = getCurrentAuditorId();
-    const pivotedWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
+      // Add some progress for the current auditor
+      const currentAuditorId = getCurrentAuditorId();
+      const pivotedWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
 
-    if (pivotedWorkbooks && currentAuditorId) {
-      const myWorkbook = pivotedWorkbooks.find(wb => wb.auditorId === currentAuditorId);
-      if (myWorkbook) {
-        const auditorProgress = getStageData("auditorProgress") || {};
-        const updatedProgress = {
-          ...auditorProgress,
-          [currentAuditorId]: {
-            completionPercentage: 35,
-            status: 'in_progress' as const,
-            lastActivityAt: new Date().toISOString(),
-            submittedAt: null,
-          },
-        };
-        setStageData("auditorProgress", updatedProgress);
+      if (pivotedWorkbooks && currentAuditorId) {
+        const myWorkbook = pivotedWorkbooks.find(wb => wb.auditorId === currentAuditorId);
+        if (myWorkbook) {
+          const auditorProgress = getStageData("auditorProgress") || {};
+          const updatedProgress = {
+            ...auditorProgress,
+            [currentAuditorId]: {
+              completionPercentage: 35,
+              status: 'in_progress' as const,
+              lastActivityAt: new Date().toISOString(),
+              submittedAt: null,
+            },
+          };
+          setStageData("auditorProgress", updatedProgress);
+        }
       }
-    }
 
-    loadWorkbooks();
-    toast.success("Demo data loaded");
+      // Use setTimeout to ensure localStorage updates are complete before reloading
+      setTimeout(() => {
+        loadWorkbooks();
+        toast.success(`Demo data loaded! ${pivotedWorkbooks?.length || 0} workbooks available.`);
+      }, 100);
+    } catch (error) {
+      console.error("Error loading demo data:", error);
+      toast.error("Failed to load demo data. Please try again.");
+    }
   };
 
   return (

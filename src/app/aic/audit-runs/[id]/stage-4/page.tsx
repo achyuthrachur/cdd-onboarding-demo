@@ -929,12 +929,19 @@ export default function AicStage4Page() {
           </Button>
         )}
         {currentStep === "view" && (
-          <Link href={`/aic/audit-runs/${id}/monitor`}>
-            <Button disabled={!canProceed}>
+          canProceed ? (
+            <Button asChild>
+              <Link href={`/aic/audit-runs/${id}/monitor`}>
+                Continue to Live Monitoring
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          ) : (
+            <Button disabled className="opacity-50 cursor-not-allowed">
               Continue to Live Monitoring
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-          </Link>
+          )
         )}
       </motion.div>
 

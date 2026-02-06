@@ -371,26 +371,28 @@ export default function AicStage2Page() {
         )}
       </AnimatePresence>
 
-      {/* Navigation */}
-      <motion.div
-        className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-white/10"
+      {/* Navigation Footer - Sticky with proper z-index */}
+      <motion.footer
+        className="sticky bottom-0 mt-8 pt-4 pb-4 -mx-8 px-8 bg-white/95 dark:bg-crowe-indigo-dark/95 backdrop-blur-sm border-t border-gray-200 dark:border-white/10 z-10"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
       >
-        <Link href={`/aic/audit-runs/${id}/stage-1`}>
-          <Button variant="outline" className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Stage 1
-          </Button>
-        </Link>
-        <Link href={`/aic/audit-runs/${id}/stage-3`}>
-          <Button disabled={!canProceed}>
-            Continue to Attribute Extraction
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </Link>
-      </motion.div>
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <Link href={`/aic/audit-runs/${id}/stage-1`}>
+            <Button variant="outline" className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Stage 1
+            </Button>
+          </Link>
+          <Link href={`/aic/audit-runs/${id}/stage-3`}>
+            <Button disabled={!canProceed}>
+              Continue to Attribute Extraction
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+      </motion.footer>
     </div>
   );
 }

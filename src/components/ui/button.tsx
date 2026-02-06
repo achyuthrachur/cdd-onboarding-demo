@@ -26,11 +26,12 @@ const buttonVariants = cva(
         // Outline - visible border with solid background in light mode
         outline:
           "bg-white text-gray-900 " +
-          "border-2 border-gray-300 " +
-          "hover:bg-gray-50 hover:border-gray-400 " +
-          "dark:bg-transparent dark:text-white dark:border-gray-500 " +
-          "dark:hover:bg-white/10 dark:hover:border-gray-400 " +
-          "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30",
+          "border-2 border-black " +
+          "hover:bg-gray-50 hover:border-gray-700 " +
+          "dark:bg-transparent dark:text-white dark:border-white " +
+          "dark:hover:bg-white/10 dark:hover:border-gray-300 " +
+          "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30 " +
+          "!text-black dark:!text-white",
         // Secondary - Crowe Amber accent
         secondary:
           "bg-crowe-amber dark:bg-crowe-amber " +
@@ -38,13 +39,14 @@ const buttonVariants = cva(
           "hover:bg-crowe-amber-dark dark:hover:bg-crowe-amber-bright " +
           "border border-crowe-amber-dark " +
           "focus-visible:ring-crowe-amber/30",
-        // Ghost - subtle background, not invisible
+        // Ghost - subtle background with visible border, not invisible
         ghost:
-          "bg-gray-100 text-gray-700 " +
-          "hover:bg-gray-200 hover:text-gray-900 " +
-          "dark:bg-white/10 dark:text-gray-200 " +
-          "dark:hover:bg-white/20 dark:hover:text-white " +
-          "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30",
+          "bg-gray-100 text-gray-700 border border-gray-300 " +
+          "hover:bg-gray-200 hover:text-gray-900 hover:border-gray-400 " +
+          "dark:bg-white/10 dark:text-gray-200 dark:border-white/20 " +
+          "dark:hover:bg-white/20 dark:hover:text-white dark:hover:border-white/30 " +
+          "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30 " +
+          "!text-black dark:!text-white",
         // Link style
         link:
           "text-crowe-indigo dark:text-crowe-amber " +
@@ -62,10 +64,11 @@ const buttonVariants = cva(
           "focus-visible:ring-amber-500/30",
         // Soft/subtle button for secondary actions
         soft:
-          "bg-gray-100 dark:bg-white/10 " +
+          "bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/10 " +
           "text-gray-900 dark:text-white " +
-          "hover:bg-gray-200 dark:hover:bg-white/20 " +
-          "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30",
+          "hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-300 dark:hover:border-white/20 " +
+          "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30 " +
+          "!text-black dark:!text-white",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
