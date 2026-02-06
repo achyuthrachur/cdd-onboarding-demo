@@ -735,6 +735,11 @@
   @apply grid gap-4 grid-cols-2 lg:grid-cols-4;
 }
 
+/* Form layout - 1 column on mobile, 2 on desktop */
+.form-grid {
+  @apply grid gap-4 grid-cols-1 md:grid-cols-2;
+}
+
 /* Scrollable container with thin scrollbar */
 .scroll-container {
   @apply overflow-x-auto overflow-y-auto;

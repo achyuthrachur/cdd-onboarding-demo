@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import { duration, useReducedMotion } from "@/lib/animations"
 
 const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-full border px-2.5 py-0.5 text-sm font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1.5 [&>svg]:pointer-events-none focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
+  "inline-flex items-center justify-center rounded-full border font-medium w-fit whitespace-nowrap shrink-0 gap-1.5 [&>svg]:pointer-events-none focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
   {
     variants: {
       variant: {
@@ -23,9 +23,15 @@ const badgeVariants = cva(
         ghost: "border-transparent text-gray-500 dark:text-gray-300 [a&]:hover:bg-gray-100 dark:[a&]:hover:bg-white/10 [a&]:hover:text-gray-900 dark:[a&]:hover:text-white",
         link: "text-crowe-amber-dark dark:text-crowe-amber border-transparent underline-offset-4 [a&]:hover:underline",
       },
+      size: {
+        sm: "px-2 py-0.5 text-xs rounded [&>svg]:size-3",
+        default: "px-2.5 py-1 text-sm rounded-md [&>svg]:size-3",
+        lg: "px-3 py-1.5 text-sm rounded-md [&>svg]:size-4",
+      },
     },
     defaultVariants: {
       variant: "default",
+      size: "default",
     },
   }
 )
@@ -33,6 +39,7 @@ const badgeVariants = cva(
 function Badge({
   className,
   variant = "default",
+  size = "default",
   asChild = false,
   ...props
 }: React.ComponentProps<"span"> &
@@ -43,7 +50,8 @@ function Badge({
     <Comp
       data-slot="badge"
       data-variant={variant}
-      className={cn(badgeVariants({ variant }), className)}
+      data-size={size}
+      className={cn(badgeVariants({ variant, size }), className)}
       {...props}
     />
   )
