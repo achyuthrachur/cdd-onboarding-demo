@@ -88,7 +88,7 @@ export function DemoModeBanner({
                   Quick Start
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-gray-600 dark:text-gray-300">
                 Populate all stages with sample data in one click
               </p>
             </div>
@@ -137,7 +137,7 @@ export function DemoModeBanner({
             {isRunning && (
               <div className="mb-4">
                 <Progress value={progress} className="h-2" />
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
                   {currentStage
                     ? `Running Stage ${currentStage}: ${stages[currentStage - 1].name}...`
                     : "Initializing..."}
@@ -158,7 +158,7 @@ export function DemoModeBanner({
                         ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300"
                         : isCurrent
                         ? "bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300"
-                        : "bg-white/50 dark:bg-white/5 text-muted-foreground"
+                        : "bg-white/50 dark:bg-white/10 text-gray-600 dark:text-gray-300"
                     }`}
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -175,7 +175,7 @@ export function DemoModeBanner({
               })}
             </div>
 
-            <p className="text-xs text-muted-foreground mt-3">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-3">
               The demo will generate sample documents, population data, testing
               workbooks, and consolidation results using mock data.
             </p>
