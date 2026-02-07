@@ -212,7 +212,7 @@ export function RoleSelector() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <p>CDD Onboarding Demo v1.2 | Dual-Portal Architecture | Deploy: 2026-02-07-B</p>
+            <p>CDD Onboarding Demo v1.3 | Dual-Portal Architecture | Deploy: 2026-02-07-C</p>
           </motion.div>
         </div>
       </div>

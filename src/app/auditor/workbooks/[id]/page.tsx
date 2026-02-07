@@ -722,7 +722,7 @@ export default function AuditorWorkbookPage() {
                 <Button
                   onClick={() => setShowSubmitDialog(true)}
                   disabled={!canSubmit}
-                  className="bg-teal-600 hover:bg-teal-700"
+                  className="bg-crowe-teal hover:bg-crowe-teal-dark text-white"
                 >
                   <Send className="h-4 w-4 mr-2" />
                   Submit
@@ -1167,7 +1167,7 @@ export default function AuditorWorkbookPage() {
             <Button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="bg-teal-600 hover:bg-teal-700"
+              className="bg-crowe-teal hover:bg-crowe-teal-dark text-white"
             >
               {isSubmitting ? (
                 <>
