@@ -25,16 +25,16 @@ export default function AicLayout({
 
   if (!isAuthorized) {
     return (
-      <div className="flex h-screen items-center justify-center bg-soft-gradient dark:bg-crowe-indigo-dark">
+      <div className="flex h-screen items-center justify-center bg-soft-gradient">
         <p className="text-gray-500 dark:text-gray-300">Checking authorization...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-soft-gradient dark:bg-crowe-indigo-dark">
+    <div className="flex h-screen bg-soft-gradient">
       <AicSidebar />
-      <main className="flex-1 overflow-auto bg-soft-gradient dark:bg-transparent">
+      <main className="flex-1 overflow-auto bg-soft-gradient">
         <ErrorBoundary>
           {children}
         </ErrorBoundary>

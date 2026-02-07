@@ -42,158 +42,120 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  /* Border Radius - Crowe Design System */
+  /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
   --radius-full: 9999px;
 
-  /* Box Shadows - Crowe Design System */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
-  --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.12);
-
-  /* Transition Durations - Crowe Design System */
+  /* Transition Durations */
   --transition-duration-instant: 75ms;
   --transition-duration-fast: 150ms;
   --transition-duration-normal: 250ms;
   --transition-duration-slow: 350ms;
   --transition-duration-slower: 500ms;
 
-  /* Transition Timing Functions - Crowe Design System */
+  /* Transition Timing Functions */
   --transition-timing-function-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-timing-function-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
   --transition-timing-function-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --transition-timing-function-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Animation - Crowe Design System */
+  /* Animation */
   --animate-fade-in-up: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 
-  /* ============================================
-     CROWE PRIMARY COLORS
-     Usage: bg-crowe-amber, text-crowe-indigo-dark, etc.
-     ============================================ */
+  /* Crowe Primary Colors */
   --color-crowe-amber-bright: #FFD231;
   --color-crowe-amber: #F5A800;
   --color-crowe-amber-dark: #D7761D;
-
   --color-crowe-indigo-bright: #003F9F;
   --color-crowe-indigo: #002E62;
   --color-crowe-indigo-dark: #011E41;
 
-  /* ============================================
-     CROWE SECONDARY COLORS
-     Usage: For accents only, never for text/backgrounds
-     ============================================ */
+  /* Crowe Secondary Colors */
   --color-crowe-teal-bright: #16D9BC;
   --color-crowe-teal: #05AB8C;
   --color-crowe-teal-dark: #0C7876;
-
   --color-crowe-cyan-light: #8FE1FF;
   --color-crowe-cyan: #54C0E8;
   --color-crowe-cyan-dark: #007DA3;
-
   --color-crowe-blue-light: #32A8FD;
   --color-crowe-blue: #0075C9;
   --color-crowe-blue-dark: #0050AD;
-
   --color-crowe-violet-bright: #EA80FF;
   --color-crowe-violet: #B14FC5;
   --color-crowe-violet-dark: #612080;
-
   --color-crowe-coral-bright: #FF526F;
   --color-crowe-coral: #E5376B;
   --color-crowe-coral-dark: #992A5C;
 
-  /* ============================================
-     NEUTRAL TINTS
-     Usage: bg-tint-100, text-tint-900, etc.
-     ============================================ */
+  /* Neutral Tints */
   --color-tint-900: #333333;
   --color-tint-700: #4F4F4F;
   --color-tint-500: #828282;
   --color-tint-300: #BDBDBD;
   --color-tint-100: #E0E0E0;
 
-  /* ============================================
-     FUNCTIONAL COLORS - Crowe Brand Aligned
-     ============================================ */
-  --color-success: #05AB8C;          /* Crowe Teal */
+  /* Functional Colors */
+  --color-success: #05AB8C;
   --color-success-light: #16D9BC;
   --color-success-dark: #0C7876;
-  --color-warning: #F5A800;          /* Crowe Amber */
+  --color-warning: #F5A800;
   --color-warning-light: #FFD231;
   --color-warning-dark: #D7761D;
-  --color-error: #E5376B;            /* Crowe Coral */
+  --color-error: #E5376B;
   --color-error-light: #FF526F;
   --color-error-dark: #992A5C;
-  --color-info: #0075C9;             /* Crowe Blue */
+  --color-info: #0075C9;
   --color-info-light: #32A8FD;
   --color-info-dark: #0050AD;
 
-  /* ============================================
-     Semantic Text Colors - Crowe Design System
-     ============================================ */
+  /* Semantic Text Colors */
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
 
-  /* ============================================
-     Semantic Surface Colors - Crowe Design System
-     ============================================ */
+  /* Semantic Surface Colors */
   --color-surface-primary: var(--surface-primary);
   --color-surface-secondary: var(--surface-secondary);
   --color-surface-elevated: var(--surface-elevated);
 
-  /* ============================================
-     Semantic Border Colors - Crowe Design System
-     ============================================ */
+  /* Semantic Border Colors */
   --color-border-default: var(--border-default);
   --color-border-strong: var(--border-strong);
 }
 
-/* ============================================
-   ALL CSS below is inside @layer base
-   Tailwind CSS v4 REQUIRES this for production builds
-   ============================================ */
+/* ══════════════════════════════════════════════════
+   @layer base — ONLY :root variables, .dark variables,
+   and element-level resets (*, body)
+   ══════════════════════════════════════════════════ */
 @layer base {
-  /* ============================================
-     :root — All CSS Custom Properties (Light Mode)
-     ============================================ */
   :root {
-    /* ── Crowe Brand Colors (CSS Custom Properties) ── */
+    /* Crowe Brand Colors (CSS custom properties for var() usage) */
     --crowe-amber-bright: #FFD231;
     --crowe-amber-core: #F5A800;
     --crowe-amber-dark: #D7761D;
-
     --crowe-indigo-bright: #003F9F;
     --crowe-indigo-core: #002E62;
     --crowe-indigo-dark: #011E41;
-
     --crowe-teal-bright: #16D9BC;
     --crowe-teal-core: #05AB8C;
     --crowe-teal-dark: #0C7876;
-
     --crowe-cyan-light: #8FE1FF;
     --crowe-cyan-core: #54C0E8;
     --crowe-cyan-dark: #007DA3;
-
     --crowe-blue-light: #32A8FD;
     --crowe-blue-core: #0075C9;
     --crowe-blue-dark: #0050AD;
-
     --crowe-violet-bright: #EA80FF;
     --crowe-violet-core: #B14FC5;
     --crowe-violet-dark: #612080;
-
     --crowe-coral-bright: #FF526F;
     --crowe-coral-core: #E5376B;
     --crowe-coral-dark: #992A5C;
 
-    /* ── Warm Neutral Tints (indigo undertone) ── */
+    /* Warm Neutral Tints */
     --crowe-white: #FFFFFF;
     --crowe-black: #000000;
     --tint-950: #1a1d2b;
@@ -205,7 +167,7 @@
     --tint-100: #eef0f4;
     --tint-50: #f6f7fa;
 
-    /* ── Spacing Scale (8px grid) ── */
+    /* Spacing Scale (8px grid) */
     --space-1: 0.25rem;
     --space-2: 0.5rem;
     --space-3: 0.75rem;
@@ -219,20 +181,20 @@
     --space-20: 5rem;
     --space-24: 6rem;
 
-    /* ── Animation Timing ── */
+    /* Animation Timing */
     --duration-instant: 100ms;
     --duration-fast: 200ms;
     --duration-normal: 350ms;
     --duration-slow: 450ms;
     --duration-slower: 600ms;
 
-    /* ── Easing Curves ── */
+    /* Easing Curves */
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
     --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    /* ── Z-Index Scale ── */
+    /* Z-Index Scale */
     --z-dropdown: 50;
     --z-sticky: 100;
     --z-fixed: 200;
@@ -241,12 +203,11 @@
     --z-popover: 500;
     --z-tooltip: 600;
 
-    /* ── Semantic Tokens (Light Mode) ── */
+    /* Semantic Tokens (Light Mode) */
     --text-primary: #111827;
     --text-secondary: #374151;
     --text-muted: #4b5563;
     --text-disabled: #9ca3af;
-
     --surface-page: #f8f9fc;
     --surface-primary: #ffffff;
     --surface-secondary: #f9fafb;
@@ -254,12 +215,11 @@
     --surface-sunken: #f3f4f6;
     --surface-brand-soft: #f0f2f8;
     --surface-amber-soft: #fff8eb;
-
     --border-default: #e5e7eb;
     --border-strong: #d1d5db;
     --border-focus: #002E62;
 
-    /* ── Indigo-Tinted Shadows ── */
+    /* Indigo-Tinted Shadows */
     --shadow-xs: 0 1px 2px rgba(1, 30, 65, 0.04);
     --shadow-sm: 0 1px 3px rgba(1, 30, 65, 0.06), 0 1px 2px rgba(1, 30, 65, 0.04);
     --shadow-md: 0 4px 8px -2px rgba(1, 30, 65, 0.06), 0 2px 4px -1px rgba(1, 30, 65, 0.04);
@@ -270,7 +230,7 @@
     --shadow-amber-glow: 0 4px 16px rgba(245, 168, 0, 0.20);
     --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.12);
 
-    /* ── shadcn/ui Theme (Light) ── */
+    /* shadcn/ui Theme (Light) */
     --radius: 0.75rem;
     --background: 225 33% 98%;
     --foreground: 228 20% 22%;
@@ -291,15 +251,11 @@
     --border: 226 17% 89%;
     --input: 226 17% 89%;
     --ring: 215 100% 19%;
-
-    /* Chart colors */
     --chart-1: 166 95% 34%;
     --chart-2: 197 100% 46%;
     --chart-3: 207 100% 39%;
     --chart-4: 39 100% 48%;
     --chart-5: 341 79% 56%;
-
-    /* Sidebar */
     --sidebar: 215 100% 13%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 39 100% 48%;
@@ -310,25 +266,19 @@
     --sidebar-ring: 39 100% 48%;
   }
 
-  /* ============================================
-     .dark — All CSS Custom Properties (Dark Mode)
-     ============================================ */
   .dark,
   [data-theme="dark"] {
     --text-primary: #ffffff;
     --text-secondary: #e2e8f0;
     --text-muted: #cbd5e1;
     --text-disabled: #64748b;
-
     --surface-primary: #020c1a;
     --surface-secondary: #011E41;
     --surface-elevated: #0c2d5a;
     --surface-sunken: #010814;
-
     --border-default: rgba(255, 255, 255, 0.12);
     --border-strong: rgba(255, 255, 255, 0.20);
     --border-focus: #F5A800;
-
     --background: 215 100% 13%;
     --foreground: 0 0% 90%;
     --card: 215 100% 19%;
@@ -348,13 +298,11 @@
     --border: 215 100% 24%;
     --input: 215 100% 24%;
     --ring: 39 100% 48%;
-
     --chart-1: 166 95% 43%;
     --chart-2: 197 100% 62%;
     --chart-3: 207 100% 55%;
     --chart-4: 43 100% 60%;
     --chart-5: 341 100% 66%;
-
     --sidebar: 215 100% 10%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 39 100% 48%;
@@ -365,7 +313,6 @@
     --sidebar-ring: 39 100% 48%;
   }
 
-  /* ── Base Element Styles ── */
   * {
     @apply border-border outline-ring/50;
   }
@@ -373,50 +320,15 @@
   body {
     @apply bg-background text-foreground font-body;
   }
+}
 
-  /* ============================================
-     Background Utilities
-     Warm, soft, premium — not cold corporate
-     ============================================ */
-
-  /* ── Page Background — always warm, never pure white ── */
-  .bg-page {
-    background: #f8f9fc;
-  }
-
-  /* ── Section Alternation ── */
-  .bg-section-light {
-    background: #fafbfd;
-  }
-
-  .bg-section-warm {
-    background: #f6f7fa;
-  }
-
-  .bg-section-indigo-wash {
-    background: #f0f2f8;
-  }
-
-  .bg-section-amber-wash {
-    background: #fff8eb;
-  }
-
-  .bg-crowe-clean {
-    background: var(--crowe-white);
-  }
-
-  .bg-crowe-subtle {
-    background: #f6f7fa;
-  }
-
-  .bg-crowe-brand {
-    background: var(--crowe-indigo-dark);
-    color: #f6f7fa;
-  }
-
-  /* ============================================
-     Soft Gradient Backgrounds
-     ============================================ */
+/* ══════════════════════════════════════════════════
+   @layer components — Reusable component classes.
+   This layer has HIGHER priority than @layer base
+   but LOWER than @layer utilities (Tailwind's classes).
+   ══════════════════════════════════════════════════ */
+@layer components {
+  /* ── Gradient Backgrounds (ACTIVE — used by layouts) ── */
 
   .bg-soft-gradient {
     background: linear-gradient(180deg, #f8f9fc 0%, #f0f2f8 100%);
@@ -453,356 +365,7 @@
     );
   }
 
-  .bg-warm-gradient {
-    background: linear-gradient(
-      135deg,
-      #fffbf5 0%,
-      #fff8ed 50%,
-      #fef3e2 100%
-    );
-  }
-
-  .dark .bg-warm-gradient,
-  .dark.bg-warm-gradient {
-    background: linear-gradient(
-      135deg,
-      #0d0906 0%,
-      #1a1006 50%,
-      #261809 100%
-    );
-  }
-
-  .bg-sidebar-gradient {
-    background: linear-gradient(180deg, #1e3a5f 0%, #1a365d 100%);
-  }
-
-  .dark .bg-sidebar-gradient,
-  .dark.bg-sidebar-gradient {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.04) 50%,
-      rgba(255, 255, 255, 0.02) 100%
-    );
-  }
-
-  /* ============================================
-     Pattern Backgrounds
-     ============================================ */
-
-  .bg-grid-pattern {
-    background-image:
-      linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  .dark .bg-grid-pattern,
-  .dark.bg-grid-pattern {
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  .bg-grid {
-    background:
-      linear-gradient(to bottom, #FFFFFF 0%, #F7F7F7 100%),
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 1px,
-        rgba(0, 0, 0, 0.015) 1px,
-        rgba(0, 0, 0, 0.015) 2px
-      );
-  }
-
-  .dark .bg-grid {
-    background:
-      linear-gradient(to bottom, var(--crowe-indigo-dark) 0%, var(--crowe-indigo-core) 100%),
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 1px,
-        rgba(255, 255, 255, 0.02) 1px,
-        rgba(255, 255, 255, 0.02) 2px
-      );
-  }
-
-  .bg-paper {
-    background:
-      linear-gradient(to bottom, #FFFFFF, #F7F7F7),
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  }
-
-  .dark .bg-paper {
-    background:
-      linear-gradient(to bottom, var(--crowe-indigo-dark), var(--crowe-indigo-core)),
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
-  }
-
-  .bg-glass {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  }
-
-  .dark .bg-glass {
-    background: rgba(0, 46, 98, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .bg-dots {
-    background-image: radial-gradient(
-      circle,
-      var(--tint-300) 1px,
-      transparent 1px
-    );
-    background-size: 24px 24px;
-  }
-
-  .dark .bg-dots {
-    background-image: radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.15) 1px,
-      transparent 1px
-    );
-    background-size: 24px 24px;
-  }
-
-  /* ============================================
-     Theme-Aware Utility Classes
-     ============================================ */
-
-  .bg-card-glass {
-    @apply bg-white dark:bg-white/10;
-  }
-
-  .border-card-glass {
-    @apply border-gray-200/60 dark:border-white/20;
-  }
-
-  .text-heading {
-    @apply text-gray-900 dark:text-white;
-  }
-
-  .text-body {
-    @apply text-gray-700 dark:text-white/90;
-  }
-
-  .text-secondary {
-    @apply text-gray-600 dark:text-white/80;
-  }
-
-  .text-muted {
-    @apply text-gray-500 dark:text-white/60;
-  }
-
-  /* ============================================
-     UI Sizing & Layout Utilities
-     ============================================ */
-
-  .page-container {
-    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-
-  .card-grid {
-    @apply grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
-  }
-
-  .stat-grid {
-    @apply grid gap-4 grid-cols-2 lg:grid-cols-4;
-  }
-
-  .form-grid {
-    @apply grid gap-4 grid-cols-1 md:grid-cols-2;
-  }
-
-  .scroll-container {
-    @apply overflow-x-auto overflow-y-auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-  }
-
-  .scroll-container::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  .scroll-container::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .scroll-container::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-  }
-
-  .dark .scroll-container::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-
-  .container-narrow {
-    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-
-  .container-wide {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-
-  .container-full {
-    @apply w-full px-4 sm:px-6 lg:px-8;
-  }
-
-  .card-sm {
-    @apply p-4 rounded-lg;
-  }
-
-  .card-md {
-    @apply p-6 rounded-xl;
-  }
-
-  .card-lg {
-    @apply p-8 rounded-2xl;
-  }
-
-  .card-glass {
-    @apply bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md;
-  }
-
-  .card-glass-elevated {
-    @apply bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-lg;
-  }
-
-  .dark .card-glass-elevated {
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-  }
-
-  .badge-sm {
-    @apply text-[10px] px-1.5 py-0.5 rounded;
-  }
-
-  .badge-md {
-    @apply text-xs px-2 py-1 rounded-md;
-  }
-
-  .badge-lg {
-    @apply text-sm px-3 py-1.5 rounded-md;
-  }
-
-  .stat-card {
-    @apply bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md rounded-xl p-4;
-  }
-
-  .stat-value {
-    @apply text-2xl font-bold tabular-nums text-gray-900 dark:text-white;
-  }
-
-  .stat-label {
-    @apply text-sm font-medium text-gray-600 dark:text-white/80;
-  }
-
-  .stat-description {
-    @apply text-xs text-gray-500 dark:text-white/60 mt-1;
-  }
-
-  .touch-target {
-    @apply min-h-[44px] min-w-[44px];
-  }
-
-  .space-section {
-    @apply py-8 md:py-12 lg:py-16;
-  }
-
-  .space-card {
-    @apply p-4 md:p-6;
-  }
-
-  .grid-cards-2 {
-    @apply grid gap-4 sm:gap-6 md:grid-cols-2;
-  }
-
-  .grid-cards-3 {
-    @apply grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3;
-  }
-
-  .grid-cards-4 {
-    @apply grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4;
-  }
-
-  /* ============================================
-     Animation Keyframes
-     ============================================ */
-
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes amber-pulse {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(245, 168, 0, 0.4);
-    }
-    50% {
-      box-shadow: 0 0 0 12px rgba(245, 168, 0, 0);
-    }
-  }
-
-  /* ============================================
-     Animation Classes
-     ============================================ */
-
-  .animate-fade-in-up {
-    animation: fade-in-up 0.7s var(--ease-out) backwards;
-  }
-
-  .animate-amber-pulse {
-    animation: amber-pulse 1.5s ease-out infinite;
-  }
-
-  .stagger-children > * {
-    animation: fade-in-up 0.6s var(--ease-out) backwards;
-  }
-  .stagger-children > *:nth-child(1) { animation-delay: 0.12s; }
-  .stagger-children > *:nth-child(2) { animation-delay: 0.24s; }
-  .stagger-children > *:nth-child(3) { animation-delay: 0.36s; }
-  .stagger-children > *:nth-child(4) { animation-delay: 0.48s; }
-  .stagger-children > *:nth-child(5) { animation-delay: 0.60s; }
-  .stagger-children > *:nth-child(6) { animation-delay: 0.72s; }
-  .stagger-children > *:nth-child(7) { animation-delay: 0.84s; }
-  .stagger-children > *:nth-child(8) { animation-delay: 0.96s; }
-
-  .card-hover-lift {
-    transition: transform var(--duration-normal) var(--ease-out),
-                box-shadow var(--duration-normal) var(--ease-out);
-  }
-
-  .card-hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-  }
-
-  .card-hover-subtle {
-    transition: transform var(--duration-normal) var(--ease-out),
-                box-shadow var(--duration-normal) var(--ease-out);
-  }
-
-  .card-hover-subtle:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-
-  /* ============================================
-     Custom Scrollbar Styles
-     ============================================ */
+  /* ── Scrollbar Utilities (ACTIVE — used by scrollable-table) ── */
 
   .scrollbar-thin {
     scrollbar-width: thin;
@@ -842,18 +405,29 @@
     display: block !important;
   }
 
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  /* ── Animation Keyframes ── */
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  @keyframes amber-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(245, 168, 0, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 12px rgba(245, 168, 0, 0);
+    }
   }
 
-  /* ============================================
-     Reduced Motion
-     ============================================ */
+  /* ── Reduced Motion ── */
 
   @media (prefers-reduced-motion: reduce) {
     *,

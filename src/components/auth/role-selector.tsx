@@ -44,7 +44,7 @@ export function RoleSelector() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-cool-gradient dark:bg-crowe-indigo-dark">
+    <div className="min-h-screen flex flex-col bg-cool-gradient">
       {/* Top accent bar - Crowe Amber */}
       <div className="h-1 bg-gradient-to-r from-crowe-amber via-crowe-amber-bright to-crowe-amber" />
 
@@ -212,7 +212,7 @@ export function RoleSelector() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <p>CDD Onboarding Demo v1.1 | Dual-Portal Architecture | Deploy: 2026-02-07-A</p>
+            <p>CDD Onboarding Demo v1.2 | Dual-Portal Architecture | Deploy: 2026-02-07-B</p>
           </motion.div>
         </div>
       </div>
