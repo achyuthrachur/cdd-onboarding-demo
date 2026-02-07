@@ -399,79 +399,14 @@
 }
 
 @layer base {
-  /* ═══════════════════════════════════════════════════════════════
-     LIGHT THEME (Default)
-     ═══════════════════════════════════════════════════════════════ */
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 215 100% 13%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 215 100% 13%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 100% 13%;
-
-    --primary: 215 100% 13%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 39 100% 48%;
-    --secondary-foreground: 215 100% 13%;
-
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
-
-    --accent: 39 100% 48%;
-    --accent-foreground: 215 100% 13%;
-
-    --destructive: 341 79% 56%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
-    --ring: 215 100% 19%;
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     DARK THEME
-     ═══════════════════════════════════════════════════════════════ */
-  .dark {
-    --background: 215 100% 13%;
-    --foreground: 0 0% 100%;
-
-    --card: 215 97% 10%;
-    --card-foreground: 0 0% 100%;
-
-    --popover: 215 97% 10%;
-    --popover-foreground: 0 0% 100%;
-
-    --primary: 39 100% 48%;
-    --primary-foreground: 215 100% 13%;
-
-    --secondary: 215 100% 19%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 215 50% 20%;
-    --muted-foreground: 0 0% 70%;
-
-    --accent: 39 100% 48%;
-    --accent-foreground: 215 100% 13%;
-
-    --destructive: 341 79% 56%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 0 0% 100% / 0.1;
-    --input: 0 0% 100% / 0.1;
-    --ring: 39 100% 48%;
-  }
+  /* NOTE: :root and .dark CSS variables are defined ABOVE (outside @layer)
+     to ensure they take precedence with Crowe-branded values.
+     DO NOT add duplicate :root/.dark variable blocks here. */
 
   * {
     @apply border-border outline-ring/50;
   }
 
-  /* ============================================
-     BODY & BASE STYLES - Theme Aware
-     ============================================ */
   body {
     @apply bg-background text-foreground font-body;
   }
