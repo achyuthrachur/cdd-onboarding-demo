@@ -36,7 +36,8 @@ import {
   loadFallbackDataForStage,
   getStageData,
   setStageData,
-  hasStageData
+  hasStageData,
+  clearStageOutputs,
 } from "@/lib/stage-data";
 
 interface PopulationData {
@@ -180,6 +181,17 @@ export default function AicStage2Page() {
     toast.success("Demo data loaded for Stage 2");
   };
 
+  const handleClearDemoData = () => {
+    clearStageOutputs(2);
+    setSample(null);
+    setSummary(null);
+    setPlan(null);
+    setConfig(null);
+    setIsLocked(false);
+    setSampleId(null);
+    toast.success("Stage 2 demo data cleared");
+  };
+
   const handlePlanUpdated = (updatedPlan: SamplingPlan) => {
     setPlan(updatedPlan);
     setSample(null);
@@ -259,10 +271,17 @@ export default function AicStage2Page() {
               your sample set
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
-            <Database className="h-4 w-4 mr-2" />
-            Load Demo Data
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+              <Database className="h-4 w-4 mr-2" />
+              Load Demo Data
+            </Button>
+            {sample && (
+              <Button variant="ghost" size="sm" onClick={handleClearDemoData}>
+                Clear Demo Data
+              </Button>
+            )}
+          </div>
         </div>
       </motion.div>
 

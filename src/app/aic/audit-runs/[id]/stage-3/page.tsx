@@ -32,6 +32,7 @@ import {
   getStageData,
   hasStageData,
   setStageData,
+  clearStageOutputs,
 } from "@/lib/stage-data";
 import type { FLUExtractionResult, ExtractedAttribute, FLUProcedureDocument } from "@/lib/stage-data/store";
 import type { AcceptableDoc } from "@/lib/attribute-library/types";
@@ -171,6 +172,13 @@ export default function AicStage3Page() {
     }
 
     toast.success("Demo data loaded for Stage 3");
+  };
+
+  const handleClearDemoData = () => {
+    clearStageOutputs(3);
+    setExtractionResult(null);
+    setViewMode("chat");
+    toast.success("Stage 3 demo data cleared");
   };
 
   const handleExtractionComplete = (result: FLUExtractionResult) => {
@@ -319,10 +327,17 @@ export default function AicStage3Page() {
               Extract CIP, CDD, and EDD testing attributes from Front Line Unit procedures
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
-            <Database className="h-4 w-4 mr-2" />
-            Load Demo Data
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+              <Database className="h-4 w-4 mr-2" />
+              Load Demo Data
+            </Button>
+            {extractionResult && (
+              <Button variant="ghost" size="sm" onClick={handleClearDemoData}>
+                Clear Demo Data
+              </Button>
+            )}
+          </div>
         </div>
       </motion.div>
 

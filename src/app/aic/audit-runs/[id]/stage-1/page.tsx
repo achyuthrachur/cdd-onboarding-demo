@@ -22,6 +22,7 @@ import {
   loadFallbackDataForStage,
   getStageData,
   setStageData,
+  clearStageOutputs,
   GapAssessmentResult as StoreGapAssessmentResult
 } from "@/lib/stage-data";
 import { motion, useReducedMotion, staggerContainer, staggerItem } from "@/lib/animations";
@@ -107,6 +108,14 @@ export default function AicStage1Page() {
     toast.success("Demo data loaded for Stage 1");
   };
 
+  const handleClearDemoData = () => {
+    clearStageOutputs(1);
+    setAssessment1Result(null);
+    setAssessment2Result(null);
+    setActiveTab("upload");
+    toast.success("Stage 1 demo data cleared");
+  };
+
   const canProceed = assessment1Result && assessment2Result;
   const shouldReduceMotion = useReducedMotion();
 
@@ -151,6 +160,11 @@ export default function AicStage1Page() {
               Load Demo Data
             </Button>
           </motion.div>
+          {(assessment1Result || assessment2Result) && (
+            <Button variant="ghost" size="sm" onClick={handleClearDemoData}>
+              Clear Demo Data
+            </Button>
+          )}
         </div>
       </motion.div>
 

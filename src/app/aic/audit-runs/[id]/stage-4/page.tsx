@@ -35,6 +35,7 @@ import {
   loadFallbackDataForStage,
   getStageData,
   setStageData,
+  clearStageOutputs,
 } from "@/lib/stage-data";
 import type {
   AuditorWorkbook,
@@ -159,6 +160,14 @@ export default function AicStage4Page() {
     }
 
     toast.success("Demo data loaded for Stage 4");
+  };
+
+  const handleClearDemoData = () => {
+    clearStageOutputs(4);
+    setSamplingResult(null);
+    setExtractedAttributes([]);
+    setAcceptableDocs([]);
+    toast.success("Stage 4 demo data cleared");
   };
 
   const handleGenerateWorkbooks = async () => {
@@ -434,10 +443,17 @@ export default function AicStage4Page() {
               Generate auditor workbooks and publish to the audit team
             </p>
           </div>
-          <Button variant="outline" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
-            <Database className="h-4 w-4 mr-2" />
-            Load Demo Data
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+              <Database className="h-4 w-4 mr-2" />
+              Load Demo Data
+            </Button>
+            {(extractedAttributes.length > 0 || samplingResult) && (
+              <Button variant="ghost" size="sm" onClick={handleClearDemoData}>
+                Clear Demo Data
+              </Button>
+            )}
+          </div>
         </div>
       </motion.div>
 
