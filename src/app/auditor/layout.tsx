@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AuditorSidebar } from "@/components/layout/auditor-sidebar";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { getSession, isAuditor } from "@/lib/auth/session";
+import { loadPortalData } from "@/lib/stage-data";
 
 export default function AuditorLayout({
   children,
@@ -23,6 +24,7 @@ export default function AuditorLayout({
     }
     setIsAuthorized(true);
     setAuditorName(session.auditorName || null);
+    loadPortalData('auditor');
   }, [router]);
 
   if (!isAuthorized) {

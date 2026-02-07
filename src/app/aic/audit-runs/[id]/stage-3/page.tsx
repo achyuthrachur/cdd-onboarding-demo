@@ -292,7 +292,7 @@ export default function AicStage3Page() {
       title: "Step 3: Review",
       description: "Confirm & Export",
       isComplete: canProceed,
-      activeColor: "bg-white/10 text-white/80",
+      activeColor: "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: FileSpreadsheet,
       badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
@@ -300,7 +300,7 @@ export default function AicStage3Page() {
   ];
 
   return (
-    <div className="p-8 h-[calc(100vh-4rem)] flex flex-col">
+    <div className="p-8 flex flex-col">
       {/* Header */}
       <motion.div
         className="mb-6 flex-shrink-0"
@@ -381,7 +381,7 @@ export default function AicStage3Page() {
       </motion.div>
 
       {/* View Mode Tabs */}
-      <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)} className="flex-1 flex flex-col min-h-0">
+      <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)} className="flex flex-col">
         <TabsList className="flex-shrink-0 mb-4">
           <TabsTrigger value="chat" className="flex items-center gap-2">
             <Bot className="h-4 w-4" />
@@ -402,13 +402,13 @@ export default function AicStage3Page() {
           {viewMode === "chat" && (
             <motion.div
               key="chat"
-              className="flex-1 min-h-0"
+              className=""
               initial={shouldReduceMotion ? undefined : "hidden"}
               animate="visible"
               exit="exit"
               variants={tabContent}
             >
-              <TabsContent value="chat" className="h-full m-0">
+              <TabsContent value="chat" className="m-0">
                 <FLUProcedureChat
                   onExtractionComplete={handleExtractionComplete}
                   extractionResult={extractionResult}
@@ -422,13 +422,13 @@ export default function AicStage3Page() {
           {viewMode === "results" && (
             <motion.div
               key="results"
-              className="flex-1 min-h-0"
+              className=""
               initial={shouldReduceMotion ? undefined : "hidden"}
               animate="visible"
               exit="exit"
               variants={tabContent}
             >
-              <TabsContent value="results" className="h-full m-0">
+              <TabsContent value="results" className="m-0">
                 {extractionResult ? (
                   <ExtractionResultsView
                     result={extractionResult}
@@ -436,7 +436,7 @@ export default function AicStage3Page() {
                     demoMode={extractionResult.demoMode}
                   />
                 ) : (
-                  <Card className="h-full flex items-center justify-center bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+                  <Card className="flex items-center justify-center py-16 bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                     <div className="text-center">
                       <Sparkles className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
                       <h3 className="font-medium mb-2 text-gray-900 dark:text-white">No Extraction Results</h3>

@@ -774,6 +774,35 @@ export function loadStageInputsFromStorage(): void {
 }
 
 /**
+ * Load only SHARED data from localStorage (cross-portal publication state)
+ * Call this on app initialization so that publication state, auditor progress,
+ * and pivoted workbooks survive page refreshes.
+ */
+export function loadSharedDataFromStorage(): void {
+  if (typeof window === 'undefined') return;
+
+  const sharedKeys = Object.entries(DATA_OWNERSHIP)
+    .filter(([, ownership]) => ownership === 'shared')
+    .map(([key]) => key as keyof StageDataStore);
+
+  try {
+    for (const key of sharedKeys) {
+      const stored = localStorage.getItem(`stageData_${key}`);
+      if (stored) {
+        try {
+          stageDataStore[key] = JSON.parse(stored);
+        } catch {
+          stageDataLogger.warn(`Failed to parse stored shared data for ${key}`);
+        }
+      }
+    }
+    stageDataLogger.info('Loaded shared data from storage');
+  } catch (error) {
+    stageDataLogger.warn('Failed to load shared data from localStorage:', error);
+  }
+}
+
+/**
  * Load OUTPUT data from localStorage for a specific stage
  * Call this when user explicitly wants to restore previous results
  */

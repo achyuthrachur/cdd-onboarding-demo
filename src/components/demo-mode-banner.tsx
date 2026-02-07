@@ -74,7 +74,7 @@ export function DemoModeBanner({
   };
 
   return (
-    <Card className="bg-gradient-to-r from-crowe-violet-dark/30 to-crowe-indigo/30 border-crowe-violet/30">
+    <Card className="bg-gradient-to-r from-crowe-violet/10 to-crowe-indigo/10 dark:from-crowe-violet-dark/30 dark:to-crowe-indigo/30 border-crowe-violet/20 dark:border-crowe-violet/30">
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -83,12 +83,12 @@ export function DemoModeBanner({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-white">Demo Mode</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white">Demo Mode</h3>
                 <Badge variant="secondary" className="bg-crowe-violet/20 text-crowe-violet-bright border-0">
                   Quick Start
                 </Badge>
               </div>
-              <p className="text-sm text-white/80">
+              <p className="text-sm text-gray-700 dark:text-white/80">
                 Populate all stages with sample data in one click
               </p>
             </div>
@@ -122,7 +122,7 @@ export function DemoModeBanner({
               variant="ghost"
               size="icon"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-white/80 hover:text-white hover:bg-white/10"
+              className="text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
             >
               {isExpanded ? (
                 <ChevronUp className="h-4 w-4" />
@@ -134,11 +134,11 @@ export function DemoModeBanner({
         </div>
 
         {isExpanded && (
-          <div className="mt-4 pt-4 border-t border-white/10">
+          <div className="mt-4 pt-4 border-t border-gray-200/30 dark:border-white/10">
             {isRunning && (
               <div className="mb-4">
                 <Progress value={progress} className="h-2" />
-                <p className="text-sm text-white/80 mt-2">
+                <p className="text-sm text-gray-700 dark:text-white/80 mt-2">
                   {currentStage
                     ? `Running Stage ${currentStage}: ${stages[currentStage - 1].name}...`
                     : "Initializing..."}
@@ -159,7 +159,7 @@ export function DemoModeBanner({
                         ? "bg-crowe-teal/20 text-crowe-teal-bright"
                         : isCurrent
                         ? "bg-crowe-violet/20 text-crowe-violet-bright"
-                        : "bg-white/10 text-white/80"
+                        : "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80"
                     }`}
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -176,7 +176,7 @@ export function DemoModeBanner({
               })}
             </div>
 
-            <p className="text-xs text-white/80 mt-3">
+            <p className="text-xs text-gray-600 dark:text-white/80 mt-3">
               The demo will generate sample documents, population data, testing
               workbooks, and consolidation results using mock data.
             </p>

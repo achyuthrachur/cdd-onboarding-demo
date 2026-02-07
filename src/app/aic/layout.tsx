@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AicSidebar } from "@/components/layout/aic-sidebar";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { getSession } from "@/lib/auth/session";
+import { loadPortalData } from "@/lib/stage-data";
 
 export default function AicLayout({
   children,
@@ -20,6 +21,7 @@ export default function AicLayout({
       router.push('/');
     } else {
       setIsAuthorized(true);
+      loadPortalData('aic');
     }
   }, [router]);
 

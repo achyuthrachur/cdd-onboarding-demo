@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         FLU_PROCEDURE_EXTRACTION_SYSTEM_PROMPT,
         userPrompt,
         {
-          model: "gpt-4-turbo-preview",
+          model: "gpt-4-turbo",
           temperature: 0.1,
           maxTokens: 8192, // Larger output for comprehensive extraction
         }

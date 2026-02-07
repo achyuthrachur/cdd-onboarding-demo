@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
         systemPrompt,
         userPrompt,
         {
-          model: "gpt-4-turbo-preview",
+          model: "gpt-4-turbo",
           temperature: 0.1,
           maxTokens: 4096,
         }

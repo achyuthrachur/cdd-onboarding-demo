@@ -234,7 +234,7 @@ export default function AicStage2Page() {
       title: "Step 3",
       description: "Lock Sample",
       isComplete: isLocked,
-      activeColor: "bg-white/10 text-white/80",
+      activeColor: "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80",
       completeColor: "bg-green-500/20 text-green-400",
       Icon: Lock,
       badgeText: isLocked ? "Locked" : "Pending",

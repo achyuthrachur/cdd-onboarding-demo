@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
         ATTRIBUTE_EXTRACTION_SYSTEM_PROMPT,
         userPrompt,
         {
-          model: "gpt-4-turbo-preview",
+          model: "gpt-4-turbo",
           temperature: 0.1,
           maxTokens: 4096,
         }

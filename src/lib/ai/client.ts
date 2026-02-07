@@ -87,7 +87,7 @@ export async function runAIAnalysis(
     maxTokens?: number;
   }
 ): Promise<AIAnalysisResult> {
-  const model = options?.model || "gpt-4-turbo-preview";
+  const model = options?.model || "gpt-4-turbo";
   const temperature = options?.temperature ?? 0.1;
   const maxTokens = options?.maxTokens || 4096;
 

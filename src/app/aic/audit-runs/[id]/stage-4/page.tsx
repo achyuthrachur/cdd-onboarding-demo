@@ -571,7 +571,7 @@ export default function AicStage4Page() {
                 >
                   {/* Sampling Data */}
                   <motion.div variants={staggerItem}>
-                    <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+                    <Card className="h-full bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-gray-900 dark:text-white">Sampling Data (Stage 2)</CardTitle>
                         <CardDescription className="text-gray-600 dark:text-gray-300">
@@ -622,7 +622,7 @@ export default function AicStage4Page() {
 
                   {/* Attributes Data */}
                   <motion.div variants={staggerItem}>
-                    <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+                    <Card className="h-full bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-gray-900 dark:text-white">Attributes (Stage 3)</CardTitle>
                         <CardDescription className="text-gray-600 dark:text-gray-300">

@@ -150,7 +150,7 @@ export function ExtractionResultsView({
   };
 
   return (
-    <Card className="h-full !gap-0 overflow-hidden">
+    <Card className="!gap-0">
       <CardHeader className="border-b flex-shrink-0 !pb-4">
         <div className="flex items-center justify-between">
           <div>
@@ -246,8 +246,8 @@ export function ExtractionResultsView({
         </motion.div>
       </CardHeader>
 
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden px-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
+      <div className="flex flex-col px-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col">
           <div className="pt-4 flex-shrink-0">
             <TabsList className="grid w-full grid-cols-2 mb-4 h-11 bg-muted border border-border">
               <TabsTrigger value="attributes" className="gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground text-muted-foreground">
@@ -291,7 +291,7 @@ export function ExtractionResultsView({
             {activeTab === "attributes" && (
               <motion.div
                 key="attributes"
-                className="flex-1 overflow-auto pb-4 mt-4"
+                className="pb-4 mt-4"
                 initial={shouldReduceMotion ? undefined : "hidden"}
                 animate="visible"
                 exit="exit"
@@ -369,7 +369,7 @@ export function ExtractionResultsView({
             {activeTab === "documents" && (
               <motion.div
                 key="documents"
-                className="flex-1 overflow-auto pb-4 mt-4"
+                className="pb-4 mt-4"
                 initial={shouldReduceMotion ? undefined : "hidden"}
                 animate="visible"
                 exit="exit"

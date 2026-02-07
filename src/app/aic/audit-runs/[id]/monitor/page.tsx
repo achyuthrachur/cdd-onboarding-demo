@@ -260,7 +260,7 @@ export default function AicMonitorPage() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -269,7 +269,7 @@ export default function AicMonitorPage() {
           <div>
             <div className="flex items-center gap-3">
               <Badge className="bg-crowe-teal/20 text-crowe-teal">Live Monitor</Badge>
-              <h1 className="text-3xl font-bold tracking-tight text-white">
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
                 Auditor Progress Tracking
               </h1>
               {isPolling && isPublished && (
@@ -284,17 +284,17 @@ export default function AicMonitorPage() {
                 </motion.div>
               )}
             </div>
-            <p className="text-white/80 mt-2">
+            <p className="text-gray-600 dark:text-white/80 mt-2">
               Real-time tracking of auditor workbook completion (5-second refresh)
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
+            <Button variant="outline" size="sm" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
             {isPublished && (
-              <Button variant="outline" size="sm" onClick={handleSimulateProgress} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
+              <Button variant="outline" size="sm" onClick={handleSimulateProgress} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Simulate Progress
               </Button>
@@ -332,13 +332,13 @@ export default function AicMonitorPage() {
         variants={staggerContainer}
       >
         <motion.div variants={staggerItem}>
-          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+          <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription className="text-white/80">Total Auditors</CardDescription>
-              <CardTitle className="text-3xl text-white">{totalAuditors}</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-white/80">Total Auditors</CardDescription>
+              <CardTitle className="text-3xl text-gray-900 dark:text-white">{totalAuditors}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-white/80">
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white/80">
                 <User className="h-4 w-4" />
                 Assigned to workbooks
               </div>
@@ -347,10 +347,10 @@ export default function AicMonitorPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+          <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription className="text-white/80">Submitted</CardDescription>
-              <CardTitle className="text-3xl text-white">{submittedCount} / {totalAuditors}</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-white/80">Submitted</CardDescription>
+              <CardTitle className="text-3xl text-gray-900 dark:text-white">{submittedCount} / {totalAuditors}</CardTitle>
             </CardHeader>
             <CardContent>
               <Progress
@@ -362,10 +362,10 @@ export default function AicMonitorPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+          <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription className="text-white/80">Average Completion</CardDescription>
-              <CardTitle className="text-3xl text-white">{averageCompletion}%</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-white/80">Average Completion</CardDescription>
+              <CardTitle className="text-3xl text-gray-900 dark:text-white">{averageCompletion}%</CardTitle>
             </CardHeader>
             <CardContent>
               <Progress value={averageCompletion} className="h-2" />
@@ -374,15 +374,15 @@ export default function AicMonitorPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+          <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardDescription className="text-white/80">Last Updated</CardDescription>
-              <CardTitle className="text-lg text-white">
+              <CardDescription className="text-gray-600 dark:text-white/80">Last Updated</CardDescription>
+              <CardTitle className="text-lg text-gray-900 dark:text-white">
                 {lastRefresh ? lastRefresh.toLocaleTimeString() : '--:--:--'}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-white/80">
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white/80">
                 <Clock className="h-4 w-4" />
                 {isPolling ? 'Auto-refresh every 5s' : 'Paused'}
               </div>
@@ -400,20 +400,20 @@ export default function AicMonitorPage() {
           transition={{ delay: 0.25 }}
         >
           <Tabs defaultValue="overview" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-4 bg-white/5">
-              <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-white/10">
+            <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-white/5">
+              <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-white/10">
                 <PieChart className="h-4 w-4" />
                 Status Overview
               </TabsTrigger>
-              <TabsTrigger value="auditors" className="flex items-center gap-2 data-[state=active]:bg-white/10">
+              <TabsTrigger value="auditors" className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-white/10">
                 <BarChart3 className="h-4 w-4" />
                 Auditor Performance
               </TabsTrigger>
-              <TabsTrigger value="timeline" className="flex items-center gap-2 data-[state=active]:bg-white/10">
+              <TabsTrigger value="timeline" className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-white/10">
                 <LineChart className="h-4 w-4" />
                 Timeline
               </TabsTrigger>
-              <TabsTrigger value="categories" className="flex items-center gap-2 data-[state=active]:bg-white/10">
+              <TabsTrigger value="categories" className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-white/10">
                 <BarChart3 className="h-4 w-4" />
                 By Category
               </TabsTrigger>
@@ -421,13 +421,13 @@ export default function AicMonitorPage() {
 
             {/* Status Overview Tab */}
             <TabsContent value="overview">
-              <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
+              <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-gray-900 dark:text-white flex items-center gap-2">
                     <PieChart className="h-5 w-5" />
                     Completion Status Distribution
                   </CardTitle>
-                  <CardDescription className="text-white/80">
+                  <CardDescription className="text-gray-600 dark:text-white/80">
                     Overview of workbook submission status across all auditors
                   </CardDescription>
                 </CardHeader>
@@ -442,22 +442,22 @@ export default function AicMonitorPage() {
                       />
                     </div>
                     <div className="flex flex-col justify-center space-y-4">
-                      <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                        <div className="text-sm text-white/80 mb-1">Total Auditors</div>
-                        <div className="text-3xl font-bold text-white">{totalAuditors}</div>
+                      <div className="p-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
+                        <div className="text-sm text-gray-600 dark:text-white/80 mb-1">Total Auditors</div>
+                        <div className="text-3xl font-bold text-gray-900 dark:text-white">{totalAuditors}</div>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         <div className="p-3 rounded-lg bg-crowe-teal/10 border border-crowe-teal/30 text-center">
                           <div className="text-xl font-bold text-crowe-teal-bright">{submittedCount}</div>
-                          <div className="text-xs text-white/80">Submitted</div>
+                          <div className="text-xs text-gray-600 dark:text-white/80">Submitted</div>
                         </div>
                         <div className="p-3 rounded-lg bg-crowe-cyan/10 border border-crowe-cyan/30 text-center">
                           <div className="text-xl font-bold text-crowe-cyan">{inProgressCount}</div>
-                          <div className="text-xs text-white/80">In Progress</div>
+                          <div className="text-xs text-gray-600 dark:text-white/80">In Progress</div>
                         </div>
-                        <div className="p-3 rounded-lg bg-white/5 border border-white/10 text-center">
-                          <div className="text-xl font-bold text-white/80">{draftCount}</div>
-                          <div className="text-xs text-white/80">Draft</div>
+                        <div className="p-3 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-center">
+                          <div className="text-xl font-bold text-gray-600 dark:text-white/80">{draftCount}</div>
+                          <div className="text-xs text-gray-600 dark:text-white/80">Draft</div>
                         </div>
                       </div>
                     </div>
@@ -468,13 +468,13 @@ export default function AicMonitorPage() {
 
             {/* Auditor Performance Tab */}
             <TabsContent value="auditors">
-              <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
+              <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-gray-900 dark:text-white flex items-center gap-2">
                     <BarChart3 className="h-5 w-5" />
                     Auditor Completion Progress
                   </CardTitle>
-                  <CardDescription className="text-white/80">
+                  <CardDescription className="text-gray-600 dark:text-white/80">
                     Individual completion percentage for each assigned auditor
                   </CardDescription>
                 </CardHeader>
@@ -491,13 +491,13 @@ export default function AicMonitorPage() {
 
             {/* Timeline Tab */}
             <TabsContent value="timeline">
-              <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
+              <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-gray-900 dark:text-white flex items-center gap-2">
                     <LineChart className="h-5 w-5" />
                     Completion Progress Over Time
                   </CardTitle>
-                  <CardDescription className="text-white/80">
+                  <CardDescription className="text-gray-600 dark:text-white/80">
                     Tracking average completion rate throughout the audit period
                   </CardDescription>
                 </CardHeader>
@@ -513,13 +513,13 @@ export default function AicMonitorPage() {
 
             {/* Category Breakdown Tab */}
             <TabsContent value="categories">
-              <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
+              <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-gray-900 dark:text-white flex items-center gap-2">
                     <BarChart3 className="h-5 w-5" />
                     Results by Attribute Category
                   </CardTitle>
-                  <CardDescription className="text-white/80">
+                  <CardDescription className="text-gray-600 dark:text-white/80">
                     Pass/Fail breakdown by testing category (preliminary data)
                   </CardDescription>
                 </CardHeader>
@@ -544,12 +544,12 @@ export default function AicMonitorPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+        <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-white">Auditor Progress</CardTitle>
-                <CardDescription className="text-white/80">
+                <CardTitle className="text-gray-900 dark:text-white">Auditor Progress</CardTitle>
+                <CardDescription className="text-gray-600 dark:text-white/80">
                   Individual completion status for each auditor
                 </CardDescription>
               </div>
@@ -557,7 +557,7 @@ export default function AicMonitorPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsPolling(!isPolling)}
-                className="text-white hover:bg-white/10"
+                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10"
               >
                 {isPolling ? (
                   <>
@@ -576,10 +576,10 @@ export default function AicMonitorPage() {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-white/80" />
+                <Loader2 className="h-8 w-8 animate-spin text-gray-600 dark:text-white/80" />
               </div>
             ) : progress.length === 0 ? (
-              <div className="text-center py-12 text-white/80">
+              <div className="text-center py-12 text-gray-600 dark:text-white/80">
                 <User className="h-12 w-12 mx-auto mb-4 opacity-30" />
                 <p>No auditor workbooks found</p>
                 <p className="text-sm">Generate and publish workbooks in Stage 4</p>
@@ -598,7 +598,7 @@ export default function AicMonitorPage() {
                       variants={staggerItem}
                       layout
                     >
-                      <Card className={`transition-all bg-white/5 border border-white/10 ${
+                      <Card className={`transition-all bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 ${
                         auditor.status === 'submitted'
                           ? 'border-green-500 bg-green-500/10'
                           : ''
@@ -606,12 +606,12 @@ export default function AicMonitorPage() {
                         <CardHeader className="pb-2">
                           <div className="flex items-start justify-between">
                             <div>
-                              <CardTitle className="text-lg text-white">{auditor.auditorName}</CardTitle>
-                              <CardDescription className="text-white/80">{auditor.auditorEmail}</CardDescription>
+                              <CardTitle className="text-lg text-gray-900 dark:text-white">{auditor.auditorName}</CardTitle>
+                              <CardDescription className="text-gray-600 dark:text-white/80">{auditor.auditorEmail}</CardDescription>
                             </div>
                             <Badge
                               variant={auditor.status === 'submitted' ? 'default' : 'outline'}
-                              className={auditor.status === 'submitted' ? 'bg-green-600' : 'border-white/30 text-white/80'}
+                              className={auditor.status === 'submitted' ? 'bg-green-600' : 'border-gray-300 dark:border-white/30 text-gray-600 dark:text-white/80'}
                             >
                               {auditor.status === 'submitted' ? (
                                 <>
@@ -630,8 +630,8 @@ export default function AicMonitorPage() {
                           {/* Progress Bar */}
                           <div>
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-white/80">Completion</span>
-                              <span className="font-medium text-white">{auditor.completionPercentage}%</span>
+                              <span className="text-gray-600 dark:text-white/80">Completion</span>
+                              <span className="font-medium text-gray-900 dark:text-white">{auditor.completionPercentage}%</span>
                             </div>
                             <Progress
                               value={auditor.completionPercentage}
@@ -646,12 +646,12 @@ export default function AicMonitorPage() {
                           </div>
 
                           {/* Stats */}
-                          <div className="flex items-center justify-between text-sm text-white/80">
+                          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-white/80">
                             <span>{auditor.totalAttributes} attributes × {auditor.totalCustomers} customers</span>
                           </div>
 
                           {/* Last Activity */}
-                          <div className="flex items-center gap-2 text-xs text-white/80">
+                          <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-white/80">
                             <Clock className="h-3 w-3" />
                             {auditor.submittedAt ? (
                               <span>Submitted {new Date(auditor.submittedAt).toLocaleString()}</span>
@@ -705,13 +705,13 @@ export default function AicMonitorPage() {
 
       {/* Navigation */}
       <motion.div
-        className="flex items-center justify-between mt-6 pt-4 border-t border-white/10"
+        className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-white/10"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
       >
         <Link href={`/aic/audit-runs/${id}/stage-4`}>
-          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
+          <Button variant="outline" className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 4
           </Button>

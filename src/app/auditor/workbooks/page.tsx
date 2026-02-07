@@ -87,7 +87,18 @@ export default function AuditorWorkbooksPage() {
 
   const handleLoadDemoData = () => {
     try {
-      // Load prerequisite stages data
+      // Check if AIC has already published workbooks — don't overwrite them
+      const existingPublished = getStageData("workbooksPublished");
+      const existingWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
+
+      if (existingPublished && existingWorkbooks && existingWorkbooks.length > 0) {
+        // Workbooks already exist from AIC publication — just reload them
+        loadWorkbooks();
+        toast.info("Loaded existing published workbooks from AIC.");
+        return;
+      }
+
+      // No published workbooks exist — generate demo data from scratch
       loadFallbackDataForStage(2);
       loadFallbackDataForStage(3);
       loadFallbackDataForStage(4);
