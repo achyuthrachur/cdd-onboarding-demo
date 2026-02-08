@@ -4,9 +4,11 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, FileSpreadsheet, LogOut } from "lucide-react";
+import { LayoutDashboard, FileSpreadsheet, LogOut, Trash2 } from "lucide-react";
 import { clearSession } from "@/lib/auth/session";
+import { clearStageData } from "@/lib/stage-data";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { toast } from "sonner";
 
 const navigation = [
   {
@@ -73,7 +75,19 @@ export function AuditorSidebar() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-gray-200/60 dark:border-white/10 p-4">
+      <div className="border-t border-gray-200/60 dark:border-white/10 p-4 space-y-2">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-500/10"
+          onClick={() => {
+            clearStageData();
+            toast.success("All demo data cleared.");
+            window.location.reload();
+          }}
+        >
+          <Trash2 className="mr-2 h-4 w-4" />
+          Clear All Demo Data
+        </Button>
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
