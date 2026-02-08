@@ -261,7 +261,7 @@ export default function AicConsolidationPage() {
               </p>
               <p className="text-sm text-green-400/80">
                 Last generated: {new Date(consolidation.generatedAt).toLocaleString()} •{" "}
-                {consolidation.rawData.totalRows} rows from {consolidation.rawData.workbookIds.length} workbook(s)
+                {consolidation.rawData?.totalRows ?? 0} rows from {consolidation.rawData?.workbookIds?.length ?? 0} workbook(s)
               </p>
             </div>
           </motion.div>
@@ -315,8 +315,8 @@ export default function AicConsolidationPage() {
             transition={{ delay: 0.3, duration: 0.35 }}
           >
             <FindingsTable
-              exceptions={consolidation.exceptions}
-              findingsByAttribute={consolidation.findingsByAttribute}
+              exceptions={consolidation.exceptions ?? []}
+              findingsByAttribute={consolidation.findingsByAttribute ?? []}
             />
           </motion.div>
         )}

@@ -215,7 +215,13 @@ export function ConsolidationDashboard({
     );
   }
 
-  const { metrics, findingsByCategory, findingsByJurisdiction, findingsByAuditor, findingsByRiskTier } = consolidation;
+  const {
+    metrics,
+    findingsByCategory = [],
+    findingsByJurisdiction = [],
+    findingsByAuditor = [],
+    findingsByRiskTier = [],
+  } = consolidation;
 
   // Prepare chart data
   const resultPieData = useMemo(() => [
