@@ -8,11 +8,13 @@ import { getChartTheme, type ChartThemeStyles } from "./chart-colors";
  * Listens for class changes on <html> to detect dark/light mode toggles.
  */
 export function useChartTheme(): ChartThemeStyles {
-  const [theme, setTheme] = useState<ChartThemeStyles>(getChartTheme);
+  // Always start with dark theme (matches SSR where document is undefined)
+  const [theme, setTheme] = useState<ChartThemeStyles>(() => getChartTheme());
 
   useEffect(() => {
-    // Re-compute on mount (SSR defaults to dark, client may differ)
-    setTheme(getChartTheme());
+    // Re-compute on mount (client may differ from SSR default)
+    const currentTheme = getChartTheme();
+    setTheme(currentTheme);
 
     // Watch for class changes on <html> (next-themes toggles "dark" class)
     const observer = new MutationObserver(() => {

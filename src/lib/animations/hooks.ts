@@ -38,7 +38,8 @@ export function useCountUp(
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const shouldReduceMotion = useReducedMotion();
-  const [displayValue, setDisplayValue] = useState(shouldReduceMotion ? targetValue : 0);
+  // Always start at 0 to avoid SSR mismatch (shouldReduceMotion can differ server vs client)
+  const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
     if (!startOnMount) return;
@@ -46,6 +47,12 @@ export function useCountUp(
     if (shouldReduceMotion) {
       count.set(targetValue);
       setDisplayValue(targetValue);
+      return;
+    }
+
+    // If target is 0, nothing to animate
+    if (targetValue === 0) {
+      setDisplayValue(0);
       return;
     }
 
