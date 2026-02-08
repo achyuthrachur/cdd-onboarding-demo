@@ -14,12 +14,8 @@ import {
   CartesianGrid,
 } from "recharts";
 import type { PieLabelRenderProps } from "recharts";
-import {
-  CHART_COLORS,
-  DARK_TOOLTIP_STYLE,
-  DARK_AXIS_STYLE,
-  DARK_GRID_STYLE,
-} from "./chart-colors";
+import { CHART_COLORS } from "./chart-colors";
+import { useChartTheme } from "./use-chart-theme";
 
 interface FailureData {
   name: string;
@@ -50,6 +46,8 @@ export function FailureAnalysisChart({
   variant = "pie",
   showLegend = true,
 }: FailureAnalysisChartProps) {
+  const t = useChartTheme();
+
   const chartData: FailureData[] = data || [
     { name: "Fail 1 - Regulatory", value: fail1Count, color: CHART_COLORS.fail1 },
     { name: "Fail 2 - Procedure", value: fail2Count, color: CHART_COLORS.fail2 },
@@ -61,7 +59,7 @@ export function FailureAnalysisChart({
   if (total === 0) {
     return (
       <div
-        className="flex items-center justify-center text-white/80"
+        className={`flex items-center justify-center ${t.emptyTextClass}`}
         style={{ height }}
       >
         <div className="text-center">
@@ -80,25 +78,25 @@ export function FailureAnalysisChart({
           layout="vertical"
           margin={{ top: 20, right: 30, left: 120, bottom: 5 }}
         >
-          <CartesianGrid {...DARK_GRID_STYLE} horizontal />
+          <CartesianGrid {...t.gridStyle} horizontal />
           <XAxis
             type="number"
-            tick={{ fill: "rgba(255, 255, 255, 0.6)", fontSize: 12 }}
-            axisLine={DARK_AXIS_STYLE.axisLine}
-            tickLine={DARK_AXIS_STYLE.tickLine}
+            tick={{ fill: t.tickFill, fontSize: 12 }}
+            axisLine={t.axisStyle.axisLine}
+            tickLine={t.axisStyle.tickLine}
           />
           <YAxis
             type="category"
             dataKey="name"
-            tick={{ fill: "rgba(255, 255, 255, 0.8)", fontSize: 11 }}
-            axisLine={DARK_AXIS_STYLE.axisLine}
-            tickLine={DARK_AXIS_STYLE.tickLine}
+            tick={{ fill: t.tickFillMuted, fontSize: 11 }}
+            axisLine={t.axisStyle.axisLine}
+            tickLine={t.axisStyle.tickLine}
             width={115}
           />
           <Tooltip
-            contentStyle={DARK_TOOLTIP_STYLE.contentStyle}
-            itemStyle={DARK_TOOLTIP_STYLE.itemStyle}
-            cursor={{ fill: "rgba(255, 255, 255, 0.05)" }}
+            contentStyle={t.tooltipStyle.contentStyle}
+            itemStyle={t.tooltipStyle.itemStyle}
+            cursor={{ fill: t.cursorFill }}
             formatter={(value) => {
               const numValue = typeof value === 'number' ? value : 0;
               return [numValue, "Count"];
@@ -140,8 +138,8 @@ export function FailureAnalysisChart({
           ))}
         </Pie>
         <Tooltip
-          contentStyle={DARK_TOOLTIP_STYLE.contentStyle}
-          itemStyle={DARK_TOOLTIP_STYLE.itemStyle}
+          contentStyle={t.tooltipStyle.contentStyle}
+          itemStyle={t.tooltipStyle.itemStyle}
           formatter={(value, name) => {
             const numValue = typeof value === 'number' ? value : 0;
             return [
@@ -152,11 +150,11 @@ export function FailureAnalysisChart({
         />
         {showLegend && (
           <Legend
-            wrapperStyle={{ color: "rgba(255, 255, 255, 0.8)" }}
+            wrapperStyle={{ color: t.legendColor }}
             iconType="circle"
             iconSize={10}
             formatter={(value) => (
-              <span style={{ color: "rgba(255, 255, 255, 0.8)" }}>{value}</span>
+              <span style={{ color: t.legendColor }}>{value}</span>
             )}
           />
         )}

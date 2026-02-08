@@ -11,12 +11,8 @@ import {
   CartesianGrid,
   Cell,
 } from "recharts";
-import {
-  CHART_COLORS,
-  DARK_TOOLTIP_STYLE,
-  DARK_AXIS_STYLE,
-  DARK_GRID_STYLE,
-} from "./chart-colors";
+import { CHART_COLORS } from "./chart-colors";
+import { useChartTheme } from "./use-chart-theme";
 
 interface CategoryData {
   category: string;
@@ -47,10 +43,12 @@ export function CategoryBreakdown({
   variant = "stacked",
   layout = "vertical",
 }: CategoryBreakdownProps) {
+  const t = useChartTheme();
+
   if (data.length === 0) {
     return (
       <div
-        className="flex items-center justify-center text-white/80"
+        className={`flex items-center justify-center ${t.emptyTextClass}`}
         style={{ height }}
       >
         No category data available
@@ -86,23 +84,23 @@ export function CategoryBreakdown({
           layout={layout}
           margin={{ top: 20, right: 30, left: layout === "vertical" ? 100 : 20, bottom: 5 }}
         >
-          <CartesianGrid {...DARK_GRID_STYLE} horizontal={layout === "vertical"} vertical={layout === "horizontal"} />
+          <CartesianGrid {...t.gridStyle} horizontal={layout === "vertical"} vertical={layout === "horizontal"} />
           {layout === "vertical" ? (
             <>
               <XAxis
                 type="number"
                 domain={[0, 100]}
-                tick={{ fill: "rgba(255, 255, 255, 0.6)", fontSize: 12 }}
-                axisLine={DARK_AXIS_STYLE.axisLine}
-                tickLine={DARK_AXIS_STYLE.tickLine}
+                tick={{ fill: t.tickFill, fontSize: 12 }}
+                axisLine={t.axisStyle.axisLine}
+                tickLine={t.axisStyle.tickLine}
                 tickFormatter={(value) => `${value}%`}
               />
               <YAxis
                 type="category"
                 dataKey="category"
-                tick={{ fill: "rgba(255, 255, 255, 0.8)", fontSize: 11 }}
-                axisLine={DARK_AXIS_STYLE.axisLine}
-                tickLine={DARK_AXIS_STYLE.tickLine}
+                tick={{ fill: t.tickFillMuted, fontSize: 11 }}
+                axisLine={t.axisStyle.axisLine}
+                tickLine={t.axisStyle.tickLine}
                 width={95}
               />
             </>
@@ -110,26 +108,26 @@ export function CategoryBreakdown({
             <>
               <XAxis
                 dataKey="category"
-                tick={{ fill: "rgba(255, 255, 255, 0.6)", fontSize: 10 }}
-                axisLine={DARK_AXIS_STYLE.axisLine}
-                tickLine={DARK_AXIS_STYLE.tickLine}
+                tick={{ fill: t.tickFill, fontSize: 10 }}
+                axisLine={t.axisStyle.axisLine}
+                tickLine={t.axisStyle.tickLine}
                 height={80}
                 interval={0}
               />
               <YAxis
                 type="number"
                 domain={[0, 100]}
-                tick={{ fill: "rgba(255, 255, 255, 0.6)", fontSize: 12 }}
-                axisLine={DARK_AXIS_STYLE.axisLine}
-                tickLine={DARK_AXIS_STYLE.tickLine}
+                tick={{ fill: t.tickFill, fontSize: 12 }}
+                axisLine={t.axisStyle.axisLine}
+                tickLine={t.axisStyle.tickLine}
                 tickFormatter={(value) => `${value}%`}
               />
             </>
           )}
           <Tooltip
-            contentStyle={DARK_TOOLTIP_STYLE.contentStyle}
-            itemStyle={DARK_TOOLTIP_STYLE.itemStyle}
-            cursor={{ fill: "rgba(255, 255, 255, 0.05)" }}
+            contentStyle={t.tooltipStyle.contentStyle}
+            itemStyle={t.tooltipStyle.itemStyle}
+            cursor={{ fill: t.cursorFill }}
             formatter={(value) => [`${(typeof value === 'number' ? value : 0).toFixed(1)}%`, variant === "passRate" ? "Pass Rate" : "Fail Rate"]}
           />
           <Bar dataKey={dataKey} name={variant === "passRate" ? "Pass Rate" : "Fail Rate"} radius={[0, 4, 4, 0]} barSize={20}>
@@ -155,21 +153,21 @@ export function CategoryBreakdown({
         layout={layout}
         margin={{ top: 20, right: 30, left: layout === "vertical" ? 100 : 20, bottom: 5 }}
       >
-        <CartesianGrid {...DARK_GRID_STYLE} horizontal={layout === "vertical"} vertical={layout === "horizontal"} />
+        <CartesianGrid {...t.gridStyle} horizontal={layout === "vertical"} vertical={layout === "horizontal"} />
         {layout === "vertical" ? (
           <>
             <XAxis
               type="number"
-              tick={{ fill: "rgba(255, 255, 255, 0.6)", fontSize: 12 }}
-              axisLine={DARK_AXIS_STYLE.axisLine}
-              tickLine={DARK_AXIS_STYLE.tickLine}
+              tick={{ fill: t.tickFill, fontSize: 12 }}
+              axisLine={t.axisStyle.axisLine}
+              tickLine={t.axisStyle.tickLine}
             />
             <YAxis
               type="category"
               dataKey="category"
-              tick={{ fill: "rgba(255, 255, 255, 0.8)", fontSize: 11 }}
-              axisLine={DARK_AXIS_STYLE.axisLine}
-              tickLine={DARK_AXIS_STYLE.tickLine}
+              tick={{ fill: t.tickFillMuted, fontSize: 11 }}
+              axisLine={t.axisStyle.axisLine}
+              tickLine={t.axisStyle.tickLine}
               width={95}
             />
           </>
@@ -177,30 +175,30 @@ export function CategoryBreakdown({
           <>
             <XAxis
               dataKey="category"
-              tick={{ fill: "rgba(255, 255, 255, 0.6)", fontSize: 10 }}
-              axisLine={DARK_AXIS_STYLE.axisLine}
-              tickLine={DARK_AXIS_STYLE.tickLine}
+              tick={{ fill: t.tickFill, fontSize: 10 }}
+              axisLine={t.axisStyle.axisLine}
+              tickLine={t.axisStyle.tickLine}
               height={80}
               interval={0}
             />
             <YAxis
               type="number"
-              tick={{ fill: "rgba(255, 255, 255, 0.6)", fontSize: 12 }}
-              axisLine={DARK_AXIS_STYLE.axisLine}
-              tickLine={DARK_AXIS_STYLE.tickLine}
+              tick={{ fill: t.tickFill, fontSize: 12 }}
+              axisLine={t.axisStyle.axisLine}
+              tickLine={t.axisStyle.tickLine}
             />
           </>
         )}
         <Tooltip
-          contentStyle={DARK_TOOLTIP_STYLE.contentStyle}
-          itemStyle={DARK_TOOLTIP_STYLE.itemStyle}
-          cursor={{ fill: "rgba(255, 255, 255, 0.05)" }}
+          contentStyle={t.tooltipStyle.contentStyle}
+          itemStyle={t.tooltipStyle.itemStyle}
+          cursor={{ fill: t.cursorFill }}
         />
         {showLegend && (
           <Legend
-            wrapperStyle={{ color: "rgba(255, 255, 255, 0.8)" }}
+            wrapperStyle={{ color: t.legendColor }}
             formatter={(value) => (
-              <span style={{ color: "rgba(255, 255, 255, 0.8)" }}>{value}</span>
+              <span style={{ color: t.legendColor }}>{value}</span>
             )}
           />
         )}

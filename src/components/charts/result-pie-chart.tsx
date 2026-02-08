@@ -9,7 +9,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { PieLabelRenderProps } from "recharts";
-import { CHART_COLORS, DARK_TOOLTIP_STYLE } from "./chart-colors";
+import { CHART_COLORS } from "./chart-colors";
+import { useChartTheme } from "./use-chart-theme";
 
 interface ResultData {
   name: string;
@@ -49,6 +50,8 @@ export function ResultPieChart({
   innerRadius = 60,
   outerRadius = 100,
 }: ResultPieChartProps) {
+  const t = useChartTheme();
+
   // Build data from counts if not provided
   const chartData: ResultData[] = data || [
     { name: "Pass", value: passCount, color: CHART_COLORS.pass },
@@ -64,7 +67,7 @@ export function ResultPieChart({
   if (total === 0) {
     return (
       <div
-        className="flex items-center justify-center text-white/80"
+        className={`flex items-center justify-center ${t.emptyTextClass}`}
         style={{ height }}
       >
         No data available
@@ -99,7 +102,7 @@ export function ResultPieChart({
       <text
         x={x}
         y={y}
-        fill="white"
+        fill={t.pieLabelFill}
         textAnchor="middle"
         dominantBaseline="central"
         fontSize={12}
@@ -133,9 +136,9 @@ export function ResultPieChart({
           ))}
         </Pie>
         <Tooltip
-          contentStyle={DARK_TOOLTIP_STYLE.contentStyle}
-          itemStyle={DARK_TOOLTIP_STYLE.itemStyle}
-          labelStyle={DARK_TOOLTIP_STYLE.labelStyle}
+          contentStyle={t.tooltipStyle.contentStyle}
+          itemStyle={t.tooltipStyle.itemStyle}
+          labelStyle={t.tooltipStyle.labelStyle}
           formatter={(value, name) => {
             const numValue = typeof value === 'number' ? value : 0;
             return [
@@ -146,11 +149,11 @@ export function ResultPieChart({
         />
         {showLegend && (
           <Legend
-            wrapperStyle={{ color: "rgba(255, 255, 255, 0.8)" }}
+            wrapperStyle={{ color: t.legendColor }}
             iconType="circle"
             iconSize={10}
             formatter={(value) => (
-              <span style={{ color: "rgba(255, 255, 255, 0.8)" }}>{value}</span>
+              <span style={{ color: t.legendColor }}>{value}</span>
             )}
           />
         )}

@@ -4,6 +4,7 @@
  */
 
 export * from "./chart-colors";
+export * from "./use-chart-theme";
 export * from "./result-pie-chart";
 export * from "./auditor-bar-chart";
 export * from "./progress-timeline";

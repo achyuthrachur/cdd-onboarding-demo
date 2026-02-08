@@ -11,12 +11,8 @@ import {
   Area,
   AreaChart,
 } from "recharts";
-import {
-  CHART_COLORS,
-  DARK_TOOLTIP_STYLE,
-  DARK_AXIS_STYLE,
-  DARK_GRID_STYLE,
-} from "./chart-colors";
+import { CHART_COLORS } from "./chart-colors";
+import { useChartTheme } from "./use-chart-theme";
 
 interface TimelineDataPoint {
   time: string;
@@ -42,10 +38,12 @@ export function ProgressTimeline({
   showArea = true,
   showSubmitted = false,
 }: ProgressTimelineProps) {
+  const t = useChartTheme();
+
   if (data.length === 0) {
     return (
       <div
-        className="flex items-center justify-center text-white/80"
+        className={`flex items-center justify-center ${t.emptyTextClass}`}
         style={{ height }}
       >
         No timeline data available
@@ -79,24 +77,24 @@ export function ProgressTimeline({
             />
           </linearGradient>
         </defs>
-        <CartesianGrid {...DARK_GRID_STYLE} />
+        <CartesianGrid {...t.gridStyle} />
         <XAxis
           dataKey="time"
-          tick={{ fill: "rgba(255, 255, 255, 0.6)", fontSize: 11 }}
-          axisLine={DARK_AXIS_STYLE.axisLine}
-          tickLine={DARK_AXIS_STYLE.tickLine}
+          tick={{ fill: t.tickFill, fontSize: 11 }}
+          axisLine={t.axisStyle.axisLine}
+          tickLine={t.axisStyle.tickLine}
         />
         <YAxis
           domain={[0, 100]}
-          tick={{ fill: "rgba(255, 255, 255, 0.6)", fontSize: 12 }}
-          axisLine={DARK_AXIS_STYLE.axisLine}
-          tickLine={DARK_AXIS_STYLE.tickLine}
+          tick={{ fill: t.tickFill, fontSize: 12 }}
+          axisLine={t.axisStyle.axisLine}
+          tickLine={t.axisStyle.tickLine}
           tickFormatter={(value) => `${value}%`}
         />
         <Tooltip
-          contentStyle={DARK_TOOLTIP_STYLE.contentStyle}
-          itemStyle={DARK_TOOLTIP_STYLE.itemStyle}
-          labelStyle={DARK_TOOLTIP_STYLE.labelStyle}
+          contentStyle={t.tooltipStyle.contentStyle}
+          itemStyle={t.tooltipStyle.itemStyle}
+          labelStyle={t.tooltipStyle.labelStyle}
           formatter={(value, name) => {
             const numValue = typeof value === 'number' ? value : 0;
             return [
