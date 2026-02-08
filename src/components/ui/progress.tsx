@@ -53,15 +53,20 @@ const AnimatedProgress = React.forwardRef<
     ref
   ) => {
     const shouldReduceMotion = useReducedMotion()
+    const springConfig = React.useMemo(
+      () => (shouldReduceMotion ? { duration: 0 } : spring.smooth),
+      [shouldReduceMotion]
+    )
 
     // Use spring animation for smooth progress updates
-    const springValue = useSpring(value, shouldReduceMotion ? { duration: 0 } : spring.smooth)
+    const springValue = useSpring(value, springConfig)
     const width = useTransform(springValue, (v) => `${v}%`)
 
     // Update spring when value changes
     React.useEffect(() => {
       springValue.set(value)
-    }, [value, springValue])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value])
 
     return (
       <ProgressPrimitive.Root
@@ -119,20 +124,26 @@ const LabeledProgress = React.forwardRef<
   LabeledProgressProps
 >(({ label, showPercentage = true, value = 0, ...props }, ref) => {
   const shouldReduceMotion = useReducedMotion()
-  const springValue = useSpring(value, shouldReduceMotion ? { duration: 0 } : spring.smooth)
+  const springConfig = React.useMemo(
+    () => (shouldReduceMotion ? { duration: 0 } : spring.smooth),
+    [shouldReduceMotion]
+  )
+  const springValue = useSpring(value, springConfig)
   const displayValue = useTransform(springValue, (v) => Math.round(v))
   const [displayNum, setDisplayNum] = React.useState(0)
 
   React.useEffect(() => {
     springValue.set(value)
-  }, [value, springValue])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
 
   React.useEffect(() => {
     const unsubscribe = displayValue.on("change", (v) => {
       setDisplayNum(v)
     })
     return unsubscribe
-  }, [displayValue])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="space-y-1.5">
