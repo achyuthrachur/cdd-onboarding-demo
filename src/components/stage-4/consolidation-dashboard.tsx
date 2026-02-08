@@ -164,6 +164,35 @@ export function ConsolidationDashboard({
     }
   };
 
+  // Prepare chart data BEFORE early returns to maintain consistent hook ordering.
+  // Using consolidation?.prop as deps — returns the actual array ref (stable) or undefined (also stable).
+  // This avoids the `= []` default which creates a new array reference every render.
+  const resultPieData = useMemo(() => {
+    const m = consolidation?.metrics;
+    if (!m) return [];
+    return [
+      { name: 'Pass', value: m.passCount, color: CHART_COLORS.pass },
+      { name: 'Pass w/Obs', value: m.passWithObservationCount, color: CHART_COLORS.passObs },
+      { name: 'Fail 1 - Reg', value: m.fail1RegulatoryCount, color: CHART_COLORS.fail1 },
+      { name: 'Fail 2 - Proc', value: m.fail2ProcedureCount, color: CHART_COLORS.fail2 },
+      { name: 'Questions', value: m.questionToLOBCount, color: CHART_COLORS.questions },
+      { name: 'N/A', value: m.naCount, color: CHART_COLORS.na },
+    ].filter(item => item.value > 0);
+  }, [consolidation?.metrics]);
+
+  const categoryChartData = useMemo(() => {
+    const cats = consolidation?.findingsByCategory;
+    if (!cats) return [];
+    return cats.map(cat => ({
+      category: cat.category,
+      passCount: cat.passCount,
+      failCount: cat.failCount,
+      naCount: cat.naCount,
+      totalTests: cat.totalTests,
+      failRate: cat.failRate,
+    }));
+  }, [consolidation?.findingsByCategory]);
+
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -216,34 +245,12 @@ export function ConsolidationDashboard({
     );
   }
 
-  const {
-    metrics,
-    findingsByCategory = [],
-    findingsByJurisdiction = [],
-    findingsByAuditor = [],
-    findingsByRiskTier = [],
-  } = consolidation;
+  const { metrics } = consolidation;
+  const findingsByCategory = consolidation.findingsByCategory ?? [];
+  const findingsByJurisdiction = consolidation.findingsByJurisdiction ?? [];
+  const findingsByAuditor = consolidation.findingsByAuditor ?? [];
+  const findingsByRiskTier = consolidation.findingsByRiskTier ?? [];
 
-  // Prepare chart data
-  const resultPieData = useMemo(() => [
-    { name: 'Pass', value: metrics.passCount, color: CHART_COLORS.pass },
-    { name: 'Pass w/Obs', value: metrics.passWithObservationCount, color: CHART_COLORS.passObs },
-    { name: 'Fail 1 - Reg', value: metrics.fail1RegulatoryCount, color: CHART_COLORS.fail1 },
-    { name: 'Fail 2 - Proc', value: metrics.fail2ProcedureCount, color: CHART_COLORS.fail2 },
-    { name: 'Questions', value: metrics.questionToLOBCount, color: CHART_COLORS.questions },
-    { name: 'N/A', value: metrics.naCount, color: CHART_COLORS.na },
-  ].filter(item => item.value > 0), [metrics]);
-
-  const categoryChartData = useMemo(() =>
-    findingsByCategory.map(cat => ({
-      category: cat.category,
-      passCount: cat.passCount,
-      failCount: cat.failCount,
-      naCount: cat.naCount,
-      totalTests: cat.totalTests,
-      failRate: cat.failRate,
-    }))
-  , [findingsByCategory]);
 
   return (
     <div className="space-y-6">
@@ -835,7 +842,7 @@ export function ConsolidationDashboard({
         {/* Results by Customer */}
         <TabsContent value="customer">
           <CustomerFindingsView
-            customerFindings={consolidation.customerFindings || []}
+            customerFindings={consolidation.customerFindings ?? []}
           />
         </TabsContent>
         </Tabs>
