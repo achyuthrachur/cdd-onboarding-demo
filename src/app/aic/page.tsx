@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,8 +17,36 @@ import {
 } from "lucide-react";
 import { motion, staggerContainer, staggerItem } from "@/lib/animations";
 import { mockAuditors } from "@/lib/attribute-library/mock-data";
+import { getStageData } from "@/lib/stage-data/store";
 
 export default function AicDashboardPage() {
+  const [stats, setStats] = useState({ auditRuns: 0, publishedWorkbooks: 0, submitted: 0 });
+  const [hasActiveRun, setHasActiveRun] = useState(false);
+
+  useEffect(() => {
+    const published = getStageData("workbooksPublished") as {
+      publishedAt: string;
+      workbookCount: number;
+      auditorCount: number;
+    } | null;
+    const progress = getStageData("auditorProgress") as Record<string, {
+      completionPercentage: number;
+      status: string;
+    }> | null;
+
+    if (published) {
+      const submittedCount = progress
+        ? Object.values(progress).filter(p => p.status === 'submitted').length
+        : 0;
+      setStats({
+        auditRuns: 1,
+        publishedWorkbooks: published.workbookCount || 0,
+        submitted: submittedCount,
+      });
+      setHasActiveRun(true);
+    }
+  }, []);
+
   return (
     <div className="p-8 min-h-full">
       <motion.div
@@ -50,9 +79,9 @@ export default function AicDashboardPage() {
               <FileStack className="h-4 w-4 text-gray-500 dark:text-gray-300" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">{stats.auditRuns}</div>
               <p className="text-xs text-gray-500 dark:text-gray-300">
-                Create your first audit run
+                {stats.auditRuns > 0 ? "Active engagement" : "Create your first audit run"}
               </p>
             </CardContent>
           </Card>
@@ -65,7 +94,7 @@ export default function AicDashboardPage() {
               <FileText className="h-4 w-4 text-gray-500 dark:text-gray-300" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">{stats.publishedWorkbooks}</div>
               <p className="text-xs text-gray-500 dark:text-gray-300">
                 Assigned to auditors
               </p>
@@ -95,7 +124,7 @@ export default function AicDashboardPage() {
               <CheckCircle2 className="h-4 w-4 text-gray-500 dark:text-gray-300" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">{stats.submitted}</div>
               <p className="text-xs text-gray-500 dark:text-gray-300">
                 Submitted workbooks
               </p>
@@ -199,16 +228,42 @@ export default function AicDashboardPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <FileStack className="h-12 w-12 text-gray-500 dark:text-gray-300 mb-4" />
-              <p className="text-gray-500 dark:text-gray-300 mb-4">No audit runs yet</p>
-              <Link href="/aic/audit-runs/new">
-                <Button variant="outline">
-                  Create your first audit run
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
+            {hasActiveRun ? (
+              <div className="space-y-3">
+                <Link href="/aic/audit-runs/demo-run-001" className="block">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-crowe-indigo/10 dark:bg-crowe-indigo-bright/20">
+                        <BarChart3 className="h-5 w-5 text-crowe-indigo dark:text-crowe-indigo-bright" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">CDD Annual Review 2025</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-300">
+                          {stats.publishedWorkbooks} workbooks published &middot; {stats.submitted} submitted
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Badge className="bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright border-0">
+                        In Progress
+                      </Badge>
+                      <ArrowRight className="h-4 w-4 text-gray-400" />
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <FileStack className="h-12 w-12 text-gray-500 dark:text-gray-300 mb-4" />
+                <p className="text-gray-500 dark:text-gray-300 mb-4">No audit runs yet</p>
+                <Link href="/aic/audit-runs/new">
+                  <Button variant="outline">
+                    Create your first audit run
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            )}
           </CardContent>
         </Card>
       </motion.div>

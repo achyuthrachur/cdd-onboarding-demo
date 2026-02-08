@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,9 +14,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, FileStack, ArrowRight } from "lucide-react";
+import { getStageData } from "@/lib/stage-data/store";
 
-// This will be replaced with actual data from the database
-const auditRuns: Array<{
+interface AuditRun {
   id: string;
   name: string;
   status: string;
@@ -21,7 +24,7 @@ const auditRuns: Array<{
   stage: number;
   publishedCount: number;
   submittedCount: number;
-}> = [];
+}
 
 function getStatusBadge(status: string) {
   switch (status) {
@@ -39,6 +42,41 @@ function getStatusBadge(status: string) {
 }
 
 export default function AicAuditRunsPage() {
+  const [auditRuns, setAuditRuns] = useState<AuditRun[]>([]);
+
+  useEffect(() => {
+    const published = getStageData("workbooksPublished") as {
+      publishedAt: string;
+      workbookCount: number;
+      auditorCount: number;
+    } | null;
+
+    if (published) {
+      const progress = getStageData("auditorProgress") as Record<string, {
+        completionPercentage: number;
+        status: string;
+      }> | null;
+
+      const submittedCount = progress
+        ? Object.values(progress).filter(p => p.status === 'submitted').length
+        : 0;
+
+      const allSubmitted = progress
+        ? Object.values(progress).every(p => p.status === 'submitted')
+        : false;
+
+      setAuditRuns([{
+        id: "demo-run-001",
+        name: "CDD Annual Review 2025",
+        status: allSubmitted ? "completed" : "in_progress",
+        createdAt: new Date(published.publishedAt).toLocaleDateString(),
+        stage: 4,
+        publishedCount: published.workbookCount || 0,
+        submittedCount,
+      }]);
+    }
+  }, []);
+
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-8">
