@@ -153,7 +153,7 @@ export default function AicMonitorPage() {
 
       pivotedWorkbooks.forEach((wb, index) => {
         // Vary progress for each auditor
-        const progressLevels = [95, 72, 45, 28];
+        const progressLevels = [85, 72, 45, 28];
         const completion = progressLevels[index % progressLevels.length];
         const isSubmitted = completion >= 95;
 
