@@ -258,9 +258,19 @@ export default function AicStage4Page() {
   const handlePublishWorkbooks = async () => {
     setIsPublishing(true);
 
+    if (pivotedWorkbooks.length === 0) {
+      toast.error("No workbooks to publish. Generate workbooks first.");
+      setIsPublishing(false);
+      return;
+    }
+
     try {
       // Simulate API call to publish workbooks
       await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Re-persist workbooks to guarantee auditor portal has data
+      setStageData("pivotedWorkbooks", pivotedWorkbooks);
+      setStageData("selectedAuditors", selectedAuditors);
 
       // In a real implementation, this would call the API to persist to database
       // await publishAllWorkbooksForAuditRun(id, 'AIC');
@@ -512,7 +522,7 @@ export default function AicStage4Page() {
       <Tabs
         value={currentStep}
         onValueChange={(v) => setCurrentStep(v as WorkflowStep)}
-        className="flex-1 flex flex-col min-h-0"
+        className="flex-1 flex flex-col min-h-0 overflow-hidden"
       >
         <TabsList className="flex-shrink-0 mb-4">
           <TabsTrigger value="load" className="flex items-center gap-2">
@@ -904,7 +914,7 @@ export default function AicStage4Page() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between pt-4 flex-shrink-0 border-t border-gray-200 dark:border-white/10 mt-4 relative z-10"
+        className="flex justify-between pt-4 flex-shrink-0 border-t border-gray-200 dark:border-white/10 mt-4 relative z-50 bg-white dark:bg-[#011E41]"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
