@@ -56,17 +56,20 @@ export function useCountUp(
       return;
     }
 
+    let animationRef: { stop: () => void } | null = null;
+
     const timeout = setTimeout(() => {
-      const animation = animate(count, targetValue, {
+      animationRef = animate(count, targetValue, {
         duration: animDuration,
         ease: ease.out,
         onUpdate: (latest) => setDisplayValue(Math.round(latest)),
       });
-
-      return () => animation.stop();
     }, delay * 1000);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+      animationRef?.stop();
+    };
   }, [targetValue, animDuration, delay, startOnMount, shouldReduceMotion, count]);
 
   return displayValue;
