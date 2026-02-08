@@ -522,7 +522,7 @@ export default function AicStage4Page() {
       <Tabs
         value={currentStep}
         onValueChange={(v) => setCurrentStep(v as WorkflowStep)}
-        className="flex-1 flex flex-col min-h-0 overflow-hidden"
+        className="flex-1 flex flex-col min-h-0 overflow-y-auto"
       >
         <TabsList className="flex-shrink-0 mb-4">
           <TabsTrigger value="load" className="flex items-center gap-2">
