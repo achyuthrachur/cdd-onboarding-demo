@@ -166,7 +166,7 @@ export function AuditorWorkbookView({
         </div>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-teal/10">
             <div className="text-lg font-bold text-crowe-teal-bright">{summary.passCount}</div>
             <div className="text-xs text-gray-600 dark:text-white/80">Pass</div>
