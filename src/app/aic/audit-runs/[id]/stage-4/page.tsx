@@ -904,7 +904,7 @@ export default function AicStage4Page() {
 
       {/* Navigation */}
       <motion.div
-        className="flex justify-between pt-4 flex-shrink-0 border-t border-gray-200 dark:border-white/10 mt-4"
+        className="flex justify-between pt-4 flex-shrink-0 border-t border-gray-200 dark:border-white/10 mt-4 relative z-10"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}

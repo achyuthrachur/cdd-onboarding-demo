@@ -128,10 +128,10 @@ export function SamplingRationale({
   };
 
   return (
-    <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+    <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <div className="space-y-1">
-          <CardTitle className="flex items-center gap-2 text-white">
+          <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
             <FileText className="h-5 w-5" />
             AI-Generated Sampling Rationale
             {isDemoMode && (
@@ -140,7 +140,7 @@ export function SamplingRationale({
               </Badge>
             )}
           </CardTitle>
-          <CardDescription className="text-white/80">
+          <CardDescription className="text-gray-600 dark:text-white/80">
             Generate audit documentation for the sampling methodology
           </CardDescription>
         </div>
@@ -181,56 +181,56 @@ export function SamplingRationale({
 
         {rationale ? (
           <div className="space-y-4">
-            <div className="prose prose-invert max-w-none rounded-lg bg-white/5 p-6 border border-white/10">
+            <div className="prose dark:prose-invert max-w-none rounded-lg bg-gray-50 dark:bg-white/5 p-6 border border-gray-200 dark:border-white/10">
               <ReactMarkdown
                 components={{
                   h2: ({ children }) => (
-                    <h2 className="text-xl font-bold text-white mt-6 mb-4 first:mt-0 border-b border-white/20 pb-2">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mt-6 mb-4 first:mt-0 border-b border-gray-200 dark:border-white/20 pb-2">
                       {children}
                     </h2>
                   ),
                   h3: ({ children }) => (
-                    <h3 className="text-lg font-semibold text-white mt-4 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mt-4 mb-2">
                       {children}
                     </h3>
                   ),
                   p: ({ children }) => (
-                    <p className="text-white/80 mb-3 leading-relaxed">{children}</p>
+                    <p className="text-gray-600 dark:text-white/80 mb-3 leading-relaxed">{children}</p>
                   ),
                   ul: ({ children }) => (
-                    <ul className="text-white/80 list-disc list-inside mb-3 space-y-1">
+                    <ul className="text-gray-600 dark:text-white/80 list-disc list-inside mb-3 space-y-1">
                       {children}
                     </ul>
                   ),
                   li: ({ children }) => (
-                    <li className="text-white/80">{children}</li>
+                    <li className="text-gray-600 dark:text-white/80">{children}</li>
                   ),
                   strong: ({ children }) => (
-                    <strong className="text-white font-semibold">{children}</strong>
+                    <strong className="text-gray-900 dark:text-white font-semibold">{children}</strong>
                   ),
                   table: ({ children }) => (
                     <div className="overflow-x-auto my-4">
-                      <table className="w-full border-collapse border border-white/20 text-sm">
+                      <table className="w-full border-collapse border border-gray-200 dark:border-white/20 text-sm">
                         {children}
                       </table>
                     </div>
                   ),
                   thead: ({ children }) => (
-                    <thead className="bg-white/10">{children}</thead>
+                    <thead className="bg-gray-100 dark:bg-white/10">{children}</thead>
                   ),
                   th: ({ children }) => (
-                    <th className="border border-white/20 px-4 py-2 text-left text-white font-semibold">
+                    <th className="border border-gray-200 dark:border-white/20 px-4 py-2 text-left text-gray-900 dark:text-white font-semibold">
                       {children}
                     </th>
                   ),
                   td: ({ children }) => (
-                    <td className="border border-white/20 px-4 py-2 text-white/80">
+                    <td className="border border-gray-200 dark:border-white/20 px-4 py-2 text-gray-600 dark:text-white/80">
                       {children}
                     </td>
                   ),
-                  hr: () => <hr className="border-white/20 my-6" />,
+                  hr: () => <hr className="border-gray-200 dark:border-white/20 my-6" />,
                   em: ({ children }) => (
-                    <em className="text-white/80 italic">{children}</em>
+                    <em className="text-gray-600 dark:text-white/80 italic">{children}</em>
                   ),
                 }}
               >
@@ -241,7 +241,7 @@ export function SamplingRationale({
               <Button
                 variant="outline"
                 onClick={copyToClipboard}
-                className="border-white/20 text-white hover:bg-white/10"
+                className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10"
               >
                 {copied ? (
                   <>
@@ -259,11 +259,11 @@ export function SamplingRationale({
           </div>
         ) : isLocked && !error ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <Sparkles className="h-12 w-12 text-white/50 mb-4" />
-            <p className="text-white/80 mb-2">
+            <Sparkles className="h-12 w-12 text-gray-400 dark:text-white/50 mb-4" />
+            <p className="text-gray-600 dark:text-white/80 mb-2">
               Click &quot;Generate Rationale&quot; to create audit documentation
             </p>
-            <p className="text-sm text-white/50">
+            <p className="text-sm text-gray-500 dark:text-white/50">
               The AI will analyze your sampling configuration and generate a narrative summary
             </p>
           </div>

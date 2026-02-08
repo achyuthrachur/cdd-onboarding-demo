@@ -56,8 +56,18 @@ export async function POST(request: NextRequest) {
     let tokensUsed = 0;
     let demoMode = false;
 
-    // Determine if we should use mock data
-    const shouldUseMock = useMock || !aiConfig.configured || !proceduresContent;
+    // Check if content is meaningful (not just a placeholder)
+    const isPlaceholderContent = !proceduresContent ||
+      proceduresContent.length < 200 ||
+      proceduresContent.startsWith("[Document:") ||
+      proceduresContent.startsWith("[PDF Document:") ||
+      proceduresContent.startsWith("[Word Document:");
+
+    const shouldUseMock = useMock || !aiConfig.configured || isPlaceholderContent;
+
+    if (isPlaceholderContent && proceduresContent) {
+      console.log(`[FLU-API] Content rejected as placeholder (${proceduresContent.length} chars, starts with: "${proceduresContent.substring(0, 30)}...")`);
+    }
 
     if (shouldUseMock) {
       demoMode = true;
@@ -65,7 +75,7 @@ export async function POST(request: NextRequest) {
         ? "useMock flag set to true"
         : !aiConfig.configured
           ? "No AI API key configured"
-          : "No procedures content provided";
+          : "Procedures content is placeholder or too short";
 
       console.log(`[FLU-API] Using DEMO MODE - Reason: ${reason}`);
 

@@ -76,17 +76,17 @@ export function DocumentCard({
       >
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 mt-0.5">
-            <GripVertical className="h-4 w-4 text-white/80" />
+            <GripVertical className="h-4 w-4 text-gray-600 dark:text-white/80" />
           </div>
           <div className="flex-shrink-0">
             <motion.div
-              className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10"
+              className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-white/10"
               animate={isSelected && !shouldReduceMotion ? {
                 scale: [1, 1.1, 1],
                 transition: { duration: 0.3 }
               } : {}}
             >
-              <FileText className="h-5 w-5 text-white/80" />
+              <FileText className="h-5 w-5 text-gray-600 dark:text-white/80" />
             </motion.div>
           </div>
           <div className="flex-1 min-w-0">
