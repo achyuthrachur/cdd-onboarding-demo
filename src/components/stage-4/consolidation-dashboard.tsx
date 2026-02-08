@@ -61,19 +61,19 @@ export function ConsolidationDashboard({
 }: ConsolidationDashboardProps) {
   const shouldReduceMotion = useReducedMotion();
 
-  // Animated count-ups for metrics
-  const animatedTotalTests = useCountUp(consolidation?.metrics.totalTests || 0, { duration: 1, delay: 0.2 });
-  const animatedPassRate = useCountUp(consolidation?.metrics.passRate || 0, { duration: 1.2, delay: 0.3 });
-  const animatedExceptions = useCountUp(consolidation?.metrics.exceptionsCount || 0, { duration: 0.8, delay: 0.4 });
-  const animatedWorkbooks = useCountUp(consolidation?.metrics.workbooksSubmitted || 0, { duration: 0.6, delay: 0.5 });
+  // Animated count-ups for metrics (use optional chaining on metrics to prevent crash)
+  const animatedTotalTests = useCountUp(consolidation?.metrics?.totalTests ?? 0, { duration: 1, delay: 0.2 });
+  const animatedPassRate = useCountUp(consolidation?.metrics?.passRate ?? 0, { duration: 1.2, delay: 0.3 });
+  const animatedExceptions = useCountUp(consolidation?.metrics?.exceptionsCount ?? 0, { duration: 0.8, delay: 0.4 });
+  const animatedWorkbooks = useCountUp(consolidation?.metrics?.workbooksSubmitted ?? 0, { duration: 0.6, delay: 0.5 });
 
   // Animated counts for result breakdown
-  const animatedPassCount = useCountUp(consolidation?.metrics.passCount || 0, { duration: 0.8, delay: 0.6 });
-  const animatedPassWithObs = useCountUp(consolidation?.metrics.passWithObservationCount || 0, { duration: 0.8, delay: 0.7 });
-  const animatedFail1 = useCountUp(consolidation?.metrics.fail1RegulatoryCount || 0, { duration: 0.8, delay: 0.8 });
-  const animatedFail2 = useCountUp(consolidation?.metrics.fail2ProcedureCount || 0, { duration: 0.8, delay: 0.9 });
-  const animatedQLOB = useCountUp(consolidation?.metrics.questionToLOBCount || 0, { duration: 0.8, delay: 1.0 });
-  const animatedNA = useCountUp(consolidation?.metrics.naCount || 0, { duration: 0.8, delay: 1.1 });
+  const animatedPassCount = useCountUp(consolidation?.metrics?.passCount ?? 0, { duration: 0.8, delay: 0.6 });
+  const animatedPassWithObs = useCountUp(consolidation?.metrics?.passWithObservationCount ?? 0, { duration: 0.8, delay: 0.7 });
+  const animatedFail1 = useCountUp(consolidation?.metrics?.fail1RegulatoryCount ?? 0, { duration: 0.8, delay: 0.8 });
+  const animatedFail2 = useCountUp(consolidation?.metrics?.fail2ProcedureCount ?? 0, { duration: 0.8, delay: 0.9 });
+  const animatedQLOB = useCountUp(consolidation?.metrics?.questionToLOBCount ?? 0, { duration: 0.8, delay: 1.0 });
+  const animatedNA = useCountUp(consolidation?.metrics?.naCount ?? 0, { duration: 0.8, delay: 1.1 });
 
   // AI Testing Summary state
   const [testingSummary, setTestingSummary] = useState<string | null>(null);
@@ -192,7 +192,8 @@ export function ConsolidationDashboard({
     );
   }
 
-  if (!consolidation) {
+  // Guard against null consolidation or missing metrics
+  if (!consolidation || !consolidation.metrics) {
     return (
       <motion.div
         className="text-center py-12 text-white/80"
