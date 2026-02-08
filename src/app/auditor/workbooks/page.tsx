@@ -24,7 +24,7 @@ import {
 import { toast } from "sonner";
 import { getCurrentAuditorId } from "@/lib/auth/session";
 import { getStageData, setStageData, loadFallbackDataForStage } from "@/lib/stage-data";
-import type { PivotedAuditorWorkbook } from "@/lib/stage-data/store";
+import type { PivotedAuditorWorkbook, CustomerTestResult } from "@/lib/stage-data/store";
 
 interface WorkbookSummary {
   id: string;
@@ -92,9 +92,93 @@ export default function AuditorWorkbooksPage() {
       const existingWorkbooks = getStageData("pivotedWorkbooks") as PivotedAuditorWorkbook[] | null;
 
       if (existingPublished && existingWorkbooks && existingWorkbooks.length > 0) {
-        // Workbooks already exist from AIC publication — just reload them
+        // Workbooks already exist from AIC publication
+        // Populate demo testing results for the current auditor's workbook
+        const currentAuditorId = getCurrentAuditorId();
+        if (currentAuditorId) {
+          const wbIndex = existingWorkbooks.findIndex(wb => wb.auditorId === currentAuditorId);
+          if (wbIndex >= 0) {
+            const wb = existingWorkbooks[wbIndex];
+            // Check if results are already populated (idempotent)
+            const alreadyPopulated = wb.rows.some(row =>
+              Object.values(row.customerResults).some(r => r.result !== '')
+            );
+            if (!alreadyPopulated) {
+              const resultOptions: Array<CustomerTestResult['result']> = [
+                'Pass', 'Pass', 'Pass', 'Pass', // weighted toward Pass
+                'Pass w/Observation',
+                'Fail 1 - Regulatory',
+                'Fail 2 - Procedure',
+                'N/A',
+                '', // empty = not yet tested
+                '',
+              ];
+              let filledCount = 0;
+              let totalCells = 0;
+              const updatedRows = wb.rows.map(row => {
+                const updatedResults: Record<string, CustomerTestResult> = {};
+                for (const customer of wb.assignedCustomers) {
+                  totalCells++;
+                  const existing = row.customerResults[customer.customerId];
+                  // ~35% of cells get a result
+                  if (Math.random() < 0.35) {
+                    const result = resultOptions[Math.floor(Math.random() * resultOptions.length)];
+                    if (result !== '') {
+                      filledCount++;
+                      // Pick a document from acceptableDocs if available
+                      const doc = row.acceptableDocs.length > 0
+                        ? row.acceptableDocs[Math.floor(Math.random() * row.acceptableDocs.length)]
+                        : undefined;
+                      updatedResults[customer.customerId] = {
+                        customerId: customer.customerId,
+                        customerName: customer.customerName,
+                        selectedDocument: doc?.value || '',
+                        result,
+                        observation: result === 'Pass w/Observation' ? 'Minor documentation gap noted' : '',
+                      };
+                      continue;
+                    }
+                  }
+                  // Keep empty
+                  updatedResults[customer.customerId] = existing || {
+                    customerId: customer.customerId,
+                    customerName: customer.customerName,
+                    selectedDocument: '',
+                    result: '' as CustomerTestResult['result'],
+                    observation: '',
+                  };
+                }
+                return { ...row, customerResults: updatedResults };
+              });
+
+              const completionPct = totalCells > 0 ? Math.round((filledCount / totalCells) * 100) : 0;
+
+              // Update the workbook in store
+              const updatedWorkbooks = [...existingWorkbooks];
+              updatedWorkbooks[wbIndex] = { ...wb, rows: updatedRows, status: 'in_progress' };
+              setStageData("pivotedWorkbooks", updatedWorkbooks);
+
+              // Update auditor progress
+              const existingProgress = (getStageData("auditorProgress") || {}) as Record<string, {
+                completionPercentage: number;
+                status: 'draft' | 'in_progress' | 'submitted';
+                lastActivityAt: string;
+                submittedAt: string | null;
+              }>;
+              setStageData("auditorProgress", {
+                ...existingProgress,
+                [currentAuditorId]: {
+                  completionPercentage: completionPct,
+                  status: 'in_progress' as const,
+                  lastActivityAt: new Date().toISOString(),
+                  submittedAt: null,
+                },
+              });
+            }
+          }
+        }
         loadWorkbooks();
-        toast.info("Loaded existing published workbooks from AIC.");
+        toast.info("Loaded existing published workbooks with demo testing results.");
         return;
       }
 
