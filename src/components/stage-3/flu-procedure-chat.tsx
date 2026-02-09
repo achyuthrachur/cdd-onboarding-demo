@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { ChatMessage, MessageType } from "@/components/stage-1/chat-message";
 import { toast } from "sonner";
 import type { FLUExtractionResult, FLUProcedureDocument } from "@/lib/stage-data/store";
+import { setStageData } from "@/lib/stage-data";
 import { getMockFLUExtractionResult } from "@/lib/ai/client";
 import {
   motion,
@@ -97,19 +98,114 @@ export function FLUProcedureChat({
   const chatEndRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
-  // Load preloaded document on mount
+  // Load preloaded document on mount — extract text if only fileUrl is available
   useEffect(() => {
-    if (preloadedDocument && !uploadedFile && !extractionResult) {
+    if (!preloadedDocument || uploadedFile || extractionResult) return;
+
+    const hasRealContent =
+      preloadedDocument.content &&
+      preloadedDocument.content.length > 200 &&
+      !preloadedDocument.content.startsWith("[Document:") &&
+      !preloadedDocument.content.startsWith("[PDF Document:") &&
+      !preloadedDocument.content.startsWith("[Word Document:");
+
+    if (hasRealContent) {
+      // Content already extracted (e.g. from localStorage cache)
       setUploadedFile({
         doc: preloadedDocument,
-        content: preloadedDocument.content || `[Document: ${preloadedDocument.fileName}]`,
+        content: preloadedDocument.content!,
       });
       setMessages(prev => [
         ...prev,
         {
           id: `preloaded-${Date.now()}`,
           type: "system",
-          content: `FLU Procedures document "${preloadedDocument.fileName}" has been preloaded from the previous stage. Click 'Extract Attributes' to analyze.`,
+          content: `FLU Procedures document "${preloadedDocument.fileName}" has been preloaded (cached). Click 'Extract Attributes' to analyze.`,
+          timestamp: new Date(),
+          documents: [{ fileName: preloadedDocument.fileName, docType: "flu_procedure" }],
+        },
+      ]);
+      return;
+    }
+
+    // Need to extract text from fileUrl
+    if (preloadedDocument.fileUrl) {
+      // Show document as loading while we extract
+      setUploadedFile({
+        doc: preloadedDocument,
+        content: "", // temporary — will be replaced
+      });
+      setMessages(prev => [
+        ...prev,
+        {
+          id: `preloaded-${Date.now()}`,
+          type: "system",
+          content: `FLU Procedures document "${preloadedDocument.fileName}" found. Extracting text content...`,
+          timestamp: new Date(),
+          documents: [{ fileName: preloadedDocument.fileName, docType: "flu_procedure" }],
+        },
+      ]);
+
+      (async () => {
+        try {
+          const res = await fetch("/api/documents/extract", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              fileUrl: preloadedDocument.fileUrl,
+              fileName: preloadedDocument.fileName,
+            }),
+          });
+
+          if (!res.ok) throw new Error("Extraction failed");
+
+          const data = await res.json();
+          const extractedText: string = data.text;
+
+          // Update the uploaded file with real content
+          const updatedDoc: FLUProcedureDocument = {
+            ...preloadedDocument,
+            content: extractedText,
+          };
+          setUploadedFile({ doc: updatedDoc, content: extractedText });
+
+          // Cache to localStorage so subsequent loads skip extraction
+          setStageData("fluProcedures", [updatedDoc]);
+
+          setMessages(prev => [
+            ...prev,
+            {
+              id: `extracted-${Date.now()}`,
+              type: "system",
+              content: `Text extracted (${data.characterCount?.toLocaleString() || extractedText.length.toLocaleString()} characters). Click 'Extract Attributes' to analyze.`,
+              timestamp: new Date(),
+            },
+          ]);
+        } catch (err) {
+          console.error("Failed to extract preloaded document text:", err);
+          setMessages(prev => [
+            ...prev,
+            {
+              id: `extract-err-${Date.now()}`,
+              type: "system",
+              content: `Could not extract text from "${preloadedDocument.fileName}". You can still try 'Extract Attributes' or upload another document.`,
+              timestamp: new Date(),
+            },
+          ]);
+        }
+      })();
+    } else {
+      // No fileUrl and no content — just show the doc as-is
+      setUploadedFile({
+        doc: preloadedDocument,
+        content: preloadedDocument.content || "",
+      });
+      setMessages(prev => [
+        ...prev,
+        {
+          id: `preloaded-${Date.now()}`,
+          type: "system",
+          content: `FLU Procedures document "${preloadedDocument.fileName}" has been preloaded. Click 'Extract Attributes' to analyze.`,
           timestamp: new Date(),
           documents: [{ fileName: preloadedDocument.fileName, docType: "flu_procedure" }],
         },
@@ -184,31 +280,46 @@ export function FLUProcedureChat({
       documents: [{ fileName: file.name, docType: "flu_procedure" }],
     });
 
-    // Read file content
+    // Extract text content from the file
     let fileContent = "";
     try {
       if (file.type === "text/plain") {
         fileContent = await file.text();
-      } else if (file.type === "application/pdf") {
-        // For PDF files, we'll send to API which can handle PDF extraction
-        // For now, note that content will be extracted server-side
-        fileContent = `[PDF Document: ${file.name}]`;
+      } else {
+        // Send DOCX/Word/PDF to the extract API via FormData
         addMessage({
           type: "system",
-          content: "PDF detected. Content will be extracted during analysis.",
+          content: "Extracting text from document...",
         });
-      } else if (file.type.includes("word") || file.type.includes("document")) {
-        // For Word docs, content will be extracted server-side
-        fileContent = `[Word Document: ${file.name}]`;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await fetch("/api/documents/extract", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => null);
+          const detail = errData?.details || errData?.error || "Unknown error";
+          throw new Error(detail);
+        }
+
+        const data = await res.json();
+        fileContent = data.text;
+
         addMessage({
           type: "system",
-          content: "Word document detected. Content will be extracted during analysis.",
+          content: `Text extracted (${data.characterCount?.toLocaleString() || fileContent.length.toLocaleString()} characters).`,
         });
       }
     } catch (error) {
       console.error("Error reading file:", error);
-      toast.error("Failed to read file content");
-      return;
+      const msg = error instanceof Error ? error.message : "Unknown error";
+      toast.error(`Failed to extract text: ${msg}`);
+      // Set placeholder so user can still see the doc is loaded
+      fileContent = `[Upload: ${file.name} — extraction failed]`;
     }
 
     const doc: FLUProcedureDocument = {
@@ -217,6 +328,7 @@ export function FLUProcedureChat({
       docType: "flu_procedure",
       jurisdiction: null,
       uploadedAt: new Date().toISOString(),
+      content: fileContent,
     };
 
     setUploadedFile({ doc, content: fileContent });

@@ -42,11 +42,11 @@ import { getMockFLUExtractionResult } from "@/lib/ai/client";
 
 const DEMO_FLU_DOCUMENT: FLUProcedureDocument = {
   id: "demo-flu-procedures",
-  fileName: "FLU_CIP_CDD_Procedures.docx",
+  fileName: "CIP CDD Procedures (Mock).docx",
   docType: "flu_procedure",
   jurisdiction: "ENT",
   uploadedAt: new Date().toISOString(),
-  content: `FRONT LINE UNIT PROCEDURES - CIP/CDD/EDD COMPLIANCE...`,
+  fileUrl: "/demo/CIP CDD Procedures (Mock).docx",
 };
 
 type ViewMode = "chat" | "results";
@@ -89,7 +89,7 @@ export default function AicStage3Page() {
               docType: 'flu_procedure',
               jurisdiction: fluDoc.jurisdiction || 'ENT',
               uploadedAt: fluDoc.uploadedAt || new Date().toISOString(),
-              content: `[Document: ${fluDoc.fileName}]`,
+              fileUrl: fluDoc.fileUrl,
             };
             setPreloadedDoc(fluProcedureDoc);
             // Store it for future use
