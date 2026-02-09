@@ -207,11 +207,11 @@ export function ConsolidationDashboard({
             <motion.div key={i} variants={staggerItem}>
               <Card>
                 <CardHeader className="pb-2">
-                  <div className="h-4 w-24 bg-white/10 animate-pulse rounded" />
+                  <div className="h-4 w-24 bg-gray-200 dark:bg-white/10 animate-pulse rounded" />
                 </CardHeader>
                 <CardContent>
-                  <div className="h-8 w-16 bg-white/10 animate-pulse rounded mb-2" />
-                  <div className="h-3 w-20 bg-white/10 animate-pulse rounded" />
+                  <div className="h-8 w-16 bg-gray-200 dark:bg-white/10 animate-pulse rounded mb-2" />
+                  <div className="h-3 w-20 bg-gray-200 dark:bg-white/10 animate-pulse rounded" />
                 </CardContent>
               </Card>
             </motion.div>
@@ -225,7 +225,7 @@ export function ConsolidationDashboard({
   if (!consolidation || !consolidation.metrics) {
     return (
       <motion.div
-        className="text-center py-12 text-white/80"
+        className="text-center py-12 text-gray-600 dark:text-white/80"
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
@@ -277,7 +277,7 @@ export function ConsolidationDashboard({
         <motion.div variants={staggerItem}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/80 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-gray-700 dark:text-white/80 flex items-center gap-2">
                 <ClipboardList className="h-4 w-4" />
                 Total Tests
               </CardTitle>
@@ -286,7 +286,7 @@ export function ConsolidationDashboard({
               <motion.div className="text-2xl font-bold tabular-nums">
                 {animatedTotalTests}
               </motion.div>
-              <p className="text-xs text-white/80">
+              <p className="text-xs text-gray-600 dark:text-white/80">
                 across {metrics.uniqueEntitiesTested} entities
               </p>
             </CardContent>
@@ -296,7 +296,7 @@ export function ConsolidationDashboard({
         <motion.div variants={staggerItem}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/80 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-gray-700 dark:text-white/80 flex items-center gap-2">
                 <TrendingUp className="h-4 w-4" />
                 Pass Rate
               </CardTitle>
@@ -315,7 +315,7 @@ export function ConsolidationDashboard({
         <motion.div variants={staggerItem}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/80 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-gray-700 dark:text-white/80 flex items-center gap-2">
                 <TrendingDown className="h-4 w-4" />
                 Exceptions
               </CardTitle>
@@ -324,7 +324,7 @@ export function ConsolidationDashboard({
               <motion.div className="text-2xl font-bold text-crowe-coral-bright tabular-nums">
                 {animatedExceptions}
               </motion.div>
-              <p className="text-xs text-white/80">
+              <p className="text-xs text-gray-600 dark:text-white/80">
                 {metrics.failRate.toFixed(1)}% fail rate
               </p>
             </CardContent>
@@ -334,7 +334,7 @@ export function ConsolidationDashboard({
         <motion.div variants={staggerItem}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-white/80 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-gray-700 dark:text-white/80 flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 Workbooks
               </CardTitle>
@@ -343,7 +343,7 @@ export function ConsolidationDashboard({
               <motion.div className="text-2xl font-bold tabular-nums">
                 {animatedWorkbooks}
               </motion.div>
-              <p className="text-xs text-white/80">
+              <p className="text-xs text-gray-600 dark:text-white/80">
                 submitted for consolidation
               </p>
             </CardContent>
@@ -380,7 +380,7 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-teal-bright tabular-nums">
                   {animatedPassCount}
                 </motion.div>
-                <p className="text-xs text-white/80">Pass</p>
+                <p className="text-xs text-gray-600 dark:text-white/80">Pass</p>
               </motion.div>
 
               <motion.div
@@ -392,7 +392,7 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-amber-bright tabular-nums">
                   {animatedPassWithObs}
                 </motion.div>
-                <p className="text-xs text-white/80">Pass w/Obs</p>
+                <p className="text-xs text-gray-600 dark:text-white/80">Pass w/Obs</p>
               </motion.div>
 
               <motion.div
@@ -404,7 +404,7 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-coral-bright tabular-nums">
                   {animatedFail1}
                 </motion.div>
-                <p className="text-xs text-white/80">Fail 1 - Reg</p>
+                <p className="text-xs text-gray-600 dark:text-white/80">Fail 1 - Reg</p>
               </motion.div>
 
               <motion.div
@@ -416,7 +416,7 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-amber tabular-nums">
                   {animatedFail2}
                 </motion.div>
-                <p className="text-xs text-white/80">Fail 2 - Proc</p>
+                <p className="text-xs text-gray-600 dark:text-white/80">Fail 2 - Proc</p>
               </motion.div>
 
               <motion.div
@@ -428,19 +428,19 @@ export function ConsolidationDashboard({
                 <motion.div className="text-xl font-bold text-crowe-blue-light tabular-nums">
                   {animatedQLOB}
                 </motion.div>
-                <p className="text-xs text-white/80">Q to LOB</p>
+                <p className="text-xs text-gray-600 dark:text-white/80">Q to LOB</p>
               </motion.div>
 
               <motion.div
                 variants={staggerItem}
-                className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-white/10"
+                className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-gray-100 dark:bg-white/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <MinusCircle className="h-6 w-6 text-white/80 mb-1" />
-                <motion.div className="text-xl font-bold text-white/80 tabular-nums">
+                <MinusCircle className="h-6 w-6 text-gray-500 dark:text-white/80 mb-1" />
+                <motion.div className="text-xl font-bold text-gray-500 dark:text-white/80 tabular-nums">
                   {animatedNA}
                 </motion.div>
-                <p className="text-xs text-white/80">N/A</p>
+                <p className="text-xs text-gray-600 dark:text-white/80">N/A</p>
               </motion.div>
             </motion.div>
           </CardContent>
@@ -567,7 +567,7 @@ export function ConsolidationDashboard({
             </CardHeader>
             <CardContent>
               {findingsByCategory.length === 0 ? (
-                <div className="text-center py-8 text-white/80">
+                <div className="text-center py-8 text-gray-600 dark:text-white/80">
                   <p className="text-sm">No category data available</p>
                 </div>
               ) : (
@@ -594,13 +594,13 @@ export function ConsolidationDashboard({
                               {category.failCount} fail
                             </span>
                             {category.naCount > 0 && (
-                              <span className="text-white/80">
+                              <span className="text-gray-600 dark:text-white/80">
                                 {category.naCount} N/A
                               </span>
                             )}
                           </div>
                         </div>
-                        <div className="h-2 rounded-full bg-white/10 overflow-hidden flex">
+                        <div className="h-2 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden flex">
                           <div
                             className="bg-crowe-teal h-full transition-all"
                             style={{ width: `${passPercent}%` }}
@@ -638,7 +638,7 @@ export function ConsolidationDashboard({
             </CardHeader>
             <CardContent>
               {findingsByJurisdiction.length === 0 ? (
-                <div className="text-center py-8 text-white/80">
+                <div className="text-center py-8 text-gray-600 dark:text-white/80">
                   <p className="text-sm">No jurisdiction data available</p>
                 </div>
               ) : (
@@ -670,7 +670,7 @@ export function ConsolidationDashboard({
                             )}
                           </div>
                         </div>
-                        <div className="h-2 rounded-full bg-white/10 overflow-hidden flex">
+                        <div className="h-2 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden flex">
                           <div
                             className="bg-crowe-teal h-full transition-all"
                             style={{ width: `${passPercent}%` }}
@@ -680,7 +680,7 @@ export function ConsolidationDashboard({
                             style={{ width: `${failPercent}%` }}
                           />
                         </div>
-                        <div className="flex gap-4 text-xs text-white/80">
+                        <div className="flex gap-4 text-xs text-gray-600 dark:text-white/80">
                           <span>Pass Rate: {jur.passRate.toFixed(1)}%</span>
                           <span>Fail Rate: {jur.failRate.toFixed(1)}%</span>
                         </div>
@@ -707,7 +707,7 @@ export function ConsolidationDashboard({
             </CardHeader>
             <CardContent>
               {findingsByAuditor.length === 0 ? (
-                <div className="text-center py-8 text-white/80">
+                <div className="text-center py-8 text-gray-600 dark:text-white/80">
                   <p className="text-sm">No auditor data available</p>
                 </div>
               ) : (
@@ -742,7 +742,7 @@ export function ConsolidationDashboard({
                             <span className="text-crowe-coral-bright">{totalFail} fail</span>
                           </div>
                         </div>
-                        <div className="h-2 rounded-full bg-white/10 overflow-hidden flex">
+                        <div className="h-2 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden flex">
                           <div
                             className="bg-crowe-teal h-full transition-all"
                             style={{ width: `${passPercent}%` }}
@@ -752,7 +752,7 @@ export function ConsolidationDashboard({
                             style={{ width: `${failPercent}%` }}
                           />
                         </div>
-                        <div className="flex gap-4 text-xs text-white/80">
+                        <div className="flex gap-4 text-xs text-gray-600 dark:text-white/80">
                           <span>Pass Rate: {aud.passRate.toFixed(1)}%</span>
                           <span>Fail Rate: {aud.failRate.toFixed(1)}%</span>
                         </div>
@@ -779,7 +779,7 @@ export function ConsolidationDashboard({
             </CardHeader>
             <CardContent>
               {findingsByRiskTier.length === 0 ? (
-                <div className="text-center py-8 text-white/80">
+                <div className="text-center py-8 text-gray-600 dark:text-white/80">
                   <p className="text-sm">No risk tier data available</p>
                 </div>
               ) : (
@@ -812,11 +812,11 @@ export function ConsolidationDashboard({
                             <span className="text-crowe-teal-bright">{tier.passCount} pass</span>
                             <span className="text-crowe-coral-bright">{tier.failCount} fail</span>
                             {tier.naCount > 0 && (
-                              <span className="text-white/80">{tier.naCount} N/A</span>
+                              <span className="text-gray-600 dark:text-white/80">{tier.naCount} N/A</span>
                             )}
                           </div>
                         </div>
-                        <div className="h-2 rounded-full bg-white/10 overflow-hidden flex">
+                        <div className="h-2 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden flex">
                           <div
                             className="bg-crowe-teal h-full transition-all"
                             style={{ width: `${passPercent}%` }}
@@ -826,7 +826,7 @@ export function ConsolidationDashboard({
                             style={{ width: `${failPercent}%` }}
                           />
                         </div>
-                        <div className="flex gap-4 text-xs text-white/80">
+                        <div className="flex gap-4 text-xs text-gray-600 dark:text-white/80">
                           <span>Pass Rate: {tier.passRate.toFixed(1)}%</span>
                           <span>Fail Rate: {tier.failRate.toFixed(1)}%</span>
                         </div>
@@ -854,14 +854,14 @@ export function ConsolidationDashboard({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
-        <Card className="border-crowe-indigo/30 bg-gradient-to-br from-crowe-indigo-dark/20 to-crowe-indigo/10">
+        <Card className="border-crowe-indigo/20 dark:border-crowe-indigo/30 bg-crowe-indigo/5 dark:bg-gradient-to-br dark:from-crowe-indigo-dark/20 dark:to-crowe-indigo/10">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
             <div className="space-y-1">
-              <CardTitle className="flex items-center gap-2 text-white">
+              <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                 <Bot className="h-5 w-5 text-crowe-amber" />
                 AI-Generated Testing Summary
               </CardTitle>
-              <CardDescription className="text-white/80">
+              <CardDescription className="text-gray-700 dark:text-white/80">
                 Comprehensive audit documentation generated from testing results
               </CardDescription>
             </div>
@@ -900,65 +900,65 @@ export function ConsolidationDashboard({
                         <Bot className="h-3 w-3 mr-1" />
                         Demo Mode
                       </Badge>
-                      <span className="text-xs text-white/80">
+                      <span className="text-xs text-gray-600 dark:text-white/80">
                         AI API not configured - showing sample summary
                       </span>
                     </div>
                   )}
 
                   {/* Summary Content */}
-                  <div className="prose prose-invert prose-sm max-w-none rounded-lg bg-white/5 p-6 border border-white/10">
+                  <div className="prose dark:prose-invert prose-sm max-w-none rounded-lg bg-gray-100 dark:bg-white/5 p-6 border border-gray-200 dark:border-white/10">
                     <ReactMarkdown
                       components={{
                         h1: ({ children }) => (
-                          <h1 className="text-xl font-bold text-white mb-4 mt-0">{children}</h1>
+                          <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-4 mt-0">{children}</h1>
                         ),
                         h2: ({ children }) => (
-                          <h2 className="text-lg font-semibold text-crowe-amber-bright mb-3 mt-6 border-b border-white/10 pb-2">{children}</h2>
+                          <h2 className="text-lg font-semibold text-crowe-amber-dark dark:text-crowe-amber-bright mb-3 mt-6 border-b border-gray-200 dark:border-white/10 pb-2">{children}</h2>
                         ),
                         h3: ({ children }) => (
-                          <h3 className="text-base font-medium text-white/90 mb-2 mt-4">{children}</h3>
+                          <h3 className="text-base font-medium text-gray-800 dark:text-white/90 mb-2 mt-4">{children}</h3>
                         ),
                         p: ({ children }) => (
-                          <p className="text-white/80 mb-3 leading-relaxed">{children}</p>
+                          <p className="text-gray-700 dark:text-white/80 mb-3 leading-relaxed">{children}</p>
                         ),
                         ul: ({ children }) => (
-                          <ul className="text-white/80 mb-4 ml-4 list-disc space-y-1">{children}</ul>
+                          <ul className="text-gray-700 dark:text-white/80 mb-4 ml-4 list-disc space-y-1">{children}</ul>
                         ),
                         ol: ({ children }) => (
-                          <ol className="text-white/80 mb-4 ml-4 list-decimal space-y-1">{children}</ol>
+                          <ol className="text-gray-700 dark:text-white/80 mb-4 ml-4 list-decimal space-y-1">{children}</ol>
                         ),
                         li: ({ children }) => (
-                          <li className="text-white/80">{children}</li>
+                          <li className="text-gray-700 dark:text-white/80">{children}</li>
                         ),
                         strong: ({ children }) => (
-                          <strong className="text-white font-semibold">{children}</strong>
+                          <strong className="text-gray-900 dark:text-white font-semibold">{children}</strong>
                         ),
                         em: ({ children }) => (
-                          <em className="text-white/80 italic">{children}</em>
+                          <em className="text-gray-700 dark:text-white/80 italic">{children}</em>
                         ),
                         table: ({ children }) => (
                           <div className="overflow-x-auto my-4">
-                            <table className="w-full border-collapse border border-white/20 text-sm">{children}</table>
+                            <table className="w-full border-collapse border border-gray-200 dark:border-white/20 text-sm">{children}</table>
                           </div>
                         ),
                         thead: ({ children }) => (
-                          <thead className="bg-white/10">{children}</thead>
+                          <thead className="bg-gray-50 dark:bg-white/10">{children}</thead>
                         ),
                         th: ({ children }) => (
-                          <th className="border border-white/20 px-3 py-2 text-left text-white font-semibold">{children}</th>
+                          <th className="border border-gray-200 dark:border-white/20 px-3 py-2 text-left text-gray-900 dark:text-white font-semibold">{children}</th>
                         ),
                         td: ({ children }) => (
-                          <td className="border border-white/20 px-3 py-2 text-white/80">{children}</td>
+                          <td className="border border-gray-200 dark:border-white/20 px-3 py-2 text-gray-700 dark:text-white/80">{children}</td>
                         ),
                         blockquote: ({ children }) => (
-                          <blockquote className="border-l-4 border-crowe-amber/50 pl-4 my-4 text-white/80 italic">{children}</blockquote>
+                          <blockquote className="border-l-4 border-crowe-amber dark:border-crowe-amber/50 pl-4 my-4 text-gray-700 dark:text-white/80 italic">{children}</blockquote>
                         ),
                         hr: () => (
-                          <hr className="border-white/20 my-6" />
+                          <hr className="border-gray-200 dark:border-white/20 my-6" />
                         ),
                         code: ({ children }) => (
-                          <code className="bg-white/10 px-1.5 py-0.5 rounded text-crowe-cyan-light text-sm">{children}</code>
+                          <code className="bg-gray-200 dark:bg-white/10 px-1.5 py-0.5 rounded text-crowe-cyan-dark dark:text-crowe-cyan-light text-sm">{children}</code>
                         ),
                       }}
                     >
@@ -971,7 +971,7 @@ export function ConsolidationDashboard({
                     <Button
                       variant="outline"
                       onClick={handleCopyToClipboard}
-                      className="border-white/20 hover:bg-white/10"
+                      className="border-gray-300 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-white/10"
                     >
                       <Copy className="h-4 w-4 mr-2" />
                       Copy to Clipboard
@@ -979,7 +979,7 @@ export function ConsolidationDashboard({
                     <Button
                       variant="outline"
                       onClick={handleExportToWord}
-                      className="border-white/20 hover:bg-white/10"
+                      className="border-gray-300 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-white/10"
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       Export as Markdown
@@ -994,11 +994,11 @@ export function ConsolidationDashboard({
                   exit={{ opacity: 0 }}
                   className="text-center py-12"
                 >
-                  <Bot className="h-12 w-12 mx-auto mb-4 text-white/50" />
-                  <p className="text-white/80 mb-2">
+                  <Bot className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-white/50" />
+                  <p className="text-gray-600 dark:text-white/80 mb-2">
                     No summary generated yet
                   </p>
-                  <p className="text-sm text-white/80">
+                  <p className="text-sm text-gray-600 dark:text-white/80">
                     Click &quot;Generate Summary&quot; to create comprehensive audit documentation
                   </p>
                 </motion.div>

@@ -246,20 +246,20 @@ export default function AicConsolidationPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg flex items-center gap-3"
+            className="mb-6 p-4 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/30 rounded-lg flex items-center gap-3"
           >
             <motion.div
               initial={shouldReduceMotion ? undefined : { scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
             >
-              <CheckCircle2 className="h-5 w-5 text-green-400" />
+              <CheckCircle2 className="h-5 w-5 text-green-700 dark:text-green-400" />
             </motion.div>
             <div>
-              <p className="font-medium text-green-400">
+              <p className="font-medium text-green-700 dark:text-green-400">
                 Consolidation Available
               </p>
-              <p className="text-sm text-green-400/80">
+              <p className="text-sm text-green-600 dark:text-green-400/80">
                 Last generated: {new Date(consolidation.generatedAt).toLocaleString()} •{" "}
                 {consolidation.rawData?.totalRows ?? 0} rows from {consolidation.rawData?.workbookIds?.length ?? 0} workbook(s)
               </p>
@@ -271,19 +271,19 @@ export default function AicConsolidationPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg flex items-center gap-3"
+            className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-200 dark:border-yellow-500/30 rounded-lg flex items-center gap-3"
           >
             <motion.div
               animate={shouldReduceMotion ? undefined : { rotate: [0, -10, 10, -10, 0] }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <AlertCircle className="h-5 w-5 text-yellow-400" />
+              <AlertCircle className="h-5 w-5 text-yellow-700 dark:text-yellow-400" />
             </motion.div>
             <div>
-              <p className="font-medium text-yellow-400">
+              <p className="font-medium text-yellow-700 dark:text-yellow-400">
                 No Consolidation Yet
               </p>
-              <p className="text-sm text-yellow-400/80">
+              <p className="text-sm text-yellow-600 dark:text-yellow-400/80">
                 Click &quot;Generate Consolidation&quot; or &quot;Load Demo Data&quot; to aggregate results
               </p>
             </div>

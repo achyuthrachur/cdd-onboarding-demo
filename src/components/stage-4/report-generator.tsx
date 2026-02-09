@@ -202,20 +202,20 @@ export function ReportGenerator({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="flex items-center gap-3 p-4 bg-crowe-teal/10 rounded-lg"
+              className="flex items-center gap-3 p-4 bg-crowe-teal/20 dark:bg-crowe-teal/10 rounded-lg"
             >
               <motion.div
                 initial={shouldReduceMotion ? undefined : { scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
               >
-                <CheckCircle2 className="h-5 w-5 text-crowe-teal-bright" />
+                <CheckCircle2 className="h-5 w-5 text-crowe-teal-dark dark:text-crowe-teal-bright" />
               </motion.div>
               <div>
-                <p className="font-medium text-crowe-teal-bright">
+                <p className="font-medium text-crowe-teal-dark dark:text-crowe-teal-bright">
                   Consolidation Complete
                 </p>
-                <p className="text-sm text-crowe-teal">
+                <p className="text-sm text-crowe-teal-dark dark:text-crowe-teal">
                   Generated at {new Date(consolidation.generatedAt).toLocaleString()}
                 </p>
               </div>
@@ -345,7 +345,7 @@ export function ReportGenerator({
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
-                      className="flex items-center text-crowe-teal-bright"
+                      className="flex items-center text-crowe-teal-dark dark:text-crowe-teal-bright"
                     >
                       <Check className="mr-2 h-4 w-4" />
                       Done!
@@ -379,7 +379,7 @@ export function ReportGenerator({
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
-                      className="flex items-center text-crowe-teal-bright"
+                      className="flex items-center text-crowe-teal-dark dark:text-crowe-teal-bright"
                     >
                       <Check className="mr-2 h-4 w-4" />
                       Done!
@@ -413,7 +413,7 @@ export function ReportGenerator({
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
-                      className="flex items-center text-crowe-teal-bright"
+                      className="flex items-center text-crowe-teal-dark dark:text-crowe-teal-bright"
                     >
                       <Check className="mr-2 h-4 w-4" />
                       Done!
@@ -437,7 +437,7 @@ export function ReportGenerator({
         </motion.div>
 
         <Presence isVisible={!canGenerate}>
-          <p className="text-sm text-white/80 text-center">
+          <p className="text-sm text-gray-600 dark:text-white/80 text-center">
             Generate a consolidation first to create reports
           </p>
         </Presence>

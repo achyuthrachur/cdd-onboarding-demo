@@ -101,7 +101,7 @@ export function FindingsTable({
         <CardContent>
           {findingsByAttribute.length === 0 ? (
             <motion.div
-              className="text-center py-8 text-white/80"
+              className="text-center py-8 text-gray-600 dark:text-white/80"
               initial={shouldReduceMotion ? undefined : { opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -123,7 +123,7 @@ export function FindingsTable({
                   transition={{ duration: 0.15 }}
                 >
                   <div
-                    className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/10/50"
+                    className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5"
                     onClick={() => toggleAttributeExpand(attr.attributeId)}
                   >
                     <div className="flex items-center gap-3">
@@ -135,7 +135,7 @@ export function FindingsTable({
                       </motion.div>
                       <div>
                         <p className="font-medium">{attr.attributeName}</p>
-                        <p className="text-sm text-white/80">
+                        <p className="text-sm text-gray-600 dark:text-white/80">
                           {attr.category}
                         </p>
                       </div>
@@ -173,7 +173,7 @@ export function FindingsTable({
                               ? "bg-crowe-coral"
                               : attr.failRate >= 10
                               ? "bg-crowe-amber"
-                              : "bg-white/30"
+                              : "bg-gray-200 dark:bg-white/30"
                           }`}
                         >
                           {attr.failRate.toFixed(1)}%
@@ -192,15 +192,15 @@ export function FindingsTable({
                           className="overflow-hidden"
                         >
                           <div className="px-4 pb-4 pt-0">
-                            <div className="pl-8 border-l-2 border-white/20 ml-2">
-                              <p className="text-sm font-medium mb-2 text-white/80">
+                            <div className="pl-8 border-l-2 border-gray-300 dark:border-white/20 ml-2">
+                              <p className="text-sm font-medium mb-2 text-gray-700 dark:text-white/80">
                                 Observations:
                               </p>
                               <ul className="space-y-1">
                                 {attr.observations.map((obs, idx) => (
                                   <motion.li
                                     key={idx}
-                                    className="text-sm text-white/80 flex items-start gap-2"
+                                    className="text-sm text-gray-600 dark:text-white/80 flex items-start gap-2"
                                     initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: idx * 0.05 }}
@@ -242,7 +242,7 @@ export function FindingsTable({
             transition={{ delay: 0.1 }}
           >
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/80" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-white/80" />
               <Input
                 placeholder="Search exceptions..."
                 value={searchTerm}
@@ -269,7 +269,7 @@ export function FindingsTable({
             {filteredExceptions.length === 0 ? (
               <motion.div
                 key="empty"
-                className="text-center py-12 text-white/80"
+                className="text-center py-12 text-gray-600 dark:text-white/80"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -315,7 +315,7 @@ export function FindingsTable({
                     {filteredExceptions.map((exception, index) => (
                       <motion.tr
                         key={exception.id}
-                        className="border-b transition-colors hover:bg-white/10/50"
+                        className="border-b transition-colors hover:bg-gray-100 dark:hover:bg-white/5"
                         initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: Math.min(index * 0.03, 0.5) }}
@@ -334,7 +334,7 @@ export function FindingsTable({
                           </p>
                         </TableCell>
                         <TableCell className="px-4 py-2">
-                          <span className="text-sm text-white/80">
+                          <span className="text-sm text-gray-600 dark:text-white/80">
                             {exception.evidenceReference}
                           </span>
                         </TableCell>
@@ -378,13 +378,13 @@ export function FindingsTable({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-white/80">
+                  <p className="text-sm font-medium text-gray-600 dark:text-white/80">
                     Entity
                   </p>
                   <p className="font-medium">{selectedFinding.entityName}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white/80">
+                  <p className="text-sm font-medium text-gray-600 dark:text-white/80">
                     Sample Item ID
                   </p>
                   <p className="font-mono text-sm">
@@ -395,13 +395,13 @@ export function FindingsTable({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-white/80">
+                  <p className="text-sm font-medium text-gray-600 dark:text-white/80">
                     Attribute
                   </p>
                   <p>{selectedFinding.attributeName}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white/80">
+                  <p className="text-sm font-medium text-gray-600 dark:text-white/80">
                     Category
                   </p>
                   <Badge variant="outline">{selectedFinding.category}</Badge>
@@ -409,17 +409,17 @@ export function FindingsTable({
               </div>
 
               <div>
-                <p className="text-sm font-medium text-white/80 mb-1">
+                <p className="text-sm font-medium text-gray-600 dark:text-white/80 mb-1">
                   Observation
                 </p>
-                <p className="p-3 bg-crowe-coral/10 rounded-lg text-sm">
+                <p className="p-3 bg-crowe-coral/20 dark:bg-crowe-coral/10 rounded-lg text-sm">
                   {selectedFinding.observation}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-white/80">
+                  <p className="text-sm font-medium text-gray-600 dark:text-white/80">
                     Evidence Reference
                   </p>
                   <p className="font-mono text-sm">
@@ -430,10 +430,10 @@ export function FindingsTable({
 
               {selectedFinding.auditorNotes && (
                 <div>
-                  <p className="text-sm font-medium text-white/80 mb-1">
+                  <p className="text-sm font-medium text-gray-600 dark:text-white/80 mb-1">
                     Auditor Notes
                   </p>
-                  <p className="p-3 bg-white/5 rounded-lg text-sm text-white/80">
+                  <p className="p-3 bg-gray-100 dark:bg-white/5 rounded-lg text-sm text-gray-700 dark:text-white/80">
                     {selectedFinding.auditorNotes}
                   </p>
                 </div>
