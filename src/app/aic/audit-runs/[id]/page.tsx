@@ -14,12 +14,12 @@ async function getAuditRun(id: string) {
     name: "Sample Audit Run",
     status: "in_progress" as "draft" | "in_progress" | "completed" | "archived",
     createdAt: new Date().toISOString(),
-    currentStage: 1,
+    currentStage: 6,
     scope: {
       description: "Sample audit run description",
     },
-    publishedWorkbooks: 0,
-    submittedWorkbooks: 0,
+    publishedWorkbooks: 1,
+    submittedWorkbooks: 1,
   };
 }
 
