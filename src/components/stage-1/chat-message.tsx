@@ -17,35 +17,34 @@ export interface ChatMessageProps {
   index?: number;
 }
 
-// Animated typing dots component
-function TypingIndicator() {
+/** Shimmer bar for “typing” / processing state (replaces dot bounce). */
+function ShimmerTypingBar() {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
     return (
-      <div className="flex gap-1">
-        {[0, 1, 2].map((i) => (
-          <span key={i} className="w-2 h-2 bg-blue-500 rounded-full" />
-        ))}
-      </div>
+      <div
+        className="h-2 w-[60px] shrink-0 rounded-full bg-tint-200/90 dark:bg-white/15"
+        aria-hidden
+      />
     );
   }
 
   return (
-    <div className="flex gap-1">
-      {[0, 1, 2].map((i) => (
-        <motion.span
-          key={i}
-          className="w-2 h-2 bg-blue-500 rounded-full"
-          animate={{ y: [0, -6, 0] }}
-          transition={{
-            duration: 0.6,
-            repeat: Infinity,
-            delay: i * 0.15,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
+    <div
+      className="relative h-2 w-[60px] shrink-0 overflow-hidden rounded-full bg-tint-200/80 dark:bg-white/10"
+      aria-hidden
+    >
+      <motion.div
+        className="absolute inset-y-0 w-[55%] rounded-full bg-gradient-to-r from-transparent via-crowe-blue/45 to-transparent dark:via-crowe-teal-bright/35"
+        initial={{ left: "-55%" }}
+        animate={{ left: ["-55%", "100%"] }}
+        transition={{
+          duration: 1.25,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      />
     </div>
   );
 }
@@ -62,7 +61,7 @@ function AnimatedSpinner() {
         repeat: Infinity,
         ease: "linear",
       }}
-      className="h-5 w-5 text-blue-500"
+      className="h-5 w-5 text-white"
     >
       <svg
         className="h-full w-full"
@@ -96,18 +95,25 @@ export function ChatMessage({
 }: ChatMessageProps) {
   const shouldReduceMotion = useReducedMotion();
 
+  const avatarGradient =
+    type === "user"
+      ? "bg-gradient-to-br from-crowe-amber to-crowe-amber-dark"
+      : type === "error"
+        ? "bg-gradient-to-br from-crowe-coral to-crowe-coral-dark"
+        : "bg-gradient-to-br from-crowe-indigo to-crowe-blue";
+
   const getIcon = () => {
     switch (type) {
       case "system":
-        return <Bot className="h-5 w-5 text-blue-500" />;
+        return <Bot className="h-5 w-5 text-white" />;
       case "user":
-        return <User className="h-5 w-5 text-green-500" />;
+        return <User className="h-5 w-5 text-white" />;
       case "assistant":
-        return <Bot className="h-5 w-5 text-purple-500" />;
+        return <Bot className="h-5 w-5 text-white" />;
       case "loading":
         return <AnimatedSpinner />;
       case "error":
-        return <AlertTriangle className="h-5 w-5 text-red-500" />;
+        return <AlertTriangle className="h-5 w-5 text-white" />;
       default:
         return null;
     }
@@ -138,16 +144,31 @@ export function ChatMessage({
     transition: { delay: index * 0.05 },
   };
 
+  const rowShadow =
+    type === "user"
+      ? "shadow-[0_2px_8px_rgba(245,168,0,0.06)]"
+      : type === "error"
+        ? "shadow-[0_2px_8px_rgba(229,55,107,0.06)]"
+        : "shadow-[0_2px_8px_rgba(5,171,140,0.06)]";
+
   return (
     <MessageWrapper
       {...messageProps}
       className={cn(
-        "flex gap-3 p-4",
+        "flex gap-3 p-4 rounded-xl",
+        rowShadow,
         type === "user" && "bg-muted",
-        type === "error" && "bg-red-50 dark:bg-red-950/20"
+        type === "error" && "bg-crowe-coral/10 dark:bg-crowe-coral/20"
       )}
     >
-      <div className="flex-shrink-0 mt-1">{getIcon()}</div>
+      <div
+        className={cn(
+          "mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full shadow-crowe-sm",
+          avatarGradient
+        )}
+      >
+        {getIcon()}
+      </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <span className="font-medium text-sm">{getLabel()}</span>
@@ -165,7 +186,7 @@ export function ChatMessage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
           >
-            <Card className="bg-muted border-border p-4 mt-2">
+            <Card className="mt-2 border-border bg-crowe-indigo-dark/5 p-4 dark:bg-crowe-indigo/10">
               <div className="flex items-center gap-2 mb-3">
                 <Badge variant="outline" className="text-xs">
                   System Prompt
@@ -211,7 +232,7 @@ export function ChatMessage({
             transition={{ duration: 0.2 }}
             className="flex items-center gap-2 mt-2"
           >
-            <TypingIndicator />
+            <ShimmerTypingBar />
             <span className="text-xs text-muted-foreground">Processing...</span>
           </motion.div>
         )}
@@ -222,7 +243,7 @@ export function ChatMessage({
             initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="flex items-center gap-1 mt-2 text-green-600"
+            className="flex items-center gap-1 mt-2 text-crowe-teal-dark"
           >
             <motion.div
               initial={shouldReduceMotion ? undefined : { scale: 0 }}

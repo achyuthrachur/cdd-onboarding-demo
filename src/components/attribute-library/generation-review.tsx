@@ -83,21 +83,21 @@ interface GenerationReviewProps {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  Ready: "bg-green-500/20 text-green-300",
-  "In Progress": "bg-blue-500/20 text-blue-300",
-  Completed: "bg-purple-500/20 text-purple-300",
-  Error: "bg-red-500/20 text-red-300",
+  Ready: "bg-crowe-teal/20 text-crowe-teal-bright",
+  "In Progress": "bg-crowe-blue/20 text-crowe-blue-light",
+  Completed: "bg-crowe-violet/20 text-crowe-violet-bright",
+  Error: "bg-crowe-coral/20 text-crowe-coral-bright",
 };
 
 const PARTY_TYPE_COLORS: Record<string, string> = {
-  "Individual - Domestic": "bg-blue-500/20 text-blue-300",
-  "Individual - Foreign": "bg-indigo-500/20 text-indigo-300",
-  "Corporate - Domestic": "bg-green-500/20 text-green-300",
-  "Corporate - Foreign": "bg-emerald-500/20 text-emerald-300",
-  PEP: "bg-red-500/20 text-red-300",
-  Trust: "bg-purple-500/20 text-purple-300",
-  Fund: "bg-orange-500/20 text-orange-300",
-  "Correspondent Bank": "bg-pink-500/20 text-pink-300",
+  "Individual - Domestic": "bg-crowe-blue/20 text-crowe-blue-light",
+  "Individual - Foreign": "bg-crowe-indigo/20 text-crowe-indigo-bright",
+  "Corporate - Domestic": "bg-crowe-teal/20 text-crowe-teal-bright",
+  "Corporate - Foreign": "bg-crowe-teal/20 text-crowe-teal",
+  PEP: "bg-crowe-coral/20 text-crowe-coral-bright",
+  Trust: "bg-crowe-violet/20 text-crowe-violet-bright",
+  Fund: "bg-crowe-amber/20 text-crowe-amber-bright",
+  "Correspondent Bank": "bg-crowe-violet/20 text-crowe-violet",
 };
 
 export function GenerationReview({
@@ -581,17 +581,17 @@ export function GenerationReview({
             {/* Data indicators */}
             <div className="flex gap-2">
               {displayAttributes.length > 0 && (
-                <Badge variant="outline" className="text-green-600 border-green-300">
+                <Badge variant="outline" className="text-crowe-teal-dark border-crowe-teal/40">
                   {displayAttributes.length} Attributes
                 </Badge>
               )}
               {displayAcceptableDocs.length > 0 && (
-                <Badge variant="outline" className="text-blue-600 border-blue-300">
+                <Badge variant="outline" className="text-crowe-blue-dark border-crowe-blue/40">
                   {displayAcceptableDocs.length} Docs
                 </Badge>
               )}
               {samplingRecords.length > 0 && (
-                <Badge variant="outline" className="text-purple-600 border-purple-300">
+                <Badge variant="outline" className="text-crowe-violet-dark border-crowe-violet/40">
                   {samplingRecords.length} Samples
                 </Badge>
               )}

@@ -66,10 +66,10 @@ const DISPOSITION_COLORS: Record<string, string> = {
 };
 
 const SEVERITY_COLORS: Record<string, string> = {
-  "Critical": "bg-red-500 text-white",
-  "High": "bg-orange-500 text-white",
-  "Medium": "bg-yellow-500 text-black",
-  "Low": "bg-green-500 text-white",
+  "Critical": "bg-crowe-coral text-white",
+  "High": "bg-crowe-amber text-white",
+  "Medium": "bg-crowe-amber text-black",
+  "Low": "bg-crowe-teal text-white",
 };
 
 export function GapsTable({ gaps, summary }: GapsTableProps) {

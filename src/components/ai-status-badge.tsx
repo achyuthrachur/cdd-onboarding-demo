@@ -23,7 +23,7 @@ export function AIStatusBadge({ showLabel = true, className }: AIStatusBadgeProp
 
   if (error) {
     return (
-      <Badge variant="outline" className={`text-red-600 border-red-300 dark:text-red-400 dark:border-red-700 ${className}`}>
+      <Badge variant="outline" className={`text-crowe-coral border-crowe-coral/40 dark:text-crowe-coral dark:border-crowe-coral-dark ${className}`}>
         <AlertCircle className="h-3 w-3 mr-1" />
         {showLabel && 'Error'}
       </Badge>
@@ -32,7 +32,7 @@ export function AIStatusBadge({ showLabel = true, className }: AIStatusBadgeProp
 
   if (activeProvider === 'none') {
     return (
-      <Badge variant="outline" className={`text-amber-600 border-amber-300 dark:text-amber-400 dark:border-amber-600 ${className}`}>
+      <Badge variant="outline" className={`text-crowe-amber-dark border-crowe-amber/50 dark:text-crowe-amber-bright dark:border-crowe-amber-dark ${className}`}>
         <Sparkles className="h-3 w-3 mr-1" />
         {showLabel && 'Demo Mode'}
       </Badge>
@@ -40,7 +40,7 @@ export function AIStatusBadge({ showLabel = true, className }: AIStatusBadgeProp
   }
 
   return (
-    <Badge variant="outline" className={`text-green-600 border-green-300 dark:text-green-400 dark:border-green-700 ${className}`}>
+    <Badge variant="outline" className={`text-crowe-teal-dark border-crowe-teal/40 dark:text-crowe-teal-bright dark:border-crowe-teal-dark ${className}`}>
       <CheckCircle2 className="h-3 w-3 mr-1" />
       {showLabel && `AI Ready (${activeProvider})`}
     </Badge>
@@ -59,11 +59,11 @@ export function AIStatusIndicator({ className }: { className?: string }) {
 
   if (activeProvider === 'none') {
     return (
-      <div className={`h-4 w-4 rounded-full bg-amber-500 animate-pulse ${className}`} title="Demo Mode - No API Key" />
+      <div className={`h-4 w-4 rounded-full bg-crowe-amber animate-pulse ${className}`} title="Demo Mode - No API Key" />
     );
   }
 
   return (
-    <div className={`h-4 w-4 rounded-full bg-green-500 ${className}`} title={`AI Ready (${activeProvider})`} />
+    <div className={`h-4 w-4 rounded-full bg-crowe-teal ${className}`} title={`AI Ready (${activeProvider})`} />
   );
 }

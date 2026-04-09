@@ -103,9 +103,9 @@ function getResultBadgeClass(result: string): string {
     case 'Question to LOB':
       return 'bg-crowe-blue/20 text-crowe-blue-light border-crowe-blue/40';
     case 'N/A':
-      return 'bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-white/20';
+      return 'bg-tint-100 dark:bg-white/10 text-tint-700 dark:text-tint-300 border-tint-300 dark:border-white/20';
     default:
-      return 'bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-white/10';
+      return 'bg-tint-50 dark:bg-white/5 text-tint-700 dark:text-tint-300 border-tint-200 dark:border-white/10';
   }
 }
 
@@ -181,7 +181,7 @@ function DocumentSelectionCell({
         disabled={isSubmitted}
       >
         <SelectTrigger className={cn(
-          "w-full h-8 text-xs bg-gray-50 dark:bg-white/10 border-gray-200 dark:border-white/20 text-gray-900 dark:text-white",
+          "w-full h-8 text-xs bg-tint-50 dark:bg-white/10 border-tint-200 dark:border-white/20 text-tint-900 dark:text-white",
           result && getResultBadgeClass(result)
         )}>
           <div className="flex items-center gap-1.5 truncate">
@@ -191,7 +191,7 @@ function DocumentSelectionCell({
             </SelectValue>
           </div>
         </SelectTrigger>
-        <SelectContent className="max-h-[300px] bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border-gray-200 dark:border-white/20">
+        <SelectContent className="max-h-[300px] bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border-tint-200 dark:border-white/20">
           {/* Acceptable Documents Section */}
           {documentOptions.length > 0 && (
             <>
@@ -203,7 +203,7 @@ function DocumentSelectionCell({
                 <SelectItem
                   key={doc.value}
                   value={doc.value}
-                  className="text-xs text-gray-900 dark:text-white hover:bg-crowe-teal/20"
+                  className="text-xs text-tint-900 dark:text-white hover:bg-crowe-teal/20"
                 >
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="h-3 w-3 text-crowe-teal-bright" />
@@ -214,10 +214,10 @@ function DocumentSelectionCell({
             </>
           )}
 
-          <SelectSeparator className="bg-gray-200 dark:bg-white/20" />
+          <SelectSeparator className="bg-tint-200 dark:bg-white/20" />
 
           {/* System Options Section */}
-          <div className="px-2 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-white/5 sticky top-0">
+          <div className="px-2 py-1.5 text-xs font-semibold text-tint-700 dark:text-tint-300 bg-tint-100 dark:bg-white/5 sticky top-0">
             Other Options
           </div>
           {systemOptions.map((doc) => (
@@ -225,10 +225,10 @@ function DocumentSelectionCell({
               key={doc.value}
               value={doc.value}
               className={cn(
-                "text-xs hover:bg-gray-100 dark:hover:bg-white/10",
+                "text-xs hover:bg-tint-100 dark:hover:bg-white/10",
                 doc.resultMapping.includes('Fail') && "text-crowe-coral dark:text-crowe-coral-bright",
                 doc.resultMapping === 'Question to LOB' && "text-crowe-blue dark:text-crowe-blue-light",
-                doc.resultMapping === 'N/A' && "text-gray-600 dark:text-gray-300",
+                doc.resultMapping === 'N/A' && "text-tint-700 dark:text-tint-300",
                 doc.resultMapping === 'Pass w/Observation' && "text-crowe-amber-dark dark:text-crowe-amber-bright"
               )}
             >
@@ -243,7 +243,7 @@ function DocumentSelectionCell({
 
       {/* Show observation if exists */}
       {customerResult?.observation && (
-        <div className="text-[10px] text-gray-500 dark:text-gray-300 truncate" title={customerResult.observation}>
+        <div className="text-[10px] text-tint-500 dark:text-tint-300 truncate" title={customerResult.observation}>
           Obs: {customerResult.observation.substring(0, 30)}...
         </div>
       )}
@@ -651,7 +651,7 @@ export default function AuditorWorkbookPage() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-500 dark:text-gray-300" />
+        <Loader2 className="h-8 w-8 animate-spin text-tint-500 dark:text-tint-300" />
       </div>
     );
   }
@@ -660,9 +660,9 @@ export default function AuditorWorkbookPage() {
     return (
       <div className="p-8">
         <div className="text-center py-12">
-          <AlertCircle className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
-          <h2 className="text-lg font-medium mb-2 text-gray-900 dark:text-white">Workbook Not Found</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">
+          <AlertCircle className="h-12 w-12 mx-auto mb-4 text-tint-500 dark:text-tint-500" />
+          <h2 className="text-lg font-medium mb-2 text-tint-900 dark:text-white">Workbook Not Found</h2>
+          <p className="text-tint-700 dark:text-tint-300 mb-4">
             This workbook doesn&apos;t exist or you don&apos;t have access to it.
           </p>
           <Link href="/auditor/workbooks">
@@ -679,7 +679,7 @@ export default function AuditorWorkbookPage() {
       <FadeInUp className="mb-8">
         <Link
           href="/auditor/workbooks"
-          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-tint-500 dark:text-tint-300 hover:text-tint-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Workbooks
@@ -687,15 +687,15 @@ export default function AuditorWorkbookPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Testing Workbook</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-tint-900 dark:text-white">Testing Workbook</h1>
               {isSubmitted && (
-                <Badge className="bg-green-600">
+                <Badge className="bg-crowe-teal text-white">
                   <CheckCircle2 className="h-3 w-3 mr-1" />
                   Submitted
                 </Badge>
               )}
             </div>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">
+            <p className="text-tint-700 dark:text-tint-300 mt-2">
               {workbook.assignedCustomers.length} customers | {workbook.attributes.length} attributes
             </p>
           </div>
@@ -705,13 +705,13 @@ export default function AuditorWorkbookPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Button variant="outline" onClick={handleExportToExcel} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
+            <Button variant="outline" onClick={handleExportToExcel} className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10">
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
             {!isSubmitted && (
               <>
-                <Button variant="outline" onClick={handleSave} disabled={isSaving} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
+                <Button variant="outline" onClick={handleSave} disabled={isSaving} className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10">
                   {isSaving ? (
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                   ) : (
@@ -762,19 +762,19 @@ export default function AuditorWorkbookPage() {
         animate="visible"
       >
         <motion.div variants={staggerItem}>
-          <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+          <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">
+              <CardTitle className="text-sm font-medium text-tint-700 dark:text-tint-300">
                 Progress
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">{completionPercentage}%</div>
+              <div className="text-2xl font-bold text-tint-900 dark:text-white">{completionPercentage}%</div>
               <AnimatedProgress
                 value={completionPercentage}
                 className={`mt-2 ${completionPercentage >= 95 ? '[&>div]:bg-crowe-teal' : ''}`}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">
+              <p className="text-xs text-tint-500 dark:text-tint-300 mt-1">
                 {testingProgress.completedTests} / {testingProgress.totalTests} tests
               </p>
             </CardContent>
@@ -782,7 +782,7 @@ export default function AuditorWorkbookPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.passCount > 0 ? "border-crowe-teal/50" : "border-gray-200/60 dark:border-white/20"}`}>
+          <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.passCount > 0 ? "border-crowe-teal/50" : "border-tint-200/60 dark:border-white/20"}`}>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-crowe-teal dark:text-crowe-teal-bright">Pass</CardTitle>
             </CardHeader>
@@ -790,7 +790,7 @@ export default function AuditorWorkbookPage() {
               <div className="text-2xl font-bold text-crowe-teal dark:text-crowe-teal-bright tabular-nums">
                 {animatedPassCount}
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">
+              <p className="text-xs text-tint-500 dark:text-tint-300 mt-1">
                 {testingProgress.totalTests > 0
                   ? (((testingProgress.passCount + testingProgress.passWithObsCount) / testingProgress.totalTests) * 100).toFixed(1)
                   : 0}% pass rate
@@ -800,7 +800,7 @@ export default function AuditorWorkbookPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.fail1RegulatoryCount > 0 ? "border-crowe-coral/50" : "border-gray-200/60 dark:border-white/20"}`}>
+          <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.fail1RegulatoryCount > 0 ? "border-crowe-coral/50" : "border-tint-200/60 dark:border-white/20"}`}>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-crowe-coral dark:text-crowe-coral-bright">Fail</CardTitle>
             </CardHeader>
@@ -808,7 +808,7 @@ export default function AuditorWorkbookPage() {
               <div className="text-2xl font-bold text-crowe-coral dark:text-crowe-coral-bright tabular-nums">
                 {animatedFailCount}
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">
+              <p className="text-xs text-tint-500 dark:text-tint-300 mt-1">
                 {testingProgress.fail1RegulatoryCount + testingProgress.fail2ProcedureCount} exception(s)
               </p>
             </CardContent>
@@ -816,13 +816,13 @@ export default function AuditorWorkbookPage() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+          <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">N/A</CardTitle>
+              <CardTitle className="text-sm font-medium text-tint-700 dark:text-tint-300">N/A</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tabular-nums text-gray-900 dark:text-white">{testingProgress.naCount}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">Not applicable</p>
+              <div className="text-2xl font-bold tabular-nums text-tint-900 dark:text-white">{testingProgress.naCount}</div>
+              <p className="text-xs text-tint-500 dark:text-tint-300 mt-1">Not applicable</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -834,15 +834,15 @@ export default function AuditorWorkbookPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <Card className="mb-6 bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+        <Card className="mb-6 bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
+                <CardTitle className="flex items-center gap-2 text-tint-900 dark:text-white">
                   <ClipboardCheck className="h-5 w-5 text-crowe-amber" />
                   Testing Grid
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-300">
+                <CardDescription className="text-tint-700 dark:text-tint-300">
                   Select the acceptable document found for each test
                 </CardDescription>
               </div>
@@ -853,7 +853,7 @@ export default function AuditorWorkbookPage() {
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 0.8, x: 20 }}
                   >
-                    <Badge className="bg-green-500/20 text-green-400">
+                    <Badge className="bg-crowe-teal/20 text-crowe-teal">
                       <CheckCircle2 className="h-4 w-4 mr-1" />
                       Ready to Submit
                     </Badge>
@@ -866,23 +866,23 @@ export default function AuditorWorkbookPage() {
             {/* Filters */}
             <div className="flex gap-3 mb-4">
               <div className="relative flex-1 max-w-xs">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-300" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-tint-500 dark:text-tint-300" />
                 <Input
                   placeholder="Search attributes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 bg-gray-50 dark:bg-white/10 border-gray-200 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/80"
+                  className="pl-9 bg-tint-50 dark:bg-white/10 border-tint-200 dark:border-white/20 text-tint-900 dark:text-white placeholder:text-tint-500 dark:placeholder:text-white/80"
                 />
               </div>
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                <SelectTrigger className="w-40 bg-gray-50 dark:bg-white/10 border-gray-200 dark:border-white/20 text-gray-900 dark:text-white">
-                  <Filter className="h-4 w-4 mr-2 text-gray-400 dark:text-gray-300" />
+                <SelectTrigger className="w-40 bg-tint-50 dark:bg-white/10 border-tint-200 dark:border-white/20 text-tint-900 dark:text-white">
+                  <Filter className="h-4 w-4 mr-2 text-tint-500 dark:text-tint-300" />
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border-gray-200 dark:border-white/20">
-                  <SelectItem value="all" className="text-gray-900 dark:text-white">All Categories</SelectItem>
+                <SelectContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border-tint-200 dark:border-white/20">
+                  <SelectItem value="all" className="text-tint-900 dark:text-white">All Categories</SelectItem>
                   {categories.map(cat => (
-                    <SelectItem key={cat} value={cat} className="text-gray-900 dark:text-white">{cat}</SelectItem>
+                    <SelectItem key={cat} value={cat} className="text-tint-900 dark:text-white">{cat}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -900,8 +900,8 @@ export default function AuditorWorkbookPage() {
                   }
                 }}
               >
-                <SelectTrigger className="w-48 bg-gray-50 dark:bg-white/10 border-gray-200 dark:border-white/20 text-gray-900 dark:text-white">
-                  <Eye className="h-4 w-4 mr-2 text-gray-400 dark:text-gray-300" />
+                <SelectTrigger className="w-48 bg-tint-50 dark:bg-white/10 border-tint-200 dark:border-white/20 text-tint-900 dark:text-white">
+                  <Eye className="h-4 w-4 mr-2 text-tint-500 dark:text-tint-300" />
                   <SelectValue placeholder="Filter Entities">
                     {entityFilter.length === 0
                       ? 'All Entities'
@@ -910,13 +910,13 @@ export default function AuditorWorkbookPage() {
                       : `${entityFilter.length} selected`}
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border-gray-200 dark:border-white/20">
-                  <SelectItem value="all" className="text-gray-900 dark:text-white">All Entities</SelectItem>
-                  <SelectSeparator className="bg-gray-200 dark:bg-white/20" />
+                <SelectContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border-tint-200 dark:border-white/20">
+                  <SelectItem value="all" className="text-tint-900 dark:text-white">All Entities</SelectItem>
+                  <SelectSeparator className="bg-tint-200 dark:bg-white/20" />
                   {workbook?.assignedCustomers.map((customer, idx) => (
-                    <SelectItem key={customer.customerId} value={customer.customerId} className="text-gray-900 dark:text-white">
+                    <SelectItem key={customer.customerId} value={customer.customerId} className="text-tint-900 dark:text-white">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{idx + 1}.</span>
+                        <span className="text-xs text-tint-500 dark:text-tint-500">{idx + 1}.</span>
                         <span className="truncate">{customer.customerName}</span>
                       </div>
                     </SelectItem>
@@ -934,7 +934,7 @@ export default function AuditorWorkbookPage() {
                     setCategoryFilter('all');
                     setEntityFilter([]);
                   }}
-                  className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  className="text-tint-500 dark:text-tint-500 hover:text-tint-900 dark:hover:text-white"
                 >
                   Clear filters
                 </Button>
@@ -942,15 +942,15 @@ export default function AuditorWorkbookPage() {
             </div>
 
             {/* Customer Legend */}
-            <div className="mb-4 p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
-              <div className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">
+            <div className="mb-4 p-3 bg-tint-50 dark:bg-white/5 rounded-lg border border-tint-200 dark:border-white/10">
+              <div className="text-xs font-medium text-tint-700 dark:text-tint-300 mb-2">
                 {entityFilter.length > 0
                   ? `Showing ${filteredCustomers.length} of ${workbook.assignedCustomers.length} Customers:`
                   : 'Assigned Customers:'}
               </div>
               <div className="flex flex-wrap gap-2">
                 {filteredCustomers.map((customer, idx) => (
-                  <Badge key={customer.customerId} variant="outline" className="text-xs border-gray-300 dark:border-white/20 text-gray-600 dark:text-gray-300">
+                  <Badge key={customer.customerId} variant="outline" className="text-xs border-tint-300 dark:border-white/20 text-tint-700 dark:text-tint-300">
                     {workbook.assignedCustomers.findIndex(c => c.customerId === customer.customerId) + 1}. {customer.customerName} ({customer.customerId})
                   </Badge>
                 ))}
@@ -958,26 +958,26 @@ export default function AuditorWorkbookPage() {
             </div>
 
             {/* Testing Table */}
-            <div className="border border-gray-200 dark:border-white/20 rounded-lg overflow-hidden bg-gray-50 dark:bg-white/5">
+            <div className="border border-tint-200 dark:border-white/20 rounded-lg overflow-hidden bg-tint-50 dark:bg-white/5">
               <div className="overflow-x-auto max-h-[500px]">
                 <Table>
-                  <TableHeader className="sticky top-0 bg-gray-100 dark:bg-crowe-indigo-dark z-10">
-                    <TableRow className="border-gray-200 dark:border-white/20 hover:bg-transparent">
-                      <TableHead className="w-24 text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-crowe-indigo-dark">Attr ID</TableHead>
-                      <TableHead className="w-20 text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-crowe-indigo-dark">Category</TableHead>
-                      <TableHead className="min-w-[200px] text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-crowe-indigo-dark">Question</TableHead>
+                  <TableHeader className="sticky top-0 bg-tint-100 dark:bg-crowe-indigo-dark z-10">
+                    <TableRow className="border-tint-200 dark:border-white/20 hover:bg-transparent">
+                      <TableHead className="w-24 text-tint-700 dark:text-tint-300 bg-tint-100 dark:bg-crowe-indigo-dark">Attr ID</TableHead>
+                      <TableHead className="w-20 text-tint-700 dark:text-tint-300 bg-tint-100 dark:bg-crowe-indigo-dark">Category</TableHead>
+                      <TableHead className="min-w-[200px] text-tint-700 dark:text-tint-300 bg-tint-100 dark:bg-crowe-indigo-dark">Question</TableHead>
                       {filteredCustomers.map((customer) => {
                         const originalIdx = workbook.assignedCustomers.findIndex(c => c.customerId === customer.customerId);
                         return (
                           <TableHead
                             key={customer.customerId}
-                            className="min-w-[180px] text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-crowe-indigo-dark"
+                            className="min-w-[180px] text-tint-700 dark:text-tint-300 bg-tint-100 dark:bg-crowe-indigo-dark"
                           >
                             <div className="flex flex-col">
                               <span className="truncate" title={customer.customerName}>
                                 {originalIdx + 1}. {customer.customerName.substring(0, 12)}...
                               </span>
-                              <span className="text-[10px] text-gray-500 dark:text-gray-300 font-normal">
+                              <span className="text-[10px] text-tint-500 dark:text-tint-300 font-normal">
                                 {customer.customerId}
                               </span>
                             </div>
@@ -988,16 +988,16 @@ export default function AuditorWorkbookPage() {
                   </TableHeader>
                   <TableBody>
                     {filteredRows.map((row) => (
-                      <TableRow key={row.id} className="border-gray-100 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5">
-                        <TableCell className="font-mono text-xs text-gray-600 dark:text-gray-300">
+                      <TableRow key={row.id} className="border-tint-100 dark:border-white/10 hover:bg-tint-100 dark:hover:bg-white/5">
+                        <TableCell className="font-mono text-xs text-tint-700 dark:text-tint-300">
                           {row.attributeId}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="text-[10px] border-gray-300 dark:border-white/20 text-gray-600 dark:text-gray-300">
+                          <Badge variant="outline" className="text-[10px] border-tint-300 dark:border-white/20 text-tint-700 dark:text-tint-300">
                             {row.attributeCategory}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-xs text-gray-600 dark:text-gray-300" title={row.questionText}>
+                        <TableCell className="text-xs text-tint-700 dark:text-tint-300" title={row.questionText}>
                           <div className="line-clamp-2">{row.questionText}</div>
                         </TableCell>
                         {filteredCustomers.map((customer) => (
@@ -1018,7 +1018,7 @@ export default function AuditorWorkbookPage() {
                       <TableRow>
                         <TableCell
                           colSpan={3 + filteredCustomers.length}
-                          className="text-center py-8 text-gray-500 dark:text-gray-300"
+                          className="text-center py-8 text-tint-500 dark:text-tint-300"
                         >
                           No rows match your filter criteria
                         </TableCell>
@@ -1029,7 +1029,7 @@ export default function AuditorWorkbookPage() {
               </div>
             </div>
 
-            <div className="mt-3 text-xs text-gray-500 dark:text-gray-300">
+            <div className="mt-3 text-xs text-tint-500 dark:text-tint-300">
               Showing {filteredRows.length} of {workbook.rows.length} attributes
             </div>
           </CardContent>
@@ -1068,29 +1068,29 @@ export default function AuditorWorkbookPage() {
           setObservationModal({ isOpen: false, rowId: '', customerId: '', selectedDoc: '', observation: '' });
         }
       }}>
-        <DialogContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border border-gray-200 dark:border-white/20 shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <DialogContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border border-tint-200 dark:border-white/20 shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
           <DialogHeader>
-            <DialogTitle className="text-gray-900 dark:text-white">Add Observation</DialogTitle>
-            <DialogDescription className="text-gray-600 dark:text-gray-300">
+            <DialogTitle className="text-tint-900 dark:text-white">Add Observation</DialogTitle>
+            <DialogDescription className="text-tint-700 dark:text-tint-300">
               Please provide an observation for this test result.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                <label className="text-sm font-medium text-tint-700 dark:text-tint-300 mb-2 block">
                   Select Observation Type
                 </label>
                 <Select
                   value={observationModal.observation}
                   onValueChange={(value) => setObservationModal(prev => ({ ...prev, observation: value }))}
                 >
-                  <SelectTrigger className="bg-gray-50 dark:bg-white/10 border-gray-200 dark:border-white/20 text-gray-900 dark:text-white">
+                  <SelectTrigger className="bg-tint-50 dark:bg-white/10 border-tint-200 dark:border-white/20 text-tint-900 dark:text-white">
                     <SelectValue placeholder="Select a standard observation..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border-gray-200 dark:border-white/20 max-h-[300px]">
+                  <SelectContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border-tint-200 dark:border-white/20 max-h-[300px]">
                     {STANDARD_OBSERVATIONS.map((obs) => (
-                      <SelectItem key={obs.id} value={obs.text} className="text-gray-900 dark:text-white text-xs">
+                      <SelectItem key={obs.id} value={obs.text} className="text-tint-900 dark:text-white text-xs">
                         {obs.text}
                       </SelectItem>
                     ))}
@@ -1098,14 +1098,14 @@ export default function AuditorWorkbookPage() {
                 </Select>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                <label className="text-sm font-medium text-tint-700 dark:text-tint-300 mb-2 block">
                   Or enter custom observation
                 </label>
                 <Textarea
                   value={observationModal.observation}
                   onChange={(e) => setObservationModal(prev => ({ ...prev, observation: e.target.value }))}
                   placeholder="Enter custom observation..."
-                  className="bg-gray-50 dark:bg-white/10 border-gray-200 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/80"
+                  className="bg-tint-50 dark:bg-white/10 border-tint-200 dark:border-white/20 text-tint-900 dark:text-white placeholder:text-tint-500 dark:placeholder:text-white/80"
                   rows={3}
                 />
               </div>
@@ -1115,7 +1115,7 @@ export default function AuditorWorkbookPage() {
             <Button
               variant="outline"
               onClick={() => setObservationModal({ isOpen: false, rowId: '', customerId: '', selectedDoc: '', observation: '' })}
-              className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10"
+              className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10"
             >
               Cancel
             </Button>
@@ -1132,27 +1132,27 @@ export default function AuditorWorkbookPage() {
 
       {/* Submit Confirmation Dialog */}
       <Dialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
-        <DialogContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border border-gray-200 dark:border-white/20 shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <DialogContent className="bg-white dark:bg-crowe-indigo-dark/95 backdrop-blur-xl border border-tint-200 dark:border-white/20 shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
           <DialogHeader>
-            <DialogTitle className="text-gray-900 dark:text-white">Submit Workbook</DialogTitle>
-            <DialogDescription className="text-gray-600 dark:text-gray-300">
+            <DialogTitle className="text-tint-900 dark:text-white">Submit Workbook</DialogTitle>
+            <DialogDescription className="text-tint-700 dark:text-tint-300">
               Are you sure you want to submit this workbook? Once submitted,
               you will not be able to make further changes.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-white/10 rounded-lg border border-gray-200 dark:border-white/10">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Completion:</span>
+              <div className="flex items-center justify-between p-3 bg-tint-50 dark:bg-white/10 rounded-lg border border-tint-200 dark:border-white/10">
+                <span className="text-sm text-tint-700 dark:text-tint-300">Completion:</span>
                 <Badge className="bg-crowe-teal">{completionPercentage}%</Badge>
               </div>
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-white/10 rounded-lg border border-gray-200 dark:border-white/10">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Tests Completed:</span>
+              <div className="flex items-center justify-between p-3 bg-tint-50 dark:bg-white/10 rounded-lg border border-tint-200 dark:border-white/10">
+                <span className="text-sm text-tint-700 dark:text-tint-300">Tests Completed:</span>
                 <Badge className="bg-crowe-indigo">{testingProgress.completedTests} / {testingProgress.totalTests}</Badge>
               </div>
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-white/10 rounded-lg border border-gray-200 dark:border-white/10">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Pass Rate:</span>
-                <Badge variant="outline" className="border-gray-300 dark:border-white/20 text-gray-900 dark:text-white">
+              <div className="flex items-center justify-between p-3 bg-tint-50 dark:bg-white/10 rounded-lg border border-tint-200 dark:border-white/10">
+                <span className="text-sm text-tint-700 dark:text-tint-300">Pass Rate:</span>
+                <Badge variant="outline" className="border-tint-300 dark:border-white/20 text-tint-900 dark:text-white">
                   {testingProgress.totalTests > 0
                     ? (((testingProgress.passCount + testingProgress.passWithObsCount) / testingProgress.totalTests) * 100).toFixed(1)
                     : 0}%
@@ -1161,7 +1161,7 @@ export default function AuditorWorkbookPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowSubmitDialog(false)} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
+            <Button variant="outline" onClick={() => setShowSubmitDialog(false)} className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10">
               Cancel
             </Button>
             <Button

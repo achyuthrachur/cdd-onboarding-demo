@@ -87,9 +87,9 @@ function DialogContent({
               // Dialog with light/dark mode support
               "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6 outline-none sm:max-w-lg",
               "bg-white dark:bg-white/10 backdrop-blur-2xl rounded-2xl",
-              "border border-gray-200 dark:border-white/20",
+              "border border-tint-200 dark:border-white/20",
               "shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]",
-              "text-gray-900 dark:text-white",
+              "text-tint-900 dark:text-white",
               className
             )}
           >
@@ -97,7 +97,7 @@ function DialogContent({
             {showCloseButton && (
               <DialogPrimitive.Close
                 data-slot="dialog-close"
-                className="absolute top-4 right-4 rounded-lg p-1 text-gray-500 dark:text-white/80 transition-all hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-white/30 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+                className="absolute top-4 right-4 rounded-lg p-1 text-tint-500 dark:text-white/80 transition-all hover:text-tint-900 dark:hover:text-white hover:bg-tint-100 dark:hover:bg-white/10 focus:ring-2 focus:ring-tint-300 dark:focus:ring-white/30 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
               >
                 <XIcon />
                 <span className="sr-only">Close</span>
@@ -167,7 +167,7 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-gray-600 dark:text-white/80 text-sm", className)}
+      className={cn("text-tint-700 dark:text-white/80 text-sm", className)}
       {...props}
     />
   )

@@ -149,7 +149,7 @@ export default function AicConsolidationPage() {
       <FadeInUp className="mb-8">
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-tint-700 dark:text-white/80 hover:text-tint-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -162,13 +162,13 @@ export default function AicConsolidationPage() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.1 }}
               >
-                <Badge className="bg-orange-500/20 text-orange-400">Consolidation</Badge>
+                <Badge className="bg-crowe-amber/20 text-crowe-amber">Consolidation</Badge>
               </motion.div>
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h1 className="text-3xl font-bold tracking-tight text-tint-900 dark:text-white">
                 Consolidation & Reporting
               </h1>
             </div>
-            <p className="text-gray-600 dark:text-white/80 mt-2">
+            <p className="text-tint-700 dark:text-white/80 mt-2">
               Consolidate all results, view dashboards, and generate final report
             </p>
           </div>
@@ -178,7 +178,7 @@ export default function AicConsolidationPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Button variant="outline" size="sm" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+            <Button variant="outline" size="sm" onClick={handleLoadDemoData} className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
@@ -195,7 +195,7 @@ export default function AicConsolidationPage() {
                     size="sm"
                     onClick={handleRefreshConsolidation}
                     disabled={isGenerating}
-                    className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30"
+                    className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30"
                   >
                     {isGenerating ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -246,20 +246,20 @@ export default function AicConsolidationPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mb-6 p-4 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/30 rounded-lg flex items-center gap-3"
+            className="mb-6 p-4 bg-crowe-teal/10 border border-crowe-teal/30 rounded-lg flex items-center gap-3"
           >
             <motion.div
               initial={shouldReduceMotion ? undefined : { scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
             >
-              <CheckCircle2 className="h-5 w-5 text-green-700 dark:text-green-400" />
+              <CheckCircle2 className="h-5 w-5 text-crowe-teal-dark dark:text-crowe-teal" />
             </motion.div>
             <div>
-              <p className="font-medium text-green-700 dark:text-green-400">
+              <p className="font-medium text-crowe-teal-dark dark:text-crowe-teal">
                 Consolidation Available
               </p>
-              <p className="text-sm text-green-600 dark:text-green-400/80">
+              <p className="text-sm text-crowe-teal-dark dark:text-crowe-teal/80">
                 Last generated: {new Date(consolidation.generatedAt).toLocaleString()} •{" "}
                 {consolidation.rawData?.totalRows ?? 0} rows from {consolidation.rawData?.workbookIds?.length ?? 0} workbook(s)
               </p>
@@ -271,19 +271,19 @@ export default function AicConsolidationPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-200 dark:border-yellow-500/30 rounded-lg flex items-center gap-3"
+            className="mb-6 p-4 bg-crowe-amber/10 border border-crowe-amber/30 rounded-lg flex items-center gap-3"
           >
             <motion.div
               animate={shouldReduceMotion ? undefined : { rotate: [0, -10, 10, -10, 0] }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <AlertCircle className="h-5 w-5 text-yellow-700 dark:text-yellow-400" />
+              <AlertCircle className="h-5 w-5 text-crowe-amber-dark dark:text-crowe-amber" />
             </motion.div>
             <div>
-              <p className="font-medium text-yellow-700 dark:text-yellow-400">
+              <p className="font-medium text-crowe-amber-dark dark:text-crowe-amber">
                 No Consolidation Yet
               </p>
-              <p className="text-sm text-yellow-600 dark:text-yellow-400/80">
+              <p className="text-sm text-crowe-amber-dark dark:text-crowe-amber/80">
                 Click &quot;Generate Consolidation&quot; or &quot;Load Demo Data&quot; to aggregate results
               </p>
             </div>
@@ -344,10 +344,10 @@ export default function AicConsolidationPage() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ delay: 0.3 }}
           >
-            <Card className="mb-6 bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+            <Card className="mb-6 bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
               <CardHeader>
-                <CardTitle className="text-gray-900 dark:text-white">Prerequisites</CardTitle>
-                <CardDescription className="text-gray-600 dark:text-white/80">
+                <CardTitle className="text-tint-900 dark:text-white">Prerequisites</CardTitle>
+                <CardDescription className="text-tint-700 dark:text-white/80">
                   Complete these steps before generating consolidation
                 </CardDescription>
               </CardHeader>
@@ -376,15 +376,15 @@ export default function AicConsolidationPage() {
                         transition={{ delay: index * 0.1, type: "spring", stiffness: 400 }}
                       >
                         {step.complete ? (
-                          <CheckCircle2 className="h-5 w-5 text-green-400" />
+                          <CheckCircle2 className="h-5 w-5 text-crowe-teal" />
                         ) : (
-                          <AlertCircle className="h-5 w-5 text-yellow-400" />
+                          <AlertCircle className="h-5 w-5 text-crowe-amber" />
                         )}
                       </motion.div>
-                      <span className="text-gray-900 dark:text-white">
+                      <span className="text-tint-900 dark:text-white">
                         {step.label}
                         {step.required && (
-                          <Badge variant="outline" className="ml-2 border-gray-300 dark:border-white/30 text-gray-600 dark:text-white/80">
+                          <Badge variant="outline" className="ml-2 border-tint-300 dark:border-white/30 text-tint-700 dark:text-white/80">
                             Required
                           </Badge>
                         )}
@@ -392,7 +392,7 @@ export default function AicConsolidationPage() {
                     </motion.div>
                   ))}
                 </motion.div>
-                <p className="text-sm text-gray-600 dark:text-white/80 mt-4">
+                <p className="text-sm text-tint-700 dark:text-white/80 mt-4">
                   Demo mode: Click &quot;Load Demo Data&quot; to populate all stages with sample data.
                 </p>
               </CardContent>
@@ -403,19 +403,19 @@ export default function AicConsolidationPage() {
 
       {/* Navigation */}
       <motion.div
-        className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-white/10"
+        className="flex items-center justify-between mt-6 pt-4 border-t border-tint-200 dark:border-white/10"
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
       >
         <Link href={`/aic/audit-runs/${id}/monitor`}>
-          <Button variant="outline" className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+          <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Live Monitor
           </Button>
         </Link>
         <Link href={`/aic/audit-runs/${id}`}>
-          <Button variant="outline" className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">Back to Overview</Button>
+          <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">Back to Overview</Button>
         </Link>
       </motion.div>
     </div>

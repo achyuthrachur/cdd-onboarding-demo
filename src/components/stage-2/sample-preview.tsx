@@ -245,7 +245,7 @@ export function SamplePreview({
               </Badge>
             )}
             {coverageOverrideCount > 0 && (
-              <Badge variant="default" className="px-2.5 py-0.5 text-xs font-medium bg-amber-500">
+              <Badge variant="default" className="px-2.5 py-0.5 text-xs font-medium bg-crowe-amber">
                 {coverageOverrideCount} coverage override(s) applied
               </Badge>
             )}
@@ -253,15 +253,15 @@ export function SamplePreview({
 
           {/* Allocations Table */}
           {plan.allocations.length > 1 && (
-            <div className="rounded-md border border-gray-200 dark:border-white/10 mb-4">
+            <div className="rounded-md border border-tint-200 dark:border-white/10 mb-4">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">#</TableHead>
-                    <TableHead className="px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Stratum</TableHead>
-                    <TableHead className="px-4 py-3 text-right text-gray-700 dark:text-gray-200 font-semibold">Population</TableHead>
-                    <TableHead className="px-4 py-3 text-right text-gray-700 dark:text-gray-200 font-semibold">Sample Size</TableHead>
-                    <TableHead className="px-4 py-3 text-right text-gray-700 dark:text-gray-200 font-semibold">Share</TableHead>
+                    <TableHead className="px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">#</TableHead>
+                    <TableHead className="px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Stratum</TableHead>
+                    <TableHead className="px-4 py-3 text-right text-tint-700 dark:text-tint-200 font-semibold">Population</TableHead>
+                    <TableHead className="px-4 py-3 text-right text-tint-700 dark:text-tint-200 font-semibold">Sample Size</TableHead>
+                    <TableHead className="px-4 py-3 text-right text-tint-700 dark:text-tint-200 font-semibold">Share</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -281,8 +281,8 @@ export function SamplePreview({
                             : ""
                         }
                       >
-                        <TableCell className="px-4 py-2 font-mono text-sm text-gray-900 dark:text-white">{idx + 1}</TableCell>
-                        <TableCell className="px-4 py-2 text-gray-900 dark:text-white">
+                        <TableCell className="px-4 py-2 font-mono text-sm text-tint-900 dark:text-white">{idx + 1}</TableCell>
+                        <TableCell className="px-4 py-2 text-tint-900 dark:text-white">
                           {Object.entries(alloc.stratum)
                             .map(([k, v]) => `${k}: ${v ?? "NULL"}`)
                             .join(", ") || "(All)"}
@@ -292,28 +292,28 @@ export function SamplePreview({
                             </span>
                           )}
                         </TableCell>
-                        <TableCell className="px-4 py-2 text-right text-gray-900 dark:text-white">
+                        <TableCell className="px-4 py-2 text-right text-tint-900 dark:text-white">
                           {alloc.population_count.toLocaleString()}
                         </TableCell>
-                        <TableCell className="px-4 py-2 text-right font-medium text-gray-900 dark:text-white">
+                        <TableCell className="px-4 py-2 text-right font-medium text-tint-900 dark:text-white">
                           {alloc.sample_count.toLocaleString()}
                         </TableCell>
-                        <TableCell className="px-4 py-2 text-right text-gray-600 dark:text-gray-300">
+                        <TableCell className="px-4 py-2 text-right text-tint-700 dark:text-tint-300">
                           {(((alloc.population_count || 0) / (plan.populationSize || 1)) * 100).toFixed(1)}%
                         </TableCell>
                       </TableRow>
                     );
                   })}
-                  <TableRow className="font-medium bg-gray-50 dark:bg-white/5">
-                    <TableCell className="px-4 py-2 text-gray-900 dark:text-white"></TableCell>
-                    <TableCell className="px-4 py-2 text-gray-900 dark:text-white">Total</TableCell>
-                    <TableCell className="px-4 py-2 text-right text-gray-900 dark:text-white">
+                  <TableRow className="font-medium bg-tint-50 dark:bg-white/5">
+                    <TableCell className="px-4 py-2 text-tint-900 dark:text-white"></TableCell>
+                    <TableCell className="px-4 py-2 text-tint-900 dark:text-white">Total</TableCell>
+                    <TableCell className="px-4 py-2 text-right text-tint-900 dark:text-white">
                       {(plan.populationSize || 0).toLocaleString()}
                     </TableCell>
-                    <TableCell className="px-4 py-2 text-right text-gray-900 dark:text-white">
+                    <TableCell className="px-4 py-2 text-right text-tint-900 dark:text-white">
                       {plan.plannedSize.toLocaleString()}
                     </TableCell>
-                    <TableCell className="px-4 py-2 text-right text-gray-900 dark:text-white">100%</TableCell>
+                    <TableCell className="px-4 py-2 text-right text-tint-900 dark:text-white">100%</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -383,7 +383,7 @@ export function SamplePreview({
                   <BarChart3 className="h-5 w-5" />
                   Sample Results
                   {isLocked && (
-                    <Badge variant="default" className="ml-2 bg-green-500">
+                    <Badge variant="default" className="ml-2 bg-crowe-teal">
                       <Lock className="mr-1 h-3 w-3" />
                       Locked
                     </Badge>
@@ -410,34 +410,34 @@ export function SamplePreview({
             <div className="grid gap-4 md:grid-cols-4 mb-6">
               <Card>
                 <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <div className="text-2xl font-bold text-tint-900 dark:text-white">
                     {summary.sample_selection_method.final_sample_size.toLocaleString()}
                   </div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Sample Size</p>
+                  <p className="text-sm font-medium text-tint-700 dark:text-tint-300">Sample Size</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <div className="text-2xl font-bold text-tint-900 dark:text-white">
                     {(summary.sampling_rationale.confidence_level * 100).toFixed(0)}%
                   </div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Confidence Level</p>
+                  <p className="text-sm font-medium text-tint-700 dark:text-tint-300">Confidence Level</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <div className="text-2xl font-bold text-tint-900 dark:text-white">
                     {(summary.sampling_rationale.tolerable_error_rate * 100).toFixed(1)}%
                   </div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Tolerable Error Rate</p>
+                  <p className="text-sm font-medium text-tint-700 dark:text-tint-300">Tolerable Error Rate</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <div className="text-2xl font-bold text-tint-900 dark:text-white">
                     {summary.sample_selection_method.seed}
                   </div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Random Seed</p>
+                  <p className="text-sm font-medium text-tint-700 dark:text-tint-300">Random Seed</p>
                 </CardContent>
               </Card>
             </div>
@@ -471,18 +471,18 @@ export function SamplePreview({
             )}
 
             {/* Sample Preview Table */}
-            <div className="rounded-md border border-gray-200 dark:border-white/10">
+            <div className="rounded-md border border-tint-200 dark:border-white/10">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[50px] px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">#</TableHead>
+                    <TableHead className="w-[50px] px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">#</TableHead>
                     {Object.keys(sample[0] || {})
                       .slice(0, 5)
                       .map((col) => (
-                        <TableHead key={col} className="px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">{col}</TableHead>
+                        <TableHead key={col} className="px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">{col}</TableHead>
                       ))}
                     {Object.keys(sample[0] || {}).length > 5 && (
-                      <TableHead className="px-4 py-3 text-gray-600 dark:text-gray-300 font-semibold">
+                      <TableHead className="px-4 py-3 text-tint-700 dark:text-tint-300 font-semibold">
                         +{Object.keys(sample[0]).length - 5} more
                       </TableHead>
                     )}
@@ -491,16 +491,16 @@ export function SamplePreview({
                 <TableBody>
                   {sample.slice(0, 10).map((row, idx) => (
                     <TableRow key={idx}>
-                      <TableCell className="px-4 py-2 font-mono text-sm text-gray-900 dark:text-white">{idx + 1}</TableCell>
+                      <TableCell className="px-4 py-2 font-mono text-sm text-tint-900 dark:text-white">{idx + 1}</TableCell>
                       {Object.keys(row)
                         .slice(0, 5)
                         .map((col) => (
-                          <TableCell key={col} className="px-4 py-2 max-w-[150px] truncate text-gray-900 dark:text-white">
+                          <TableCell key={col} className="px-4 py-2 max-w-[150px] truncate text-tint-900 dark:text-white">
                             {String(row[col] ?? "")}
                           </TableCell>
                         ))}
                       {Object.keys(row).length > 5 && (
-                        <TableCell className="px-4 py-2 text-gray-600 dark:text-gray-300">...</TableCell>
+                        <TableCell className="px-4 py-2 text-tint-700 dark:text-tint-300">...</TableCell>
                       )}
                     </TableRow>
                   ))}
@@ -508,7 +508,7 @@ export function SamplePreview({
                     <TableRow>
                       <TableCell
                         colSpan={Math.min(7, Object.keys(sample[0] || {}).length + 1)}
-                        className="text-center py-4 text-gray-600 dark:text-gray-300"
+                        className="text-center py-4 text-tint-700 dark:text-tint-300"
                       >
                         ... and {sample.length - 10} more rows
                       </TableCell>
@@ -539,7 +539,7 @@ export function SamplePreview({
                     </>
                   )}
                 </Button>
-                <p className="text-xs text-gray-600 dark:text-gray-300 text-center mt-2">
+                <p className="text-xs text-tint-700 dark:text-tint-300 text-center mt-2">
                   Locking the sample will finalize it for testing. This action cannot be undone.
                 </p>
               </div>

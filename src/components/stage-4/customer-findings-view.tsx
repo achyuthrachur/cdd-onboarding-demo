@@ -72,7 +72,7 @@ function getResultBadgeConfig(result: ConsolidatedCustomer['overallResult']) {
       };
     default:
       return {
-        className: "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80 border-gray-300 dark:border-white/20",
+        className: "bg-tint-100 dark:bg-white/10 text-tint-700 dark:text-white/80 border-tint-300 dark:border-white/20",
         icon: FileText,
       };
   }
@@ -92,7 +92,7 @@ function getRiskTierConfig(tier: string) {
     case 'Low':
       return "bg-crowe-teal/20 text-crowe-teal-bright";
     default:
-      return "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80";
+      return "bg-tint-100 dark:bg-white/10 text-tint-700 dark:text-white/80";
   }
 }
 
@@ -156,11 +156,11 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
         animate="visible"
       >
         <motion.div variants={staggerItem}>
-          <Card className="bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10">
+          <Card className="bg-tint-50 dark:bg-white/5 border-tint-200 dark:border-white/10">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-white/80">Customers with Observations</p>
+                  <p className="text-sm text-tint-700 dark:text-white/80">Customers with Observations</p>
                   <p className="text-2xl font-bold text-crowe-amber-bright">
                     {customersWithObservations}
                   </p>
@@ -172,11 +172,11 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className="bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10">
+          <Card className="bg-tint-50 dark:bg-white/5 border-tint-200 dark:border-white/10">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-white/80">Total Observations</p>
+                  <p className="text-sm text-tint-700 dark:text-white/80">Total Observations</p>
                   <p className="text-2xl font-bold text-crowe-amber-bright">
                     {totalObservations}
                   </p>
@@ -188,11 +188,11 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className="bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10">
+          <Card className="bg-tint-50 dark:bg-white/5 border-tint-200 dark:border-white/10">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-white/80">Questions to LOB</p>
+                  <p className="text-sm text-tint-700 dark:text-white/80">Questions to LOB</p>
                   <p className="text-2xl font-bold text-crowe-blue-light">
                     {totalQuestions}
                   </p>
@@ -204,11 +204,11 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className="bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10">
+          <Card className="bg-tint-50 dark:bg-white/5 border-tint-200 dark:border-white/10">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-white/80">Total Failures</p>
+                  <p className="text-sm text-tint-700 dark:text-white/80">Total Failures</p>
                   <p className="text-2xl font-bold text-crowe-coral-bright">
                     {totalFailures}
                   </p>
@@ -240,7 +240,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
             transition={{ delay: 0.1 }}
           >
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-white/80" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-tint-500 dark:text-white/80" />
               <Input
                 placeholder="Search customers..."
                 value={searchTerm}
@@ -275,7 +275,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
             {filteredCustomers.length === 0 ? (
               <motion.div
                 key="empty"
-                className="text-center py-12 text-gray-600 dark:text-white/80"
+                className="text-center py-12 text-tint-700 dark:text-white/80"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -305,24 +305,24 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                     <motion.div
                       key={customer.customerId}
                       variants={staggerItem}
-                      className="border border-gray-200 dark:border-white/10 rounded-lg overflow-hidden bg-gray-50 dark:bg-white/5"
+                      className="border border-tint-200 dark:border-white/10 rounded-lg overflow-hidden bg-tint-50 dark:bg-white/5"
                     >
                       <Collapsible
                         open={isExpanded}
                         onOpenChange={() => toggleCustomerExpand(customer.customerId)}
                       >
                         <CollapsibleTrigger className="w-full">
-                          <div className="p-4 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                          <div className="p-4 flex items-center justify-between hover:bg-tint-100 dark:hover:bg-white/5 transition-colors">
                             <div className="flex items-center gap-4">
                               <motion.div
                                 animate={{ rotate: isExpanded ? 180 : 0 }}
                                 transition={{ duration: 0.2 }}
                               >
-                                <ChevronDown className="h-5 w-5 text-gray-500 dark:text-white/80" />
+                                <ChevronDown className="h-5 w-5 text-tint-500 dark:text-white/80" />
                               </motion.div>
                               <div className="text-left">
                                 <div className="flex items-center gap-2">
-                                  <h4 className="font-semibold text-gray-900 dark:text-white">
+                                  <h4 className="font-semibold text-tint-900 dark:text-white">
                                     {customer.customerName}
                                   </h4>
                                   <Badge
@@ -333,7 +333,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                     {customer.overallResult}
                                   </Badge>
                                 </div>
-                                <div className="flex items-center gap-4 mt-1 text-sm text-gray-600 dark:text-white/80">
+                                <div className="flex items-center gap-4 mt-1 text-sm text-tint-700 dark:text-white/80">
                                   <span className="flex items-center gap-1">
                                     <Building2 className="h-3 w-3" />
                                     {customer.partyType}
@@ -377,12 +377,12 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                 animate={{ height: "auto", opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
                                 transition={{ duration: 0.25 }}
-                                className="border-t border-gray-200 dark:border-white/10 p-4 space-y-4"
+                                className="border-t border-tint-200 dark:border-white/10 p-4 space-y-4"
                               >
                                 {/* Observations Section */}
                                 {customer.observations.length > 0 && (
                                   <div>
-                                    <h4 className="text-gray-900 dark:text-white font-medium mb-3 flex items-center gap-2">
+                                    <h4 className="text-tint-900 dark:text-white font-medium mb-3 flex items-center gap-2">
                                       <Eye className="h-4 w-4 text-crowe-amber-bright" />
                                       Observations ({customer.observations.length})
                                     </h4>
@@ -396,17 +396,17 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                           transition={{ delay: idx * 0.05 }}
                                         >
                                           <div className="flex items-start justify-between mb-1">
-                                            <span className="text-gray-900 dark:text-white font-medium text-sm">
+                                            <span className="text-tint-900 dark:text-white font-medium text-sm">
                                               {obs.attributeName}
                                             </span>
                                             <Badge variant="outline" className="text-xs px-2 py-0.5">
                                               {obs.attributeCategory}
                                             </Badge>
                                           </div>
-                                          <p className="text-gray-700 dark:text-white/80 text-sm">
+                                          <p className="text-tint-700 dark:text-white/80 text-sm">
                                             {obs.observationText}
                                           </p>
-                                          <p className="text-gray-500 dark:text-white/80 text-xs mt-2">
+                                          <p className="text-tint-500 dark:text-white/80 text-xs mt-2">
                                             Auditor: {obs.auditorName}
                                           </p>
                                         </motion.li>
@@ -418,7 +418,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                 {/* Questions to LOB Section */}
                                 {customer.questionsToLOB.length > 0 && (
                                   <div>
-                                    <h4 className="text-gray-900 dark:text-white font-medium mb-3 flex items-center gap-2">
+                                    <h4 className="text-tint-900 dark:text-white font-medium mb-3 flex items-center gap-2">
                                       <HelpCircle className="h-4 w-4 text-crowe-blue-light" />
                                       Questions to LOB ({customer.questionsToLOB.length})
                                     </h4>
@@ -432,17 +432,17 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                           transition={{ delay: idx * 0.05 }}
                                         >
                                           <div className="flex items-start justify-between mb-1">
-                                            <span className="text-gray-900 dark:text-white font-medium text-sm">
+                                            <span className="text-tint-900 dark:text-white font-medium text-sm">
                                               {q.attributeName}
                                             </span>
                                             <Badge variant="outline" className="text-xs px-2 py-0.5">
                                               {q.attributeCategory}
                                             </Badge>
                                           </div>
-                                          <p className="text-gray-700 dark:text-white/80 text-sm">
+                                          <p className="text-tint-700 dark:text-white/80 text-sm">
                                             {q.questionText}
                                           </p>
-                                          <p className="text-gray-500 dark:text-white/80 text-xs mt-2">
+                                          <p className="text-tint-500 dark:text-white/80 text-xs mt-2">
                                             Auditor: {q.auditorName}
                                           </p>
                                         </motion.li>
@@ -454,7 +454,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                 {/* Failures Section */}
                                 {customer.failures.length > 0 && (
                                   <div>
-                                    <h4 className="text-gray-900 dark:text-white font-medium mb-3 flex items-center gap-2">
+                                    <h4 className="text-tint-900 dark:text-white font-medium mb-3 flex items-center gap-2">
                                       <XCircle className="h-4 w-4 text-crowe-coral-bright" />
                                       Failures ({customer.failures.length})
                                     </h4>
@@ -468,7 +468,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                           transition={{ delay: idx * 0.05 }}
                                         >
                                           <div className="flex items-start justify-between mb-1">
-                                            <span className="text-gray-900 dark:text-white font-medium text-sm">
+                                            <span className="text-tint-900 dark:text-white font-medium text-sm">
                                               {fail.attributeName}
                                             </span>
                                             <div className="flex items-center gap-2">
@@ -487,10 +487,10 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                               </Badge>
                                             </div>
                                           </div>
-                                          <p className="text-gray-700 dark:text-white/80 text-sm">
+                                          <p className="text-tint-700 dark:text-white/80 text-sm">
                                             {fail.failureReason}
                                           </p>
-                                          <p className="text-gray-500 dark:text-white/80 text-xs mt-2">
+                                          <p className="text-tint-500 dark:text-white/80 text-xs mt-2">
                                             Auditor: {fail.auditorName}
                                           </p>
                                         </motion.li>
@@ -500,8 +500,8 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                 )}
 
                                 {/* Test Summary */}
-                                <div className="pt-3 border-t border-gray-200 dark:border-white/10">
-                                  <p className="text-gray-600 dark:text-white/80 text-sm">
+                                <div className="pt-3 border-t border-tint-200 dark:border-white/10">
+                                  <p className="text-tint-700 dark:text-white/80 text-sm">
                                     Test Summary: {customer.passCount} pass, {customer.passWithObservationCount} pass w/obs, {customer.failCount} fail, {customer.questionCount} questions, {customer.naCount} N/A
                                   </p>
                                 </div>

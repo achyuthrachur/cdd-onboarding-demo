@@ -298,16 +298,16 @@ export function ExtractionResultsView({
                 variants={tabContent}
               >
                 <TabsContent value="attributes" className="m-0">
-                  <div className="border border-gray-200 dark:border-white/10 rounded-lg overflow-hidden">
+                  <div className="border border-tint-200 dark:border-white/10 rounded-lg overflow-hidden">
                     <Table>
                       <TableHeader>
-                        <TableRow className="bg-gray-50 dark:bg-white/5 border-b border-gray-200 dark:border-white/10">
-                          <TableHead className="w-24 px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">ID</TableHead>
-                          <TableHead className="w-20 px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Category</TableHead>
-                          <TableHead className="w-48 px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Attribute Name</TableHead>
-                          <TableHead className="px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Question Text</TableHead>
-                          <TableHead className="w-20 px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Scope</TableHead>
-                          <TableHead className="w-20 px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Docs</TableHead>
+                        <TableRow className="bg-tint-50 dark:bg-white/5 border-b border-tint-200 dark:border-white/10">
+                          <TableHead className="w-24 px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">ID</TableHead>
+                          <TableHead className="w-20 px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Category</TableHead>
+                          <TableHead className="w-48 px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Attribute Name</TableHead>
+                          <TableHead className="px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Question Text</TableHead>
+                          <TableHead className="w-20 px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Scope</TableHead>
+                          <TableHead className="w-20 px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Docs</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -316,12 +316,12 @@ export function ExtractionResultsView({
                           return (
                             <motion.tr
                               key={attr.Attribute_ID}
-                              className="border-b border-gray-200 dark:border-white/10 transition-colors hover:bg-gray-50 dark:hover:bg-white/5 data-[state=selected]:bg-gray-100 dark:data-[state=selected]:bg-white/10"
+                              className="border-b border-tint-200 dark:border-white/10 transition-colors hover:bg-tint-50 dark:hover:bg-white/5 data-[state=selected]:bg-tint-100 dark:data-[state=selected]:bg-white/10"
                               initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: Math.min(index * 0.02, 0.3) }}
                             >
-                              <TableCell className="px-4 py-2 font-mono text-xs text-gray-900 dark:text-white">
+                              <TableCell className="px-4 py-2 font-mono text-xs text-tint-900 dark:text-white">
                                 {attr.Attribute_ID}
                               </TableCell>
                               <TableCell className="px-4 py-2">
@@ -333,10 +333,10 @@ export function ExtractionResultsView({
                                   {attr.Category}
                                 </Badge>
                               </TableCell>
-                              <TableCell className="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                              <TableCell className="px-4 py-2 font-medium text-tint-900 dark:text-white">
                                 {attr.Attribute_Name}
                               </TableCell>
-                              <TableCell className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300">
+                              <TableCell className="px-4 py-2 text-sm text-tint-700 dark:text-tint-300">
                                 {attr.Question_Text}
                               </TableCell>
                               <TableCell className="px-4 py-2">
@@ -354,7 +354,7 @@ export function ExtractionResultsView({
                         })}
                         {filteredAttributes.length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={6} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                            <TableCell colSpan={6} className="text-center py-8 text-tint-500 dark:text-tint-300">
                               No attributes match your search criteria
                             </TableCell>
                           </TableRow>
@@ -376,15 +376,15 @@ export function ExtractionResultsView({
                 variants={tabContent}
               >
                 <TabsContent value="documents" className="m-0">
-                  <div className="border border-gray-200 dark:border-white/10 rounded-lg overflow-hidden">
+                  <div className="border border-tint-200 dark:border-white/10 rounded-lg overflow-hidden">
                     <Table>
                       <TableHeader>
-                        <TableRow className="bg-gray-50 dark:bg-white/5 border-b border-gray-200 dark:border-white/10">
-                          <TableHead className="w-24 px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Attribute ID</TableHead>
-                          <TableHead className="w-48 px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Document Name</TableHead>
-                          <TableHead className="px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Evidence Source</TableHead>
-                          <TableHead className="w-32 px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Jurisdiction</TableHead>
-                          <TableHead className="px-4 py-3 text-gray-700 dark:text-gray-200 font-semibold">Notes</TableHead>
+                        <TableRow className="bg-tint-50 dark:bg-white/5 border-b border-tint-200 dark:border-white/10">
+                          <TableHead className="w-24 px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Attribute ID</TableHead>
+                          <TableHead className="w-48 px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Document Name</TableHead>
+                          <TableHead className="px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Evidence Source</TableHead>
+                          <TableHead className="w-32 px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Jurisdiction</TableHead>
+                          <TableHead className="px-4 py-3 text-tint-700 dark:text-tint-200 font-semibold">Notes</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -393,12 +393,12 @@ export function ExtractionResultsView({
                           return (
                             <motion.tr
                               key={`${doc.Attribute_ID}-${index}`}
-                              className="border-b border-gray-200 dark:border-white/10 transition-colors hover:bg-gray-50 dark:hover:bg-white/5 data-[state=selected]:bg-gray-100 dark:data-[state=selected]:bg-white/10"
+                              className="border-b border-tint-200 dark:border-white/10 transition-colors hover:bg-tint-50 dark:hover:bg-white/5 data-[state=selected]:bg-tint-100 dark:data-[state=selected]:bg-white/10"
                               initial={shouldReduceMotion ? undefined : { opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: Math.min(index * 0.02, 0.3) }}
                             >
-                              <TableCell className="px-4 py-2 font-mono text-xs text-gray-900 dark:text-white">
+                              <TableCell className="px-4 py-2 font-mono text-xs text-tint-900 dark:text-white">
                                 <div className="flex items-center gap-2">
                                   {doc.Attribute_ID}
                                   {attr && (
@@ -411,10 +411,10 @@ export function ExtractionResultsView({
                                   )}
                                 </div>
                               </TableCell>
-                              <TableCell className="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                              <TableCell className="px-4 py-2 font-medium text-tint-900 dark:text-white">
                                 {doc.Document_Name}
                               </TableCell>
-                              <TableCell className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300">
+                              <TableCell className="px-4 py-2 text-sm text-tint-700 dark:text-tint-300">
                                 {doc.Evidence_Source_Document}
                               </TableCell>
                               <TableCell className="px-4 py-2">
@@ -422,7 +422,7 @@ export function ExtractionResultsView({
                                   {doc.Jurisdiction_ID}
                                 </Badge>
                               </TableCell>
-                              <TableCell className="px-4 py-2 text-xs text-gray-600 dark:text-gray-300">
+                              <TableCell className="px-4 py-2 text-xs text-tint-700 dark:text-tint-300">
                                 {doc.Notes}
                               </TableCell>
                             </motion.tr>
@@ -430,7 +430,7 @@ export function ExtractionResultsView({
                         })}
                         {filteredDocs.length === 0 && (
                           <TableRow>
-                            <TableCell colSpan={5} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                            <TableCell colSpan={5} className="text-center py-8 text-tint-500 dark:text-tint-300">
                               No documents match your search criteria
                             </TableCell>
                           </TableRow>

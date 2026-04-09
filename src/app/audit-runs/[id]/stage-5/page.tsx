@@ -33,6 +33,7 @@ import { HotTable, HotTableClass } from "@handsontable/react";
 import { registerAllModules } from "handsontable/registry";
 import Handsontable from "handsontable";
 import "handsontable/dist/handsontable.full.min.css";
+import "@/app/handsontable-crowe.css";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import {
@@ -369,7 +370,7 @@ export default function Stage5Page() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.1 }}
               >
-                <Badge className="bg-teal-500/20 text-teal-400">Stage 5</Badge>
+                <Badge className="bg-crowe-teal/20 text-crowe-teal">Stage 5</Badge>
               </motion.div>
               <h1 className="text-3xl font-bold tracking-tight text-white">Testing</h1>
             </div>
@@ -415,12 +416,12 @@ export default function Stage5Page() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="mb-6 p-4 bg-yellow-500/10 backdrop-blur-xl border border-yellow-500/30 rounded-lg"
+            className="mb-6 p-4 bg-crowe-amber/10 backdrop-blur-xl border border-crowe-amber/30 rounded-lg"
           >
-            <h3 className="font-medium text-yellow-300 mb-2">
+            <h3 className="font-medium text-crowe-amber-bright mb-2">
               Prerequisites Required
             </h3>
-            <ul className="text-sm text-yellow-400 space-y-1">
+            <ul className="text-sm text-crowe-amber space-y-1">
               <li>• Complete Stage 4 (Generate Workbooks) or click &quot;Load Demo Data&quot;</li>
             </ul>
           </motion.div>
@@ -452,12 +453,12 @@ export default function Stage5Page() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.passCount > 0 ? "border-green-500/50" : ""}`}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.passCount > 0 ? "border-crowe-teal/50" : ""}`}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-green-400">Pass</CardTitle>
+              <CardTitle className="text-sm font-medium text-crowe-teal">Pass</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-400 tabular-nums">
+              <div className="text-2xl font-bold text-crowe-teal tabular-nums">
                 {animatedPassCount}
               </div>
               <p className="text-xs text-white/80 mt-1">
@@ -470,12 +471,12 @@ export default function Stage5Page() {
         </motion.div>
 
         <motion.div variants={staggerItem}>
-          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.fail1RegulatoryCount > 0 ? "border-red-500/50" : ""}`}>
+          <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.fail1RegulatoryCount > 0 ? "border-crowe-coral/50" : ""}`}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-red-400">Fail</CardTitle>
+              <CardTitle className="text-sm font-medium text-crowe-coral">Fail</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-400 tabular-nums">
+              <div className="text-2xl font-bold text-crowe-coral tabular-nums">
                 {animatedFailCount}
               </div>
               <p className="text-xs text-white/80 mt-1">
@@ -524,7 +525,7 @@ export default function Stage5Page() {
                       animate={{ opacity: 1, scale: 1, x: 0 }}
                       exit={{ opacity: 0, scale: 0.8, x: 20 }}
                     >
-                      <Badge className="bg-green-500/20 text-green-400">
+                      <Badge className="bg-crowe-teal/20 text-crowe-teal">
                         <CheckCircle2 className="h-4 w-4 mr-1" />
                         Ready for Consolidation
                       </Badge>
@@ -593,13 +594,13 @@ export default function Stage5Page() {
                       if (col >= 3 && (col - 3) % 2 === 0 && tableData[row]) {
                         const value = String(tableData[row][col] || '').toLowerCase();
                         if (value.startsWith('pass')) {
-                          cellProperties.className = 'bg-green-50 dark:bg-green-950';
+                          cellProperties.className = 'bg-crowe-teal/10 dark:bg-crowe-teal/20';
                         } else if (value.startsWith('fail')) {
-                          cellProperties.className = 'bg-red-50 dark:bg-red-950';
+                          cellProperties.className = 'bg-crowe-coral/10 dark:bg-crowe-coral/20';
                         } else if (value === 'n/a') {
-                          cellProperties.className = 'bg-gray-50 dark:bg-gray-950';
+                          cellProperties.className = 'bg-tint-50 dark:bg-tint-950';
                         } else if (value === 'question to lob') {
-                          cellProperties.className = 'bg-blue-50 dark:bg-blue-950';
+                          cellProperties.className = 'bg-crowe-blue/10 dark:bg-crowe-blue/20';
                         }
                       }
                       return cellProperties;
@@ -631,15 +632,15 @@ export default function Stage5Page() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
           >
-            <Card className="mb-6 bg-yellow-500/10 backdrop-blur-xl border border-yellow-500/30 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+            <Card className="mb-6 bg-crowe-amber/10 backdrop-blur-xl border border-crowe-amber/30 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-yellow-400" />
-                  <CardTitle className="text-yellow-300">Completion Required</CardTitle>
+                  <AlertCircle className="h-5 w-5 text-crowe-amber" />
+                  <CardTitle className="text-crowe-amber-bright">Completion Required</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-yellow-200">
+                <p className="text-sm text-crowe-amber-bright">
                   At least 95% of tests must be completed to proceed to consolidation.
                   Currently at {completionPercentage.toFixed(1)}%.
                 </p>

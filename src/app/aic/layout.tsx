@@ -28,15 +28,22 @@ export default function AicLayout({
   if (!isAuthorized) {
     return (
       <div className="flex h-screen items-center justify-center bg-soft-gradient">
-        <p className="text-gray-500 dark:text-gray-300">Checking authorization...</p>
+        <p className="text-tint-500 dark:text-tint-300">Checking authorization...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-soft-gradient">
+    <div className="flex h-screen bg-soft-gradient bg-noise">
       <AicSidebar />
-      <main className="flex-1 overflow-auto bg-soft-gradient">
+      <main className="flex-1 overflow-auto">
+        <div className="bg-white/60 dark:bg-white/5 backdrop-blur-md border-b border-tint-200/50 dark:border-white/10 px-6 py-2">
+          <div className="flex items-center gap-2 text-sm text-tint-700 dark:text-tint-300">
+            <span className="font-medium text-crowe-amber-dark dark:text-crowe-amber">Auditor in Charge</span>
+            <span className="text-tint-300 dark:text-white/30">|</span>
+            <span>CDD Onboarding Demo</span>
+          </div>
+        </div>
         <ErrorBoundary>
           {children}
         </ErrorBoundary>

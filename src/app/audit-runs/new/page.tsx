@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { FadeInUp } from "@/lib/animations";
 
 export default function NewAuditRunPage() {
   const router = useRouter();
@@ -66,7 +67,7 @@ export default function NewAuditRunPage() {
 
   return (
     <div className="p-8 max-w-2xl min-h-screen">
-      <div className="mb-8">
+      <FadeInUp className="mb-8">
         <Link
           href="/audit-runs"
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
@@ -78,8 +79,9 @@ export default function NewAuditRunPage() {
         <p className="text-muted-foreground mt-2">
           Start a new CDD onboarding audit workflow
         </p>
-      </div>
+      </FadeInUp>
 
+      <FadeInUp delay={0.1}>
       <Card>
         <CardHeader>
           <CardTitle>Audit Run Details</CardTitle>
@@ -153,6 +155,7 @@ export default function NewAuditRunPage() {
           </form>
         </CardContent>
       </Card>
+      </FadeInUp>
     </div>
   );
 }

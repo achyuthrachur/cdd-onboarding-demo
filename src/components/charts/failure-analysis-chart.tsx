@@ -96,6 +96,7 @@ export function FailureAnalysisChart({
           <Tooltip
             contentStyle={t.tooltipStyle.contentStyle}
             itemStyle={t.tooltipStyle.itemStyle}
+            labelStyle={t.tooltipStyle.labelStyle}
             cursor={{ fill: t.cursorFill }}
             formatter={(value) => {
               const numValue = typeof value === 'number' ? value : 0;
@@ -112,11 +113,40 @@ export function FailureAnalysisChart({
     );
   }
 
-  // Pie variant - custom label with proper typing
   const renderPieLabel = (props: PieLabelRenderProps) => {
-    const { percent } = props;
-    if (typeof percent !== 'number' || percent < 0.05) return null;
-    return `${(percent * 100).toFixed(0)}%`;
+    const { cx, cy, midAngle, innerRadius: ir, outerRadius: or, percent } = props;
+
+    if (
+      typeof cx !== "number" ||
+      typeof cy !== "number" ||
+      typeof midAngle !== "number" ||
+      typeof ir !== "number" ||
+      typeof or !== "number" ||
+      typeof percent !== "number"
+    ) {
+      return null;
+    }
+
+    if (percent < 0.05) return null;
+
+    const RADIAN = Math.PI / 180;
+    const radius = ir + (or - ir) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill={t.pieLabelFill}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize={12}
+        fontWeight={600}
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
   };
 
   return (
@@ -140,6 +170,7 @@ export function FailureAnalysisChart({
         <Tooltip
           contentStyle={t.tooltipStyle.contentStyle}
           itemStyle={t.tooltipStyle.itemStyle}
+          labelStyle={t.tooltipStyle.labelStyle}
           formatter={(value, name) => {
             const numValue = typeof value === 'number' ? value : 0;
             return [

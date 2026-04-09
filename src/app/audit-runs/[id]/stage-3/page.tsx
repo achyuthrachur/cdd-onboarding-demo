@@ -290,8 +290,8 @@ export default function Stage3Page() {
       title: "Step 1: Upload",
       description: "FLU Procedures",
       isComplete: true,
-      activeColor: "bg-green-500/20 text-green-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-teal/20 text-crowe-teal",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: FileText,
       badgeText: "Ready",
     },
@@ -299,8 +299,8 @@ export default function Stage3Page() {
       title: "Step 2: Extract",
       description: "AI Attribute Extraction",
       isComplete: attributeCount > 0,
-      activeColor: "bg-amber-500/20 text-amber-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-amber/20 text-crowe-amber",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Bot,
       badgeText: attributeCount > 0
         ? `${attributeCount} attributes`
@@ -311,7 +311,7 @@ export default function Stage3Page() {
       description: "Confirm & Export",
       isComplete: canProceed,
       activeColor: "bg-white/10 text-white/80",
-      completeColor: "bg-green-500/20 text-green-400",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: FileSpreadsheet,
       badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
     },
@@ -336,7 +336,7 @@ export default function Stage3Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-amber-500/20 text-amber-400">Stage 3</Badge>
+              <Badge className="bg-crowe-amber/20 text-crowe-amber">Stage 3</Badge>
               <h1 className="text-3xl font-bold tracking-tight text-white">
                 FLU Procedure Extraction
               </h1>
@@ -361,7 +361,7 @@ export default function Stage3Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
+            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
                   <motion.div

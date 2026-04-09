@@ -5,6 +5,7 @@ import { HotTable } from "@handsontable/react";
 import { registerAllModules } from "handsontable/registry";
 import type { CellChange, ChangeSource } from "handsontable/common";
 import "handsontable/dist/handsontable.full.min.css";
+import "@/app/handsontable-crowe.css";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -273,7 +274,7 @@ export function TestGridLayout({
               <CardTitle className="flex items-center gap-2">
                 Test Grid - {workbook.auditorName}
                 {hasUnsavedChanges && (
-                  <Badge variant="outline" className="text-orange-600">
+                  <Badge variant="outline" className="text-crowe-amber-dark">
                     Unsaved Changes
                   </Badge>
                 )}
@@ -313,24 +314,24 @@ export function TestGridLayout({
               <p className="text-lg font-bold text-white">{summary.total}</p>
               <p className="text-xs text-white/80">Total</p>
             </div>
-            <div className="text-center p-3 rounded bg-green-500/20">
-              <p className="text-lg font-bold text-green-300">{summary.pass}</p>
+            <div className="text-center p-3 rounded bg-crowe-teal/20">
+              <p className="text-lg font-bold text-crowe-teal-bright">{summary.pass}</p>
               <p className="text-xs text-white/80">Pass</p>
             </div>
-            <div className="text-center p-3 rounded bg-yellow-500/20">
-              <p className="text-lg font-bold text-yellow-300">{summary.passObs}</p>
+            <div className="text-center p-3 rounded bg-crowe-amber/20">
+              <p className="text-lg font-bold text-crowe-amber-bright">{summary.passObs}</p>
               <p className="text-xs text-white/80">Pass Obs</p>
             </div>
-            <div className="text-center p-3 rounded bg-red-500/20">
-              <p className="text-lg font-bold text-red-300">{summary.fail1}</p>
+            <div className="text-center p-3 rounded bg-crowe-coral/20">
+              <p className="text-lg font-bold text-crowe-coral-bright">{summary.fail1}</p>
               <p className="text-xs text-white/80">Fail 1</p>
             </div>
-            <div className="text-center p-3 rounded bg-red-500/20">
-              <p className="text-lg font-bold text-red-300">{summary.fail2}</p>
+            <div className="text-center p-3 rounded bg-crowe-coral/20">
+              <p className="text-lg font-bold text-crowe-coral-bright">{summary.fail2}</p>
               <p className="text-xs text-white/80">Fail 2</p>
             </div>
-            <div className="text-center p-3 rounded bg-blue-500/20">
-              <p className="text-lg font-bold text-blue-300">{summary.qLob}</p>
+            <div className="text-center p-3 rounded bg-crowe-blue/20">
+              <p className="text-lg font-bold text-crowe-blue-light">{summary.qLob}</p>
               <p className="text-xs text-white/80">Q to LOB</p>
             </div>
             <div className="text-center p-3 rounded bg-white/5">
@@ -452,13 +453,13 @@ export function TestGridLayout({
                 if (visibleColumns[col]?.key === "result") {
                   const result = filteredRows[row]?.result;
                   if (result === "Pass") {
-                    cellProperties.className = "htCenter bg-green-500/20 text-green-300";
+                    cellProperties.className = "htCenter bg-crowe-teal/20 text-crowe-teal-bright";
                   } else if (result === "Pass w/Observation") {
-                    cellProperties.className = "htCenter bg-yellow-500/20 text-yellow-300";
+                    cellProperties.className = "htCenter bg-crowe-amber/20 text-crowe-amber-bright";
                   } else if (result?.startsWith("Fail")) {
-                    cellProperties.className = "htCenter bg-red-500/20 text-red-300";
+                    cellProperties.className = "htCenter bg-crowe-coral/20 text-crowe-coral-bright";
                   } else if (result === "Question to LOB") {
-                    cellProperties.className = "htCenter bg-blue-500/20 text-blue-300";
+                    cellProperties.className = "htCenter bg-crowe-blue/20 text-crowe-blue-light";
                   } else if (result === "N/A") {
                     cellProperties.className = "htCenter bg-white/5 text-white/80";
                   }
@@ -468,9 +469,9 @@ export function TestGridLayout({
                 if (visibleColumns[col]?.key === "percentComplete") {
                   const pct = filteredRows[row]?.percentComplete || 0;
                   if (pct >= 100) {
-                    cellProperties.className = "htCenter bg-green-500/30 text-green-300 font-bold";
+                    cellProperties.className = "htCenter bg-crowe-teal/30 text-crowe-teal-bright font-bold";
                   } else if (pct >= 50) {
-                    cellProperties.className = "htCenter bg-yellow-500/20 text-yellow-300";
+                    cellProperties.className = "htCenter bg-crowe-amber/20 text-crowe-amber-bright";
                   }
                 }
 
@@ -504,9 +505,9 @@ export function TestGridLayout({
                   variant="secondary"
                   className={`ml-2 ${
                     entity.percentComplete >= 100
-                      ? "bg-green-500/20 text-green-300"
+                      ? "bg-crowe-teal/20 text-crowe-teal-bright"
                       : entity.percentComplete > 0
-                      ? "bg-yellow-500/20 text-yellow-300"
+                      ? "bg-crowe-amber/20 text-crowe-amber-bright"
                       : "bg-white/10 text-white/80"
                   }`}
                 >

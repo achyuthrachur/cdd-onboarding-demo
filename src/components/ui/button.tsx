@@ -16,22 +16,20 @@ const buttonVariants = cva(
           "hover:bg-crowe-indigo-dark dark:hover:bg-crowe-indigo-bright " +
           "border border-crowe-indigo dark:border-crowe-indigo-bright " +
           "focus-visible:ring-crowe-indigo/30",
-        // Destructive action - clear red styling
         destructive:
-          "bg-red-600 dark:bg-red-600 " +
+          "bg-crowe-coral dark:bg-crowe-coral " +
           "text-white " +
-          "hover:bg-red-700 dark:hover:bg-red-500 " +
-          "border border-red-700 " +
-          "focus-visible:ring-red-500/20 dark:focus-visible:ring-red-500/40",
-        // Outline - visible border with solid background in light mode
+          "hover:bg-crowe-coral-dark dark:hover:bg-crowe-coral-bright " +
+          "border border-crowe-coral-dark " +
+          "focus-visible:ring-crowe-coral/20 dark:focus-visible:ring-crowe-coral/40",
         outline:
-          "bg-white text-gray-900 " +
-          "border-2 border-black " +
-          "hover:bg-gray-50 hover:border-gray-700 " +
+          "bg-white text-tint-900 " +
+          "border-2 border-crowe-indigo-dark " +
+          "hover:bg-tint-50 hover:border-crowe-indigo " +
           "dark:bg-transparent dark:text-white dark:border-white " +
-          "dark:hover:bg-white/10 dark:hover:border-gray-300 " +
-          "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30 " +
-          "!text-black dark:!text-white",
+          "dark:hover:bg-white/10 dark:hover:border-tint-300 " +
+          "focus-visible:ring-crowe-indigo/30 dark:focus-visible:ring-white/30 " +
+          "!text-crowe-indigo-dark dark:!text-white",
         // Secondary - Crowe Amber accent
         secondary:
           "bg-crowe-amber dark:bg-crowe-amber " +
@@ -39,36 +37,33 @@ const buttonVariants = cva(
           "hover:bg-crowe-amber-dark dark:hover:bg-crowe-amber-bright " +
           "border border-crowe-amber-dark " +
           "focus-visible:ring-crowe-amber/30",
-        // Ghost - subtle background with visible border, not invisible
         ghost:
-          "bg-gray-100 text-gray-700 border border-gray-300 " +
-          "hover:bg-gray-200 hover:text-gray-900 hover:border-gray-400 " +
-          "dark:bg-white/10 dark:text-gray-200 dark:border-white/20 " +
+          "bg-tint-100 text-tint-700 border border-tint-300 " +
+          "hover:bg-tint-200 hover:text-tint-900 hover:border-tint-500 " +
+          "dark:bg-white/10 dark:text-tint-300 dark:border-white/20 " +
           "dark:hover:bg-white/20 dark:hover:text-white dark:hover:border-white/30 " +
-          "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30 " +
-          "!text-black dark:!text-white",
+          "focus-visible:ring-crowe-indigo/30 dark:focus-visible:ring-white/30 " +
+          "!text-tint-950 dark:!text-white",
         // Link style
         link:
           "text-crowe-indigo dark:text-crowe-amber " +
           "underline-offset-4 hover:underline",
-        // Demo data button - prominent gradient styling
         demoData:
-          "bg-gradient-to-r from-amber-500 to-orange-500 " +
-          "dark:from-amber-400 dark:to-orange-400 " +
+          "bg-gradient-to-r from-crowe-amber to-crowe-amber-dark " +
+          "dark:from-crowe-amber dark:to-crowe-amber-bright " +
           "text-white dark:text-crowe-indigo-dark " +
           "font-semibold " +
-          "border border-amber-600 dark:border-amber-300 " +
-          "shadow-md hover:shadow-lg " +
-          "hover:from-amber-600 hover:to-orange-600 " +
-          "dark:hover:from-amber-300 dark:hover:to-orange-300 " +
-          "focus-visible:ring-amber-500/30",
-        // Soft/subtle button for secondary actions
+          "border border-crowe-amber-dark dark:border-crowe-amber " +
+          "shadow-crowe-md hover:shadow-crowe-hover " +
+          "hover:from-crowe-amber-dark hover:to-crowe-amber " +
+          "dark:hover:from-crowe-amber-bright dark:hover:to-crowe-amber " +
+          "focus-visible:ring-crowe-amber/30",
         soft:
-          "bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/10 " +
-          "text-gray-900 dark:text-white " +
-          "hover:bg-gray-200 dark:hover:bg-white/20 hover:border-gray-300 dark:hover:border-white/20 " +
-          "focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30 " +
-          "!text-black dark:!text-white",
+          "bg-tint-100 dark:bg-white/10 border border-tint-200 dark:border-white/10 " +
+          "text-tint-900 dark:text-white " +
+          "hover:bg-tint-200 dark:hover:bg-white/20 hover:border-tint-300 dark:hover:border-white/20 " +
+          "focus-visible:ring-crowe-indigo/30 dark:focus-visible:ring-white/30 " +
+          "!text-tint-950 dark:!text-white",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

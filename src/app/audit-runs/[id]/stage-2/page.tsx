@@ -208,8 +208,8 @@ export default function Stage2Page() {
       title: "Step 1",
       description: "Upload Population",
       isComplete: !!population,
-      activeColor: "bg-blue-500/20 text-blue-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-blue/20 text-crowe-blue",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Upload,
       badgeText: population
         ? `${population.rowCount.toLocaleString()} records`
@@ -220,8 +220,8 @@ export default function Stage2Page() {
       title: "Step 2",
       description: "Configure & Sample",
       isComplete: !!plan,
-      activeColor: "bg-purple-500/20 text-purple-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-violet/20 text-crowe-violet",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Settings,
       badgeText: sample
         ? `${sample.length.toLocaleString()} sampled`
@@ -235,7 +235,7 @@ export default function Stage2Page() {
       description: "Lock Sample",
       isComplete: isLocked,
       activeColor: "bg-white/10 text-white/80",
-      completeColor: "bg-green-500/20 text-green-400",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Lock,
       badgeText: isLocked ? "Locked" : "Pending",
       helpText: "Review and lock the sample to proceed to workbooks.",
@@ -261,7 +261,7 @@ export default function Stage2Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-green-500/20 text-green-400">Stage 2</Badge>
+              <Badge className="bg-crowe-teal/20 text-crowe-teal">Stage 2</Badge>
               <h1 className="text-3xl font-bold tracking-tight text-white">
                 Statistical Sampling
               </h1>
@@ -287,7 +287,7 @@ export default function Stage2Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
+            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <motion.div

@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import {
   Bot,
   FileText,
@@ -15,6 +14,7 @@ import {
   Loader2,
   Sparkles,
   X,
+  ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ChatMessage, MessageType } from "@/components/stage-1/chat-message";
@@ -96,6 +96,10 @@ export function FLUProcedureChat({
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  /** True when the user is within NEAR_BOTTOM_PX of the bottom (updated on scroll / resize only). */
+  const userAtBottomRef = useRef(true);
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   // Load preloaded document on mount — extract text if only fileUrl is available
@@ -216,10 +220,51 @@ export function FLUProcedureChat({
   // Helper to get the document from uploaded file
   const selectedDoc = uploadedFile?.doc || null;
 
-  // Auto-scroll to bottom when messages change
+  // Track scroll position on Radix ScrollArea viewport; show “scroll to bottom” when user reads history
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const root = scrollAreaRef.current;
+    const viewport = root?.querySelector(
+      "[data-radix-scroll-area-viewport]"
+    ) as HTMLElement | null;
+    if (!viewport) return;
+
+    const NEAR_BOTTOM_PX = 100;
+    const SHOW_BUTTON_PX = 80;
+
+    const updateScrollState = () => {
+      const { scrollTop, scrollHeight, clientHeight } = viewport;
+      const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+      userAtBottomRef.current = distanceFromBottom < NEAR_BOTTOM_PX;
+      setShowScrollToBottom(distanceFromBottom > SHOW_BUTTON_PX);
+    };
+
+    updateScrollState();
+    viewport.addEventListener("scroll", updateScrollState, { passive: true });
+    const ro = new ResizeObserver(updateScrollState);
+    ro.observe(viewport);
+    return () => {
+      viewport.removeEventListener("scroll", updateScrollState);
+      ro.disconnect();
+    };
+  }, []);
+
+  // Keep the viewport pinned to the bottom when new messages arrive only if the user was already there.
+  // useLayoutEffect avoids a ResizeObserver frame where an enlarged scrollHeight falsely looks “scrolled up”.
+  useLayoutEffect(() => {
+    const root = scrollAreaRef.current;
+    const viewport = root?.querySelector(
+      "[data-radix-scroll-area-viewport]"
+    ) as HTMLElement | null;
+    if (!viewport || !userAtBottomRef.current) return;
+    viewport.scrollTop = viewport.scrollHeight - viewport.clientHeight;
+    setShowScrollToBottom(false);
   }, [messages]);
+
+  const scrollChatToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    userAtBottomRef.current = true;
+    setShowScrollToBottom(false);
+  };
 
   const addMessage = (msg: Omit<ChatMessageData, "id" | "timestamp">) => {
     setMessages(prev => [
@@ -515,68 +560,109 @@ Click the "Results" tab to view and export the extracted attributes.`,
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <Badge variant={extractionResult ? "default" : "outline"} className="gap-1">
-                {extractionResult && <CheckCircle2 className="h-3 w-3" />}
-                {extractionResult ? "Extraction Complete" : "Ready"}
-              </Badge>
+              {extractionResult ? (
+                <Badge variant="default" className="gap-1">
+                  <CheckCircle2 className="h-3 w-3" />
+                  Extraction Complete
+                </Badge>
+              ) : (
+                <motion.div
+                  animate={
+                    shouldReduceMotion ? undefined : { opacity: [1, 0.78, 1] }
+                  }
+                  transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Badge variant="outline" className="gap-1 ring-1 ring-crowe-amber/20">
+                    Ready
+                  </Badge>
+                </motion.div>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
       </CardHeader>
 
       {/* Chat Messages - Animated */}
-      <ScrollArea className="flex-1 min-h-0">
-        <div className="divide-y">
-          <AnimatePresence initial={false}>
-            {messages.map((msg, index) => (
-              <motion.div
-                key={msg.id}
-                initial={shouldReduceMotion ? undefined : "hidden"}
-                animate="visible"
-                variants={chatMessageVariant}
-                transition={{ delay: index === messages.length - 1 ? 0 : 0 }}
-              >
-                <ChatMessage
-                  type={msg.type}
-                  content={msg.content}
-                  timestamp={msg.timestamp}
-                  documents={msg.documents}
-                  isPrompt={msg.isPrompt}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          <div ref={chatEndRef} />
-        </div>
-      </ScrollArea>
+      <div className="relative min-h-0 flex-1">
+        <ScrollArea ref={scrollAreaRef} className="h-full">
+          <div className="divide-y">
+            <AnimatePresence initial={false}>
+              {messages.map((msg, index) => (
+                <motion.div
+                  key={msg.id}
+                  initial={shouldReduceMotion ? undefined : "hidden"}
+                  animate="visible"
+                  variants={chatMessageVariant}
+                  transition={{ delay: index === messages.length - 1 ? 0 : 0 }}
+                >
+                  <ChatMessage
+                    type={msg.type}
+                    content={msg.content}
+                    timestamp={msg.timestamp}
+                    documents={msg.documents}
+                    isPrompt={msg.isPrompt}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+            <div ref={chatEndRef} />
+          </div>
+        </ScrollArea>
 
-      <Separator />
-
-      {/* Upload Zone & Actions */}
-      <div className="p-4 flex-shrink-0">
-        {/* Drop Zone - Animated */}
-        <motion.div
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={() => !selectedDoc && fileInputRef.current?.click()}
-          className={cn(
-            "border-2 border-dashed rounded-lg p-4 mb-4 transition-colors cursor-pointer",
-            isDragOver
-              ? "border-primary bg-primary/5"
-              : "border-gray-300 dark:border-white/25 hover:border-gray-400 dark:hover:border-white/50",
-            selectedDoc && "cursor-default"
+        <AnimatePresence>
+          {showScrollToBottom && (
+            <motion.button
+              type="button"
+              aria-label="Scroll to latest message"
+              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 8 }}
+              transition={{ duration: 0.2 }}
+              onClick={scrollChatToBottom}
+              className="absolute bottom-4 left-1/2 z-10 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full bg-crowe-indigo text-white shadow-crowe-lg dark:bg-crowe-amber dark:text-crowe-indigo-dark"
+            >
+              <ChevronDown className="h-5 w-5" />
+            </motion.button>
           )}
-          animate={isDragOver ? { scale: 1.02 } : { scale: 1 }}
-          transition={{ duration: 0.15 }}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf,.docx,.doc,.txt"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
+        </AnimatePresence>
+      </div>
+
+      {/* Upload Zone & Actions — frosted panel */}
+      <div className="flex-shrink-0 border-t border-tint-200 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
+        <div className="p-4">
+          <div className="rounded-xl border border-transparent transition-all duration-200 focus-within:border-crowe-amber/50 focus-within:ring-2 focus-within:ring-crowe-amber/30">
+            {/* Drop Zone - Animated */}
+            <motion.div
+              role={selectedDoc ? undefined : "button"}
+              tabIndex={selectedDoc ? undefined : 0}
+              onKeyDown={(e) => {
+                if (selectedDoc) return;
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  fileInputRef.current?.click();
+                }
+              }}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => !selectedDoc && fileInputRef.current?.click()}
+              className={cn(
+                "mb-4 cursor-pointer rounded-lg border-2 border-dashed p-4 transition-colors",
+                isDragOver
+                  ? "border-primary bg-primary/5"
+                  : "border-tint-300 dark:border-white/25 hover:border-tint-500 dark:hover:border-white/50",
+                selectedDoc && "cursor-default"
+              )}
+              animate={isDragOver ? { scale: 1.02 } : { scale: 1 }}
+              transition={{ duration: 0.15 }}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.docx,.doc,.txt"
+                onChange={handleFileSelect}
+                className="sr-only"
+              />
           <div className="text-center">
             <AnimatePresence mode="wait">
               {selectedDoc ? (
@@ -612,11 +698,11 @@ Click the "Results" tab to view and export the extracted attributes.`,
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  <Upload className="h-8 w-8 mx-auto mb-2 text-gray-400 dark:text-white/80" />
-                  <p className="text-sm text-gray-600 dark:text-white/80">
+                  <Upload className="h-8 w-8 mx-auto mb-2 text-tint-500 dark:text-white/80" />
+                  <p className="text-sm text-tint-700 dark:text-white/80">
                     Drag & drop FLU Procedures document here, or click to browse
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-white/80 mt-1">
+                  <p className="text-xs text-tint-500 dark:text-white/80 mt-1">
                     Supports PDF, Word (.docx), and text files
                   </p>
                 </motion.div>
@@ -625,43 +711,45 @@ Click the "Results" tab to view and export the extracted attributes.`,
           </div>
         </motion.div>
 
-        {/* Action Button */}
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-gray-500 dark:text-white/80">
-            {selectedDoc ? "Ready to extract attributes" : "No document selected"}
-          </p>
-          <motion.div
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-          >
-            <Button
-              onClick={runExtraction}
-              disabled={!selectedDoc || isProcessing || !!extractionResult}
-              className="gap-2"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Extracting...
-                </>
-              ) : extractionResult ? (
-                <>
-                  <CheckCircle2 className="h-4 w-4" />
-                  Extraction Complete
-                </>
-              ) : selectedDoc ? (
-                <>
-                  <Play className="h-4 w-4" />
-                  Extract Attributes
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-4 w-4" />
-                  Upload Document to Start
-                </>
-              )}
-            </Button>
-          </motion.div>
+            {/* Action Button */}
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-tint-500 dark:text-white/80">
+                {selectedDoc ? "Ready to extract attributes" : "No document selected"}
+              </p>
+              <motion.div
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+              >
+                <Button
+                  onClick={runExtraction}
+                  disabled={!selectedDoc || isProcessing || !!extractionResult}
+                  className="gap-2"
+                >
+                  {isProcessing ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Extracting...
+                    </>
+                  ) : extractionResult ? (
+                    <>
+                      <CheckCircle2 className="h-4 w-4" />
+                      Extraction Complete
+                    </>
+                  ) : selectedDoc ? (
+                    <>
+                      <Play className="h-4 w-4" />
+                      Extract Attributes
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4" />
+                      Upload Document to Start
+                    </>
+                  )}
+                </Button>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </Card>

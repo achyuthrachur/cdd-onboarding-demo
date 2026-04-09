@@ -208,8 +208,8 @@ export default function AicStage2Page() {
       title: "Step 1",
       description: "Upload Population",
       isComplete: !!population,
-      activeColor: "bg-blue-500/20 text-blue-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-blue/20 text-crowe-blue",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Upload,
       badgeText: population
         ? `${population.rowCount.toLocaleString()} records`
@@ -220,8 +220,8 @@ export default function AicStage2Page() {
       title: "Step 2",
       description: "Configure & Sample",
       isComplete: !!plan,
-      activeColor: "bg-purple-500/20 text-purple-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-violet/20 text-crowe-violet",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Settings,
       badgeText: sample
         ? `${sample.length.toLocaleString()} sampled`
@@ -234,8 +234,8 @@ export default function AicStage2Page() {
       title: "Step 3",
       description: "Lock Sample",
       isComplete: isLocked,
-      activeColor: "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-tint-100 dark:bg-white/10 text-tint-700 dark:text-white/80",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Lock,
       badgeText: isLocked ? "Locked" : "Pending",
       helpText: "Review and lock the sample to proceed to workbooks.",
@@ -253,7 +253,7 @@ export default function AicStage2Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-tint-500 dark:text-tint-300 hover:text-tint-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -261,18 +261,18 @@ export default function AicStage2Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-green-500/20 text-green-400">Stage 2</Badge>
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <Badge className="bg-crowe-teal/20 text-crowe-teal">Stage 2</Badge>
+              <h1 className="text-3xl font-bold tracking-tight text-tint-900 dark:text-white">
                 Statistical Sampling
               </h1>
             </div>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">
+            <p className="text-tint-700 dark:text-tint-300 mt-2">
               Upload population data, configure sampling parameters, and generate
               your sample set
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
@@ -294,12 +294,12 @@ export default function AicStage2Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
+            <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <motion.div
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor
+                      step.isComplete ? "bg-crowe-teal/20 text-crowe-teal" : step.activeColor
                     }`}
                   >
                     {step.isComplete ? (
@@ -309,16 +309,16 @@ export default function AicStage2Page() {
                     )}
                   </motion.div>
                   <div>
-                    <CardTitle className="text-base text-gray-900 dark:text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-300">{step.description}</CardDescription>
+                    <CardTitle className="text-base text-tint-900 dark:text-white">{step.title}</CardTitle>
+                    <CardDescription className="text-tint-700 dark:text-tint-300">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                <p className="text-sm text-tint-700 dark:text-tint-300 mb-3">
                   {step.helpText}
                 </p>
-                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-gray-300 dark:border-white/30 text-gray-600 dark:text-gray-300" : ""}>
+                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-tint-300 dark:border-white/30 text-tint-700 dark:text-tint-300" : ""}>
                   {step.badgeText}
                 </Badge>
               </CardContent>
@@ -392,14 +392,14 @@ export default function AicStage2Page() {
 
       {/* Navigation Footer - Sticky with proper z-index */}
       <motion.footer
-        className="sticky bottom-0 mt-8 pt-4 pb-4 -mx-8 px-8 bg-white/95 dark:bg-crowe-indigo-dark/95 backdrop-blur-sm border-t border-gray-200 dark:border-white/10 z-10"
+        className="sticky bottom-0 mt-8 pt-4 pb-4 -mx-8 px-8 bg-white/95 dark:bg-crowe-indigo-dark/95 backdrop-blur-sm border-t border-tint-200 dark:border-white/10 z-10"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
       >
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <Link href={`/aic/audit-runs/${id}/stage-1`}>
-            <Button variant="outline" className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+            <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Stage 1
             </Button>

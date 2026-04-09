@@ -15,13 +15,18 @@ import {
   Eye,
   Users,
 } from "lucide-react";
-import { motion, staggerContainer, staggerItem } from "@/lib/animations";
+import { motion, staggerContainer, staggerItem, useCountUp } from "@/lib/animations";
 import { mockAuditors } from "@/lib/attribute-library/mock-data";
 import { getStageData } from "@/lib/stage-data/store";
 
 export default function AicDashboardPage() {
   const [stats, setStats] = useState({ auditRuns: 0, publishedWorkbooks: 0, submitted: 0 });
   const [hasActiveRun, setHasActiveRun] = useState(false);
+
+  const countAuditRuns = useCountUp(stats.auditRuns, { duration: 0.85, delay: 0.05 });
+  const countPublished = useCountUp(stats.publishedWorkbooks, { duration: 0.85, delay: 0.1 });
+  const countAuditors = useCountUp(mockAuditors.length, { duration: 0.85, delay: 0.12 });
+  const countSubmitted = useCountUp(stats.submitted, { duration: 0.85, delay: 0.15 });
 
   useEffect(() => {
     const published = getStageData("workbooksPublished") as {
@@ -55,12 +60,12 @@ export default function AicDashboardPage() {
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">AIC Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-tint-900 dark:text-white">AIC Dashboard</h1>
           <Badge className="bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber border-0">
             Auditor in Charge
           </Badge>
         </div>
-        <p className="text-gray-500 dark:text-gray-300 mt-2">
+        <p className="text-tint-500 dark:text-tint-300 mt-2">
           Manage audit engagements, generate workbooks, and monitor auditor progress.
         </p>
       </motion.div>
@@ -76,11 +81,11 @@ export default function AicDashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Audit Runs</CardTitle>
-              <FileStack className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+              <FileStack className="h-4 w-4 text-tint-500 dark:text-tint-300" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.auditRuns}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-300">
+              <div className="text-2xl font-bold">{countAuditRuns}</div>
+              <p className="text-xs text-tint-500 dark:text-tint-300">
                 {stats.auditRuns > 0 ? "Active engagement" : "Create your first audit run"}
               </p>
             </CardContent>
@@ -91,11 +96,11 @@ export default function AicDashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Published Workbooks</CardTitle>
-              <FileText className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+              <FileText className="h-4 w-4 text-tint-500 dark:text-tint-300" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.publishedWorkbooks}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-300">
+              <div className="text-2xl font-bold">{countPublished}</div>
+              <p className="text-xs text-tint-500 dark:text-tint-300">
                 Assigned to auditors
               </p>
             </CardContent>
@@ -106,11 +111,11 @@ export default function AicDashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Auditors</CardTitle>
-              <Users className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+              <Users className="h-4 w-4 text-tint-500 dark:text-tint-300" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{mockAuditors.length}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-300">
+              <div className="text-2xl font-bold">{countAuditors}</div>
+              <p className="text-xs text-tint-500 dark:text-tint-300">
                 Available for assignment
               </p>
             </CardContent>
@@ -121,11 +126,11 @@ export default function AicDashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Completed</CardTitle>
-              <CheckCircle2 className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+              <CheckCircle2 className="h-4 w-4 text-tint-500 dark:text-tint-300" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.submitted}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-300">
+              <div className="text-2xl font-bold">{countSubmitted}</div>
+              <p className="text-xs text-tint-500 dark:text-tint-300">
                 Submitted workbooks
               </p>
             </CardContent>
@@ -166,12 +171,12 @@ export default function AicDashboardPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white text-sm font-medium">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-tint-100 dark:bg-white/10 text-tint-900 dark:text-white text-sm font-medium">
                 1
               </div>
               <div>
-                <p className="font-medium text-sm text-gray-900 dark:text-white">Gap Assessment</p>
-                <p className="text-xs text-gray-500 dark:text-gray-300">Upload docs, extract attributes</p>
+                <p className="font-medium text-sm text-tint-900 dark:text-white">Gap Assessment</p>
+                <p className="text-xs text-tint-500 dark:text-tint-300">Upload docs, extract attributes</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -179,8 +184,8 @@ export default function AicDashboardPage() {
                 2
               </div>
               <div>
-                <p className="font-medium text-sm text-gray-900 dark:text-white">Sampling</p>
-                <p className="text-xs text-gray-500 dark:text-gray-300">Configure and generate samples</p>
+                <p className="font-medium text-sm text-tint-900 dark:text-white">Sampling</p>
+                <p className="text-xs text-tint-500 dark:text-tint-300">Configure and generate samples</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -188,8 +193,8 @@ export default function AicDashboardPage() {
                 3
               </div>
               <div>
-                <p className="font-medium text-sm text-gray-900 dark:text-white">Attribute Extraction</p>
-                <p className="text-xs text-gray-500 dark:text-gray-300">AI-powered CDD/EDD extraction</p>
+                <p className="font-medium text-sm text-tint-900 dark:text-white">Attribute Extraction</p>
+                <p className="text-xs text-tint-500 dark:text-tint-300">AI-powered CDD/EDD extraction</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -197,8 +202,8 @@ export default function AicDashboardPage() {
                 4
               </div>
               <div>
-                <p className="font-medium text-sm text-gray-900 dark:text-white">Workbook Generation & Publish</p>
-                <p className="text-xs text-gray-500 dark:text-gray-300">Assign to auditors and publish</p>
+                <p className="font-medium text-sm text-tint-900 dark:text-white">Workbook Generation & Publish</p>
+                <p className="text-xs text-tint-500 dark:text-tint-300">Assign to auditors and publish</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -206,8 +211,8 @@ export default function AicDashboardPage() {
                 <Eye className="h-4 w-4" />
               </div>
               <div>
-                <p className="font-medium text-sm text-gray-900 dark:text-white">Live Monitoring</p>
-                <p className="text-xs text-gray-500 dark:text-gray-300">Track auditor progress in real-time</p>
+                <p className="font-medium text-sm text-tint-900 dark:text-white">Live Monitoring</p>
+                <p className="text-xs text-tint-500 dark:text-tint-300">Track auditor progress in real-time</p>
               </div>
             </div>
           </CardContent>
@@ -231,14 +236,14 @@ export default function AicDashboardPage() {
             {hasActiveRun ? (
               <div className="space-y-3">
                 <Link href="/aic/audit-runs/demo-run-001" className="block">
-                  <div className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-tint-200 dark:border-white/10 hover:bg-tint-50 dark:hover:bg-white/5 transition-colors">
                     <div className="flex items-center gap-4">
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-crowe-indigo/10 dark:bg-crowe-indigo-bright/20">
                         <BarChart3 className="h-5 w-5 text-crowe-indigo dark:text-crowe-indigo-bright" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">CDD Annual Review 2025</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-300">
+                        <p className="font-medium text-tint-900 dark:text-white">CDD Annual Review 2025</p>
+                        <p className="text-xs text-tint-500 dark:text-tint-300">
                           {stats.publishedWorkbooks} workbooks published &middot; {stats.submitted} submitted
                         </p>
                       </div>
@@ -247,15 +252,15 @@ export default function AicDashboardPage() {
                       <Badge className="bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright border-0">
                         In Progress
                       </Badge>
-                      <ArrowRight className="h-4 w-4 text-gray-400" />
+                      <ArrowRight className="h-4 w-4 text-tint-500" />
                     </div>
                   </div>
                 </Link>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-8 text-center">
-                <FileStack className="h-12 w-12 text-gray-500 dark:text-gray-300 mb-4" />
-                <p className="text-gray-500 dark:text-gray-300 mb-4">No audit runs yet</p>
+                <FileStack className="h-12 w-12 text-tint-500 dark:text-tint-300 mb-4" />
+                <p className="text-tint-500 dark:text-tint-300 mb-4">No audit runs yet</p>
                 <Link href="/aic/audit-runs/new">
                   <Button variant="outline">
                     Create your first audit run

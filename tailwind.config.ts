@@ -132,23 +132,23 @@ const config: Config = {
 
       fontFamily: {
         display: [
-          "Helvetica Now Display",
-          "Helvetica Neue",
-          "Arial",
-          "system-ui",
-          "sans-serif",
+          "var(--font-playfair)",
+          "Playfair Display",
+          "Georgia",
+          "serif",
         ],
         body: [
-          "Helvetica Now Text",
+          "var(--font-dm-sans)",
+          "DM Sans",
           "Helvetica Neue",
           "Arial",
           "system-ui",
           "sans-serif",
         ],
         mono: [
+          "var(--font-jetbrains)",
           "JetBrains Mono",
           "Fira Code",
-          "IBM Plex Mono",
           "Consolas",
           "monospace",
         ],

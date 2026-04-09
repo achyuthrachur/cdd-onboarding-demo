@@ -161,7 +161,7 @@ export function TestGridGenerator({
             <div className="flex flex-wrap items-center gap-2">
               <Badge
                 variant={hasAssignments ? "default" : "outline"}
-                className={hasAssignments ? "bg-green-500/20 text-green-300" : ""}
+                className={hasAssignments ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
               >
                 {hasAssignments ? (
                   <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -172,7 +172,7 @@ export function TestGridGenerator({
               </Badge>
               <Badge
                 variant={hasAttributes ? "default" : "outline"}
-                className={hasAttributes ? "bg-green-500/20 text-green-300" : ""}
+                className={hasAttributes ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
               >
                 {hasAttributes ? (
                   <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -183,7 +183,7 @@ export function TestGridGenerator({
               </Badge>
               <Badge
                 variant={!hasUnassigned ? "default" : "destructive"}
-                className={!hasUnassigned ? "bg-green-500/20 text-green-300" : ""}
+                className={!hasUnassigned ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
               >
                 {!hasUnassigned ? (
                   <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -245,7 +245,7 @@ export function TestGridGenerator({
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+                  <CheckCircle2 className="h-5 w-5 text-crowe-teal-dark" />
                   Generated Workbooks
                 </CardTitle>
                 <CardDescription>
@@ -279,7 +279,7 @@ export function TestGridGenerator({
               </Card>
               <Card>
                 <CardContent className="pt-4">
-                  <div className="text-2xl font-bold text-green-600">
+                  <div className="text-2xl font-bold text-crowe-teal-dark">
                     {generatedWorkbooks.reduce((sum, wb) => sum + wb.summary.passCount, 0)}
                   </div>
                   <p className="text-xs text-white/80">Pass</p>
@@ -287,7 +287,7 @@ export function TestGridGenerator({
               </Card>
               <Card>
                 <CardContent className="pt-4">
-                  <div className="text-2xl font-bold text-red-600">
+                  <div className="text-2xl font-bold text-crowe-coral">
                     {generatedWorkbooks.reduce(
                       (sum, wb) => sum + wb.summary.fail1Count + wb.summary.fail2Count,
                       0
@@ -339,12 +339,12 @@ export function TestGridGenerator({
                         {workbook.summary.totalRows}
                       </TableCell>
                       <TableCell className="px-4 py-2 text-center text-sm">
-                        <span className="text-green-600 font-medium">
+                        <span className="text-crowe-teal-dark font-medium">
                           {workbook.summary.passCount}
                         </span>
                       </TableCell>
                       <TableCell className="px-4 py-2 text-center text-sm">
-                        <span className="text-red-600 font-medium">
+                        <span className="text-crowe-coral font-medium">
                           {workbook.summary.fail1Count + workbook.summary.fail2Count}
                         </span>
                       </TableCell>
@@ -362,7 +362,7 @@ export function TestGridGenerator({
                           }
                           className={
                             workbook.summary.completionPercentage >= 100
-                              ? "bg-green-500/20 text-green-300"
+                              ? "bg-crowe-teal/20 text-crowe-teal-bright"
                               : ""
                           }
                         >

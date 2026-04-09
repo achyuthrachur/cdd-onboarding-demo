@@ -32,8 +32,8 @@ const tabsListVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-200 border-gray-200 dark:border-white/20",
-        line: "gap-1 bg-transparent text-gray-700 dark:text-gray-200 border-transparent",
+        default: "bg-tint-100 text-tint-700 dark:bg-white/10 dark:text-tint-200 border-tint-200 dark:border-white/20",
+        line: "gap-1 bg-transparent text-tint-700 dark:text-tint-200 border-transparent",
       },
     },
     defaultVariants: {
@@ -71,17 +71,17 @@ function TabsTrigger({
         // Layout variants
         "group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start",
         // Focus styles
-        "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:border-gray-300 focus-visible:ring-gray-300 dark:focus-visible:border-white/30 dark:focus-visible:ring-white/20",
+        "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:border-tint-300 focus-visible:ring-tint-300 dark:focus-visible:border-white/30 dark:focus-visible:ring-white/20",
         // Disabled styles
         "disabled:pointer-events-none disabled:opacity-50",
         // Icon styles
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         // Inactive state - visible text with hover
-        "text-gray-700 dark:text-gray-200",
-        "hover:text-gray-900 dark:hover:text-white",
+        "text-tint-700 dark:text-tint-200",
+        "hover:text-tint-900 dark:hover:text-white",
         "hover:bg-white/60 dark:hover:bg-white/15",
         // Active state - clear visual distinction with border
-        "data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-md data-[state=active]:border-gray-300",
+        "data-[state=active]:bg-white data-[state=active]:text-tint-900 data-[state=active]:shadow-md data-[state=active]:border-tint-300",
         "dark:data-[state=active]:bg-white/20 dark:data-[state=active]:text-white dark:data-[state=active]:border-white/30",
         // Line variant overrides
         "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent",

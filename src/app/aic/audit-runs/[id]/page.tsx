@@ -95,15 +95,15 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       <div className="mb-8">
         <Link
           href="/aic/audit-runs"
-          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-tint-500 dark:text-tint-300 hover:text-tint-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Runs
         </Link>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{auditRun.name}</h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">
+            <h1 className="text-3xl font-bold tracking-tight text-tint-900 dark:text-white">{auditRun.name}</h1>
+            <p className="text-tint-700 dark:text-tint-300 mt-2">
               {auditRun.scope?.description || "CDD Onboarding Audit"}
             </p>
           </div>
@@ -143,10 +143,10 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
           return (
             <Card
               key={stage.number}
-              className={`transition-all bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-gray-50 dark:hover:bg-white/15 hover:border-gray-300 dark:hover:border-white/30 ${
+              className={`transition-all duration-200 hover:-translate-y-0.5 hover:shadow-crowe-hover bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-tint-50 dark:hover:bg-white/15 hover:border-tint-300 dark:hover:border-white/30 ${
                 isCurrent ? "border-crowe-amber shadow-md" : ""
               } ${!isActive ? "opacity-60" : ""} ${
-                isMonitor && auditRun.publishedWorkbooks > 0 ? "border-teal-500" : ""
+                isMonitor && auditRun.publishedWorkbooks > 0 ? "border-crowe-teal" : ""
               }`}
             >
               <CardHeader className="p-4">
@@ -158,14 +158,14 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                         : isMonitor && auditRun.publishedWorkbooks > 0
                         ? "bg-crowe-teal/15 text-crowe-teal"
                         : isActive
-                        ? "bg-green-500/20 text-green-400"
-                        : "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-300"
+                        ? "bg-crowe-teal/20 text-crowe-teal"
+                        : "bg-tint-100 dark:bg-white/10 text-tint-500 dark:text-tint-300"
                     }`}
                   >
                     <stage.icon className="h-5 w-5" />
                   </div>
                   <div>
-                    <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
+                    <CardTitle className="flex items-center gap-2 text-tint-900 dark:text-white">
                       {stage.name}
                       {isCurrent && (
                         <Badge variant="default" className="text-xs">
@@ -178,7 +178,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                         </Badge>
                       )}
                     </CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-300">{stage.description}</CardDescription>
+                    <CardDescription className="text-tint-700 dark:text-tint-300">{stage.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -188,7 +188,7 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
                     className={`w-full ${
                       isCurrent || (isMonitor && auditRun.publishedWorkbooks > 0)
                         ? ""
-                        : "border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30"
+                        : "border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30"
                     }`}
                     variant={isCurrent || (isMonitor && auditRun.publishedWorkbooks > 0) ? "default" : "outline"}
                     disabled={!isActive && !isCurrent}
@@ -204,36 +204,36 @@ export default async function AicAuditRunDetailPage({ params }: PageProps) {
       </div>
 
       {/* AIC Workflow Summary */}
-      <Card className="mt-6 bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+      <Card className="mt-6 bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
         <CardHeader>
-          <CardTitle className="text-gray-900 dark:text-white">AIC Workflow Summary</CardTitle>
-          <CardDescription className="text-gray-600 dark:text-gray-300">
+          <CardTitle className="text-tint-900 dark:text-white">AIC Workflow Summary</CardTitle>
+          <CardDescription className="text-tint-700 dark:text-tint-300">
             Your responsibilities in the audit lifecycle
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="w-32 font-medium text-gray-900 dark:text-white">Stages 1-4</div>
-              <div className="flex-1 text-sm text-gray-600 dark:text-gray-300">
+              <div className="w-32 font-medium text-tint-900 dark:text-white">Stages 1-4</div>
+              <div className="flex-1 text-sm text-tint-700 dark:text-tint-300">
                 Setup: Gap analysis, sampling, attribute extraction, workbook generation
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-32 font-medium text-gray-900 dark:text-white">Stage 4</div>
-              <div className="flex-1 text-sm text-gray-600 dark:text-gray-300">
+              <div className="w-32 font-medium text-tint-900 dark:text-white">Stage 4</div>
+              <div className="flex-1 text-sm text-tint-700 dark:text-tint-300">
                 <span className="font-medium text-crowe-amber">Publish</span> workbooks to assigned auditors
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-32 font-medium text-gray-900 dark:text-white">Monitor</div>
-              <div className="flex-1 text-sm text-gray-600 dark:text-gray-300">
+              <div className="w-32 font-medium text-tint-900 dark:text-white">Monitor</div>
+              <div className="flex-1 text-sm text-tint-700 dark:text-tint-300">
                 <span className="font-medium text-crowe-teal">Live tracking</span> of auditor completion (5-second refresh)
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-32 font-medium text-gray-900 dark:text-white">Consolidation</div>
-              <div className="flex-1 text-sm text-gray-600 dark:text-gray-300">
+              <div className="w-32 font-medium text-tint-900 dark:text-white">Consolidation</div>
+              <div className="flex-1 text-sm text-tint-700 dark:text-tint-300">
                 Aggregate submitted results and generate final report
               </div>
             </div>

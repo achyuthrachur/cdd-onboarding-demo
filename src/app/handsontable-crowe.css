@@ -1,0 +1,96 @@
+/* Handsontable Crowe Brand Overrides */
+
+/* Header cells */
+.handsontable th,
+.handsontable .ht_clone_top th {
+  background: #eef0f4 !important;
+  color: #545968 !important;
+  font-weight: 600;
+  border-color: #dfe1e8 !important;
+  font-size: 0.8125rem;
+}
+
+.dark .handsontable th,
+.dark .handsontable .ht_clone_top th {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Body cells */
+.handsontable td {
+  background: #ffffff !important;
+  color: #2d3142 !important;
+  border-color: #dfe1e8 !important;
+  font-size: 0.8125rem;
+}
+
+.dark .handsontable td {
+  background: rgba(1, 30, 65, 0.6) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Alternating rows */
+.handsontable tbody tr:nth-child(even) td {
+  background: #f6f7fa !important;
+}
+
+.dark .handsontable tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* Selection highlight - Crowe Amber */
+.handsontable td.area {
+  background: rgba(245, 168, 0, 0.12) !important;
+}
+
+.handsontable td.current {
+  border-color: #F5A800 !important;
+}
+
+.dark .handsontable td.area {
+  background: rgba(245, 168, 0, 0.15) !important;
+}
+
+/* Hover row */
+.handsontable tbody tr:hover td {
+  background: rgba(0, 46, 98, 0.04) !important;
+}
+
+.dark .handsontable tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Row/column headers */
+.handsontable .ht_clone_left th,
+.handsontable .ht_clone_top_left_corner th {
+  background: #eef0f4 !important;
+  color: #8b90a0 !important;
+  font-weight: 500;
+}
+
+.dark .handsontable .ht_clone_left th,
+.dark .handsontable .ht_clone_top_left_corner th {
+  background: rgba(1, 30, 65, 0.8) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Scrollbar */
+.handsontable .wtHolder {
+  scrollbar-width: thin;
+}
+
+.handsontable .wtHolder::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.handsontable .wtHolder::-webkit-scrollbar-thumb {
+  background-color: #c8cbd6;
+  border-radius: 4px;
+}
+
+.dark .handsontable .wtHolder::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+}

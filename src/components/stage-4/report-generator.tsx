@@ -304,7 +304,7 @@ export function ReportGenerator({
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="flex items-center text-green-100"
+                    className="flex items-center text-white"
                   >
                     <Check className="mr-2 h-4 w-4" />
                     Report Generated!
@@ -437,7 +437,7 @@ export function ReportGenerator({
         </motion.div>
 
         <Presence isVisible={!canGenerate}>
-          <p className="text-sm text-gray-600 dark:text-white/80 text-center">
+          <p className="text-sm text-tint-700 dark:text-white/80 text-center">
             Generate a consolidation first to create reports
           </p>
         </Presence>
@@ -461,31 +461,31 @@ function generateReportHTML(
   <title>Audit Report - ${consolidation.auditRunId}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-    h1 { font-size: 28px; margin-bottom: 10px; color: #1a1a1a; }
-    h2 { font-size: 20px; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #e5e5e5; }
-    h3 { font-size: 16px; margin: 20px 0 10px; color: #666; }
-    .header { border-bottom: 3px solid #2563eb; padding-bottom: 20px; margin-bottom: 30px; }
-    .header p { color: #666; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #2d3142; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+    h1 { font-size: 28px; margin-bottom: 10px; color: #1a1d2b; }
+    h2 { font-size: 20px; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #dfe1e8; }
+    h3 { font-size: 16px; margin: 20px 0 10px; color: #545968; }
+    .header { border-bottom: 3px solid #0075C9; padding-bottom: 20px; margin-bottom: 30px; }
+    .header p { color: #545968; }
     .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-    .metric { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; }
+    .metric { background: #f6f7fa; padding: 20px; border-radius: 8px; text-align: center; }
     .metric .value { font-size: 32px; font-weight: bold; }
-    .metric .label { font-size: 12px; color: #666; text-transform: uppercase; }
-    .metric.pass .value { color: #16a34a; }
-    .metric.fail .value { color: #dc2626; }
+    .metric .label { font-size: 12px; color: #545968; text-transform: uppercase; }
+    .metric.pass .value { color: #05AB8C; }
+    .metric.fail .value { color: #E5376B; }
     table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e5e5; }
-    th { background: #f8f9fa; font-weight: 600; font-size: 12px; text-transform: uppercase; color: #666; }
-    tr:hover { background: #f8f9fa; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #dfe1e8; }
+    th { background: #f6f7fa; font-weight: 600; font-size: 12px; text-transform: uppercase; color: #545968; }
+    tr:hover { background: #f6f7fa; }
     .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
-    .badge-red { background: #fee2e2; color: #dc2626; }
-    .badge-green { background: #dcfce7; color: #16a34a; }
-    .badge-gray { background: #f3f4f6; color: #6b7280; }
-    .progress-bar { height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+    .badge-red { background: #fdeef2; color: #E5376B; }
+    .badge-green { background: #e6f7f4; color: #0C7876; }
+    .badge-gray { background: #eef0f4; color: #8b90a0; }
+    .progress-bar { height: 8px; background: #dfe1e8; border-radius: 4px; overflow: hidden; margin: 8px 0; }
     .progress-bar .fill { height: 100%; }
-    .progress-bar .pass { background: #16a34a; }
-    .progress-bar .fail { background: #dc2626; }
-    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e5e5; font-size: 12px; color: #666; }
+    .progress-bar .pass { background: #05AB8C; }
+    .progress-bar .fail { background: #E5376B; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #dfe1e8; font-size: 12px; color: #545968; }
     @media print { body { max-width: none; padding: 20px; } .metrics { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>

@@ -272,8 +272,8 @@ export default function AicStage3Page() {
       title: "Step 1: Upload",
       description: "FLU Procedures",
       isComplete: true,
-      activeColor: "bg-green-500/20 text-green-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-teal/20 text-crowe-teal",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: FileText,
       badgeText: "Ready",
     },
@@ -281,8 +281,8 @@ export default function AicStage3Page() {
       title: "Step 2: Extract",
       description: "AI Attribute Extraction",
       isComplete: attributeCount > 0,
-      activeColor: "bg-amber-500/20 text-amber-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-amber/20 text-crowe-amber",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Bot,
       badgeText: attributeCount > 0
         ? `${attributeCount} attributes`
@@ -292,8 +292,8 @@ export default function AicStage3Page() {
       title: "Step 3: Review",
       description: "Confirm & Export",
       isComplete: canProceed,
-      activeColor: "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-tint-100 dark:bg-white/10 text-tint-700 dark:text-white/80",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: FileSpreadsheet,
       badgeText: canProceed ? `${docsCount} docs mapped` : "Pending",
     },
@@ -310,7 +310,7 @@ export default function AicStage3Page() {
       >
         <Link
           href={`/aic/audit-runs/${id}`}
-          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4"
+          className="inline-flex items-center text-sm text-tint-500 dark:text-tint-300 hover:text-tint-900 dark:hover:text-white mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Audit Run
@@ -318,17 +318,17 @@ export default function AicStage3Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-amber-500/20 text-amber-400">Stage 3</Badge>
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <Badge className="bg-crowe-amber/20 text-crowe-amber">Stage 3</Badge>
+              <h1 className="text-3xl font-bold tracking-tight text-tint-900 dark:text-white">
                 FLU Procedure Extraction
               </h1>
             </div>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">
+            <p className="text-tint-700 dark:text-tint-300 mt-2">
               Extract CIP, CDD, and EDD testing attributes from Front Line Unit procedures
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleLoadDemoData} className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+            <Button variant="outline" onClick={handleLoadDemoData} className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
             </Button>
@@ -350,12 +350,12 @@ export default function AicStage3Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
+            <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
                   <motion.div
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      step.isComplete ? "bg-green-500/20 text-green-400" : step.activeColor
+                      step.isComplete ? "bg-crowe-teal/20 text-crowe-teal" : step.activeColor
                     }`}
                   >
                     {step.isComplete ? (
@@ -365,13 +365,13 @@ export default function AicStage3Page() {
                     )}
                   </motion.div>
                   <div>
-                    <CardTitle className="text-base text-gray-900 dark:text-white">{step.title}</CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-300">{step.description}</CardDescription>
+                    <CardTitle className="text-base text-tint-900 dark:text-white">{step.title}</CardTitle>
+                    <CardDescription className="text-tint-700 dark:text-tint-300">{step.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-gray-300 dark:border-white/30 text-gray-600 dark:text-gray-300" : ""}>
+                <Badge variant={step.isComplete ? "default" : "outline"} className={!step.isComplete ? "border-tint-300 dark:border-white/30 text-tint-700 dark:text-tint-300" : ""}>
                   {step.badgeText}
                 </Badge>
               </CardContent>
@@ -436,11 +436,11 @@ export default function AicStage3Page() {
                     demoMode={extractionResult.demoMode}
                   />
                 ) : (
-                  <Card className="flex items-center justify-center py-16 bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+                  <Card className="flex items-center justify-center py-16 bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                     <div className="text-center">
-                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
-                      <h3 className="font-medium mb-2 text-gray-900 dark:text-white">No Extraction Results</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <Sparkles className="h-16 w-16 mx-auto mb-4 text-tint-500 dark:text-tint-500" />
+                      <h3 className="font-medium mb-2 text-tint-900 dark:text-white">No Extraction Results</h3>
+                      <p className="text-sm text-tint-700 dark:text-tint-300">
                         Upload FLU procedures and run extraction to view results
                       </p>
                     </div>
@@ -454,13 +454,13 @@ export default function AicStage3Page() {
 
       {/* Navigation */}
       <motion.div
-        className="flex items-center justify-between pt-4 flex-shrink-0 border-t border-gray-200 dark:border-white/10 mt-6"
+        className="flex items-center justify-between pt-4 flex-shrink-0 border-t border-tint-200 dark:border-white/10 mt-6"
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
         <Link href={`/aic/audit-runs/${id}/stage-2`}>
-          <Button variant="outline" className="border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30">
+          <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Stage 2
           </Button>

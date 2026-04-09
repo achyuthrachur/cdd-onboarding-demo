@@ -291,7 +291,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                 Testing Workbook
                 <Badge
                   variant={isSubmitted ? "default" : "secondary"}
-                  className={isSubmitted ? "bg-green-500" : ""}
+                  className={isSubmitted ? "bg-crowe-teal" : ""}
                 >
                   {workbook.status}
                 </Badge>

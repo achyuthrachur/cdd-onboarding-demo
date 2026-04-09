@@ -165,7 +165,7 @@ export default function Stage6Page() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.1 }}
               >
-                <Badge className="bg-orange-100 text-orange-700">Stage 6</Badge>
+                <Badge className="bg-crowe-amber/20 text-crowe-amber-dark">Stage 6</Badge>
               </motion.div>
               <h1 className="text-3xl font-bold tracking-tight text-white">
                 Consolidation & Reporting
@@ -246,20 +246,20 @@ export default function Stage6Page() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mb-6 p-4 bg-green-500/10 backdrop-blur-xl border border-green-500/30 rounded-lg flex items-center gap-3"
+            className="mb-6 p-4 bg-crowe-teal/10 backdrop-blur-xl border border-crowe-teal/30 rounded-lg flex items-center gap-3"
           >
             <motion.div
               initial={shouldReduceMotion ? undefined : { scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
             >
-              <CheckCircle2 className="h-5 w-5 text-green-400" />
+              <CheckCircle2 className="h-5 w-5 text-crowe-teal" />
             </motion.div>
             <div>
-              <p className="font-medium text-green-300">
+              <p className="font-medium text-crowe-teal-bright">
                 Consolidation Available
               </p>
-              <p className="text-sm text-green-400">
+              <p className="text-sm text-crowe-teal">
                 Last generated: {new Date(consolidation.generatedAt).toLocaleString()} •{" "}
                 {consolidation.rawData.totalRows} rows from {consolidation.rawData.workbookIds.length} workbook(s)
               </p>
@@ -271,19 +271,19 @@ export default function Stage6Page() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mb-6 p-4 bg-yellow-500/10 backdrop-blur-xl border border-yellow-500/30 rounded-lg flex items-center gap-3"
+            className="mb-6 p-4 bg-crowe-amber/10 backdrop-blur-xl border border-crowe-amber/30 rounded-lg flex items-center gap-3"
           >
             <motion.div
               animate={shouldReduceMotion ? undefined : { rotate: [0, -10, 10, -10, 0] }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <AlertCircle className="h-5 w-5 text-yellow-400" />
+              <AlertCircle className="h-5 w-5 text-crowe-amber" />
             </motion.div>
             <div>
-              <p className="font-medium text-yellow-300">
+              <p className="font-medium text-crowe-amber-bright">
                 No Consolidation Yet
               </p>
-              <p className="text-sm text-yellow-400">
+              <p className="text-sm text-crowe-amber">
                 Click &quot;Generate Consolidation&quot; or &quot;Load Demo Data&quot; to aggregate results
               </p>
             </div>
@@ -376,9 +376,9 @@ export default function Stage6Page() {
                         transition={{ delay: index * 0.1, type: "spring", stiffness: 400 }}
                       >
                         {step.complete ? (
-                          <CheckCircle2 className="h-5 w-5 text-green-500" />
+                          <CheckCircle2 className="h-5 w-5 text-crowe-teal" />
                         ) : (
-                          <AlertCircle className="h-5 w-5 text-yellow-500" />
+                          <AlertCircle className="h-5 w-5 text-crowe-amber" />
                         )}
                       </motion.div>
                       <span className="text-white">

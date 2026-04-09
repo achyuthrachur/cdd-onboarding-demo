@@ -63,9 +63,9 @@ export function ScrollableTable({
         ref={containerRef}
         className={cn(
           'overflow-x-auto overflow-y-auto',
-          'scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600',
+          'scrollbar-thin scrollbar-thumb-tint-300 dark:scrollbar-thumb-tint-700',
           'scrollbar-track-transparent',
-          'border border-gray-200 dark:border-white/10',
+          'border border-tint-200 dark:border-white/10',
           'rounded-lg',
           'scroll-always',
           className
@@ -77,24 +77,42 @@ export function ScrollableTable({
 
       {/* Left scroll hint */}
       {showScrollHint && showLeftHint && (
-        <div
-          className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(to right, rgba(255, 255, 255, 0.9), transparent)',
-          }}
-        />
+        <>
+          <div
+            className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none dark:hidden"
+            style={{
+              background:
+                'linear-gradient(to right, rgba(255, 255, 255, 0.9), transparent)',
+            }}
+          />
+          <div
+            className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none hidden dark:block"
+            style={{
+              background:
+                'linear-gradient(to right, rgba(1, 30, 65, 0.9), transparent)',
+            }}
+          />
+        </>
       )}
 
       {/* Right scroll hint */}
       {showScrollHint && showRightHint && (
-        <div
-          className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(to left, rgba(255, 255, 255, 0.9), transparent)',
-          }}
-        />
+        <>
+          <div
+            className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none dark:hidden"
+            style={{
+              background:
+                'linear-gradient(to left, rgba(255, 255, 255, 0.9), transparent)',
+            }}
+          />
+          <div
+            className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none hidden dark:block"
+            style={{
+              background:
+                'linear-gradient(to left, rgba(1, 30, 65, 0.9), transparent)',
+            }}
+          />
+        </>
       )}
     </div>
   );
@@ -118,7 +136,7 @@ export function StickyColumnTable({
   return (
     <div className={cn('relative overflow-x-auto', className)}>
       <div className="inline-block min-w-full align-middle">
-        <div className="overflow-hidden border border-gray-200 dark:border-white/10 rounded-lg">
+        <div className="overflow-hidden border border-tint-200 dark:border-white/10 rounded-lg">
           <style jsx>{`
             table th:nth-child(-n+${stickyColumns}),
             table td:nth-child(-n+${stickyColumns}) {

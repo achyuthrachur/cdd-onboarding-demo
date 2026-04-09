@@ -9,18 +9,18 @@ import { cn } from "@/lib/utils"
 import { duration, useReducedMotion } from "@/lib/animations"
 
 const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-full border font-medium w-fit whitespace-nowrap shrink-0 gap-1.5 [&>svg]:pointer-events-none focus-visible:ring-gray-400/30 dark:focus-visible:ring-white/30 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
+  "inline-flex items-center justify-center rounded-full border font-medium w-fit whitespace-nowrap shrink-0 gap-1.5 [&>svg]:pointer-events-none focus-visible:ring-tint-500/30 dark:focus-visible:ring-white/30 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
   {
     variants: {
       variant: {
-        default: "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white border-gray-200 dark:border-white/20 [a&]:hover:bg-gray-200 dark:[a&]:hover:bg-white/15",
+        default: "bg-tint-100 dark:bg-white/10 text-tint-900 dark:text-white border-tint-200 dark:border-white/20 [a&]:hover:bg-tint-200 dark:[a&]:hover:bg-white/15",
         secondary:
           "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber border-crowe-amber/30 [a&]:hover:bg-crowe-amber/30",
         destructive:
           "bg-destructive/20 text-destructive border-destructive/30 [a&]:hover:bg-destructive/30 focus-visible:ring-destructive/20",
         outline:
-          "border-gray-200 dark:border-white/20 text-gray-600 dark:text-gray-300 bg-transparent [a&]:hover:bg-gray-100 dark:[a&]:hover:bg-white/10 [a&]:hover:text-gray-900 dark:[a&]:hover:text-white",
-        ghost: "border-transparent text-gray-500 dark:text-gray-300 [a&]:hover:bg-gray-100 dark:[a&]:hover:bg-white/10 [a&]:hover:text-gray-900 dark:[a&]:hover:text-white",
+          "border-tint-200 dark:border-white/20 text-tint-700 dark:text-tint-300 bg-transparent [a&]:hover:bg-tint-100 dark:[a&]:hover:bg-white/10 [a&]:hover:text-tint-900 dark:[a&]:hover:text-white",
+        ghost: "border-transparent text-tint-500 dark:text-tint-300 [a&]:hover:bg-tint-100 dark:[a&]:hover:bg-white/10 [a&]:hover:text-tint-900 dark:[a&]:hover:text-white",
         link: "text-crowe-amber-dark dark:text-crowe-amber border-transparent underline-offset-4 [a&]:hover:underline",
       },
       size: {

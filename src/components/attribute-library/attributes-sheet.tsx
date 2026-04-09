@@ -37,27 +37,27 @@ interface AttributesSheetProps {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Entity Profile": "bg-blue-500/20 text-blue-700 dark:text-blue-300",
-  "Individual Profile": "bg-purple-500/20 text-purple-700 dark:text-purple-300",
-  Ownership: "bg-green-500/20 text-green-700 dark:text-green-300",
-  Documentation: "bg-yellow-500/20 text-yellow-700 dark:text-yellow-300",
-  AML: "bg-red-500/20 text-red-700 dark:text-red-300",
-  EDD: "bg-orange-500/20 text-orange-700 dark:text-orange-300",
-  Compliance: "bg-indigo-500/20 text-indigo-700 dark:text-indigo-300",
-  Registration: "bg-pink-500/20 text-pink-700 dark:text-pink-300",
+  "Entity Profile": "bg-crowe-blue/20 text-crowe-blue-dark dark:text-crowe-blue-light",
+  "Individual Profile": "bg-crowe-violet/20 text-crowe-violet-dark dark:text-crowe-violet-bright",
+  Ownership: "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright",
+  Documentation: "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright",
+  AML: "bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright",
+  EDD: "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber",
+  Compliance: "bg-crowe-indigo/20 text-crowe-indigo dark:text-crowe-indigo-bright",
+  Registration: "bg-crowe-violet/20 text-crowe-violet-dark dark:text-crowe-violet-bright",
 };
 
 const GROUP_COLORS: Record<string, string> = {
-  Individuals: "bg-cyan-500/20 text-cyan-700 dark:text-cyan-300",
-  Entity: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300",
-  "Beneficial Owner": "bg-violet-500/20 text-violet-700 dark:text-violet-300",
-  Screening: "bg-amber-500/20 text-amber-700 dark:text-amber-300",
+  Individuals: "bg-crowe-cyan/20 text-crowe-cyan-dark dark:text-crowe-cyan",
+  Entity: "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright",
+  "Beneficial Owner": "bg-crowe-violet/20 text-crowe-violet-dark dark:text-crowe-violet-bright",
+  Screening: "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright",
 };
 
 const RISK_SCOPE_COLORS: Record<string, string> = {
   Base: "bg-muted text-muted-foreground",
-  EDD: "bg-red-500/20 text-red-700 dark:text-red-300",
-  Both: "bg-orange-500/20 text-orange-700 dark:text-orange-300",
+  EDD: "bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright",
+  Both: "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber",
 };
 
 type SortField = "Attribute_ID" | "Attribute_Name" | "Category" | "Group" | "Jurisdiction_ID";
@@ -330,7 +330,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                       </TableCell>
                       <TableCell className="px-4 py-2 text-sm">
                         {attr.IsRequired === "Y" ? (
-                          <CheckCircle className="h-4 w-4 text-green-400" />
+                          <CheckCircle className="h-4 w-4 text-crowe-teal" />
                         ) : (
                           <span className="text-muted-foreground">-</span>
                         )}
@@ -361,7 +361,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                                 </Badge>
                                 <Badge variant="secondary">{attr.Jurisdiction_ID}</Badge>
                                 {attr.IsRequired === "Y" && (
-                                  <Badge className="bg-green-500/20 text-green-300">Required</Badge>
+                                  <Badge className="bg-crowe-teal/20 text-crowe-teal-bright">Required</Badge>
                                 )}
                                 <Badge
                                   variant="outline"

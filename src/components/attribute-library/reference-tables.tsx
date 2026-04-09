@@ -115,10 +115,10 @@ interface ClientTypeRiskTableProps {
 }
 
 const RISK_TIER_COLORS: Record<string, string> = {
-  Low: "bg-green-500/20 text-green-300",
-  Medium: "bg-yellow-500/20 text-yellow-300",
-  High: "bg-orange-500/20 text-orange-300",
-  Critical: "bg-red-500/20 text-red-300",
+  Low: "bg-crowe-teal/20 text-crowe-teal-bright",
+  Medium: "bg-crowe-amber/20 text-crowe-amber-bright",
+  High: "bg-crowe-amber/20 text-crowe-amber",
+  Critical: "bg-crowe-coral/20 text-crowe-coral-bright",
 };
 
 export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProps) {
@@ -191,7 +191,7 @@ export function ClientTypeRiskTable({ clientTypeRisks }: ClientTypeRiskTableProp
                     </TableCell>
                     <TableCell className="px-4 py-2 text-sm">
                       {ctr.IsEDD ? (
-                        <div className="flex items-center gap-1 text-red-600">
+                        <div className="flex items-center gap-1 text-crowe-coral">
                           <CheckCircle className="h-4 w-4" />
                           <span className="text-sm">Yes</span>
                         </div>
@@ -220,8 +220,8 @@ interface SamplingTableProps {
 
 const SAMPLING_STATUS_COLORS: Record<string, string> = {
   Draft: "bg-white/10 text-white/80",
-  Locked: "bg-blue-500/20 text-blue-300",
-  Completed: "bg-green-500/20 text-green-300",
+  Locked: "bg-crowe-blue/20 text-crowe-blue-light",
+  Completed: "bg-crowe-teal/20 text-crowe-teal-bright",
 };
 
 export function SamplingTable({ samplingConfig }: SamplingTableProps) {

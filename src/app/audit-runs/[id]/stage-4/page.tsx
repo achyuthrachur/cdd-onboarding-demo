@@ -308,8 +308,8 @@ export default function Stage4Page() {
       title: "Step 1: Load Data",
       description: "Sample & Attributes",
       isComplete: stepComplete.load,
-      activeColor: "bg-blue-500/20 text-blue-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-blue/20 text-crowe-blue",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Database,
       badgeText: `${samples.length} samples, ${extractedAttributes.length} attrs`,
     },
@@ -317,8 +317,8 @@ export default function Stage4Page() {
       title: "Step 2: Auditors",
       description: "Select team",
       isComplete: stepComplete.auditors,
-      activeColor: "bg-purple-500/20 text-purple-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-violet/20 text-crowe-violet",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: Users,
       badgeText: `${selectedAuditors.length} selected`,
     },
@@ -326,8 +326,8 @@ export default function Stage4Page() {
       title: "Step 3: Generate",
       description: "Create workbooks",
       isComplete: stepComplete.generate,
-      activeColor: "bg-amber-500/20 text-amber-400",
-      completeColor: "bg-green-500/20 text-green-400",
+      activeColor: "bg-crowe-amber/20 text-crowe-amber",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: FileSpreadsheet,
       badgeText: `${auditorWorkbooks.length} workbooks`,
     },
@@ -336,7 +336,7 @@ export default function Stage4Page() {
       description: "Fill demo data",
       isComplete: stepComplete.view,
       activeColor: "bg-white/10 text-white/80",
-      completeColor: "bg-green-500/20 text-green-400",
+      completeColor: "bg-crowe-teal/20 text-crowe-teal",
       Icon: ListChecks,
       badgeText: stepComplete.view ? "Ready" : "Pending",
     },
@@ -361,7 +361,7 @@ export default function Stage4Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-purple-500/20 text-purple-400">Stage 4</Badge>
+              <Badge className="bg-crowe-violet/20 text-crowe-violet">Stage 4</Badge>
               <h1 className="text-3xl font-bold tracking-tight text-white">
                 Auditor Workbook Generation
               </h1>
@@ -386,7 +386,7 @@ export default function Stage4Page() {
       >
         {steps.map((step, index) => (
           <motion.div key={index} variants={staggerItem}>
-            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-green-500" : ""}`}>
+            <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -518,13 +518,13 @@ export default function Stage4Page() {
                               </>
                             )}
                             <motion.div
-                              className="p-3 bg-green-500/10 rounded-lg"
+                              className="p-3 bg-crowe-teal/10 rounded-lg"
                               initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ delay: 0.2 }}
                             >
-                              <CheckCircle2 className="h-5 w-5 text-green-400 mb-2" />
-                              <p className="text-sm text-green-400">
+                              <CheckCircle2 className="h-5 w-5 text-crowe-teal mb-2" />
+                              <p className="text-sm text-crowe-teal">
                                 Sampling data loaded and ready
                               </p>
                             </motion.div>
@@ -572,13 +572,13 @@ export default function Stage4Page() {
                               </Badge>
                             </div>
                             <motion.div
-                              className="p-3 bg-green-500/10 rounded-lg"
+                              className="p-3 bg-crowe-teal/10 rounded-lg"
                               initial={shouldReduceMotion ? undefined : { scale: 0.9, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ delay: 0.3 }}
                             >
-                              <CheckCircle2 className="h-5 w-5 text-green-400 mb-2" />
-                              <p className="text-sm text-green-400">
+                              <CheckCircle2 className="h-5 w-5 text-crowe-teal mb-2" />
+                              <p className="text-sm text-crowe-teal">
                                 Attributes loaded and ready
                               </p>
                             </motion.div>
