@@ -310,41 +310,41 @@ export function TestGridLayout({
         <CardContent>
           {/* Summary Stats */}
           <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-3 mb-4">
-            <div className="text-center p-3 rounded bg-white/10">
-              <p className="text-lg font-bold text-white">{summary.total}</p>
-              <p className="text-xs text-white/80">Total</p>
+            <div className="text-center p-3 rounded bg-tint-100 dark:bg-white/10">
+              <p className="text-lg font-bold text-tint-900 dark:text-white">{summary.total}</p>
+              <p className="text-xs text-tint-700 dark:text-white/80">Total</p>
             </div>
             <div className="text-center p-3 rounded bg-crowe-teal/20">
-              <p className="text-lg font-bold text-crowe-teal-bright">{summary.pass}</p>
-              <p className="text-xs text-white/80">Pass</p>
+              <p className="text-lg font-bold text-crowe-teal-dark dark:text-crowe-teal-bright">{summary.pass}</p>
+              <p className="text-xs text-tint-700 dark:text-white/80">Pass</p>
             </div>
             <div className="text-center p-3 rounded bg-crowe-amber/20">
-              <p className="text-lg font-bold text-crowe-amber-bright">{summary.passObs}</p>
-              <p className="text-xs text-white/80">Pass Obs</p>
+              <p className="text-lg font-bold text-crowe-amber-dark dark:text-crowe-amber-bright">{summary.passObs}</p>
+              <p className="text-xs text-tint-700 dark:text-white/80">Pass Obs</p>
             </div>
             <div className="text-center p-3 rounded bg-crowe-coral/20">
-              <p className="text-lg font-bold text-crowe-coral-bright">{summary.fail1}</p>
-              <p className="text-xs text-white/80">Fail 1</p>
+              <p className="text-lg font-bold text-crowe-coral-dark dark:text-crowe-coral-bright">{summary.fail1}</p>
+              <p className="text-xs text-tint-700 dark:text-white/80">Fail 1</p>
             </div>
             <div className="text-center p-3 rounded bg-crowe-coral/20">
-              <p className="text-lg font-bold text-crowe-coral-bright">{summary.fail2}</p>
-              <p className="text-xs text-white/80">Fail 2</p>
+              <p className="text-lg font-bold text-crowe-coral-dark dark:text-crowe-coral-bright">{summary.fail2}</p>
+              <p className="text-xs text-tint-700 dark:text-white/80">Fail 2</p>
             </div>
             <div className="text-center p-3 rounded bg-crowe-blue/20">
-              <p className="text-lg font-bold text-crowe-blue-light">{summary.qLob}</p>
-              <p className="text-xs text-white/80">Q to LOB</p>
+              <p className="text-lg font-bold text-crowe-blue-dark dark:text-crowe-blue-light">{summary.qLob}</p>
+              <p className="text-xs text-tint-700 dark:text-white/80">Q to LOB</p>
             </div>
-            <div className="text-center p-3 rounded bg-white/5">
-              <p className="text-lg font-bold text-white/80">{summary.na}</p>
-              <p className="text-xs text-white/80">N/A</p>
+            <div className="text-center p-3 rounded bg-tint-50 dark:bg-white/5">
+              <p className="text-lg font-bold text-tint-700 dark:text-white/80">{summary.na}</p>
+              <p className="text-xs text-tint-700 dark:text-white/80">N/A</p>
             </div>
-            <div className="text-center p-3 rounded bg-white/10">
-              <p className="text-lg font-bold text-white">{summary.empty}</p>
-              <p className="text-xs text-white/80">Empty</p>
+            <div className="text-center p-3 rounded bg-tint-100 dark:bg-white/10">
+              <p className="text-lg font-bold text-tint-900 dark:text-white">{summary.empty}</p>
+              <p className="text-xs text-tint-700 dark:text-white/80">Empty</p>
             </div>
             <div className="text-center p-3 rounded bg-crowe-amber/20">
               <p className="text-lg font-bold text-crowe-amber">{summary.percentage.toFixed(0)}%</p>
-              <p className="text-xs text-white/80">Complete</p>
+              <p className="text-xs text-tint-700 dark:text-white/80">Complete</p>
             </div>
           </div>
 
@@ -352,7 +352,7 @@ export function TestGridLayout({
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/80" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-tint-700 dark:text-white/80" />
                 <Input
                   placeholder="Search attributes..."
                   value={searchTerm}
@@ -412,7 +412,7 @@ export function TestGridLayout({
           </div>
 
           {/* Row count */}
-          <p className="text-sm text-white/80 mb-2">
+          <p className="text-sm text-tint-700 dark:text-white/80 mb-2">
             Showing {filteredRows.length} of {rows.length} rows
           </p>
         </CardContent>
@@ -453,15 +453,20 @@ export function TestGridLayout({
                 if (visibleColumns[col]?.key === "result") {
                   const result = filteredRows[row]?.result;
                   if (result === "Pass") {
-                    cellProperties.className = "htCenter bg-crowe-teal/20 text-crowe-teal-bright";
+                    cellProperties.className =
+                      "htCenter bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright";
                   } else if (result === "Pass w/Observation") {
-                    cellProperties.className = "htCenter bg-crowe-amber/20 text-crowe-amber-bright";
+                    cellProperties.className =
+                      "htCenter bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright";
                   } else if (result?.startsWith("Fail")) {
-                    cellProperties.className = "htCenter bg-crowe-coral/20 text-crowe-coral-bright";
+                    cellProperties.className =
+                      "htCenter bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright";
                   } else if (result === "Question to LOB") {
-                    cellProperties.className = "htCenter bg-crowe-blue/20 text-crowe-blue-light";
+                    cellProperties.className =
+                      "htCenter bg-crowe-blue/20 text-crowe-blue-dark dark:text-crowe-blue-light";
                   } else if (result === "N/A") {
-                    cellProperties.className = "htCenter bg-white/5 text-white/80";
+                    cellProperties.className =
+                      "htCenter bg-tint-50 dark:bg-white/5 text-tint-700 dark:text-white/80";
                   }
                 }
 
@@ -469,9 +474,11 @@ export function TestGridLayout({
                 if (visibleColumns[col]?.key === "percentComplete") {
                   const pct = filteredRows[row]?.percentComplete || 0;
                   if (pct >= 100) {
-                    cellProperties.className = "htCenter bg-crowe-teal/30 text-crowe-teal-bright font-bold";
+                    cellProperties.className =
+                      "htCenter bg-crowe-teal/30 text-crowe-teal-dark dark:text-crowe-teal-bright font-bold";
                   } else if (pct >= 50) {
-                    cellProperties.className = "htCenter bg-crowe-amber/20 text-crowe-amber-bright";
+                    cellProperties.className =
+                      "htCenter bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright";
                   }
                 }
 
@@ -505,10 +512,10 @@ export function TestGridLayout({
                   variant="secondary"
                   className={`ml-2 ${
                     entity.percentComplete >= 100
-                      ? "bg-crowe-teal/20 text-crowe-teal-bright"
+                      ? "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright"
                       : entity.percentComplete > 0
-                      ? "bg-crowe-amber/20 text-crowe-amber-bright"
-                      : "bg-white/10 text-white/80"
+                      ? "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright"
+                      : "bg-tint-100 dark:bg-white/10 text-tint-700 dark:text-white/80"
                   }`}
                 >
                   {entity.percentComplete.toFixed(0)}%

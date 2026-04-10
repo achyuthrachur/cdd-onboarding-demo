@@ -86,7 +86,7 @@ export function WorkbookGenerator({
           <div className="flex flex-wrap gap-2">
             <Badge
               variant={hasStage1Results ? "default" : "outline"}
-              className={hasStage1Results ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
+              className={hasStage1Results ? "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright" : ""}
             >
               {hasStage1Results ? (
                 <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -95,7 +95,7 @@ export function WorkbookGenerator({
             </Badge>
             <Badge
               variant={hasLockedSample ? "default" : "outline"}
-              className={hasLockedSample ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
+              className={hasLockedSample ? "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright" : ""}
             >
               {hasLockedSample ? (
                 <CheckCircle2 className="mr-1 h-3 w-3" />

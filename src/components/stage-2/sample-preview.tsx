@@ -326,7 +326,7 @@ export function SamplePreview({
               onClick={addCoverageOverrides}
               disabled={isAddingCoverage}
               variant="outline"
-              className="w-full mb-4 border-crowe-amber/50 text-crowe-amber-bright hover:bg-crowe-amber/10"
+              className="w-full mb-4 border-crowe-amber/50 text-crowe-amber-dark dark:text-crowe-amber-bright hover:bg-crowe-amber/10"
             >
               {isAddingCoverage ? (
                 <>
@@ -445,7 +445,7 @@ export function SamplePreview({
             {/* Overrides Summary */}
             {summary.overrides?.has_overrides && (
               <div className="p-4 mb-6 border border-crowe-amber/30 bg-crowe-amber/10 rounded-lg">
-                <h4 className="font-medium text-crowe-amber-bright mb-2">
+                <h4 className="font-medium text-crowe-amber-dark dark:text-crowe-amber-bright mb-2">
                   Overrides Applied
                 </h4>
                 {summary.overrides.justification && (

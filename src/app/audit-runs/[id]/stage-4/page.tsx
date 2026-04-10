@@ -23,11 +23,10 @@ import {
 import {
   motion,
   AnimatePresence,
-  staggerContainer,
-  staggerItem,
-  fadeInUp,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
   tabContent,
-  scaleIn,
   useReducedMotion,
 } from "@/lib/animations";
 import { toast } from "sonner";
@@ -344,13 +343,8 @@ export default function Stage4Page() {
 
   return (
     <div className="p-8 h-[calc(100vh-4rem)] flex flex-col min-h-screen bg-crowe-indigo-dark">
-      {/* Header - Animated */}
-      <motion.div
-        className="mb-6 flex-shrink-0"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-      >
+      {/* Header */}
+      <ScrollReveal direction="up" className="mb-6 flex-shrink-0">
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
@@ -375,17 +369,12 @@ export default function Stage4Page() {
             Load Demo Data
           </Button>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
-      {/* Workflow Steps - Staggered animation */}
-      <motion.div
-        className="grid gap-4 md:grid-cols-4 mb-6 flex-shrink-0"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={staggerContainer}
-      >
+      {/* Workflow Steps */}
+      <ScrollStagger className="grid gap-4 md:grid-cols-4 mb-6 flex-shrink-0">
         {steps.map((step, index) => (
-          <motion.div key={index} variants={staggerItem}>
+          <ScrollStaggerItem key={index}>
             <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
@@ -424,9 +413,9 @@ export default function Stage4Page() {
                 </AnimatePresence>
               </CardContent>
             </Card>
-          </motion.div>
+          </ScrollStaggerItem>
         ))}
-      </motion.div>
+      </ScrollStagger>
 
       {/* Main Content Area */}
       <Tabs
@@ -483,14 +472,9 @@ export default function Stage4Page() {
               variants={tabContent}
             >
               <TabsContent value="load" className="h-full m-0">
-                <motion.div
-                  className="grid gap-6 md:grid-cols-2 h-full"
-                  initial={shouldReduceMotion ? undefined : "hidden"}
-                  animate="visible"
-                  variants={staggerContainer}
-                >
+                <ScrollStagger className="grid gap-6 md:grid-cols-2 h-full">
                   {/* Sampling Data */}
-                  <motion.div variants={staggerItem}>
+                  <ScrollStaggerItem>
                     <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-white">Sampling Data (Stage 2)</CardTitle>
@@ -538,10 +522,10 @@ export default function Stage4Page() {
                         )}
                       </CardContent>
                     </Card>
-                  </motion.div>
+                  </ScrollStaggerItem>
 
                   {/* Attributes Data */}
-                  <motion.div variants={staggerItem}>
+                  <ScrollStaggerItem>
                     <Card className="h-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-white">Attributes (Stage 3)</CardTitle>
@@ -592,8 +576,8 @@ export default function Stage4Page() {
                         )}
                       </CardContent>
                     </Card>
-                  </motion.div>
-                </motion.div>
+                  </ScrollStaggerItem>
+                </ScrollStagger>
 
               </TabsContent>
             </motion.div>
@@ -610,12 +594,14 @@ export default function Stage4Page() {
               variants={tabContent}
             >
               <TabsContent value="auditors" className="h-full m-0">
-                <AuditorSelector
-                  availableAuditors={availableAuditors}
-                  selectedAuditors={selectedAuditors}
-                  onSelectionChange={setSelectedAuditors}
-                  sampleCount={samples.length}
-                />
+                <ScrollReveal>
+                  <AuditorSelector
+                    availableAuditors={availableAuditors}
+                    selectedAuditors={selectedAuditors}
+                    onSelectionChange={setSelectedAuditors}
+                    sampleCount={samples.length}
+                  />
+                </ScrollReveal>
 
               </TabsContent>
             </motion.div>
@@ -632,6 +618,7 @@ export default function Stage4Page() {
               variants={tabContent}
             >
               <TabsContent value="generate" className="h-full m-0">
+                <ScrollReveal>
                 <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                   <CardHeader>
                     <CardTitle className="text-white">Generate Auditor Workbooks</CardTitle>
@@ -640,33 +627,26 @@ export default function Stage4Page() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    {/* Summary - Staggered */}
-                    <motion.div
-                      className="grid grid-cols-3 gap-4"
-                      initial={shouldReduceMotion ? undefined : "hidden"}
-                      animate="visible"
-                      variants={staggerContainer}
-                    >
-                      <motion.div variants={staggerItem} className="p-4 bg-white/10 rounded-lg text-center">
+                    {/* Summary */}
+                    <ScrollStagger className="grid grid-cols-3 gap-4">
+                      <ScrollStaggerItem className="p-4 bg-white/10 rounded-lg text-center">
                         <div className="text-2xl font-bold text-white">{samples.length}</div>
                         <div className="text-sm text-white/80">Samples</div>
-                      </motion.div>
-                      <motion.div variants={staggerItem} className="p-4 bg-white/10 rounded-lg text-center">
+                      </ScrollStaggerItem>
+                      <ScrollStaggerItem className="p-4 bg-white/10 rounded-lg text-center">
                         <div className="text-2xl font-bold text-white">{selectedAuditors.length}</div>
                         <div className="text-sm text-white/80">Auditors</div>
-                      </motion.div>
-                      <motion.div variants={staggerItem} className="p-4 bg-white/10 rounded-lg text-center">
+                      </ScrollStaggerItem>
+                      <ScrollStaggerItem className="p-4 bg-white/10 rounded-lg text-center">
                         <div className="text-2xl font-bold text-white">{extractedAttributes.length}</div>
                         <div className="text-sm text-white/80">Attributes</div>
-                      </motion.div>
-                    </motion.div>
+                      </ScrollStaggerItem>
+                    </ScrollStagger>
 
                     {/* Estimated Output */}
-                    <motion.div
+                    <ScrollReveal delay={0.05}>
+                    <div
                       className="p-4 bg-white/5 border border-white/10 rounded-lg"
-                      initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
                     >
                       <h4 className="font-medium mb-2 text-white">Estimated Output</h4>
                       <div className="text-sm space-y-1 text-white">
@@ -683,15 +663,12 @@ export default function Stage4Page() {
                           {samples.length * extractedAttributes.length}
                         </p>
                       </div>
-                    </motion.div>
+                    </div>
+                    </ScrollReveal>
 
                     {/* Actions */}
-                    <motion.div
-                      className="flex gap-3"
-                      initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                    >
+                    <ScrollReveal delay={0.1}>
+                    <div className="flex gap-3">
                       <Button
                         onClick={handleGenerateWorkbooks}
                         disabled={isGenerating || auditorWorkbooks.length > 0}
@@ -719,10 +696,12 @@ export default function Stage4Page() {
                           Clear & Regenerate
                         </Button>
                       )}
-                    </motion.div>
+                    </div>
+                    </ScrollReveal>
 
                   </CardContent>
                 </Card>
+                </ScrollReveal>
               </TabsContent>
             </motion.div>
           )}
@@ -739,11 +718,7 @@ export default function Stage4Page() {
             >
               <TabsContent value="view" className="h-full m-0 flex flex-col">
                 {/* Populate Button */}
-                <motion.div
-                  className="mb-4 flex items-center justify-between flex-shrink-0"
-                  initial={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <ScrollReveal direction="up" className="mb-4 flex items-center justify-between flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="border-white/30 text-white/80">
                       {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.totalRows, 0)} total rows
@@ -769,17 +744,17 @@ export default function Stage4Page() {
                       </>
                     )}
                   </Button>
-                </motion.div>
+                </ScrollReveal>
 
                 {/* Workbook View */}
-                <div className="flex-1 min-h-0">
+                <ScrollReveal className="flex-1 min-h-0">
                   <AuditorWorkbookView
                     workbooks={auditorWorkbooks}
                     activeAuditorId={activeAuditorId}
                     onAuditorChange={setActiveAuditorId}
                     onExport={handleExportWorkbook}
                   />
-                </div>
+                </ScrollReveal>
               </TabsContent>
             </motion.div>
           )}
@@ -787,12 +762,7 @@ export default function Stage4Page() {
       </Tabs>
 
       {/* Navigation */}
-      <motion.div
-        className="flex justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-4"
-        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-      >
+      <ScrollReveal className="flex justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-4">
         <Link href={`/audit-runs/${id}/stage-3`}>
           <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -836,7 +806,7 @@ export default function Stage4Page() {
             </Button>
           </Link>
         )}
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

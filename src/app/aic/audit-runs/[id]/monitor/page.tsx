@@ -26,10 +26,10 @@ import {
 import {
   motion,
   AnimatePresence,
-  staggerContainer,
-  staggerItem,
-  fadeInUp,
   useReducedMotion,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
 } from "@/lib/animations";
 import { toast } from "sonner";
 import { loadFallbackDataForStage, getStageData, setStageData } from "@/lib/stage-data";
@@ -253,12 +253,7 @@ export default function AicMonitorPage() {
   return (
     <div className="p-8">
       {/* Header */}
-      <motion.div
-        className="mb-8"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-      >
+      <ScrollReveal direction="up" className="mb-8">
         <Link
           href={`/aic/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-tint-700 dark:text-white/80 hover:text-tint-900 dark:hover:text-white mb-4"
@@ -269,7 +264,7 @@ export default function AicMonitorPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Badge className="bg-crowe-teal/20 text-crowe-teal">Live Monitor</Badge>
+              <Badge className="bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright">Live Monitor</Badge>
               <h1 className="text-3xl font-bold tracking-tight text-tint-900 dark:text-white">
                 Auditor Progress Tracking
               </h1>
@@ -278,7 +273,7 @@ export default function AicMonitorPage() {
                   animate={{ opacity: [1, 0.5, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <Badge variant="outline" className="text-crowe-teal border-crowe-teal">
+                  <Badge variant="outline" className="text-crowe-teal-dark dark:text-crowe-teal-bright border-crowe-teal">
                     <Activity className="h-3 w-3 mr-1" />
                     Live
                   </Badge>
@@ -302,37 +297,28 @@ export default function AicMonitorPage() {
             )}
           </div>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
       {/* Status Banner */}
       {!isPublished && (
-        <motion.div
-          className="mb-6 p-4 bg-crowe-amber/10 border border-crowe-amber/30 rounded-lg"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <ScrollReveal direction="up" delay={0.05} className="mb-6 p-4 bg-crowe-amber/10 border border-crowe-amber/30 rounded-lg">
           <div className="flex items-center gap-3">
-            <AlertCircle className="h-5 w-5 text-crowe-amber" />
+            <AlertCircle className="h-5 w-5 text-crowe-amber-dark dark:text-crowe-amber" />
             <div>
-              <p className="font-medium text-crowe-amber">
+              <p className="font-medium text-crowe-amber-dark dark:text-crowe-amber">
                 Workbooks Not Published
               </p>
-              <p className="text-sm text-crowe-amber/80">
+              <p className="text-sm text-crowe-amber-dark/80 dark:text-crowe-amber/80">
                 Publish workbooks in Stage 4 to enable live monitoring.
               </p>
             </div>
           </div>
-        </motion.div>
+        </ScrollReveal>
       )}
 
       {/* Summary Stats */}
-      <motion.div
-        className="grid gap-3 md:grid-cols-4 mb-6"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={staggerContainer}
-      >
-        <motion.div variants={staggerItem}>
+      <ScrollStagger className="grid gap-3 md:grid-cols-4 mb-6">
+        <ScrollStaggerItem>
           <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
               <CardDescription className="text-tint-700 dark:text-white/80">Total Auditors</CardDescription>
@@ -345,9 +331,9 @@ export default function AicMonitorPage() {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
+        <ScrollStaggerItem>
           <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
               <CardDescription className="text-tint-700 dark:text-white/80">Submitted</CardDescription>
@@ -360,9 +346,9 @@ export default function AicMonitorPage() {
               />
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
+        <ScrollStaggerItem>
           <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
               <CardDescription className="text-tint-700 dark:text-white/80">Average Completion</CardDescription>
@@ -372,9 +358,9 @@ export default function AicMonitorPage() {
               <Progress value={averageCompletion} className="h-2" />
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
+        <ScrollStaggerItem>
           <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
               <CardDescription className="text-tint-700 dark:text-white/80">Last Updated</CardDescription>
@@ -389,17 +375,12 @@ export default function AicMonitorPage() {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
-      </motion.div>
+        </ScrollStaggerItem>
+      </ScrollStagger>
 
       {/* Charts Section */}
       {isPublished && progress.length > 0 && (
-        <motion.div
-          className="mb-6"
-          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-        >
+        <ScrollReveal direction="up" delay={0.1} className="mb-6">
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList className="grid w-full grid-cols-4 bg-tint-100 dark:bg-white/5">
               <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-white/10">
@@ -422,6 +403,7 @@ export default function AicMonitorPage() {
 
             {/* Status Overview Tab */}
             <TabsContent value="overview">
+              <ScrollReveal direction="up" delay={0.1}>
               <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20">
                 <CardContent className="pt-6">
                   <div className="grid md:grid-cols-2 gap-6">
@@ -443,7 +425,7 @@ export default function AicMonitorPage() {
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         <div className="p-3 rounded-lg bg-crowe-teal/10 border border-crowe-teal/30 text-center">
-                          <div className="text-xl font-bold text-crowe-teal-bright">{submittedCount}</div>
+                          <div className="text-xl font-bold text-crowe-teal-dark dark:text-crowe-teal-bright">{submittedCount}</div>
                           <div className="text-xs text-tint-700 dark:text-white/80">Submitted</div>
                         </div>
                         <div className="p-3 rounded-lg bg-crowe-cyan/10 border border-crowe-cyan/30 text-center">
@@ -459,10 +441,12 @@ export default function AicMonitorPage() {
                   </div>
                 </CardContent>
               </Card>
+              </ScrollReveal>
             </TabsContent>
 
             {/* Auditor Performance Tab */}
             <TabsContent value="auditors">
+              <ScrollReveal direction="up" delay={0.1}>
               <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20">
                 <CardContent className="pt-6">
                   <ChartContainer
@@ -478,10 +462,12 @@ export default function AicMonitorPage() {
                   </ChartContainer>
                 </CardContent>
               </Card>
+              </ScrollReveal>
             </TabsContent>
 
             {/* Timeline Tab */}
             <TabsContent value="timeline">
+              <ScrollReveal direction="up" delay={0.1}>
               <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20">
                 <CardContent className="pt-6">
                   <ChartContainer
@@ -496,10 +482,12 @@ export default function AicMonitorPage() {
                   </ChartContainer>
                 </CardContent>
               </Card>
+              </ScrollReveal>
             </TabsContent>
 
             {/* Category Breakdown Tab */}
             <TabsContent value="categories">
+              <ScrollReveal direction="up" delay={0.1}>
               <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20">
                 <CardContent className="pt-6">
                   <ChartContainer
@@ -515,18 +503,14 @@ export default function AicMonitorPage() {
                   </ChartContainer>
                 </CardContent>
               </Card>
+              </ScrollReveal>
             </TabsContent>
           </Tabs>
-        </motion.div>
+        </ScrollReveal>
       )}
 
       {/* Auditor Progress Cards */}
-      <motion.div
-        className="mb-6"
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
+      <ScrollReveal direction="up" delay={0.15} className="mb-6">
         <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -544,7 +528,7 @@ export default function AicMonitorPage() {
               >
                 {isPolling ? (
                   <>
-                    <Activity className="h-4 w-4 mr-2 text-crowe-teal" />
+                    <Activity className="h-4 w-4 mr-2 text-crowe-teal-dark dark:text-crowe-teal-bright" />
                     Pause
                   </>
                 ) : (
@@ -568,19 +552,10 @@ export default function AicMonitorPage() {
                 <p className="text-sm">Generate and publish workbooks in Stage 4</p>
               </div>
             ) : (
-              <motion.div
-                className="grid gap-3 md:grid-cols-2"
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-              >
+              <ScrollStagger className="grid gap-3 md:grid-cols-2">
                 <AnimatePresence>
                   {progress.map((auditor) => (
-                    <motion.div
-                      key={auditor.auditorId}
-                      variants={staggerItem}
-                      layout
-                    >
+                    <ScrollStaggerItem key={auditor.auditorId}>
                       <Card className={`transition-all bg-tint-50 dark:bg-white/5 border border-tint-200 dark:border-white/10 ${
                         auditor.status === 'submitted'
                           ? 'border-crowe-teal bg-crowe-teal/10'
@@ -646,14 +621,14 @@ export default function AicMonitorPage() {
                           </div>
                         </CardContent>
                       </Card>
-                    </motion.div>
+                    </ScrollStaggerItem>
                   ))}
                 </AnimatePresence>
-              </motion.div>
+              </ScrollStagger>
             )}
           </CardContent>
         </Card>
-      </motion.div>
+      </ScrollReveal>
 
       {/* All Submitted Banner */}
       <AnimatePresence>
@@ -670,13 +645,13 @@ export default function AicMonitorPage() {
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300, delay: 0.2 }}
               >
-                <CheckCircle2 className="h-10 w-10 text-crowe-teal" />
+                <CheckCircle2 className="h-10 w-10 text-crowe-teal-dark dark:text-crowe-teal-bright" />
               </motion.div>
               <div>
-                <h3 className="font-semibold text-crowe-teal">
+                <h3 className="font-semibold text-crowe-teal-dark dark:text-crowe-teal-bright">
                   All Workbooks Submitted
                 </h3>
-                <p className="text-sm text-crowe-teal/80">
+                <p className="text-sm text-crowe-teal-dark/80 dark:text-crowe-teal/80">
                   All {totalAuditors} auditors have completed and submitted their workbooks.
                   You can now proceed to consolidation.
                 </p>
@@ -687,11 +662,10 @@ export default function AicMonitorPage() {
       </AnimatePresence>
 
       {/* Navigation */}
-      <motion.div
+      <ScrollReveal
+        direction="up"
+        delay={0.15}
         className="flex items-center justify-between mt-6 pt-4 border-t border-tint-200 dark:border-white/10"
-        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
       >
         <Link href={`/aic/audit-runs/${id}/stage-4`}>
           <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
@@ -705,7 +679,7 @@ export default function AicMonitorPage() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

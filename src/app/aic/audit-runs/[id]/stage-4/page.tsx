@@ -24,11 +24,11 @@ import {
 import {
   motion,
   AnimatePresence,
-  staggerContainer,
-  staggerItem,
-  fadeInUp,
   tabContent,
   useReducedMotion,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
 } from "@/lib/animations";
 import { toast } from "sonner";
 import {
@@ -428,12 +428,7 @@ export default function AicStage4Page() {
   return (
     <div className="p-8 h-[calc(100vh-4rem)] flex flex-col">
       {/* Header */}
-      <motion.div
-        className="mb-6 flex-shrink-0"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-      >
+      <ScrollReveal direction="up" className="mb-6 flex-shrink-0">
         <Link
           href={`/aic/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-tint-500 dark:text-tint-300 hover:text-tint-900 dark:hover:text-white mb-4"
@@ -465,17 +460,12 @@ export default function AicStage4Page() {
             )}
           </div>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
       {/* Workflow Steps */}
-      <motion.div
-        className="grid gap-4 md:grid-cols-4 mb-6 flex-shrink-0"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={staggerContainer}
-      >
+      <ScrollStagger className="grid gap-4 md:grid-cols-4 mb-6 flex-shrink-0">
         {steps.map((step, index) => (
-          <motion.div key={index} variants={staggerItem}>
+          <ScrollStaggerItem key={index}>
             <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
@@ -514,15 +504,16 @@ export default function AicStage4Page() {
                 </AnimatePresence>
               </CardContent>
             </Card>
-          </motion.div>
+          </ScrollStaggerItem>
         ))}
-      </motion.div>
+      </ScrollStagger>
 
       {/* Main Content Area */}
+      <ScrollReveal direction="up" delay={0.1} className="flex-1 flex flex-col min-h-0 min-w-0 overflow-y-auto">
       <Tabs
         value={currentStep}
         onValueChange={(v) => setCurrentStep(v as WorkflowStep)}
-        className="flex-1 flex flex-col min-h-0 overflow-y-auto"
+        className="flex flex-1 flex-col min-h-0"
       >
         <TabsList className="flex-shrink-0 mb-4">
           <TabsTrigger value="load" className="flex items-center gap-2">
@@ -573,14 +564,9 @@ export default function AicStage4Page() {
               variants={tabContent}
             >
               <TabsContent value="load" className="h-full m-0">
-                <motion.div
-                  className="grid gap-6 md:grid-cols-2 h-full"
-                  initial={shouldReduceMotion ? undefined : "hidden"}
-                  animate="visible"
-                  variants={staggerContainer}
-                >
+                <ScrollStagger className="grid gap-6 md:grid-cols-2 h-full">
                   {/* Sampling Data */}
-                  <motion.div variants={staggerItem}>
+                  <ScrollStaggerItem>
                     <Card className="h-full bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-tint-900 dark:text-white">Sampling Data (Stage 2)</CardTitle>
@@ -628,10 +614,10 @@ export default function AicStage4Page() {
                         )}
                       </CardContent>
                     </Card>
-                  </motion.div>
+                  </ScrollStaggerItem>
 
                   {/* Attributes Data */}
-                  <motion.div variants={staggerItem}>
+                  <ScrollStaggerItem>
                     <Card className="h-full bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
                       <CardHeader>
                         <CardTitle className="text-lg text-tint-900 dark:text-white">Attributes (Stage 3)</CardTitle>
@@ -682,8 +668,8 @@ export default function AicStage4Page() {
                         )}
                       </CardContent>
                     </Card>
-                  </motion.div>
-                </motion.div>
+                  </ScrollStaggerItem>
+                </ScrollStagger>
               </TabsContent>
             </motion.div>
           )}
@@ -729,33 +715,23 @@ export default function AicStage4Page() {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {/* Summary */}
-                    <motion.div
-                      className="grid grid-cols-3 gap-4"
-                      initial={shouldReduceMotion ? undefined : "hidden"}
-                      animate="visible"
-                      variants={staggerContainer}
-                    >
-                      <motion.div variants={staggerItem} className="p-4 bg-tint-50 dark:bg-white/5 rounded-lg text-center border border-tint-200 dark:border-white/10">
+                    <ScrollStagger className="grid grid-cols-3 gap-4">
+                      <ScrollStaggerItem className="p-4 bg-tint-50 dark:bg-white/5 rounded-lg text-center border border-tint-200 dark:border-white/10">
                         <div className="text-2xl font-bold text-tint-900 dark:text-white">{samples.length}</div>
                         <div className="text-sm text-tint-700 dark:text-tint-300">Samples</div>
-                      </motion.div>
-                      <motion.div variants={staggerItem} className="p-4 bg-tint-50 dark:bg-white/5 rounded-lg text-center border border-tint-200 dark:border-white/10">
+                      </ScrollStaggerItem>
+                      <ScrollStaggerItem className="p-4 bg-tint-50 dark:bg-white/5 rounded-lg text-center border border-tint-200 dark:border-white/10">
                         <div className="text-2xl font-bold text-tint-900 dark:text-white">{selectedAuditors.length}</div>
                         <div className="text-sm text-tint-700 dark:text-tint-300">Auditors</div>
-                      </motion.div>
-                      <motion.div variants={staggerItem} className="p-4 bg-tint-50 dark:bg-white/5 rounded-lg text-center border border-tint-200 dark:border-white/10">
+                      </ScrollStaggerItem>
+                      <ScrollStaggerItem className="p-4 bg-tint-50 dark:bg-white/5 rounded-lg text-center border border-tint-200 dark:border-white/10">
                         <div className="text-2xl font-bold text-tint-900 dark:text-white">{extractedAttributes.length}</div>
                         <div className="text-sm text-tint-700 dark:text-tint-300">Attributes</div>
-                      </motion.div>
-                    </motion.div>
+                      </ScrollStaggerItem>
+                    </ScrollStagger>
 
                     {/* Estimated Output */}
-                    <motion.div
-                      className="p-4 bg-crowe-indigo-bright/10 border border-crowe-indigo-bright/30 rounded-lg"
-                      initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
+                    <ScrollReveal direction="up" delay={0.1} className="p-4 bg-crowe-indigo-bright/10 border border-crowe-indigo-bright/30 rounded-lg">
                       <h4 className="font-medium mb-2 text-tint-900 dark:text-white">Estimated Output</h4>
                       <div className="text-sm space-y-1">
                         <p className="text-tint-900 dark:text-white">
@@ -771,15 +747,10 @@ export default function AicStage4Page() {
                           {samples.length * extractedAttributes.length}
                         </p>
                       </div>
-                    </motion.div>
+                    </ScrollReveal>
 
                     {/* Actions */}
-                    <motion.div
-                      className="flex gap-3"
-                      initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                    >
+                    <ScrollReveal direction="up" delay={0.15} className="flex gap-3">
                       <Button
                         onClick={handleGenerateWorkbooks}
                         disabled={isGenerating || auditorWorkbooks.length > 0}
@@ -807,7 +778,7 @@ export default function AicStage4Page() {
                           Clear & Regenerate
                         </Button>
                       )}
-                    </motion.div>
+                    </ScrollReveal>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -826,11 +797,7 @@ export default function AicStage4Page() {
             >
               <TabsContent value="view" className="h-full m-0 flex flex-col">
                 {/* Action Bar */}
-                <motion.div
-                  className="mb-4 flex items-center justify-between flex-shrink-0"
-                  initial={shouldReduceMotion ? undefined : { opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <ScrollReveal direction="up" className="mb-4 flex items-center justify-between flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="border-tint-300 dark:border-white/30 text-tint-700 dark:text-tint-300">
                       {auditorWorkbooks.reduce((sum, wb) => sum + wb.summary.totalRows, 0)} total rows
@@ -873,15 +840,11 @@ export default function AicStage4Page() {
                       Publish to Auditors
                     </Button>
                   </div>
-                </motion.div>
+                </ScrollReveal>
 
                 {/* Published Banner */}
                 {isPublished && (
-                  <motion.div
-                    className="mb-4 p-4 bg-crowe-teal/10 border border-crowe-teal/30 rounded-lg"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                  >
+                  <ScrollReveal direction="up" delay={0.05} className="mb-4 p-4 bg-crowe-teal/10 border border-crowe-teal/30 rounded-lg">
                     <div className="flex items-center gap-3">
                       <CheckCircle2 className="h-5 w-5 text-crowe-teal" />
                       <div>
@@ -894,30 +857,30 @@ export default function AicStage4Page() {
                         </p>
                       </div>
                     </div>
-                  </motion.div>
+                  </ScrollReveal>
                 )}
 
                 {/* Workbook View */}
-                <div className="flex-1 min-h-0">
+                <ScrollReveal direction="up" delay={0.1} className="flex-1 min-h-0">
                   <AuditorWorkbookView
                     workbooks={auditorWorkbooks}
                     activeAuditorId={activeAuditorId}
                     onAuditorChange={setActiveAuditorId}
                     onExport={handleExportWorkbook}
                   />
-                </div>
+                </ScrollReveal>
               </TabsContent>
             </motion.div>
           )}
         </AnimatePresence>
       </Tabs>
+      </ScrollReveal>
 
       {/* Navigation */}
-      <motion.div
+      <ScrollReveal
+        direction="up"
+        delay={0.15}
         className="flex justify-between pt-4 flex-shrink-0 border-t border-tint-200 dark:border-white/10 mt-4 relative z-50 bg-white dark:bg-[#011E41]"
-        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
       >
         <Link href={`/aic/audit-runs/${id}/stage-3`}>
           <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
@@ -969,7 +932,7 @@ export default function AicStage4Page() {
             </Button>
           )
         )}
-      </motion.div>
+      </ScrollReveal>
 
       {/* Publish Confirmation Dialog */}
       <Dialog open={showPublishDialog} onOpenChange={setShowPublishDialog}>

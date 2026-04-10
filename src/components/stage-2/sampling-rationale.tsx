@@ -135,7 +135,7 @@ export function SamplingRationale({
             <FileText className="h-5 w-5" />
             AI-Generated Sampling Rationale
             {isDemoMode && (
-              <Badge variant="outline" className="ml-2 border-crowe-amber/50 text-crowe-amber-bright">
+              <Badge variant="outline" className="ml-2 border-crowe-amber/50 text-crowe-amber-dark dark:text-crowe-amber-bright">
                 Demo Mode
               </Badge>
             )}
@@ -164,7 +164,7 @@ export function SamplingRationale({
       </CardHeader>
       <CardContent>
         {!isLocked && (
-          <div className="flex items-center gap-2 p-4 rounded-lg bg-crowe-amber/10 border border-crowe-amber/30 text-crowe-amber-bright">
+          <div className="flex items-center gap-2 p-4 rounded-lg bg-crowe-amber/10 border border-crowe-amber/30 text-crowe-amber-dark dark:text-crowe-amber-bright">
             <AlertCircle className="h-5 w-5 flex-shrink-0" />
             <p className="text-sm">
               Lock the sample first to generate the sampling rationale documentation.
@@ -173,7 +173,7 @@ export function SamplingRationale({
         )}
 
         {error && (
-          <div className="flex items-center gap-2 p-4 rounded-lg bg-crowe-coral/10 border border-crowe-coral/30 text-crowe-coral-bright">
+          <div className="flex items-center gap-2 p-4 rounded-lg bg-crowe-coral/10 border border-crowe-coral/30 text-crowe-coral-dark dark:text-crowe-coral-bright">
             <AlertCircle className="h-5 w-5 flex-shrink-0" />
             <p className="text-sm">{error}</p>
           </div>

@@ -145,7 +145,7 @@ export function FindingsTable({
                         <div className="flex gap-2">
                           <Badge
                             variant="outline"
-                            className="px-2.5 py-0.5 text-xs font-medium bg-crowe-teal/20 text-crowe-teal-bright"
+                            className="px-2.5 py-0.5 text-xs font-medium bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright"
                           >
                             {attr.passCount} pass
                           </Badge>
@@ -153,7 +153,7 @@ export function FindingsTable({
                             variant="outline"
                             className={`px-2.5 py-0.5 text-xs font-medium ${
                               attr.failCount > 0
-                                ? "bg-crowe-coral/20 text-crowe-coral-bright"
+                                ? "bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright"
                                 : ""
                             }`}
                           >
@@ -205,7 +205,7 @@ export function FindingsTable({
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: idx * 0.05 }}
                                   >
-                                    <span className="text-crowe-coral-bright">•</span>
+                                    <span className="text-crowe-coral-dark dark:text-crowe-coral-bright">•</span>
                                     {obs}
                                   </motion.li>
                                 ))}

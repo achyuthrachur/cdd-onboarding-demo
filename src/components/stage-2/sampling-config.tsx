@@ -304,7 +304,7 @@ export function SamplingConfig({
               />
               <p className="text-xs text-gray-600 dark:text-gray-300">Alternative to fixed sample size</p>
             </div>
-            <p className="col-span-2 text-xs text-crowe-blue-light">
+            <p className="col-span-2 text-xs text-crowe-blue-dark dark:text-crowe-blue-light">
               Simple Random sampling requires either a sample size or percentage.
             </p>
           </div>
@@ -399,7 +399,7 @@ export function SamplingConfig({
         {/* Override Justification - Required when overrides are active */}
         {configHasOverrides && (
           <div className="space-y-2 p-4 border border-crowe-amber/30 bg-crowe-amber/10 rounded-lg">
-            <div className="flex items-center gap-2 text-crowe-amber-bright">
+            <div className="flex items-center gap-2 text-crowe-amber-dark dark:text-crowe-amber-bright">
               <AlertTriangle className="h-4 w-4" />
               <Label htmlFor="overrideJustification" className="font-medium">
                 Override Justification (Required)

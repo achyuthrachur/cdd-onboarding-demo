@@ -7,8 +7,8 @@
  * that respect user's reduced motion preferences.
  */
 
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ReactNode, ComponentProps } from 'react';
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { ReactNode, ComponentProps, useRef } from 'react';
 import {
   fadeIn,
   fadeInUp,
@@ -20,6 +20,13 @@ import {
   modalContent,
   chatMessage,
   cardHover,
+  scrollRevealUp,
+  scrollRevealDown,
+  scrollRevealLeft,
+  scrollRevealRight,
+  scrollScale,
+  scrollStaggerContainer,
+  scrollStaggerItem,
 } from './variants';
 import { duration, ease } from './constants';
 
@@ -424,6 +431,212 @@ export function Presence({ children, isVisible, className }: PresenceProps) {
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+// ============================================
+// Scroll Reveal Component (Apple-style viewport reveals)
+// ============================================
+
+type ScrollDirection = 'up' | 'down' | 'left' | 'right';
+
+interface ScrollRevealProps {
+  children: ReactNode;
+  className?: string;
+  direction?: ScrollDirection;
+  delay?: number;
+  once?: boolean;
+  amount?: number;
+}
+
+const directionVariantMap = {
+  up: scrollRevealUp,
+  down: scrollRevealDown,
+  left: scrollRevealLeft,
+  right: scrollRevealRight,
+};
+
+export function ScrollReveal({
+  children,
+  className,
+  direction = 'up',
+  delay = 0,
+  once = true,
+  amount = 0.2,
+}: ScrollRevealProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  if (shouldReduceMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
+  return (
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once, amount }}
+      variants={directionVariantMap[direction]}
+      transition={{ delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ============================================
+// Scroll Scale Component (product reveal style)
+// ============================================
+
+interface ScrollScaleProps {
+  children: ReactNode;
+  className?: string;
+  once?: boolean;
+  amount?: number;
+}
+
+export function ScrollScale({
+  children,
+  className,
+  once = true,
+  amount = 0.3,
+}: ScrollScaleProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  if (shouldReduceMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
+  return (
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once, amount }}
+      variants={scrollScale}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ============================================
+// Scroll Stagger Container (cards/grids revealing on scroll)
+// ============================================
+
+interface ScrollStaggerProps {
+  children: ReactNode;
+  className?: string;
+  once?: boolean;
+  amount?: number;
+  as?: 'div' | 'ul' | 'section' | 'article';
+}
+
+export function ScrollStagger({
+  children,
+  className,
+  once = true,
+  amount = 0.15,
+  as = 'div',
+}: ScrollStaggerProps) {
+  const shouldReduceMotion = useReducedMotion();
+  const Component = motion[as];
+
+  if (shouldReduceMotion) {
+    const StaticComponent = as;
+    return <StaticComponent className={className}>{children}</StaticComponent>;
+  }
+
+  return (
+    <Component
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once, amount }}
+      variants={scrollStaggerContainer}
+    >
+      {children}
+    </Component>
+  );
+}
+
+export function ScrollStaggerItem({
+  children,
+  className,
+  as = 'div',
+}: { children: ReactNode; className?: string; as?: 'div' | 'li' | 'article' }) {
+  const shouldReduceMotion = useReducedMotion();
+  const Component = motion[as];
+
+  if (shouldReduceMotion) {
+    const StaticComponent = as;
+    return <StaticComponent className={className}>{children}</StaticComponent>;
+  }
+
+  return (
+    <Component className={className} variants={scrollStaggerItem}>
+      {children}
+    </Component>
+  );
+}
+
+// ============================================
+// Parallax Layer Component
+// ============================================
+
+interface ParallaxLayerProps {
+  children: ReactNode;
+  className?: string;
+  speed?: number;
+}
+
+export function ParallaxLayer({
+  children,
+  className,
+  speed = 0.3,
+}: ParallaxLayerProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [speed * 100, speed * -100]);
+
+  if (shouldReduceMotion) {
+    return <div ref={ref} className={className}>{children}</div>;
+  }
+
+  return (
+    <div ref={ref} className={className}>
+      <motion.div style={{ y }}>
+        {children}
+      </motion.div>
+    </div>
+  );
+}
+
+// ============================================
+// Scroll Progress Bar
+// ============================================
+
+interface ScrollProgressProps {
+  className?: string;
+}
+
+export function ScrollProgress({ className }: ScrollProgressProps) {
+  const { scrollYProgress } = useScroll();
+  const shouldReduceMotion = useReducedMotion();
+
+  if (shouldReduceMotion) return null;
+
+  return (
+    <motion.div
+      className={`fixed top-0 left-0 right-0 h-[2px] bg-crowe-amber origin-left z-[1000] ${className || ''}`}
+      style={{ scaleX: scrollYProgress }}
+    />
   );
 }
 

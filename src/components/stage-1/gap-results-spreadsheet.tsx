@@ -75,7 +75,7 @@ export function GapResultsSpreadsheet({
           initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex flex-col items-center justify-center py-16 text-white/80"
+          className="flex flex-col items-center justify-center py-16 text-tint-700 dark:text-white/80"
         >
           <motion.div
             animate={shouldReduceMotion ? {} : {
@@ -298,7 +298,7 @@ export function GapResultsSpreadsheet({
                 className="mb-4"
               >
                 <h3 className="font-medium">Old GFC vs Current GFC</h3>
-                <p className="text-sm text-white/80">
+                <p className="text-sm text-tint-700 dark:text-white/80">
                   Comparison of changes between Global Financial Standards versions
                 </p>
               </motion.div>
@@ -313,7 +313,7 @@ export function GapResultsSpreadsheet({
                 className="mb-4"
               >
                 <h3 className="font-medium">Current GFC vs FLU Procedures</h3>
-                <p className="text-sm text-white/80">
+                <p className="text-sm text-tint-700 dark:text-white/80">
                   Gap analysis between standards and implemented procedures
                 </p>
               </motion.div>

@@ -17,13 +17,10 @@ import {
 import {
   motion,
   AnimatePresence,
-  FadeInUp,
-  StaggerContainer,
-  StaggerItem,
-  Presence,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
   useReducedMotion,
-  staggerContainer,
-  staggerItem,
 } from "@/lib/animations";
 import { toast } from "sonner";
 import { ConsolidationDashboard } from "@/components/stage-4/consolidation-dashboard";
@@ -149,7 +146,7 @@ export default function Stage6Page() {
   return (
     <div className="p-8 min-h-screen bg-crowe-indigo-dark">
       {/* Header */}
-      <FadeInUp className="mb-8">
+      <ScrollReveal direction="up" className="mb-8">
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
@@ -160,13 +157,7 @@ export default function Stage6Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <motion.div
-                initial={shouldReduceMotion ? undefined : { scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.1 }}
-              >
-                <Badge className="bg-crowe-amber/20 text-crowe-amber-dark">Stage 6</Badge>
-              </motion.div>
+              <Badge className="bg-crowe-amber/20 text-crowe-amber-dark">Stage 6</Badge>
               <h1 className="text-3xl font-bold tracking-tight text-white">
                 Consolidation & Reporting
               </h1>
@@ -175,12 +166,7 @@ export default function Stage6Page() {
               Consolidate all results, view dashboards, and generate final report
             </p>
           </div>
-          <motion.div
-            className="flex gap-2"
-            initial={shouldReduceMotion ? undefined : { opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+          <div className="flex gap-2">
             <Button variant="outline" onClick={handleLoadDemoData}>
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
@@ -234,9 +220,9 @@ export default function Stage6Page() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+          </div>
         </div>
-      </FadeInUp>
+      </ScrollReveal>
 
       {/* Status Banner */}
       <AnimatePresence mode="wait">
@@ -256,7 +242,7 @@ export default function Stage6Page() {
               <CheckCircle2 className="h-5 w-5 text-crowe-teal" />
             </motion.div>
             <div>
-              <p className="font-medium text-crowe-teal-bright">
+              <p className="font-medium text-crowe-teal-dark dark:text-crowe-teal-bright">
                 Consolidation Available
               </p>
               <p className="text-sm text-crowe-teal">
@@ -280,7 +266,7 @@ export default function Stage6Page() {
               <AlertCircle className="h-5 w-5 text-crowe-amber" />
             </motion.div>
             <div>
-              <p className="font-medium text-crowe-amber-bright">
+              <p className="font-medium text-crowe-amber-dark dark:text-crowe-amber-bright">
                 No Consolidation Yet
               </p>
               <p className="text-sm text-crowe-amber">
@@ -292,122 +278,83 @@ export default function Stage6Page() {
       </AnimatePresence>
 
       {/* Consolidation Dashboard */}
-      <motion.div
-        className="mb-8"
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.35 }}
-      >
+      <ScrollReveal className="mb-8">
         <ConsolidationDashboard
           consolidation={consolidation}
           isLoading={isLoading}
         />
-      </motion.div>
+      </ScrollReveal>
 
       {/* Findings Table */}
-      <AnimatePresence>
-        {consolidation && (
-          <motion.div
-            className="mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ delay: 0.3, duration: 0.35 }}
-          >
-            <FindingsTable
-              exceptions={consolidation.exceptions}
-              findingsByAttribute={consolidation.findingsByAttribute}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {consolidation && (
+        <ScrollReveal className="mb-8">
+          <FindingsTable
+            exceptions={consolidation.exceptions}
+            findingsByAttribute={consolidation.findingsByAttribute}
+          />
+        </ScrollReveal>
+      )}
 
       {/* Report Generator */}
-      <motion.div
-        className="mb-8"
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.35 }}
-      >
+      <ScrollReveal className="mb-8" delay={0.05}>
         <ReportGenerator
           consolidation={consolidation}
           auditRunId={id}
         />
-      </motion.div>
+      </ScrollReveal>
 
       {/* Prerequisites Info (when no consolidation) */}
-      <AnimatePresence>
-        {!consolidation && !isLoading && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card className="mb-8 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
-              <CardHeader>
-                <CardTitle className="text-white">Prerequisites</CardTitle>
-                <CardDescription className="text-white/80">
-                  Complete these steps before generating consolidation
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <motion.div
-                  className="space-y-3"
-                  variants={staggerContainer}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  {[
-                    { label: "Stage 1: Gap Assessment complete", complete: true },
-                    { label: "Stage 2: Sample locked", complete: true },
-                    { label: "Stage 3: Attributes extracted", complete: true },
-                    { label: "Stage 4: Workbook generated", complete: true },
-                    { label: "Stage 5: Testing completed", complete: hasTestResults, required: !hasTestResults },
-                  ].map((step, index) => (
+      {!consolidation && !isLoading && (
+        <ScrollReveal className="mb-8">
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+            <CardHeader>
+              <CardTitle className="text-white">Prerequisites</CardTitle>
+              <CardDescription className="text-white/80">
+                Complete these steps before generating consolidation
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ScrollStagger as="div" className="space-y-3">
+                {[
+                  { label: "Stage 1: Gap Assessment complete", complete: true },
+                  { label: "Stage 2: Sample locked", complete: true },
+                  { label: "Stage 3: Attributes extracted", complete: true },
+                  { label: "Stage 4: Workbook generated", complete: true },
+                  { label: "Stage 5: Testing completed", complete: hasTestResults, required: !hasTestResults },
+                ].map((step, index) => (
+                  <ScrollStaggerItem key={index} className="flex items-center gap-3">
                     <motion.div
-                      key={index}
-                      className="flex items-center gap-3"
-                      variants={staggerItem}
+                      initial={shouldReduceMotion ? undefined : { scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: index * 0.1, type: "spring", stiffness: 400 }}
                     >
-                      <motion.div
-                        initial={shouldReduceMotion ? undefined : { scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: index * 0.1, type: "spring", stiffness: 400 }}
-                      >
-                        {step.complete ? (
-                          <CheckCircle2 className="h-5 w-5 text-crowe-teal" />
-                        ) : (
-                          <AlertCircle className="h-5 w-5 text-crowe-amber" />
-                        )}
-                      </motion.div>
-                      <span className="text-white">
-                        {step.label}
-                        {step.required && (
-                          <Badge variant="outline" className="ml-2 border-white/30 text-white/80">
-                            Required
-                          </Badge>
-                        )}
-                      </span>
+                      {step.complete ? (
+                        <CheckCircle2 className="h-5 w-5 text-crowe-teal" />
+                      ) : (
+                        <AlertCircle className="h-5 w-5 text-crowe-amber" />
+                      )}
                     </motion.div>
-                  ))}
-                </motion.div>
-                <p className="text-sm text-white/80 mt-4">
-                  Demo mode: Click &quot;Load Demo Data&quot; to populate all stages with sample data.
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                    <span className="text-white">
+                      {step.label}
+                      {step.required && (
+                        <Badge variant="outline" className="ml-2 border-white/30 text-white/80">
+                          Required
+                        </Badge>
+                      )}
+                    </span>
+                  </ScrollStaggerItem>
+                ))}
+              </ScrollStagger>
+              <p className="text-sm text-white/80 mt-4">
+                Demo mode: Click &quot;Load Demo Data&quot; to populate all stages with sample data.
+              </p>
+            </CardContent>
+          </Card>
+        </ScrollReveal>
+      )}
 
       {/* Navigation */}
-      <motion.div
-        className="flex justify-between"
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
+      <ScrollReveal className="flex justify-between">
         <Link href={`/audit-runs/${id}/stage-5`}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -417,7 +364,7 @@ export default function Stage6Page() {
         <Link href={`/audit-runs/${id}`}>
           <Button variant="outline">Back to Overview</Button>
         </Link>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

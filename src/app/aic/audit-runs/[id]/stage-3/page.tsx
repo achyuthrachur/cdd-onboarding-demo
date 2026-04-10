@@ -20,11 +20,11 @@ import {
 import {
   motion,
   AnimatePresence,
-  staggerContainer,
-  staggerItem,
-  fadeInUp,
   tabContent,
   useReducedMotion,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
 } from "@/lib/animations";
 import { toast } from "sonner";
 import {
@@ -302,12 +302,7 @@ export default function AicStage3Page() {
   return (
     <div className="p-8 flex flex-col">
       {/* Header */}
-      <motion.div
-        className="mb-6 flex-shrink-0"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-      >
+      <ScrollReveal direction="up" className="mb-6 flex-shrink-0">
         <Link
           href={`/aic/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-tint-500 dark:text-tint-300 hover:text-tint-900 dark:hover:text-white mb-4"
@@ -339,17 +334,12 @@ export default function AicStage3Page() {
             )}
           </div>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
       {/* Workflow Steps */}
-      <motion.div
-        className="grid gap-3 md:grid-cols-3 mb-6 flex-shrink-0"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={staggerContainer}
-      >
+      <ScrollStagger className="grid gap-3 md:grid-cols-3 mb-6 flex-shrink-0">
         {steps.map((step, index) => (
-          <motion.div key={index} variants={staggerItem}>
+          <ScrollStaggerItem key={index}>
             <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
@@ -376,11 +366,12 @@ export default function AicStage3Page() {
                 </Badge>
               </CardContent>
             </Card>
-          </motion.div>
+          </ScrollStaggerItem>
         ))}
-      </motion.div>
+      </ScrollStagger>
 
       {/* View Mode Tabs */}
+      <ScrollReveal direction="up" delay={0.1}>
       <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)} className="flex flex-col">
         <TabsList className="flex-shrink-0 mb-4">
           <TabsTrigger value="chat" className="flex items-center gap-2">
@@ -451,13 +442,13 @@ export default function AicStage3Page() {
           )}
         </AnimatePresence>
       </Tabs>
+      </ScrollReveal>
 
       {/* Navigation */}
-      <motion.div
+      <ScrollReveal
+        direction="up"
+        delay={0.15}
         className="flex items-center justify-between pt-4 flex-shrink-0 border-t border-tint-200 dark:border-white/10 mt-6"
-        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
       >
         <Link href={`/aic/audit-runs/${id}/stage-2`}>
           <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
@@ -471,7 +462,7 @@ export default function AicStage3Page() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

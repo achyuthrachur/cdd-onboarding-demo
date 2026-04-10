@@ -93,15 +93,15 @@ function selectionRequiresObservation(selectedValue: string): boolean {
 function getResultBadgeClass(result: string): string {
   switch (result) {
     case 'Pass':
-      return 'bg-crowe-teal/20 text-crowe-teal-bright border-crowe-teal/40';
+      return 'bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright border-crowe-teal/40';
     case 'Pass w/Observation':
-      return 'bg-crowe-amber/20 text-crowe-amber-bright border-crowe-amber/40';
+      return 'bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright border-crowe-amber/40';
     case 'Fail 1 - Regulatory':
-      return 'bg-crowe-coral/20 text-crowe-coral-bright border-crowe-coral/40';
+      return 'bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright border-crowe-coral/40';
     case 'Fail 2 - Procedure':
       return 'bg-crowe-amber-dark/20 text-crowe-amber border-crowe-amber-dark/40';
     case 'Question to LOB':
-      return 'bg-crowe-blue/20 text-crowe-blue-light border-crowe-blue/40';
+      return 'bg-crowe-blue/20 text-crowe-blue-dark dark:text-crowe-blue-light border-crowe-blue/40';
     case 'N/A':
       return 'bg-tint-100 dark:bg-white/10 text-tint-700 dark:text-tint-300 border-tint-300 dark:border-white/20';
     default:
@@ -195,7 +195,7 @@ function DocumentSelectionCell({
           {/* Acceptable Documents Section */}
           {documentOptions.length > 0 && (
             <>
-              <div className="px-2 py-1.5 text-xs font-semibold text-crowe-amber-bright bg-crowe-amber/10 sticky top-0">
+              <div className="px-2 py-1.5 text-xs font-semibold text-crowe-amber-dark dark:text-crowe-amber-bright bg-crowe-amber/10 sticky top-0">
                 <FileText className="h-3 w-3 inline mr-1.5" />
                 Acceptable Documents (Pass)
               </div>
@@ -206,7 +206,7 @@ function DocumentSelectionCell({
                   className="text-xs text-tint-900 dark:text-white hover:bg-crowe-teal/20"
                 >
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-3 w-3 text-crowe-teal-bright" />
+                    <CheckCircle2 className="h-3 w-3 text-crowe-teal-dark dark:text-crowe-teal-bright" />
                     <span>{doc.label}</span>
                   </div>
                 </SelectItem>
@@ -226,8 +226,8 @@ function DocumentSelectionCell({
               value={doc.value}
               className={cn(
                 "text-xs hover:bg-tint-100 dark:hover:bg-white/10",
-                doc.resultMapping.includes('Fail') && "text-crowe-coral dark:text-crowe-coral-bright",
-                doc.resultMapping === 'Question to LOB' && "text-crowe-blue dark:text-crowe-blue-light",
+                doc.resultMapping.includes('Fail') && "text-crowe-coral-dark dark:text-crowe-coral-bright",
+                doc.resultMapping === 'Question to LOB' && "text-crowe-blue-dark dark:text-crowe-blue-light",
                 doc.resultMapping === 'N/A' && "text-tint-700 dark:text-tint-300",
                 doc.resultMapping === 'Pass w/Observation' && "text-crowe-amber-dark dark:text-crowe-amber-bright"
               )}
@@ -741,12 +741,12 @@ export default function AuditorWorkbookPage() {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="flex items-center gap-3">
-            <CheckCircle2 className="h-5 w-5 text-crowe-teal-bright" />
+            <CheckCircle2 className="h-5 w-5 text-crowe-teal-dark dark:text-crowe-teal-bright" />
             <div>
-              <p className="font-medium text-crowe-teal-bright">
+              <p className="font-medium text-crowe-teal-dark dark:text-crowe-teal-bright">
                 Workbook Submitted
               </p>
-              <p className="text-sm text-crowe-teal">
+              <p className="text-sm text-crowe-teal-dark dark:text-crowe-teal">
                 Your testing results have been submitted. The workbook is now read-only.
               </p>
             </div>
@@ -784,10 +784,10 @@ export default function AuditorWorkbookPage() {
         <motion.div variants={staggerItem}>
           <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.passCount > 0 ? "border-crowe-teal/50" : "border-tint-200/60 dark:border-white/20"}`}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-crowe-teal dark:text-crowe-teal-bright">Pass</CardTitle>
+              <CardTitle className="text-sm font-medium text-crowe-teal-dark dark:text-crowe-teal-bright">Pass</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-crowe-teal dark:text-crowe-teal-bright tabular-nums">
+              <div className="text-2xl font-bold text-crowe-teal-dark dark:text-crowe-teal-bright tabular-nums">
                 {animatedPassCount}
               </div>
               <p className="text-xs text-tint-500 dark:text-tint-300 mt-1">
@@ -802,10 +802,10 @@ export default function AuditorWorkbookPage() {
         <motion.div variants={staggerItem}>
           <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.fail1RegulatoryCount > 0 ? "border-crowe-coral/50" : "border-tint-200/60 dark:border-white/20"}`}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-crowe-coral dark:text-crowe-coral-bright">Fail</CardTitle>
+              <CardTitle className="text-sm font-medium text-crowe-coral-dark dark:text-crowe-coral-bright">Fail</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-crowe-coral dark:text-crowe-coral-bright tabular-nums">
+              <div className="text-2xl font-bold text-crowe-coral-dark dark:text-crowe-coral-bright tabular-nums">
                 {animatedFailCount}
               </div>
               <p className="text-xs text-tint-500 dark:text-tint-300 mt-1">
@@ -839,7 +839,7 @@ export default function AuditorWorkbookPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2 text-tint-900 dark:text-white">
-                  <ClipboardCheck className="h-5 w-5 text-crowe-amber" />
+                  <ClipboardCheck className="h-5 w-5 text-crowe-amber-dark dark:text-crowe-amber" />
                   Testing Grid
                 </CardTitle>
                 <CardDescription className="text-tint-700 dark:text-tint-300">
@@ -853,7 +853,7 @@ export default function AuditorWorkbookPage() {
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 0.8, x: 20 }}
                   >
-                    <Badge className="bg-crowe-teal/20 text-crowe-teal">
+                    <Badge className="bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright">
                       <CheckCircle2 className="h-4 w-4 mr-1" />
                       Ready to Submit
                     </Badge>
@@ -1047,12 +1047,12 @@ export default function AuditorWorkbookPage() {
             <Card className="mb-6 bg-crowe-amber/20 border border-crowe-amber/40 backdrop-blur-xl">
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-crowe-amber" />
-                  <CardTitle className="text-crowe-amber-bright">Completion Required</CardTitle>
+                  <AlertCircle className="h-5 w-5 text-crowe-amber-dark dark:text-crowe-amber" />
+                  <CardTitle className="text-crowe-amber-dark dark:text-crowe-amber-bright">Completion Required</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-crowe-amber">
+                <p className="text-sm text-crowe-amber-dark dark:text-crowe-amber">
                   At least 95% of tests must be completed to submit.
                   Currently at {completionPercentage}%.
                 </p>

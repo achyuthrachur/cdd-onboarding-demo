@@ -26,9 +26,9 @@ const DOC_TYPE_LABELS: Record<string, string> = {
 };
 
 const DOC_TYPE_COLORS: Record<string, string> = {
-  global_std_old: "bg-crowe-amber/20 text-crowe-amber-bright",
-  global_std_new: "bg-crowe-blue/20 text-crowe-blue-light",
-  flu_jurisdiction: "bg-crowe-teal/20 text-crowe-teal-bright",
+  global_std_old: "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright",
+  global_std_new: "bg-crowe-blue/20 text-crowe-blue-dark dark:text-crowe-blue-light",
+  flu_jurisdiction: "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright",
 };
 
 export function DocumentCard({

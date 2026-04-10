@@ -161,7 +161,11 @@ export function TestGridGenerator({
             <div className="flex flex-wrap items-center gap-2">
               <Badge
                 variant={hasAssignments ? "default" : "outline"}
-                className={hasAssignments ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
+                className={
+                  hasAssignments
+                    ? "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright"
+                    : ""
+                }
               >
                 {hasAssignments ? (
                   <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -172,7 +176,11 @@ export function TestGridGenerator({
               </Badge>
               <Badge
                 variant={hasAttributes ? "default" : "outline"}
-                className={hasAttributes ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
+                className={
+                  hasAttributes
+                    ? "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright"
+                    : ""
+                }
               >
                 {hasAttributes ? (
                   <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -183,7 +191,11 @@ export function TestGridGenerator({
               </Badge>
               <Badge
                 variant={!hasUnassigned ? "default" : "destructive"}
-                className={!hasUnassigned ? "bg-crowe-teal/20 text-crowe-teal-bright" : ""}
+                className={
+                  !hasUnassigned
+                    ? "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright"
+                    : ""
+                }
               >
                 {!hasUnassigned ? (
                   <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -200,19 +212,19 @@ export function TestGridGenerator({
           </div>
 
           {/* Generation Summary */}
-          <div className="rounded-md bg-white/10 p-4">
+          <div className="rounded-md bg-tint-100 dark:bg-white/10 p-4">
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
-                <p className="text-2xl font-bold text-white">{assignments.length}</p>
-                <p className="text-xs text-white/80">Entities</p>
+                <p className="text-2xl font-bold text-tint-900 dark:text-white">{assignments.length}</p>
+                <p className="text-xs text-tint-700 dark:text-white/80">Entities</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{attributes.length}</p>
-                <p className="text-xs text-white/80">Attributes</p>
+                <p className="text-2xl font-bold text-tint-900 dark:text-white">{attributes.length}</p>
+                <p className="text-xs text-tint-700 dark:text-white/80">Attributes</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{uniqueAuditors}</p>
-                <p className="text-xs text-white/80">Workbooks</p>
+                <p className="text-2xl font-bold text-tint-900 dark:text-white">{uniqueAuditors}</p>
+                <p className="text-xs text-tint-700 dark:text-white/80">Workbooks</p>
               </div>
             </div>
           </div>
@@ -229,7 +241,7 @@ export function TestGridGenerator({
           </Button>
 
           {!canGenerate && (
-            <p className="text-xs text-white/80 text-center">
+            <p className="text-xs text-tint-700 dark:text-white/80 text-center">
               {!hasAssignments && "No assignments available. "}
               {!hasAttributes && "No attributes available. "}
               {hasUnassigned && "Some entities are unassigned. "}
@@ -266,7 +278,7 @@ export function TestGridGenerator({
                   <div className="text-2xl font-bold">
                     {generatedWorkbooks.reduce((sum, wb) => sum + wb.entityCount, 0)}
                   </div>
-                  <p className="text-xs text-white/80">Total Entities</p>
+                  <p className="text-xs text-tint-700 dark:text-white/80">Total Entities</p>
                 </CardContent>
               </Card>
               <Card>
@@ -274,7 +286,7 @@ export function TestGridGenerator({
                   <div className="text-2xl font-bold">
                     {generatedWorkbooks.reduce((sum, wb) => sum + wb.summary.totalRows, 0)}
                   </div>
-                  <p className="text-xs text-white/80">Total Test Rows</p>
+                  <p className="text-xs text-tint-700 dark:text-white/80">Total Test Rows</p>
                 </CardContent>
               </Card>
               <Card>
@@ -282,7 +294,7 @@ export function TestGridGenerator({
                   <div className="text-2xl font-bold text-crowe-teal-dark">
                     {generatedWorkbooks.reduce((sum, wb) => sum + wb.summary.passCount, 0)}
                   </div>
-                  <p className="text-xs text-white/80">Pass</p>
+                  <p className="text-xs text-tint-700 dark:text-white/80">Pass</p>
                 </CardContent>
               </Card>
               <Card>
@@ -293,7 +305,7 @@ export function TestGridGenerator({
                       0
                     )}
                   </div>
-                  <p className="text-xs text-white/80">Fail</p>
+                  <p className="text-xs text-tint-700 dark:text-white/80">Fail</p>
                 </CardContent>
               </Card>
               <Card>
@@ -301,7 +313,7 @@ export function TestGridGenerator({
                   <div className="text-2xl font-bold">
                     {generatedWorkbooks.reduce((sum, wb) => sum + wb.summary.emptyCount, 0)}
                   </div>
-                  <p className="text-xs text-white/80">Pending</p>
+                  <p className="text-xs text-tint-700 dark:text-white/80">Pending</p>
                 </CardContent>
               </Card>
             </div>
@@ -327,7 +339,7 @@ export function TestGridGenerator({
                       <TableCell className="px-4 py-2">
                         <div>
                           <p className="font-medium text-sm">{workbook.auditorName}</p>
-                          <p className="text-xs text-white/80">
+                          <p className="text-xs text-tint-700 dark:text-white/80">
                             {workbook.auditorId}
                           </p>
                         </div>
@@ -362,7 +374,7 @@ export function TestGridGenerator({
                           }
                           className={
                             workbook.summary.completionPercentage >= 100
-                              ? "bg-crowe-teal/20 text-crowe-teal-bright"
+                              ? "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright"
                               : ""
                           }
                         >

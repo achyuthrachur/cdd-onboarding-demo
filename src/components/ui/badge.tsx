@@ -19,8 +19,8 @@ const badgeVariants = cva(
         destructive:
           "bg-destructive/20 text-destructive border-destructive/30 [a&]:hover:bg-destructive/30 focus-visible:ring-destructive/20",
         outline:
-          "border-tint-200 dark:border-white/20 text-tint-700 dark:text-tint-300 bg-transparent [a&]:hover:bg-tint-100 dark:[a&]:hover:bg-white/10 [a&]:hover:text-tint-900 dark:[a&]:hover:text-white",
-        ghost: "border-transparent text-tint-500 dark:text-tint-300 [a&]:hover:bg-tint-100 dark:[a&]:hover:bg-white/10 [a&]:hover:text-tint-900 dark:[a&]:hover:text-white",
+          "border-tint-200 dark:border-white/20 text-tint-700 dark:text-tint-100 bg-transparent [a&]:hover:bg-tint-100 dark:[a&]:hover:bg-white/10 [a&]:hover:text-tint-900 dark:[a&]:hover:text-white",
+        ghost: "border-transparent text-tint-700 dark:text-tint-100 [a&]:hover:bg-tint-100 dark:[a&]:hover:bg-white/10 [a&]:hover:text-tint-900 dark:[a&]:hover:text-white",
         link: "text-crowe-amber-dark dark:text-crowe-amber border-transparent underline-offset-4 [a&]:hover:underline",
       },
       size: {

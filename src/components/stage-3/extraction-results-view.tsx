@@ -209,7 +209,7 @@ export function ExtractionResultsView({
               <AlertTitle className="text-sm text-crowe-amber">Demo Mode Active</AlertTitle>
               <AlertDescription className="text-xs text-muted-foreground">
                 These results are demonstration data. To enable AI-powered extraction, configure your{" "}
-                <code className="px-1 py-0.5 bg-muted rounded text-crowe-amber-bright">
+                <code className="px-1 py-0.5 bg-muted rounded text-crowe-amber-dark dark:text-crowe-amber-bright">
                   OPENAI_API_KEY
                 </code>{" "}
                 environment variable.

@@ -361,7 +361,7 @@ export function AttributesSheet({ attributes, acceptableDocs }: AttributesSheetP
                                 </Badge>
                                 <Badge variant="secondary">{attr.Jurisdiction_ID}</Badge>
                                 {attr.IsRequired === "Y" && (
-                                  <Badge className="bg-crowe-teal/20 text-crowe-teal-bright">Required</Badge>
+                                  <Badge className="bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright">Required</Badge>
                                 )}
                                 <Badge
                                   variant="outline"

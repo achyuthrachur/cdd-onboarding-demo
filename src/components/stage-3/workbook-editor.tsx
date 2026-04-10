@@ -206,11 +206,11 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
   const getResultIcon = (result: string) => {
     switch (result) {
       case "Pass":
-        return <CheckCircle2 className="h-4 w-4 text-crowe-teal-bright" />;
+        return <CheckCircle2 className="h-4 w-4 text-crowe-teal-dark dark:text-crowe-teal-bright" />;
       case "Fail":
-        return <XCircle className="h-4 w-4 text-crowe-coral-bright" />;
+        return <XCircle className="h-4 w-4 text-crowe-coral-dark dark:text-crowe-coral-bright" />;
       case "N/A":
-        return <MinusCircle className="h-4 w-4 text-white/80" />;
+        return <MinusCircle className="h-4 w-4 text-tint-700 dark:text-white/80" />;
       default:
         return null;
     }
@@ -220,7 +220,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
     return (
       <Card>
         <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-white/80" />
+          <Loader2 className="h-8 w-8 animate-spin text-tint-700 dark:text-white/80" />
         </CardContent>
       </Card>
     );
@@ -230,7 +230,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
     return (
       <Card>
         <CardContent className="flex items-center justify-center py-12">
-          <p className="text-white/80">Workbook not found</p>
+          <p className="text-tint-700 dark:text-white/80">Workbook not found</p>
         </CardContent>
       </Card>
     );
@@ -245,31 +245,31 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
             <div className="text-2xl font-bold">{workbook.summary.totalRows}</div>
-            <p className="text-xs text-white/80">Total Tests</p>
+            <p className="text-xs text-tint-700 dark:text-white/80">Total Tests</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
-            <div className="text-2xl font-bold text-crowe-teal-bright">
+            <div className="text-2xl font-bold text-crowe-teal-dark dark:text-crowe-teal-bright">
               {workbook.summary.passCount}
             </div>
-            <p className="text-xs text-white/80">Passed</p>
+            <p className="text-xs text-tint-700 dark:text-white/80">Passed</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
-            <div className="text-2xl font-bold text-crowe-coral-bright">
+            <div className="text-2xl font-bold text-crowe-coral-dark dark:text-crowe-coral-bright">
               {workbook.summary.failCount}
             </div>
-            <p className="text-xs text-white/80">Failed</p>
+            <p className="text-xs text-tint-700 dark:text-white/80">Failed</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 text-center flex flex-col items-center justify-center min-h-[80px]">
-            <div className="text-2xl font-bold text-white/80">
+            <div className="text-2xl font-bold text-tint-700 dark:text-white/80">
               {workbook.summary.naCount}
             </div>
-            <p className="text-xs text-white/80">N/A</p>
+            <p className="text-xs text-tint-700 dark:text-white/80">N/A</p>
           </CardContent>
         </Card>
         <Card>
@@ -277,7 +277,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
             <div className="text-2xl font-bold">
               {workbook.summary.completionPercentage.toFixed(0)}%
             </div>
-            <p className="text-xs text-white/80">Complete</p>
+            <p className="text-xs text-tint-700 dark:text-white/80">Complete</p>
           </CardContent>
         </Card>
       </div>
@@ -296,7 +296,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                   {workbook.status}
                 </Badge>
                 {hasChanges && !isSubmitted && (
-                  <Badge variant="outline" className="text-crowe-amber-bright">
+                  <Badge variant="outline" className="text-crowe-amber-dark dark:text-crowe-amber-bright">
                     Unsaved changes
                   </Badge>
                 )}
@@ -337,7 +337,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/80" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-tint-700 dark:text-white/80" />
                 <Input
                   placeholder="Search by ID, entity, or attribute..."
                   value={searchTerm}
@@ -400,7 +400,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                     <TableCell className="px-4 py-2">
                       <div className="flex flex-col">
                         <span className="font-medium text-sm">{row.attributeId}</span>
-                        <span className="text-xs text-white/80 truncate max-w-[150px]">
+                        <span className="text-xs text-tint-700 dark:text-white/80 truncate max-w-[150px]">
                           {row.attributeName}
                         </span>
                       </div>
@@ -466,7 +466,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                             <DialogTitle className="flex items-center gap-2">
                               {row.sampleItemId} - {row.attributeId}
                               {row.isRequired && (
-                                <Badge variant="secondary" className="bg-crowe-amber/20 text-crowe-amber-bright">
+                                <Badge variant="secondary" className="bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright">
                                   Required
                                 </Badge>
                               )}
@@ -552,7 +552,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                 ))}
                 {filteredRows.length > 50 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-4 text-white/80">
+                    <TableCell colSpan={6} className="text-center py-4 text-tint-700 dark:text-white/80">
                       <AlertTriangle className="h-4 w-4 inline mr-2" />
                       Showing first 50 of {filteredRows.length} rows. Use filters to narrow results.
                     </TableCell>
@@ -560,7 +560,7 @@ export function WorkbookEditor({ workbookId, onSubmitted }: WorkbookEditorProps)
                 )}
                 {filteredRows.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-white/80">
+                    <TableCell colSpan={6} className="text-center py-8 text-tint-700 dark:text-white/80">
                       No rows match your filters
                     </TableCell>
                   </TableRow>

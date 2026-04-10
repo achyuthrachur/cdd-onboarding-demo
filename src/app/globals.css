@@ -293,7 +293,7 @@
     --secondary: 215 100% 31%;
     --secondary-foreground: 0 0% 100%;
     --muted: 215 100% 19%;
-    --muted-foreground: 0 0% 65%;
+    --muted-foreground: 0 0% 80%;
     --accent: 39 100% 48%;
     --accent-foreground: 215 100% 13%;
     --destructive: 341 79% 56%;
@@ -314,6 +314,10 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: rgba(255, 255, 255, 0.1);
     --sidebar-ring: 39 100% 48%;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   * {

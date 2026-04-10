@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table";
 import { Plus, FileStack, ArrowRight } from "lucide-react";
 import { getStageData } from "@/lib/stage-data/store";
-import { motion, FadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
+import { ScrollReveal } from "@/lib/animations";
 
 interface AuditRun {
   id: string;
@@ -81,31 +81,26 @@ export default function AicAuditRunsPage() {
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-8">
-        <FadeInUp>
+        <ScrollReveal direction="up" delay={0}>
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-foreground">Audit Runs</h1>
             <p className="text-muted-foreground mt-2">
               Manage and track your CDD audit engagements
             </p>
           </div>
-        </FadeInUp>
-        <FadeInUp delay={0.06}>
+        </ScrollReveal>
+        <ScrollReveal direction="up" delay={0.2}>
           <Link href="/aic/audit-runs/new">
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               New Audit Run
             </Button>
           </Link>
-        </FadeInUp>
+        </ScrollReveal>
       </div>
 
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div variants={staggerItem}>
-          {auditRuns.length === 0 ? (
+      <ScrollReveal direction="up" delay={0.1}>
+        {auditRuns.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-16">
                 <FileStack className="h-16 w-16 text-muted-foreground mb-4" />
@@ -166,8 +161,7 @@ export default function AicAuditRunsPage() {
               </CardContent>
             </Card>
           )}
-        </motion.div>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

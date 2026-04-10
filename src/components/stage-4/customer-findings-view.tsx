@@ -52,22 +52,22 @@ function getResultBadgeConfig(result: ConsolidatedCustomer['overallResult']) {
   switch (result) {
     case 'Pass':
       return {
-        className: "bg-crowe-teal/20 text-crowe-teal-bright border-crowe-teal/30",
+        className: "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright border-crowe-teal/30",
         icon: CheckCircle2,
       };
     case 'Pass w/Observation':
       return {
-        className: "bg-crowe-amber/20 text-crowe-amber-bright border-crowe-amber/30",
+        className: "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright border-crowe-amber/30",
         icon: Eye,
       };
     case 'Fail':
       return {
-        className: "bg-crowe-coral/20 text-crowe-coral-bright border-crowe-coral/30",
+        className: "bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright border-crowe-coral/30",
         icon: XCircle,
       };
     case 'Question':
       return {
-        className: "bg-crowe-blue/20 text-crowe-blue-light border-crowe-blue/30",
+        className: "bg-crowe-blue/20 text-crowe-blue-dark dark:text-crowe-blue-light border-crowe-blue/30",
         icon: HelpCircle,
       };
     default:
@@ -84,13 +84,13 @@ function getResultBadgeConfig(result: ConsolidatedCustomer['overallResult']) {
 function getRiskTierConfig(tier: string) {
   switch (tier) {
     case 'Critical':
-      return "bg-crowe-coral/20 text-crowe-coral-bright";
+      return "bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright";
     case 'High':
       return "bg-crowe-amber-dark/20 text-crowe-amber";
     case 'Medium':
-      return "bg-crowe-amber/20 text-crowe-amber-bright";
+      return "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright";
     case 'Low':
-      return "bg-crowe-teal/20 text-crowe-teal-bright";
+      return "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright";
     default:
       return "bg-tint-100 dark:bg-white/10 text-tint-700 dark:text-white/80";
   }
@@ -161,7 +161,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-tint-700 dark:text-white/80">Customers with Observations</p>
-                  <p className="text-2xl font-bold text-crowe-amber-bright">
+                  <p className="text-2xl font-bold text-crowe-amber-dark dark:text-crowe-amber-bright">
                     {customersWithObservations}
                   </p>
                 </div>
@@ -177,7 +177,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-tint-700 dark:text-white/80">Total Observations</p>
-                  <p className="text-2xl font-bold text-crowe-amber-bright">
+                  <p className="text-2xl font-bold text-crowe-amber-dark dark:text-crowe-amber-bright">
                     {totalObservations}
                   </p>
                 </div>
@@ -193,7 +193,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-tint-700 dark:text-white/80">Questions to LOB</p>
-                  <p className="text-2xl font-bold text-crowe-blue-light">
+                  <p className="text-2xl font-bold text-crowe-blue-dark dark:text-crowe-blue-light">
                     {totalQuestions}
                   </p>
                 </div>
@@ -209,7 +209,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-tint-700 dark:text-white/80">Total Failures</p>
-                  <p className="text-2xl font-bold text-crowe-coral-bright">
+                  <p className="text-2xl font-bold text-crowe-coral-dark dark:text-crowe-coral-bright">
                     {totalFailures}
                   </p>
                 </div>
@@ -351,17 +351,17 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                             </div>
                             <div className="flex items-center gap-3 text-sm">
                               {customer.observations.length > 0 && (
-                                <Badge variant="outline" className="bg-crowe-amber/10 text-crowe-amber-bright border-crowe-amber/30">
+                                <Badge variant="outline" className="bg-crowe-amber/10 text-crowe-amber-dark dark:text-crowe-amber-bright border-crowe-amber/30">
                                   {customer.observations.length} obs
                                 </Badge>
                               )}
                               {customer.questionsToLOB.length > 0 && (
-                                <Badge variant="outline" className="bg-crowe-blue/10 text-crowe-blue-light border-crowe-blue/30">
+                                <Badge variant="outline" className="bg-crowe-blue/10 text-crowe-blue-dark dark:text-crowe-blue-light border-crowe-blue/30">
                                   {customer.questionsToLOB.length} Q
                                 </Badge>
                               )}
                               {customer.failures.length > 0 && (
-                                <Badge variant="outline" className="bg-crowe-coral/10 text-crowe-coral-bright border-crowe-coral/30">
+                                <Badge variant="outline" className="bg-crowe-coral/10 text-crowe-coral-dark dark:text-crowe-coral-bright border-crowe-coral/30">
                                   {customer.failures.length} fail
                                 </Badge>
                               )}
@@ -383,7 +383,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                 {customer.observations.length > 0 && (
                                   <div>
                                     <h4 className="text-tint-900 dark:text-white font-medium mb-3 flex items-center gap-2">
-                                      <Eye className="h-4 w-4 text-crowe-amber-bright" />
+                                      <Eye className="h-4 w-4 text-crowe-amber-dark dark:text-crowe-amber-bright" />
                                       Observations ({customer.observations.length})
                                     </h4>
                                     <ul className="space-y-2">
@@ -419,7 +419,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                 {customer.questionsToLOB.length > 0 && (
                                   <div>
                                     <h4 className="text-tint-900 dark:text-white font-medium mb-3 flex items-center gap-2">
-                                      <HelpCircle className="h-4 w-4 text-crowe-blue-light" />
+                                      <HelpCircle className="h-4 w-4 text-crowe-blue-dark dark:text-crowe-blue-light" />
                                       Questions to LOB ({customer.questionsToLOB.length})
                                     </h4>
                                     <ul className="space-y-2">
@@ -455,7 +455,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                 {customer.failures.length > 0 && (
                                   <div>
                                     <h4 className="text-tint-900 dark:text-white font-medium mb-3 flex items-center gap-2">
-                                      <XCircle className="h-4 w-4 text-crowe-coral-bright" />
+                                      <XCircle className="h-4 w-4 text-crowe-coral-dark dark:text-crowe-coral-bright" />
                                       Failures ({customer.failures.length})
                                     </h4>
                                     <ul className="space-y-2">
@@ -476,7 +476,7 @@ export function CustomerFindingsView({ customerFindings }: CustomerFindingsViewP
                                                 variant="outline"
                                                 className={`text-xs px-2 py-0.5 ${
                                                   fail.failureType === 'Regulatory'
-                                                    ? 'bg-crowe-coral/20 text-crowe-coral-bright border-crowe-coral/30'
+                                                    ? 'bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright border-crowe-coral/30'
                                                     : 'bg-crowe-amber-dark/20 text-crowe-amber border-crowe-amber-dark/30'
                                                 }`}
                                               >

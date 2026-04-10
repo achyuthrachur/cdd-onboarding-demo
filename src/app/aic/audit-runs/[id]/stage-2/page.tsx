@@ -17,10 +17,9 @@ import {
 } from "lucide-react";
 import {
   motion,
-  AnimatePresence,
-  staggerContainer,
-  staggerItem,
-  fadeInUp,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
   useReducedMotion,
 } from "@/lib/animations";
 import { PopulationUploader } from "@/components/stage-2/population-uploader";
@@ -245,12 +244,7 @@ export default function AicStage2Page() {
   return (
     <div className="p-8">
       {/* Header */}
-      <motion.div
-        className="mb-8"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-      >
+      <ScrollReveal direction="up" className="mb-8">
         <Link
           href={`/aic/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-tint-500 dark:text-tint-300 hover:text-tint-900 dark:hover:text-white mb-4"
@@ -283,17 +277,12 @@ export default function AicStage2Page() {
             )}
           </div>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
       {/* Workflow Steps */}
-      <motion.div
-        className="grid gap-3 md:grid-cols-3 mb-6"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={staggerContainer}
-      >
+      <ScrollStagger className="grid gap-3 md:grid-cols-3 mb-6">
         {steps.map((step, index) => (
-          <motion.div key={index} variants={staggerItem}>
+          <ScrollStaggerItem key={index}>
             <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -323,35 +312,23 @@ export default function AicStage2Page() {
                 </Badge>
               </CardContent>
             </Card>
-          </motion.div>
+          </ScrollStaggerItem>
         ))}
-      </motion.div>
+      </ScrollStagger>
 
       {/* Population Uploader */}
-      <motion.div
-        className="mb-6"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-        transition={{ delay: 0.2 }}
-      >
+      <ScrollReveal direction="up" delay={0.1} className="mb-6">
         <PopulationUploader
           auditRunId={id}
           population={population}
           onPopulationLoaded={handlePopulationLoaded}
           onPopulationCleared={handlePopulationCleared}
         />
-      </motion.div>
+      </ScrollReveal>
 
       {/* Sampling Configuration */}
-      <AnimatePresence>
-        {population && !isLocked && (
-          <motion.div
-            className="mb-6"
-            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
+      {population && !isLocked && (
+        <ScrollReveal direction="up" delay={0.15} className="mb-6">
             <SamplingConfig
               auditRunId={id}
               populationId={population.id}
@@ -359,19 +336,12 @@ export default function AicStage2Page() {
               populationSize={population.rowCount}
               onPlanComputed={handlePlanComputed}
             />
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </ScrollReveal>
+      )}
 
       {/* Sample Preview */}
-      <AnimatePresence>
-        {plan && config && (
-          <motion.div
-            className="mb-6"
-            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
+      {plan && config && (
+        <ScrollReveal direction="up" delay={0.1} className="mb-6">
             <SamplePreview
               auditRunId={id}
               populationId={population?.id || ""}
@@ -386,17 +356,12 @@ export default function AicStage2Page() {
               onSampleLocked={handleSampleLocked}
               onPlanUpdated={handlePlanUpdated}
             />
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </ScrollReveal>
+      )}
 
       {/* Navigation Footer - Sticky with proper z-index */}
-      <motion.footer
-        className="sticky bottom-0 mt-8 pt-4 pb-4 -mx-8 px-8 bg-white/95 dark:bg-crowe-indigo-dark/95 backdrop-blur-sm border-t border-tint-200 dark:border-white/10 z-10"
-        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-      >
+      <footer className="sticky bottom-0 mt-8 pt-4 pb-4 -mx-8 px-8 bg-white/95 dark:bg-crowe-indigo-dark/95 backdrop-blur-sm border-t border-tint-200 dark:border-white/10 z-10">
+        <ScrollReveal direction="up" delay={0.15}>
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <Link href={`/aic/audit-runs/${id}/stage-1`}>
             <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
@@ -411,7 +376,8 @@ export default function AicStage2Page() {
             </Button>
           </Link>
         </div>
-      </motion.footer>
+        </ScrollReveal>
+      </footer>
     </div>
   );
 }

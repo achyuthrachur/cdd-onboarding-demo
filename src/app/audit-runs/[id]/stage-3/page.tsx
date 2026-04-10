@@ -21,9 +21,9 @@ import {
 import {
   motion,
   AnimatePresence,
-  staggerContainer,
-  staggerItem,
-  fadeInUp,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
   tabContent,
   useReducedMotion,
 } from "@/lib/animations";
@@ -319,13 +319,8 @@ export default function Stage3Page() {
 
   return (
     <div className="p-8 h-[calc(100vh-4rem)] flex flex-col min-h-screen bg-crowe-indigo-dark">
-      {/* Header - Animated */}
-      <motion.div
-        className="mb-6 flex-shrink-0"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-      >
+      {/* Header */}
+      <ScrollReveal direction="up" className="mb-6 flex-shrink-0">
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
@@ -350,17 +345,12 @@ export default function Stage3Page() {
             Load Demo Data
           </Button>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
-      {/* Workflow Steps - Staggered animation */}
-      <motion.div
-        className="grid gap-4 md:grid-cols-3 mb-6 flex-shrink-0"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={staggerContainer}
-      >
+      {/* Workflow Steps */}
+      <ScrollStagger className="grid gap-4 md:grid-cols-3 mb-6 flex-shrink-0">
         {steps.map((step, index) => (
-          <motion.div key={index} variants={staggerItem}>
+          <ScrollStaggerItem key={index}>
             <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
@@ -399,9 +389,9 @@ export default function Stage3Page() {
                 </AnimatePresence>
               </CardContent>
             </Card>
-          </motion.div>
+          </ScrollStaggerItem>
         ))}
-      </motion.div>
+      </ScrollStagger>
 
       {/* View Mode Tabs */}
       <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)} className="flex-1 flex flex-col min-h-0">
@@ -477,12 +467,7 @@ export default function Stage3Page() {
       </Tabs>
 
       {/* Navigation */}
-      <motion.div
-        className="flex justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-4"
-        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-      >
+      <ScrollReveal className="flex justify-between pt-4 flex-shrink-0 border-t border-white/10 mt-4">
         <Link href={`/audit-runs/${id}/stage-2`}>
           <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -495,7 +480,7 @@ export default function Stage3Page() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

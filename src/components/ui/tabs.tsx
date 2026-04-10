@@ -32,8 +32,8 @@ const tabsListVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-tint-100 text-tint-700 dark:bg-white/10 dark:text-tint-200 border-tint-200 dark:border-white/20",
-        line: "gap-1 bg-transparent text-tint-700 dark:text-tint-200 border-transparent",
+        default: "bg-tint-100 text-tint-700 dark:bg-white/10 dark:text-tint-100 border-tint-200 dark:border-white/20",
+        line: "gap-1 bg-transparent text-tint-700 dark:text-tint-100 border-transparent",
       },
     },
     defaultVariants: {
@@ -77,7 +77,7 @@ function TabsTrigger({
         // Icon styles
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         // Inactive state - visible text with hover
-        "text-tint-700 dark:text-tint-200",
+        "text-tint-700 dark:text-tint-100",
         "hover:text-tint-900 dark:hover:text-white",
         "hover:bg-white/60 dark:hover:bg-white/15",
         // Active state - clear visual distinction with border

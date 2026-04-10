@@ -18,10 +18,9 @@ import {
 import {
   motion,
   AnimatePresence,
-  staggerContainer,
-  staggerItem,
-  fadeInUp,
-  scaleIn,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
   useReducedMotion,
 } from "@/lib/animations";
 import { PopulationUploader } from "@/components/stage-2/population-uploader";
@@ -245,12 +244,7 @@ export default function Stage2Page() {
   return (
     <div className="p-8 min-h-screen bg-crowe-indigo-dark">
       {/* Header */}
-      <motion.div
-        className="mb-8"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-      >
+      <ScrollReveal direction="up" className="mb-8">
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
@@ -276,17 +270,12 @@ export default function Stage2Page() {
             Load Demo Data
           </Button>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
-      {/* Workflow Steps - Animated with stagger */}
-      <motion.div
-        className="grid gap-6 md:grid-cols-3 mb-8"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={staggerContainer}
-      >
+      {/* Workflow Steps - scroll stagger */}
+      <ScrollStagger className="grid gap-6 md:grid-cols-3 mb-8">
         {steps.map((step, index) => (
-          <motion.div key={index} variants={staggerItem}>
+          <ScrollStaggerItem key={index}>
             <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${step.isComplete ? "border-crowe-teal" : ""}`}>
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -328,58 +317,37 @@ export default function Stage2Page() {
                 </AnimatePresence>
               </CardContent>
             </Card>
-          </motion.div>
+          </ScrollStaggerItem>
         ))}
-      </motion.div>
+      </ScrollStagger>
 
-      {/* Population Uploader - Animated entrance */}
-      <motion.div
-        className="mb-6"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-        transition={{ delay: 0.2 }}
-      >
+      {/* Population Uploader */}
+      <ScrollReveal className="mb-6" delay={0.05}>
         <PopulationUploader
           auditRunId={id}
           population={population}
           onPopulationLoaded={handlePopulationLoaded}
           onPopulationCleared={handlePopulationCleared}
         />
-      </motion.div>
+      </ScrollReveal>
 
-      {/* Sampling Configuration - Animated presence */}
-      <AnimatePresence>
-        {population && !isLocked && (
-          <motion.div
-            className="mb-6"
-            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <SamplingConfig
-              auditRunId={id}
-              populationId={population.id}
-              columns={population.columns}
-              populationSize={population.rowCount}
-              onPlanComputed={handlePlanComputed}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Sampling Configuration */}
+      {population && !isLocked && (
+        <ScrollReveal className="mb-6">
+          <SamplingConfig
+            auditRunId={id}
+            populationId={population.id}
+            columns={population.columns}
+            populationSize={population.rowCount}
+            onPlanComputed={handlePlanComputed}
+          />
+        </ScrollReveal>
+      )}
 
-      {/* Sample Preview - Animated presence */}
-      <AnimatePresence>
-        {plan && config && (
-          <motion.div
-            className="mb-6"
-            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-          >
-            <SamplePreview
+      {/* Sample Preview */}
+      {plan && config && (
+        <ScrollReveal className="mb-6" delay={0.05}>
+          <SamplePreview
               auditRunId={id}
               populationId={population?.id || ""}
               plan={plan}
@@ -393,17 +361,11 @@ export default function Stage2Page() {
               onSampleLocked={handleSampleLocked}
               onPlanUpdated={handlePlanUpdated}
             />
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </ScrollReveal>
+      )}
 
       {/* Navigation */}
-      <motion.div
-        className="flex justify-between"
-        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-      >
+      <ScrollReveal className="flex justify-between" delay={0.05}>
         <Link href={`/audit-runs/${id}/stage-1`}>
           <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -416,7 +378,7 @@ export default function Stage2Page() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

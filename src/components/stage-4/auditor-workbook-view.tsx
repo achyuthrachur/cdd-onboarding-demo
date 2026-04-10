@@ -43,11 +43,11 @@ interface AuditorWorkbookViewProps {
 
 const RESULT_OPTIONS = [
   { value: "all", label: "All Results" },
-  { value: "Pass", label: "Pass", icon: CheckCircle2, color: "text-crowe-teal-bright" },
-  { value: "Pass w/Observation", label: "Pass w/Observation", icon: CheckCircle2, color: "text-crowe-amber-bright" },
-  { value: "Fail 1 - Regulatory", label: "Fail 1 - Regulatory", icon: XCircle, color: "text-crowe-coral-bright" },
-  { value: "Fail 2 - Procedure", label: "Fail 2 - Procedure", icon: AlertTriangle, color: "text-crowe-amber" },
-  { value: "Question to LOB", label: "Question to LOB", icon: HelpCircle, color: "text-crowe-blue-light" },
+  { value: "Pass", label: "Pass", icon: CheckCircle2, color: "text-crowe-teal-dark dark:text-crowe-teal-bright" },
+  { value: "Pass w/Observation", label: "Pass w/Observation", icon: CheckCircle2, color: "text-crowe-amber-dark dark:text-crowe-amber-bright" },
+  { value: "Fail 1 - Regulatory", label: "Fail 1 - Regulatory", icon: XCircle, color: "text-crowe-coral-dark dark:text-crowe-coral-bright" },
+  { value: "Fail 2 - Procedure", label: "Fail 2 - Procedure", icon: AlertTriangle, color: "text-crowe-amber-dark dark:text-crowe-amber" },
+  { value: "Question to LOB", label: "Question to LOB", icon: HelpCircle, color: "text-crowe-blue-dark dark:text-crowe-blue-light" },
   { value: "N/A", label: "N/A", icon: MinusCircle, color: "text-tint-700 dark:text-white/80" },
   { value: "not-tested", label: "Not Tested", icon: MinusCircle, color: "text-tint-700 dark:text-white/80" },
 ];
@@ -168,23 +168,23 @@ export function AuditorWorkbookView({
         {/* Summary Stats */}
         <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-teal/10">
-            <div className="text-lg font-bold text-crowe-teal-bright">{summary.passCount}</div>
+            <div className="text-lg font-bold text-crowe-teal-dark dark:text-crowe-teal-bright">{summary.passCount}</div>
             <div className="text-xs text-tint-700 dark:text-white/80">Pass</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-amber/10">
-            <div className="text-lg font-bold text-crowe-amber-bright">{summary.passWithObsCount}</div>
+            <div className="text-lg font-bold text-crowe-amber-dark dark:text-crowe-amber-bright">{summary.passWithObsCount}</div>
             <div className="text-xs text-tint-700 dark:text-white/80">Pass w/Obs</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-coral/10">
-            <div className="text-lg font-bold text-crowe-coral-bright">{summary.fail1RegulatoryCount}</div>
+            <div className="text-lg font-bold text-crowe-coral-dark dark:text-crowe-coral-bright">{summary.fail1RegulatoryCount}</div>
             <div className="text-xs text-tint-700 dark:text-white/80">Fail 1</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-amber-dark/10">
-            <div className="text-lg font-bold text-crowe-amber">{summary.fail2ProcedureCount}</div>
+            <div className="text-lg font-bold text-crowe-amber-dark dark:text-crowe-amber">{summary.fail2ProcedureCount}</div>
             <div className="text-xs text-tint-700 dark:text-white/80">Fail 2</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-blue/10">
-            <div className="text-lg font-bold text-crowe-blue-light">{summary.questionToLOBCount}</div>
+            <div className="text-lg font-bold text-crowe-blue-dark dark:text-crowe-blue-light">{summary.questionToLOBCount}</div>
             <div className="text-xs text-tint-700 dark:text-white/80">Questions</div>
           </div>
           <div className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-tint-100 dark:bg-white/10">

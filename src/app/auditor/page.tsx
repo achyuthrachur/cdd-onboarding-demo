@@ -12,13 +12,7 @@ import {
   ArrowRight,
   AlertCircle,
 } from "lucide-react";
-import {
-  motion,
-  staggerContainer,
-  staggerItem,
-  fadeInUp,
-  useReducedMotion,
-} from "@/lib/animations";
+import { ScrollReveal, ScrollStagger, ScrollStaggerItem } from "@/lib/animations";
 import { getSession, getCurrentAuditorId } from "@/lib/auth/session";
 import { getStageData } from "@/lib/stage-data";
 import type { PivotedAuditorWorkbook } from "@/lib/stage-data/store";
@@ -31,7 +25,6 @@ interface WorkbookStats {
 }
 
 export default function AuditorDashboardPage() {
-  const shouldReduceMotion = useReducedMotion();
   const [auditorName, setAuditorName] = useState<string>("");
   const [stats, setStats] = useState<WorkbookStats>({ total: 0, inProgress: 0, submitted: 0, averageCompletion: 0 });
   const [hasWorkbooks, setHasWorkbooks] = useState(false);
@@ -83,91 +76,79 @@ export default function AuditorDashboardPage() {
   return (
     <div className="p-8 min-h-full">
       {/* Header */}
-      <motion.div
-        className="mb-8"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={fadeInUp}
-      >
+      <ScrollReveal className="mb-8" direction="up" delay={0}>
         <h1 className="text-3xl font-bold tracking-tight text-tint-900 dark:text-white">
           Welcome back, {auditorName || "Auditor"}
         </h1>
         <p className="text-tint-500 dark:text-tint-300 mt-2">
           View and complete your assigned testing workbooks
         </p>
-      </motion.div>
+      </ScrollReveal>
 
       {/* Stats Cards */}
-      <motion.div
-        className="grid gap-3 md:grid-cols-4 mb-6"
-        initial={shouldReduceMotion ? undefined : "hidden"}
-        animate="visible"
-        variants={staggerContainer}
-      >
-        <motion.div variants={staggerItem}>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription>Total Workbooks</CardDescription>
-              <CardTitle className="text-3xl">{stats.total}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2 text-sm text-tint-500 dark:text-tint-300">
-                <FileSpreadsheet className="h-4 w-4" />
-                Assigned to you
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+      <ScrollReveal direction="left" delay={0.1}>
+        <ScrollStagger className="grid gap-3 md:grid-cols-4 mb-6">
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardDescription>Total Workbooks</CardDescription>
+                <CardTitle className="text-3xl">{stats.total}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2 text-sm text-tint-500 dark:text-tint-300">
+                  <FileSpreadsheet className="h-4 w-4" />
+                  Assigned to you
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription>In Progress</CardDescription>
-              <CardTitle className="text-3xl text-crowe-amber-dark dark:text-crowe-amber">{stats.inProgress}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2 text-sm text-tint-500 dark:text-tint-300">
-                <Clock className="h-4 w-4" />
-                Awaiting completion
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardDescription>In Progress</CardDescription>
+                <CardTitle className="text-3xl text-crowe-amber-dark dark:text-crowe-amber">{stats.inProgress}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2 text-sm text-tint-500 dark:text-tint-300">
+                  <Clock className="h-4 w-4" />
+                  Awaiting completion
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription>Submitted</CardDescription>
-              <CardTitle className="text-3xl text-crowe-teal-dark dark:text-crowe-teal-bright">{stats.submitted}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2 text-sm text-tint-500 dark:text-tint-300">
-                <CheckCircle2 className="h-4 w-4" />
-                Completed
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardDescription>Submitted</CardDescription>
+                <CardTitle className="text-3xl text-crowe-teal-dark dark:text-crowe-teal-bright">{stats.submitted}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2 text-sm text-tint-500 dark:text-tint-300">
+                  <CheckCircle2 className="h-4 w-4" />
+                  Completed
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription>Avg. Completion</CardDescription>
-              <CardTitle className="text-3xl">{stats.averageCompletion}%</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Progress value={stats.averageCompletion} className="h-2" />
-            </CardContent>
-          </Card>
-        </motion.div>
-      </motion.div>
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardDescription>Avg. Completion</CardDescription>
+                <CardTitle className="text-3xl">{stats.averageCompletion}%</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Progress value={stats.averageCompletion} className="h-2" />
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
+        </ScrollStagger>
+      </ScrollReveal>
 
       {/* Quick Actions */}
-      <motion.div
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
+      <ScrollReveal direction="up" delay={0.2}>
         <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
@@ -184,7 +165,7 @@ export default function AuditorDashboardPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 bg-tint-50 dark:bg-white/5 rounded-lg border border-tint-200 dark:border-white/10">
                   <div className="flex items-center gap-3">
-                    <FileSpreadsheet className="h-8 w-8 text-crowe-amber" />
+                    <FileSpreadsheet className="h-8 w-8 text-crowe-amber-dark dark:text-crowe-amber" />
                     <div>
                       <p className="font-medium text-tint-900 dark:text-white">
                         {stats.inProgress > 0 ? `${stats.inProgress} workbook${stats.inProgress > 1 ? 's' : ''} in progress` : 'All workbooks submitted'}
@@ -222,7 +203,7 @@ export default function AuditorDashboardPage() {
             )}
           </CardContent>
         </Card>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

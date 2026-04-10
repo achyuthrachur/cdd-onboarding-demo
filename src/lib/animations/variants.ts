@@ -352,3 +352,72 @@ export const checkmark: Variants = {
     transition: { duration: duration.slow, ease: ease.out },
   },
 };
+
+// ============================================
+// Scroll-Triggered Reveal Variants
+// ============================================
+
+export const scrollRevealUp: Variants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: duration.slower, ease: ease.out },
+  },
+};
+
+export const scrollRevealDown: Variants = {
+  hidden: { opacity: 0, y: -60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: duration.slower, ease: ease.out },
+  },
+};
+
+export const scrollRevealLeft: Variants = {
+  hidden: { opacity: 0, x: -60 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: duration.slower, ease: ease.out },
+  },
+};
+
+export const scrollRevealRight: Variants = {
+  hidden: { opacity: 0, x: 60 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: duration.slower, ease: ease.out },
+  },
+};
+
+export const scrollScale: Variants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: duration.slower, ease: ease.out },
+  },
+};
+
+export const scrollStaggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+export const scrollStaggerItem: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: duration.slow, ease: ease.out },
+  },
+};

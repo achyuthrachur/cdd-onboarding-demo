@@ -21,7 +21,13 @@ import {
   BarChart3,
   Eye,
 } from "lucide-react";
-import { motion } from "@/lib/animations";
+import {
+  ScrollReveal,
+  ScrollScale,
+  ScrollStagger,
+  ScrollStaggerItem,
+  ParallaxLayer,
+} from "@/lib/animations";
 import { setAicRole, setAuditorRole } from "@/lib/auth/session";
 import { mockAuditors } from "@/lib/attribute-library/mock-data";
 
@@ -51,29 +57,20 @@ export function RoleSelector() {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-4xl">
           {/* Header */}
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <ScrollReveal direction="up" className="text-center mb-12">
             <h1 className="text-4xl font-bold tracking-tight text-tint-900 dark:text-[#f6f7fa] mb-2">
               CDD Onboarding Demo
             </h1>
             <p className="text-lg text-tint-700 dark:text-[#c8cbd6] max-w-2xl mx-auto">
               Audit testing workflow for CIP/CDD/EDD compliance. Select your role to continue.
             </p>
-          </motion.div>
+          </ScrollReveal>
 
         {/* Role Cards */}
-        <div className="grid gap-6 md:grid-cols-2 items-stretch">
+        <ScrollStagger className="grid gap-6 md:grid-cols-2 items-stretch">
           {/* AIC Card */}
-          <motion.div
-            className="h-full"
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
+          <ScrollStaggerItem className="h-full">
+            <ScrollScale className="h-full">
             <Card
               className={`h-full flex flex-col cursor-pointer transition-all duration-300 ${
                 selectedRole === "aic"
@@ -126,15 +123,12 @@ export function RoleSelector() {
                 </Button>
               </CardContent>
             </Card>
-          </motion.div>
+            </ScrollScale>
+          </ScrollStaggerItem>
 
           {/* Auditor Card */}
-          <motion.div
-            className="h-full"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
+          <ScrollStaggerItem className="h-full">
+            <ScrollScale className="h-full">
             <Card
               className={`cursor-pointer transition-all duration-300 ${
                 selectedRole === "auditor"
@@ -203,18 +197,14 @@ export function RoleSelector() {
                 </Button>
               </CardContent>
             </Card>
-          </motion.div>
-        </div>
+            </ScrollScale>
+          </ScrollStaggerItem>
+        </ScrollStagger>
 
           {/* Footer */}
-          <motion.div
-            className="text-center mt-12 text-sm text-tint-500 dark:text-[#8b90a0]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
+          <ScrollReveal className="text-center mt-12 text-sm text-tint-500 dark:text-[#8b90a0]">
             <p>CDD Onboarding Demo v1.4 | Dual-Portal Architecture | Deploy: 2026-02-07-D</p>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </div>
     </div>

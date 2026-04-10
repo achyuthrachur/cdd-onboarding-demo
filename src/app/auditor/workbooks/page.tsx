@@ -273,7 +273,7 @@ export default function AuditorWorkbooksPage() {
               <div className="p-4 bg-crowe-amber/20 border border-crowe-amber/40 rounded-lg inline-block">
                 <div className="flex items-start gap-2">
                   <AlertCircle className="h-4 w-4 text-crowe-amber mt-0.5" />
-                  <div className="text-sm text-crowe-amber-bright text-left">
+                  <div className="text-sm text-crowe-amber-dark dark:text-crowe-amber-bright text-left">
                     <p className="mb-2">
                       The AIC needs to publish workbooks before you can see them here.
                     </p>

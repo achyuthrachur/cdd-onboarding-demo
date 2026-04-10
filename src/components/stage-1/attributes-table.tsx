@@ -61,21 +61,21 @@ interface AttributesTableProps {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Entity Profile": "bg-crowe-blue/20 text-crowe-blue-light",
+  "Entity Profile": "bg-crowe-blue/20 text-crowe-blue-dark dark:text-crowe-blue-light",
   "Individual Profile": "bg-crowe-violet/20 text-crowe-violet-bright",
-  "Ownership": "bg-crowe-teal/20 text-crowe-teal-bright",
-  "Documentation": "bg-crowe-amber/20 text-crowe-amber-bright",
-  "AML": "bg-crowe-coral/20 text-crowe-coral-bright",
+  "Ownership": "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright",
+  "Documentation": "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright",
+  "AML": "bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright",
   "EDD": "bg-crowe-amber-dark/20 text-crowe-amber",
   "Compliance": "bg-crowe-indigo-bright/20 text-crowe-cyan-light",
-  "Registration": "bg-crowe-coral/20 text-crowe-coral-bright",
+  "Registration": "bg-crowe-coral/20 text-crowe-coral-dark dark:text-crowe-coral-bright",
 };
 
 const GROUP_COLORS: Record<string, string> = {
   "Individuals": "bg-crowe-cyan/20 text-crowe-cyan-light",
-  "Entity": "bg-crowe-teal/20 text-crowe-teal-bright",
+  "Entity": "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright",
   "Beneficial Owner": "bg-crowe-violet/20 text-crowe-violet-bright",
-  "Screening": "bg-crowe-amber/20 text-crowe-amber-bright",
+  "Screening": "bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber-bright",
 };
 
 export function AttributesTable({ attributes, acceptableDocs }: AttributesTableProps) {
@@ -230,7 +230,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                       </TableCell>
                       <TableCell className="px-4 py-2">
                         {attr.IsRequired === "Y" ? (
-                          <CheckCircle className="h-4 w-4 text-crowe-teal-bright" />
+                          <CheckCircle className="h-4 w-4 text-crowe-teal-dark dark:text-crowe-teal-bright" />
                         ) : (
                           <span className="text-white/80">-</span>
                         )}
@@ -259,7 +259,7 @@ export function AttributesTable({ attributes, acceptableDocs }: AttributesTableP
                                   {attr.Group}
                                 </Badge>
                                 {attr.IsRequired === "Y" && (
-                                  <Badge className="bg-crowe-teal/20 text-crowe-teal-bright">Required</Badge>
+                                  <Badge className="bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright">Required</Badge>
                                 )}
                               </DialogDescription>
                             </DialogHeader>

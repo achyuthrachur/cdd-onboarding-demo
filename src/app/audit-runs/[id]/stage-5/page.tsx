@@ -23,11 +23,10 @@ import {
 import {
   motion,
   AnimatePresence,
-  FadeInUp,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
   useCountUp,
-  useReducedMotion,
-  staggerContainer,
-  staggerItem,
 } from "@/lib/animations";
 import { HotTable, HotTableClass } from "@handsontable/react";
 import { registerAllModules } from "handsontable/registry";
@@ -70,8 +69,6 @@ export default function Stage5Page() {
     questionToLOBCount: 0,
     naCount: 0,
   });
-
-  const shouldReduceMotion = useReducedMotion();
 
   // Load pivoted workbooks on mount
   useEffect(() => {
@@ -354,7 +351,7 @@ export default function Stage5Page() {
   return (
     <div className="p-8 min-h-screen bg-crowe-indigo-dark">
       {/* Header */}
-      <FadeInUp className="mb-8">
+      <ScrollReveal direction="up" className="mb-8">
         <Link
           href={`/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-white/80 hover:text-white mb-4"
@@ -365,25 +362,14 @@ export default function Stage5Page() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <motion.div
-                initial={shouldReduceMotion ? undefined : { scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.1 }}
-              >
-                <Badge className="bg-crowe-teal/20 text-crowe-teal">Stage 5</Badge>
-              </motion.div>
+              <Badge className="bg-crowe-teal/20 text-crowe-teal">Stage 5</Badge>
               <h1 className="text-3xl font-bold tracking-tight text-white">Testing</h1>
             </div>
             <p className="text-white/80 mt-2">
               Execute testing workbook - Rows: Test Questions, Columns: Customers
             </p>
           </div>
-          <motion.div
-            className="flex gap-2"
-            initial={shouldReduceMotion ? undefined : { opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+          <div className="flex gap-2">
             <Button variant="outline" onClick={handleLoadDemoData} className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
               <Database className="h-4 w-4 mr-2" />
               Load Demo Data
@@ -405,9 +391,9 @@ export default function Stage5Page() {
                 </span>
               )}
             </Button>
-          </motion.div>
+          </div>
         </div>
-      </FadeInUp>
+      </ScrollReveal>
 
       {/* Prerequisites Check */}
       <AnimatePresence>
@@ -418,7 +404,7 @@ export default function Stage5Page() {
             exit={{ opacity: 0, height: 0 }}
             className="mb-6 p-4 bg-crowe-amber/10 backdrop-blur-xl border border-crowe-amber/30 rounded-lg"
           >
-            <h3 className="font-medium text-crowe-amber-bright mb-2">
+            <h3 className="font-medium text-crowe-amber-dark dark:text-crowe-amber-bright mb-2">
               Prerequisites Required
             </h3>
             <ul className="text-sm text-crowe-amber space-y-1">
@@ -429,13 +415,8 @@ export default function Stage5Page() {
       </AnimatePresence>
 
       {/* Progress Summary */}
-      <motion.div
-        className="grid gap-6 md:grid-cols-4 mb-8"
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div variants={staggerItem}>
+      <ScrollStagger className="grid gap-6 md:grid-cols-4 mb-8">
+        <ScrollStaggerItem>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-white/80">
@@ -450,9 +431,9 @@ export default function Stage5Page() {
               </p>
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
+        <ScrollStaggerItem>
           <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.passCount > 0 ? "border-crowe-teal/50" : ""}`}>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-crowe-teal">Pass</CardTitle>
@@ -468,9 +449,9 @@ export default function Stage5Page() {
               </p>
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
+        <ScrollStaggerItem>
           <Card className={`bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${testingProgress.fail1RegulatoryCount > 0 ? "border-crowe-coral/50" : ""}`}>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-crowe-coral">Fail</CardTitle>
@@ -484,9 +465,9 @@ export default function Stage5Page() {
               </p>
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
+        <ScrollStaggerItem>
           <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-white/80">N/A</CardTitle>
@@ -496,17 +477,13 @@ export default function Stage5Page() {
               <p className="text-xs text-white/80 mt-1">Not applicable</p>
             </CardContent>
           </Card>
-        </motion.div>
-      </motion.div>
+        </ScrollStaggerItem>
+      </ScrollStagger>
 
       {/* Auditor Tabs + Testing Workbook */}
       {pivotedWorkbooks.length > 0 && (
-        <motion.div
-          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card className="mb-6 bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+        <ScrollReveal className="mb-6">
+          <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -621,7 +598,7 @@ export default function Stage5Page() {
               )}
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollReveal>
       )}
 
       {/* Completion Requirements */}
@@ -636,11 +613,11 @@ export default function Stage5Page() {
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
                   <AlertCircle className="h-5 w-5 text-crowe-amber" />
-                  <CardTitle className="text-crowe-amber-bright">Completion Required</CardTitle>
+                  <CardTitle className="text-crowe-amber-dark dark:text-crowe-amber-bright">Completion Required</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-crowe-amber-bright">
+                <p className="text-sm text-crowe-amber-dark dark:text-crowe-amber-bright">
                   At least 95% of tests must be completed to proceed to consolidation.
                   Currently at {completionPercentage.toFixed(1)}%.
                 </p>
@@ -651,12 +628,7 @@ export default function Stage5Page() {
       </AnimatePresence>
 
       {/* Navigation */}
-      <motion.div
-        className="flex justify-between"
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
+      <ScrollReveal className="flex justify-between">
         <Link href={`/audit-runs/${id}/stage-4`}>
           <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-white/30">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -669,7 +641,7 @@ export default function Stage5Page() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

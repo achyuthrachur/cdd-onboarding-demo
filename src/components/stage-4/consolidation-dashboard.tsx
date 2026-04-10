@@ -302,7 +302,7 @@ export function ConsolidationDashboard({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <motion.div className={`text-2xl font-bold tabular-nums ${metrics.passRate >= 80 ? 'text-crowe-teal-bright' : metrics.passRate >= 60 ? 'text-crowe-amber-bright' : 'text-crowe-coral-bright'}`}>
+              <motion.div className={`text-2xl font-bold tabular-nums ${metrics.passRate >= 80 ? 'text-crowe-teal-dark dark:text-crowe-teal-bright' : metrics.passRate >= 60 ? 'text-crowe-amber-dark dark:text-crowe-amber-bright' : 'text-crowe-coral-dark dark:text-crowe-coral-bright'}`}>
                 {animatedPassRate}%
               </motion.div>
               <div className="flex items-center gap-2 mt-1">
@@ -321,7 +321,7 @@ export function ConsolidationDashboard({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <motion.div className="text-2xl font-bold text-crowe-coral-bright tabular-nums">
+              <motion.div className="text-2xl font-bold text-crowe-coral-dark dark:text-crowe-coral-bright tabular-nums">
                 {animatedExceptions}
               </motion.div>
               <p className="text-xs text-tint-700 dark:text-white/80">
@@ -376,8 +376,8 @@ export function ConsolidationDashboard({
                 className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-teal/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <CheckCircle2 className="h-6 w-6 text-crowe-teal-bright mb-1" />
-                <motion.div className="text-xl font-bold text-crowe-teal-bright tabular-nums">
+                <CheckCircle2 className="h-6 w-6 text-crowe-teal-dark dark:text-crowe-teal-bright mb-1" />
+                <motion.div className="text-xl font-bold text-crowe-teal-dark dark:text-crowe-teal-bright tabular-nums">
                   {animatedPassCount}
                 </motion.div>
                 <p className="text-xs text-tint-700 dark:text-white/80">Pass</p>
@@ -388,8 +388,8 @@ export function ConsolidationDashboard({
                 className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-amber/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <CheckCircle2 className="h-6 w-6 text-crowe-amber-bright mb-1" />
-                <motion.div className="text-xl font-bold text-crowe-amber-bright tabular-nums">
+                <CheckCircle2 className="h-6 w-6 text-crowe-amber-dark dark:text-crowe-amber-bright mb-1" />
+                <motion.div className="text-xl font-bold text-crowe-amber-dark dark:text-crowe-amber-bright tabular-nums">
                   {animatedPassWithObs}
                 </motion.div>
                 <p className="text-xs text-tint-700 dark:text-white/80">Pass w/Obs</p>
@@ -400,8 +400,8 @@ export function ConsolidationDashboard({
                 className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-coral/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <XCircle className="h-6 w-6 text-crowe-coral-bright mb-1" />
-                <motion.div className="text-xl font-bold text-crowe-coral-bright tabular-nums">
+                <XCircle className="h-6 w-6 text-crowe-coral-dark dark:text-crowe-coral-bright mb-1" />
+                <motion.div className="text-xl font-bold text-crowe-coral-dark dark:text-crowe-coral-bright tabular-nums">
                   {animatedFail1}
                 </motion.div>
                 <p className="text-xs text-tint-700 dark:text-white/80">Fail 1 - Reg</p>
@@ -424,8 +424,8 @@ export function ConsolidationDashboard({
                 className="p-3 rounded-lg text-center flex flex-col items-center justify-center min-h-[80px] bg-crowe-blue/10"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
               >
-                <AlertTriangle className="h-6 w-6 text-crowe-blue-light mb-1" />
-                <motion.div className="text-xl font-bold text-crowe-blue-light tabular-nums">
+                <AlertTriangle className="h-6 w-6 text-crowe-blue-dark dark:text-crowe-blue-light mb-1" />
+                <motion.div className="text-xl font-bold text-crowe-blue-dark dark:text-crowe-blue-light tabular-nums">
                   {animatedQLOB}
                 </motion.div>
                 <p className="text-xs text-tint-700 dark:text-white/80">Q to LOB</p>
@@ -572,10 +572,10 @@ export function ConsolidationDashboard({
                             </Badge>
                           </div>
                           <div className="flex items-center gap-4 text-sm">
-                            <span className="text-crowe-teal-bright">
+                            <span className="text-crowe-teal-dark dark:text-crowe-teal-bright">
                               {category.passCount} pass
                             </span>
-                            <span className="text-crowe-coral-bright">
+                            <span className="text-crowe-coral-dark dark:text-crowe-coral-bright">
                               {category.failCount} fail
                             </span>
                             {category.naCount > 0 && (
@@ -596,7 +596,7 @@ export function ConsolidationDashboard({
                           />
                         </div>
                         {category.failRate > 10 && (
-                          <p className="text-xs text-crowe-coral-bright">
+                          <p className="text-xs text-crowe-coral-dark dark:text-crowe-coral-bright">
                             {category.failRate.toFixed(1)}% failure rate - requires attention
                           </p>
                         )}
@@ -648,10 +648,10 @@ export function ConsolidationDashboard({
                             </Badge>
                           </div>
                           <div className="flex items-center gap-3 text-sm">
-                            <span className="text-crowe-teal-bright">{totalPass} pass</span>
-                            <span className="text-crowe-coral-bright">{totalFail} fail</span>
+                            <span className="text-crowe-teal-dark dark:text-crowe-teal-bright">{totalPass} pass</span>
+                            <span className="text-crowe-coral-dark dark:text-crowe-coral-bright">{totalFail} fail</span>
                             {jur.questionToLOBCount > 0 && (
-                              <span className="text-crowe-amber-bright">{jur.questionToLOBCount} Q</span>
+                              <span className="text-crowe-amber-dark dark:text-crowe-amber-bright">{jur.questionToLOBCount} Q</span>
                             )}
                           </div>
                         </div>
@@ -723,8 +723,8 @@ export function ConsolidationDashboard({
                             </Badge>
                           </div>
                           <div className="flex items-center gap-3 text-sm">
-                            <span className="text-crowe-teal-bright">{totalPass} pass</span>
-                            <span className="text-crowe-coral-bright">{totalFail} fail</span>
+                            <span className="text-crowe-teal-dark dark:text-crowe-teal-bright">{totalPass} pass</span>
+                            <span className="text-crowe-coral-dark dark:text-crowe-coral-bright">{totalFail} fail</span>
                           </div>
                         </div>
                         <div className="h-2 rounded-full bg-tint-200 dark:bg-white/10 overflow-hidden flex">
@@ -775,10 +775,10 @@ export function ConsolidationDashboard({
                     const failPercent = total > 0 ? (tier.failCount / total) * 100 : 0;
 
                     const tierColor = {
-                      Critical: "text-crowe-coral-bright bg-crowe-coral/20",
+                      Critical: "text-crowe-coral-dark dark:text-crowe-coral-bright bg-crowe-coral/20",
                       High: "text-crowe-amber bg-crowe-amber-dark/20",
-                      Medium: "text-crowe-amber-bright bg-crowe-amber/20",
-                      Low: "text-crowe-teal-bright bg-crowe-teal/20",
+                      Medium: "text-crowe-amber-dark dark:text-crowe-amber-bright bg-crowe-amber/20",
+                      Low: "text-crowe-teal-dark dark:text-crowe-teal-bright bg-crowe-teal/20",
                     }[tier.riskTier] || "text-white/80 bg-white/10";
 
                     return (
@@ -794,8 +794,8 @@ export function ConsolidationDashboard({
                             </Badge>
                           </div>
                           <div className="flex items-center gap-3 text-sm">
-                            <span className="text-crowe-teal-bright">{tier.passCount} pass</span>
-                            <span className="text-crowe-coral-bright">{tier.failCount} fail</span>
+                            <span className="text-crowe-teal-dark dark:text-crowe-teal-bright">{tier.passCount} pass</span>
+                            <span className="text-crowe-coral-dark dark:text-crowe-coral-bright">{tier.failCount} fail</span>
                             {tier.naCount > 0 && (
                               <span className="text-tint-700 dark:text-white/80">{tier.naCount} N/A</span>
                             )}
@@ -881,7 +881,7 @@ export function ConsolidationDashboard({
                   {/* Demo Mode Badge */}
                   {summaryDemoMode && (
                     <div className="mb-4 flex items-center gap-2">
-                      <Badge variant="outline" className="bg-crowe-amber/10 text-crowe-amber-bright border-crowe-amber/30">
+                      <Badge variant="outline" className="bg-crowe-amber/10 text-crowe-amber-dark dark:text-crowe-amber-bright border-crowe-amber/30">
                         <Bot className="h-3 w-3 mr-1" />
                         Demo Mode
                       </Badge>
@@ -899,7 +899,7 @@ export function ConsolidationDashboard({
                           <h1 className="text-xl font-bold text-tint-900 dark:text-white mb-4 mt-0">{children}</h1>
                         ),
                         h2: ({ children }) => (
-                          <h2 className="text-lg font-semibold text-crowe-amber-dark dark:text-crowe-amber-bright mb-3 mt-6 border-b border-tint-200 dark:border-white/10 pb-2">{children}</h2>
+                          <h2 className="text-lg font-semibold text-crowe-amber-dark dark:text-crowe-amber-dark dark:text-crowe-amber-bright mb-3 mt-6 border-b border-tint-200 dark:border-white/10 pb-2">{children}</h2>
                         ),
                         h3: ({ children }) => (
                           <h3 className="text-base font-medium text-tint-900 dark:text-white/90 mb-2 mt-4">{children}</h3>

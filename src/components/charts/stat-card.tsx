@@ -21,7 +21,7 @@ interface StatCardProps {
 
 const variantStyles = {
   default: "text-foreground",
-  success: "text-crowe-teal-bright dark:text-crowe-teal-bright",
+  success: "text-crowe-teal-dark dark:text-crowe-teal-bright",
   warning: "text-crowe-amber-dark dark:text-crowe-amber-bright",
   danger: "text-crowe-coral dark:text-crowe-coral-bright",
 };
@@ -82,8 +82,8 @@ export function StatCard({
             <span
               className={cn(
                 "text-xs",
-                trend === "up" && "text-crowe-teal dark:text-crowe-teal-bright",
-                trend === "down" && "text-crowe-coral dark:text-crowe-coral-bright",
+                trend === "up" && "text-crowe-teal-dark dark:text-crowe-teal-bright",
+                trend === "down" && "text-crowe-coral-dark dark:text-crowe-coral-bright",
                 trend === "neutral" && "text-muted-foreground"
               )}
             >

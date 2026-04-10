@@ -151,7 +151,7 @@ export function PopulationUploader({
         <CardContent>
           <div className="flex items-center justify-between p-4 bg-white/10 rounded-lg">
             <div className="flex items-center gap-3">
-              <FileSpreadsheet className="h-8 w-8 text-crowe-teal-bright" />
+              <FileSpreadsheet className="h-8 w-8 text-crowe-teal-dark dark:text-crowe-teal-bright" />
               <div>
                 <p className="font-medium">{population.fileName}</p>
                 <div className="flex items-center gap-2 mt-1">

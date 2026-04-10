@@ -17,10 +17,10 @@ import {
 import {
   motion,
   AnimatePresence,
-  FadeInUp,
   useReducedMotion,
-  staggerContainer,
-  staggerItem,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
 } from "@/lib/animations";
 import { toast } from "sonner";
 import { ConsolidationDashboard } from "@/components/stage-4/consolidation-dashboard";
@@ -146,7 +146,7 @@ export default function AicConsolidationPage() {
   return (
     <div className="p-8">
       {/* Header */}
-      <FadeInUp className="mb-8">
+      <ScrollReveal direction="up" className="mb-8">
         <Link
           href={`/aic/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-tint-700 dark:text-white/80 hover:text-tint-900 dark:hover:text-white mb-4"
@@ -236,7 +236,7 @@ export default function AicConsolidationPage() {
             </AnimatePresence>
           </motion.div>
         </div>
-      </FadeInUp>
+      </ScrollReveal>
 
       {/* Status Banner */}
       <AnimatePresence mode="wait">
@@ -292,59 +292,35 @@ export default function AicConsolidationPage() {
       </AnimatePresence>
 
       {/* Consolidation Dashboard */}
-      <motion.div
-        className="mb-6"
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.35 }}
-      >
+      <ScrollReveal direction="up" delay={0.1} className="mb-6">
         <ConsolidationDashboard
           consolidation={consolidation}
           isLoading={isLoading}
         />
-      </motion.div>
+      </ScrollReveal>
 
       {/* Findings Table */}
-      <AnimatePresence>
-        {consolidation && (
-          <motion.div
-            className="mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ delay: 0.3, duration: 0.35 }}
-          >
+      {consolidation && (
+        <ScrollReveal direction="up" delay={0.1} className="mb-6">
             <FindingsTable
               exceptions={consolidation.exceptions ?? []}
               findingsByAttribute={consolidation.findingsByAttribute ?? []}
             />
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </ScrollReveal>
+      )}
 
       {/* Report Generator */}
-      <motion.div
-        className="mb-6"
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.35 }}
-      >
+      <ScrollReveal direction="up" delay={0.15} className="mb-6">
         <ReportGenerator
           consolidation={consolidation}
           auditRunId={id}
         />
-      </motion.div>
+      </ScrollReveal>
 
       {/* Prerequisites Info (when no consolidation) */}
-      <AnimatePresence>
-        {!consolidation && !isLoading && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card className="mb-6 bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
+      {!consolidation && !isLoading && (
+        <ScrollReveal direction="up" delay={0.1} className="mb-6">
+            <Card className="bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]">
               <CardHeader>
                 <CardTitle className="text-tint-900 dark:text-white">Prerequisites</CardTitle>
                 <CardDescription className="text-tint-700 dark:text-white/80">
@@ -352,12 +328,7 @@ export default function AicConsolidationPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <motion.div
-                  className="space-y-3"
-                  variants={staggerContainer}
-                  initial="hidden"
-                  animate="visible"
-                >
+                <ScrollStagger className="space-y-3">
                   {[
                     { label: "Stage 1: Gap Assessment complete", complete: true },
                     { label: "Stage 2: Sample locked", complete: true },
@@ -365,11 +336,7 @@ export default function AicConsolidationPage() {
                     { label: "Stage 4: Workbooks generated & published", complete: true },
                     { label: "Live Monitor: Auditors have submitted", complete: hasTestResults, required: !hasTestResults },
                   ].map((step, index) => (
-                    <motion.div
-                      key={index}
-                      className="flex items-center gap-3"
-                      variants={staggerItem}
-                    >
+                    <ScrollStaggerItem key={index} className="flex items-center gap-3">
                       <motion.div
                         initial={shouldReduceMotion ? undefined : { scale: 0 }}
                         animate={{ scale: 1 }}
@@ -389,24 +356,22 @@ export default function AicConsolidationPage() {
                           </Badge>
                         )}
                       </span>
-                    </motion.div>
+                    </ScrollStaggerItem>
                   ))}
-                </motion.div>
+                </ScrollStagger>
                 <p className="text-sm text-tint-700 dark:text-white/80 mt-4">
                   Demo mode: Click &quot;Load Demo Data&quot; to populate all stages with sample data.
                 </p>
               </CardContent>
             </Card>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </ScrollReveal>
+      )}
 
       {/* Navigation */}
-      <motion.div
+      <ScrollReveal
+        direction="up"
+        delay={0.15}
         className="flex items-center justify-between mt-6 pt-4 border-t border-tint-200 dark:border-white/10"
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
       >
         <Link href={`/aic/audit-runs/${id}/monitor`}>
           <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">
@@ -417,7 +382,7 @@ export default function AicConsolidationPage() {
         <Link href={`/aic/audit-runs/${id}`}>
           <Button variant="outline" className="border-tint-200 dark:border-white/20 text-tint-900 dark:text-white hover:bg-tint-100 dark:hover:bg-white/10 hover:border-tint-300 dark:hover:border-white/30">Back to Overview</Button>
         </Link>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

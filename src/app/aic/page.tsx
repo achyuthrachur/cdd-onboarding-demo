@@ -15,7 +15,7 @@ import {
   Eye,
   Users,
 } from "lucide-react";
-import { motion, staggerContainer, staggerItem, useCountUp } from "@/lib/animations";
+import { ScrollReveal, ScrollStagger, ScrollStaggerItem, useCountUpOnScroll } from "@/lib/animations";
 import { mockAuditors } from "@/lib/attribute-library/mock-data";
 import { getStageData } from "@/lib/stage-data/store";
 
@@ -23,10 +23,10 @@ export default function AicDashboardPage() {
   const [stats, setStats] = useState({ auditRuns: 0, publishedWorkbooks: 0, submitted: 0 });
   const [hasActiveRun, setHasActiveRun] = useState(false);
 
-  const countAuditRuns = useCountUp(stats.auditRuns, { duration: 0.85, delay: 0.05 });
-  const countPublished = useCountUp(stats.publishedWorkbooks, { duration: 0.85, delay: 0.1 });
-  const countAuditors = useCountUp(mockAuditors.length, { duration: 0.85, delay: 0.12 });
-  const countSubmitted = useCountUp(stats.submitted, { duration: 0.85, delay: 0.15 });
+  const [refAuditRuns, countAuditRuns] = useCountUpOnScroll(stats.auditRuns, { duration: 0.85, delay: 0.05 });
+  const [refPublished, countPublished] = useCountUpOnScroll(stats.publishedWorkbooks, { duration: 0.85, delay: 0.1 });
+  const [refAuditors, countAuditors] = useCountUpOnScroll(mockAuditors.length, { duration: 0.85, delay: 0.12 });
+  const [refSubmitted, countSubmitted] = useCountUpOnScroll(stats.submitted, { duration: 0.85, delay: 0.15 });
 
   useEffect(() => {
     const published = getStageData("workbooksPublished") as {
@@ -54,11 +54,7 @@ export default function AicDashboardPage() {
 
   return (
     <div className="p-8 min-h-full">
-      <motion.div
-        className="mb-8"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <ScrollReveal className="mb-8" direction="up" delay={0}>
         <div className="flex items-center gap-3 mb-2">
           <h1 className="text-3xl font-bold tracking-tight text-tint-900 dark:text-white">AIC Dashboard</h1>
           <Badge className="bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber border-0">
@@ -68,163 +64,157 @@ export default function AicDashboardPage() {
         <p className="text-tint-500 dark:text-tint-300 mt-2">
           Manage audit engagements, generate workbooks, and monitor auditor progress.
         </p>
-      </motion.div>
+      </ScrollReveal>
 
       {/* Quick Stats */}
-      <motion.div
-        className="grid gap-3 md:grid-cols-2 lg:grid-cols-4 mb-8"
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div variants={staggerItem}>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Audit Runs</CardTitle>
-              <FileStack className="h-4 w-4 text-tint-500 dark:text-tint-300" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{countAuditRuns}</div>
-              <p className="text-xs text-tint-500 dark:text-tint-300">
-                {stats.auditRuns > 0 ? "Active engagement" : "Create your first audit run"}
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
+      <ScrollReveal direction="up" delay={0.1}>
+        <ScrollStagger className="grid gap-3 md:grid-cols-2 lg:grid-cols-4 mb-8">
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Audit Runs</CardTitle>
+                <FileStack className="h-4 w-4 text-tint-500 dark:text-tint-300" />
+              </CardHeader>
+              <CardContent>
+                <div ref={refAuditRuns} className="text-2xl font-bold">{countAuditRuns}</div>
+                <p className="text-xs text-tint-500 dark:text-tint-300">
+                  {stats.auditRuns > 0 ? "Active engagement" : "Create your first audit run"}
+                </p>
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Published Workbooks</CardTitle>
-              <FileText className="h-4 w-4 text-tint-500 dark:text-tint-300" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{countPublished}</div>
-              <p className="text-xs text-tint-500 dark:text-tint-300">
-                Assigned to auditors
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Published Workbooks</CardTitle>
+                <FileText className="h-4 w-4 text-tint-500 dark:text-tint-300" />
+              </CardHeader>
+              <CardContent>
+                <div ref={refPublished} className="text-2xl font-bold">{countPublished}</div>
+                <p className="text-xs text-tint-500 dark:text-tint-300">
+                  Assigned to auditors
+                </p>
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Auditors</CardTitle>
-              <Users className="h-4 w-4 text-tint-500 dark:text-tint-300" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{countAuditors}</div>
-              <p className="text-xs text-tint-500 dark:text-tint-300">
-                Available for assignment
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Active Auditors</CardTitle>
+                <Users className="h-4 w-4 text-tint-500 dark:text-tint-300" />
+              </CardHeader>
+              <CardContent>
+                <div ref={refAuditors} className="text-2xl font-bold">{countAuditors}</div>
+                <p className="text-xs text-tint-500 dark:text-tint-300">
+                  Available for assignment
+                </p>
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
 
-        <motion.div variants={staggerItem}>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Completed</CardTitle>
-              <CheckCircle2 className="h-4 w-4 text-tint-500 dark:text-tint-300" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{countSubmitted}</div>
-              <p className="text-xs text-tint-500 dark:text-tint-300">
-                Submitted workbooks
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </motion.div>
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Completed</CardTitle>
+                <CheckCircle2 className="h-4 w-4 text-tint-500 dark:text-tint-300" />
+              </CardHeader>
+              <CardContent>
+                <div ref={refSubmitted} className="text-2xl font-bold">{countSubmitted}</div>
+                <p className="text-xs text-tint-500 dark:text-tint-300">
+                  Submitted workbooks
+                </p>
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
+        </ScrollStagger>
+      </ScrollReveal>
 
       {/* Getting Started & Workflow */}
-      <motion.div
-        className="grid gap-4 md:grid-cols-2"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <Card>
-          <CardHeader>
-            <CardTitle>Get Started</CardTitle>
-            <CardDescription>
-              Create a new audit run to begin the workflow
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/aic/audit-runs/new">
-              <Button className="w-full">
-                <Plus className="mr-2 h-4 w-4" />
-                Create Audit Run
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+      <ScrollReveal direction="right" delay={0.2}>
+        <ScrollStagger className="grid gap-4 md:grid-cols-2">
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader>
+                <CardTitle>Get Started</CardTitle>
+                <CardDescription>
+                  Create a new audit run to begin the workflow
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link href="/aic/audit-runs/new">
+                  <Button className="w-full">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create Audit Run
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>AIC Workflow Stages</CardTitle>
-            <CardDescription>
-              Your responsibilities in the audit lifecycle
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-tint-100 dark:bg-white/10 text-tint-900 dark:text-white text-sm font-medium">
-                1
-              </div>
-              <div>
-                <p className="font-medium text-sm text-tint-900 dark:text-white">Gap Assessment</p>
-                <p className="text-xs text-tint-500 dark:text-tint-300">Upload docs, extract attributes</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright text-sm font-medium">
-                2
-              </div>
-              <div>
-                <p className="font-medium text-sm text-tint-900 dark:text-white">Sampling</p>
-                <p className="text-xs text-tint-500 dark:text-tint-300">Configure and generate samples</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-blue/20 text-crowe-blue-dark dark:text-crowe-blue-light text-sm font-medium">
-                3
-              </div>
-              <div>
-                <p className="font-medium text-sm text-tint-900 dark:text-white">Attribute Extraction</p>
-                <p className="text-xs text-tint-500 dark:text-tint-300">AI-powered CDD/EDD extraction</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber text-sm font-medium">
-                4
-              </div>
-              <div>
-                <p className="font-medium text-sm text-tint-900 dark:text-white">Workbook Generation & Publish</p>
-                <p className="text-xs text-tint-500 dark:text-tint-300">Assign to auditors and publish</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-cyan/20 text-crowe-cyan-dark dark:text-crowe-cyan text-sm font-medium">
-                <Eye className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="font-medium text-sm text-tint-900 dark:text-white">Live Monitoring</p>
-                <p className="text-xs text-tint-500 dark:text-tint-300">Track auditor progress in real-time</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+          <ScrollStaggerItem>
+            <Card>
+              <CardHeader>
+                <CardTitle>AIC Workflow Stages</CardTitle>
+                <CardDescription>
+                  Your responsibilities in the audit lifecycle
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-tint-100 dark:bg-white/10 text-tint-900 dark:text-white text-sm font-medium">
+                    1
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-tint-900 dark:text-white">Gap Assessment</p>
+                    <p className="text-xs text-tint-500 dark:text-tint-300">Upload docs, extract attributes</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright text-sm font-medium">
+                    2
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-tint-900 dark:text-white">Sampling</p>
+                    <p className="text-xs text-tint-500 dark:text-tint-300">Configure and generate samples</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-blue/20 text-crowe-blue-dark dark:text-crowe-blue-light text-sm font-medium">
+                    3
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-tint-900 dark:text-white">Attribute Extraction</p>
+                    <p className="text-xs text-tint-500 dark:text-tint-300">AI-powered CDD/EDD extraction</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-amber/20 text-crowe-amber-dark dark:text-crowe-amber text-sm font-medium">
+                    4
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-tint-900 dark:text-white">Workbook Generation & Publish</p>
+                    <p className="text-xs text-tint-500 dark:text-tint-300">Assign to auditors and publish</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-crowe-cyan/20 text-crowe-cyan-dark dark:text-crowe-cyan text-sm font-medium">
+                    <Eye className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-tint-900 dark:text-white">Live Monitoring</p>
+                    <p className="text-xs text-tint-500 dark:text-tint-300">Track auditor progress in real-time</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollStaggerItem>
+        </ScrollStagger>
+      </ScrollReveal>
 
       {/* Recent Activity */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
+      <ScrollReveal direction="up" delay={0.3}>
         <Card className="mt-6">
           <CardHeader>
             <CardTitle>Recent Audit Runs</CardTitle>
@@ -271,7 +261,7 @@ export default function AicDashboardPage() {
             )}
           </CardContent>
         </Card>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }

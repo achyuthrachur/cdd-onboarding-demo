@@ -4,7 +4,7 @@
  * Animation Hooks - Custom hooks for animation control
  */
 
-import { useReducedMotion, useSpring, useTransform, useMotionValue, useInView, animate } from 'framer-motion';
+import { useReducedMotion, useSpring, useTransform, useMotionValue, useInView, useScroll, animate } from 'framer-motion';
 import { useEffect, useRef, RefObject, useState } from 'react';
 import { duration, ease } from './constants';
 
@@ -19,6 +19,8 @@ interface UseCountUpOptions {
   duration?: number;
   delay?: number;
   startOnMount?: boolean;
+  /** Pass true to trigger the animation (e.g., from an IntersectionObserver) */
+  enabled?: boolean;
 }
 
 /**
@@ -33,16 +35,16 @@ export function useCountUp(
     duration: animDuration = 1,
     delay = 0,
     startOnMount = true,
+    enabled = true,
   } = options;
 
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const shouldReduceMotion = useReducedMotion();
-  // Always start at 0 to avoid SSR mismatch (shouldReduceMotion can differ server vs client)
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
-    if (!startOnMount) return;
+    if (!startOnMount || !enabled) return;
 
     if (shouldReduceMotion) {
       count.set(targetValue);
@@ -50,7 +52,6 @@ export function useCountUp(
       return;
     }
 
-    // If target is 0, nothing to animate
     if (targetValue === 0) {
       setDisplayValue(0);
       return;
@@ -70,9 +71,24 @@ export function useCountUp(
       clearTimeout(timeout);
       animationRef?.stop();
     };
-  }, [targetValue, animDuration, delay, startOnMount, shouldReduceMotion, count]);
+  }, [targetValue, animDuration, delay, startOnMount, enabled, shouldReduceMotion, count]);
 
   return displayValue;
+}
+
+/**
+ * Hook for count-up that triggers when element scrolls into view.
+ * Returns [ref, displayValue] - attach ref to the container element.
+ */
+export function useCountUpOnScroll(
+  targetValue: number,
+  options: Omit<UseCountUpOptions, 'enabled' | 'startOnMount'> = {}
+) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref as RefObject<Element>, { once: true, amount: 0.5 });
+  const displayValue = useCountUp(targetValue, { ...options, enabled: isInView });
+
+  return [ref, displayValue] as const;
 }
 
 // ============================================
@@ -228,4 +244,41 @@ export function useTypingIndicator() {
   };
 
   return { dotVariants };
+}
+
+// ============================================
+// Parallax Hook
+// ============================================
+
+export function useParallax(ref: RefObject<Element | null>, speed: number = 0.3) {
+  const { scrollYProgress } = useScroll({
+    target: ref as RefObject<HTMLElement>,
+    offset: ['start end', 'end start'],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [speed * 100, speed * -100]);
+
+  return y;
+}
+
+// ============================================
+// Page Scroll Progress Hook
+// ============================================
+
+export function useScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  return scrollYProgress;
+}
+
+// ============================================
+// Section Scroll Progress Hook
+// ============================================
+
+export function useSectionProgress(ref: RefObject<Element | null>) {
+  const { scrollYProgress } = useScroll({
+    target: ref as RefObject<HTMLElement>,
+    offset: ['start end', 'end start'],
+  });
+
+  return scrollYProgress;
 }

@@ -156,7 +156,7 @@ export function DemoModeBanner({
                     key={stage.num}
                     className={`p-2 rounded-lg text-center text-sm transition-colors ${
                       isComplete
-                        ? "bg-crowe-teal/20 text-crowe-teal-bright"
+                        ? "bg-crowe-teal/20 text-crowe-teal-dark dark:text-crowe-teal-bright"
                         : isCurrent
                         ? "bg-crowe-violet/20 text-crowe-violet-bright"
                         : "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80"

@@ -25,7 +25,13 @@ import {
   clearStageOutputs,
   GapAssessmentResult as StoreGapAssessmentResult
 } from "@/lib/stage-data";
-import { motion, useReducedMotion, staggerContainer, staggerItem } from "@/lib/animations";
+import {
+  motion,
+  useReducedMotion,
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
+} from "@/lib/animations";
 
 interface Document {
   id: string;
@@ -122,12 +128,7 @@ export default function AicStage1Page() {
   return (
     <div className="p-8">
       {/* Header */}
-      <motion.div
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="mb-8"
-      >
+      <ScrollReveal direction="up" className="mb-8">
         <Link
           href={`/aic/audit-runs/${id}`}
           className="inline-flex items-center text-sm text-tint-500 dark:text-tint-300 hover:text-tint-900 dark:hover:text-white mb-4"
@@ -166,16 +167,11 @@ export default function AicStage1Page() {
             </Button>
           )}
         </div>
-      </motion.div>
+      </ScrollReveal>
 
       {/* Workflow Progress */}
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={shouldReduceMotion ? {} : staggerContainer}
-        className="grid gap-3 md:grid-cols-3 mb-6"
-      >
-        <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
+      <ScrollStagger className="grid gap-3 md:grid-cols-3 mb-6">
+        <ScrollStaggerItem>
           <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment1Result ? "border-crowe-teal" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
@@ -198,9 +194,9 @@ export default function AicStage1Page() {
               </Badge>
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollStaggerItem>
 
-        <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
+        <ScrollStaggerItem>
           <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${assessment2Result ? "border-crowe-teal" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
@@ -223,9 +219,9 @@ export default function AicStage1Page() {
               </Badge>
             </CardContent>
           </Card>
-        </motion.div>
+        </ScrollStaggerItem>
 
-        <motion.div variants={shouldReduceMotion ? {} : staggerItem}>
+        <ScrollStaggerItem>
           <Card className={`bg-white dark:bg-white/10 backdrop-blur-xl border border-tint-200/60 dark:border-white/20 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] ${canProceed ? "border-crowe-teal" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
@@ -248,15 +244,11 @@ export default function AicStage1Page() {
               </Badge>
             </CardContent>
           </Card>
-        </motion.div>
-      </motion.div>
+        </ScrollStaggerItem>
+      </ScrollStagger>
 
       {/* Main Content Tabs */}
-      <motion.div
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
-      >
+      <ScrollReveal direction="up" delay={0.1}>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
           <TabsList>
             <TabsTrigger value="agent" className="flex items-center gap-2">
@@ -291,13 +283,12 @@ export default function AicStage1Page() {
             />
           </TabsContent>
         </Tabs>
-      </motion.div>
+      </ScrollReveal>
 
       {/* Navigation */}
-      <motion.div
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.3 }}
+      <ScrollReveal
+        direction="up"
+        delay={0.15}
         className="flex items-center justify-between mt-6 pt-4 border-t border-tint-200 dark:border-white/10"
       >
         <Link href={`/aic/audit-runs/${id}`}>
@@ -312,7 +303,7 @@ export default function AicStage1Page() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </Link>
-      </motion.div>
+      </ScrollReveal>
     </div>
   );
 }
